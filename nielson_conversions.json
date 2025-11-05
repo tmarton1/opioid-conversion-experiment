@@ -2,36 +2,43 @@
     "iv_fentanyl": {
         "administration_method": "iv",
         "substance": "fentanyl",
-        "conversion_factor": 100
+        "conversion_factor": 100,
+        "unit": "mcg/hour"
     },
     "oral_hydromorphone": {
         "administration_method": "oral",
         "substance": "hydromorphone",
-        "conversion_factor": 5
+        "conversion_factor": 5,
+        "unit": "mg/day"
     },
     "iv_hydromorphone": {
         "administration_method": "iv",
         "substance": "hydromorphone",
-        "conversion_factor": 20
+        "conversion_factor": 20,
+        "unit": "mg/day"
     },
     "oral_oxycodone": {
         "administration_method": "oral",
         "substance": "oxycodone",
-        "conversion_factor": 1.5
+        "conversion_factor": 1.5,
+        "unit": "mg/day"
     },
     "oral_codeine": {
         "administration_method": "oral",
         "substance": "codeine",
-        "conversion_factor": 0.15
+        "conversion_factor": 0.15,
+        "unit": "mg/day"
     },
     "oral_tramadol": {
         "administration_method": "oral",
         "substance": "tramadol",
-        "conversion_factor": 0.1
+        "conversion_factor": 0.1,
+        "unit": "mg/day"
     },
     "oral_morphine": {
         "administration_method": "oral",
         "substance": "morphine",
-        "conversion_factor": 1
+        "conversion_factor": 1,
+        "unit": "mg/day"
     }
 }
