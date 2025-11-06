@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
-from prompt_service import PromptedOpioidConversion
+from prompt_service import PromptedOpioidConversion, PromptService
 from conversion_service import ConversionService
 from nielson_data import NIELSON_CONVERSIONS
 from opioid import Opioid
@@ -30,6 +30,10 @@ class Experiment:
         self.include_examples = include_examples
         self.results = []  # To store results of all experiments
 
+        # Initialize the PromptService once for the entire experiment
+        self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
+
+
     def run(self):
         """
         Run the experiment for all opioid pairs and repetitions.
@@ -42,12 +46,16 @@ class Experiment:
                     include_nielson=self.include_nielson,
                     include_examples=self.include_examples
                 )
-                conversion.generate_prompt()
+                conversion.generate_prompt(prompt_service=self.prompt_service)
                 try:
                     conversion.ask_model()
                     self.results.append({
-                        "from_opioid": from_opioid.substance,
-                        "to_opioid": to_opioid.substance,
+                        "from_opioid_substance": from_opioid.substance,
+                        "from_opioid_administration_method": from_opioid.administration_method,
+                        "from_opioid_unit": from_opioid.unit,
+                        "to_opioid_substance": to_opioid.substance,
+                        "to_opioid_administration_method": to_opioid.administration_method,
+                        "to_opioid_unit": to_opioid.unit,
                         "from_dose": conversion.from_dose,
                         "expected_to_dose": conversion.expected_to_dose,
                         "observed_to_dose": conversion.observed_to_dose,
@@ -112,7 +120,7 @@ class Experiment:
         df = self.to_dataframe()
 
         # Scatter plot: Expected vs Observed Dose
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(5, 5))
         for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
             plt.scatter(group["expected_to_dose"], group["ratio_observed_expected"], label=f"{from_opioid} → {to_opioid}")
         plt.axhline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
@@ -126,7 +134,7 @@ class Experiment:
         plt.show()
 
         # CDF of Ratio Observed/Expected
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(5, 3))
         for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
             sorted_ratios = np.sort(group["ratio_observed_expected"])
             cdf = np.arange(len(sorted_ratios)) / float(len(sorted_ratios))
@@ -141,7 +149,7 @@ class Experiment:
         plt.show()
 
         # Histogram: Proportion of Ratios Inside 0.7 - 1.3
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(5, 3))
         df["ratio_observed_expected"].hist(bins=20, edgecolor="black")
         plt.axvline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
         plt.axvline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
@@ -152,3 +160,33 @@ class Experiment:
         plt.legend()
         plt.grid()
         plt.show()
+
+class ExperimentFromCSVConverter:
+    @staticmethod
+    def from_csv(csv_file):
+        """
+        Create an Experiment object from a CSV file.
+
+        Args:
+            csv_file (str): Path to the CSV file containing experiment results.
+
+        Returns:
+            Experiment: An Experiment object with the data loaded from the CSV.
+        """
+        # Load the CSV into a DataFrame
+        df = pd.read_csv(csv_file)
+
+        # Extract unique opioid pairs from the DataFrame
+        opioid_pairs = []
+        for _, row in df[["from_opioid", "to_opioid"]].drop_duplicates().iterrows():
+            from_opioid = Opioid(substance=row["from_opioid"])
+            to_opioid = Opioid(substance=row["to_opioid"])
+            opioid_pairs.append((from_opioid, to_opioid))
+
+        # Create an Experiment object
+        experiment = Experiment(opioid_pairs)
+
+        # Populate the results directly from the CSV data
+        experiment.results = df.to_dict(orient="records")
+
+        return experiment
