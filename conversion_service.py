@@ -3,19 +3,6 @@ from opioid import Opioid
 from typing import Dict, Tuple
 import numpy as np
 
-@dataclass
-class PromptedOpioidConversion:
-    from_opioid: Opioid
-    to_opioid: Opioid = field(default_factory=lambda: Opioid(administration_method="oral", substance="morphine"))
-    dose_from: float = None
-    expected_dose_to: float = None
-    include_nielson: bool = True
-    include_examples: bool = True
-    prompt: str = None
-    observed_dose_to: float = None
-    ratio_observed_expected: float = None
-
-
 class ConversionService:
     def __init__(self, nielson_conversions: Dict[str, float]):
         self.nielson_conversions = nielson_conversions
