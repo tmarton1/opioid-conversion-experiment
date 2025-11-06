@@ -7,6 +7,8 @@ from conversion_service import ConversionService
 from nielson_data import NIELSON_CONVERSIONS
 from opioid import Opioid
 import os
+from itertools import product  # For generating combinations of opioid_pairs and prompt_conditions
+
 
 class Experiment:
     ID_COUNTER_FILE = "experiment_id_counter.txt"  # File to store the current experiment ID
@@ -33,15 +35,14 @@ class Experiment:
 
         return next_id
 
-    def __init__(self, opioid_pairs, repetitions=10, include_nielson=True, include_examples=False, experiment_id=None):
+    def __init__(self, opioid_pairs, prompt_conditions, repetitions=10, experiment_id=None):
         """
         Initialize the Experiment class.
 
         Args:
-            opioid_pairs (list of tuples): List of (from_opioid, to_opioid) pairs or a list of from_opioids (defaulting to morphine as to_opioid).
-            repetitions (int): Number of repetitions for each pair.
-            include_nielson (bool): Whether to include Nielson coefficients in the prompt.
-            include_examples (bool): Whether to include examples in the prompt.
+            opioid_pairs (list of tuples): List of (from_opioid, to_opioid) pairs.
+            prompt_conditions (list of dict): List of dictionaries specifying prompt conditions.
+            repetitions (int): Number of repetitions for each combination of opioid_pairs and prompt_conditions.
             experiment_id (int): Unique identifier for the experiment. If None, a new ID will be generated.
         """
         # Generate an incremental experiment ID if not provided
@@ -51,26 +52,27 @@ class Experiment:
             if isinstance(from_opioid, Opioid) else from_opioid
             for from_opioid in opioid_pairs
         ]
+        self.prompt_conditions = prompt_conditions
         self.repetitions = repetitions
-        self.include_nielson = include_nielson
-        self.include_examples = include_examples
         self.results = []  # To store results of all experiments
+
+        # Generate all combinations of opioid_pairs and prompt_conditions
+        self.combinations = list(product(opioid_pairs, prompt_conditions))
 
         # Initialize the PromptService once for the entire experiment
         self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
 
-
     def run(self):
         """
-        Run the experiment for all opioid pairs and repetitions.
+        Run the experiment for all combinations of opioid_pairs and prompt_conditions, repeated for the specified number of repetitions.
         """
-        for from_opioid, to_opioid in self.opioid_pairs:
+        for (from_opioid, to_opioid), condition in self.combinations:
             for _ in range(self.repetitions):
                 conversion = PromptedOpioidConversion(
                     from_opioid=from_opioid,
                     to_opioid=to_opioid,
-                    include_nielson=self.include_nielson,
-                    include_examples=self.include_examples
+                    include_nielson=condition["include_nielson"],
+                    include_examples=condition["include_examples"]
                 )
                 conversion.generate_prompt(prompt_service=self.prompt_service)
                 try:
@@ -85,8 +87,8 @@ class Experiment:
                         "expected_to_dose": conversion.expected_to_dose,
                         "model": conversion.model,
                         "prompt": conversion.prompt,
-                        "include_nielson": conversion.include_nielson,
-                        "include_examples": conversion.include_examples,
+                        "include_nielson": condition["include_nielson"],
+                        "include_examples": condition["include_examples"],
                         "observed_to_dose": conversion.observed_to_dose,
                         "ratio_observed_expected": conversion.ratio_observed_expected,
                         "response": conversion.response
@@ -200,6 +202,7 @@ class Experiment:
         plt.grid()
         plt.show()
 
+
 class ExperimentFromCSVConverter:
     @staticmethod
     def list_experiment_ids(csv_file):
@@ -237,7 +240,7 @@ class ExperimentFromCSVConverter:
         # Count observations for each experiment_id
         counts = df.groupby("experiment_id").size().reset_index(name="observation_count")
         return counts
-    
+
     @staticmethod
     def from_csv(csv_file, experiment_id=None, filters=None):
         """
