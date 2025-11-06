@@ -50,11 +50,9 @@ class Experiment:
                 try:
                     conversion.ask_model()
                     self.results.append({
-                        "from_opioid_substance": from_opioid.substance,
-                        "from_opioid_administration_method": from_opioid.administration_method,
+                        "from_opioid": f"{from_opioid.administration_method}_{from_opioid.substance}",
                         "from_opioid_unit": from_opioid.unit,
-                        "to_opioid_substance": to_opioid.substance,
-                        "to_opioid_administration_method": to_opioid.administration_method,
+                        "to_opioid": f"{to_opioid.administration_method}_{to_opioid.substance}",
                         "to_opioid_unit": to_opioid.unit,
                         "from_dose": conversion.from_dose,
                         "expected_to_dose": conversion.expected_to_dose,
@@ -183,10 +181,23 @@ class ExperimentFromCSVConverter:
         # Extract unique opioid pairs from the DataFrame
         opioid_pairs = []
         for _, row in df[["from_opioid", "to_opioid"]].drop_duplicates().iterrows():
-            from_opioid = Opioid(substance=row["from_opioid"])
-            to_opioid = Opioid(substance=row["to_opioid"])
-            opioid_pairs.append((from_opioid, to_opioid))
+            # Parse the from_opioid string
+            from_opioid_parts = row["from_opioid"].split("_")
+            from_opioid = Opioid(
+                administration_method=from_opioid_parts[0],
+                substance=from_opioid_parts[1]
+            )
 
+            # Parse the to_opioid string
+            to_opioid_parts = row["to_opioid"].split("_")
+            to_opioid = Opioid(
+                administration_method=to_opioid_parts[0],
+                substance=to_opioid_parts[1]
+            )
+
+            # Append the pair to the opioid_pairs list
+            opioid_pairs.append((from_opioid, to_opioid))
+            
         # Create an Experiment object
         experiment = Experiment(opioid_pairs)
 
