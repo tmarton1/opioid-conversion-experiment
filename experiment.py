@@ -58,6 +58,10 @@ class Experiment:
                         "to_opioid_unit": to_opioid.unit,
                         "from_dose": conversion.from_dose,
                         "expected_to_dose": conversion.expected_to_dose,
+                        "model": conversion.model,
+                        "prompt": conversion.prompt,
+                        "include_nielson": conversion.include_nielson,
+                        "include_examples": conversion.include_examples,
                         "observed_to_dose": conversion.observed_to_dose,
                         "ratio_observed_expected": conversion.ratio_observed_expected,
                         "response": conversion.response
