@@ -6,10 +6,34 @@ from prompt_service import PromptedOpioidConversion, PromptService
 from conversion_service import ConversionService
 from nielson_data import NIELSON_CONVERSIONS
 from opioid import Opioid
-
+import os
 
 class Experiment:
-    def __init__(self, opioid_pairs, repetitions=10, include_nielson=True, include_examples=False):
+    ID_COUNTER_FILE = "experiment_id_counter.txt"  # File to store the current experiment ID
+
+    @staticmethod
+    def _get_next_experiment_id():
+        """
+        Retrieve the next experiment ID from the counter file. If the file does not exist, start at 1.
+
+        Returns:
+            int: The next experiment ID.
+        """
+        if os.path.exists(Experiment.ID_COUNTER_FILE):
+            with open(Experiment.ID_COUNTER_FILE, "r") as f:
+                current_id = int(f.read().strip())
+        else:
+            current_id = 0  # Start at 0 if the file does not exist
+
+        next_id = current_id + 1
+
+        # Update the counter file with the new ID
+        with open(Experiment.ID_COUNTER_FILE, "w") as f:
+            f.write(str(next_id))
+
+        return next_id
+
+    def __init__(self, opioid_pairs, repetitions=10, include_nielson=True, include_examples=False, experiment_id=None):
         """
         Initialize the Experiment class.
 
@@ -18,8 +42,10 @@ class Experiment:
             repetitions (int): Number of repetitions for each pair.
             include_nielson (bool): Whether to include Nielson coefficients in the prompt.
             include_examples (bool): Whether to include examples in the prompt.
+            experiment_id (int): Unique identifier for the experiment. If None, a new ID will be generated.
         """
-        # If only a list of from_opioids is provided, default to morphine as the to_opioid
+        # Generate an incremental experiment ID if not provided
+        self.experiment_id = experiment_id or self._get_next_experiment_id()
         self.opioid_pairs = [
             (from_opioid, Opioid(administration_method="oral", substance="morphine"))
             if isinstance(from_opioid, Opioid) else from_opioid
@@ -50,6 +76,7 @@ class Experiment:
                 try:
                     conversion.ask_model()
                     self.results.append({
+                        "experiment_id": self.experiment_id,  # Add experiment ID to each result
                         "from_opioid": f"{from_opioid.administration_method}_{from_opioid.substance}",
                         "from_opioid_unit": from_opioid.unit,
                         "to_opioid": f"{to_opioid.administration_method}_{to_opioid.substance}",
@@ -112,8 +139,18 @@ class Experiment:
             filename (str): The name of the CSV file.
         """
         df = self.to_dataframe()
-        df.to_csv(filename, index=False)
-        print(f"Results saved to {filename}")
+        try:
+            # Check if the file exists
+            file_exists = os.path.isfile(filename)
+
+            # Write to the file (append if it exists, create if it doesn't)
+            df.to_csv(filename, mode="a" if file_exists else "w", header=not file_exists, index=False)
+            if file_exists:
+                print(f"Results appended to {filename}")
+            else:
+                print(f"Results saved to new file: {filename}")
+        except Exception as e:
+            print(f"Error saving to CSV: {e}")
 
     def visualize(self):
         """
@@ -165,7 +202,44 @@ class Experiment:
 
 class ExperimentFromCSVConverter:
     @staticmethod
-    def from_csv(csv_file):
+    def list_experiment_ids(csv_file):
+        """
+        List all unique experiment IDs in the CSV file.
+
+        Args:
+            csv_file (str): Path to the CSV file.
+
+        Returns:
+            list: A list of unique experiment IDs.
+        """
+        df = pd.read_csv(csv_file)
+        return df["experiment_id"].unique().tolist()
+
+    @staticmethod
+    def filter_experiments(csv_file, filters=None):
+        """
+        Filter experiments based on specified fields and return the count of observations for each matching experiment ID.
+
+        Args:
+            csv_file (str): Path to the CSV file.
+            filters (dict, optional): A dictionary of filters to apply (e.g., {"include_nielson": True, "model": "gpt-4.1-mini"}).
+
+        Returns:
+            pd.DataFrame: A DataFrame with experiment IDs and their observation counts.
+        """
+        df = pd.read_csv(csv_file)
+
+        # Apply filters if provided
+        if filters:
+            for key, value in filters.items():
+                df = df[df[key] == value]
+
+        # Count observations for each experiment_id
+        counts = df.groupby("experiment_id").size().reset_index(name="observation_count")
+        return counts
+    
+    @staticmethod
+    def from_csv(csv_file, experiment_id=None, filters=None):
         """
         Create an Experiment object from a CSV file.
 
@@ -177,6 +251,13 @@ class ExperimentFromCSVConverter:
         """
         # Load the CSV into a DataFrame
         df = pd.read_csv(csv_file)
+
+        # Apply filters
+        if experiment_id:
+            df = df[df["experiment_id"] == experiment_id]
+        if filters:
+            for key, value in filters.items():
+                df = df[df[key] == value]
 
         # Extract unique opioid pairs from the DataFrame
         opioid_pairs = []
@@ -197,7 +278,7 @@ class ExperimentFromCSVConverter:
 
             # Append the pair to the opioid_pairs list
             opioid_pairs.append((from_opioid, to_opioid))
-            
+
         # Create an Experiment object
         experiment = Experiment(opioid_pairs)
 
