@@ -1,0 +1,1434 @@
+experiment_id,from_opioid,from_opioid_unit,to_opioid,to_opioid_unit,from_dose,expected_to_dose,model,prompt,include_nielson,include_examples,observed_to_dose,ratio_observed_expected,response
+3,iv_fentanyl,mcg/hour,oral_hydromorphone,mg/day,0.85,17.0,gpt-4.1-mini,"Convert 0.85 mcg/hour of fentanyl (iv) to mg/day of hydromorphone (oral).
+How many mg/day of hydromorphone (oral) is equivalent to 0.85 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+5 OME for hydromorphone (oral) means 10 mg/day of morphine (oral) is equivalent to 2.00 mg/day of hydromorphone (oral).
+And 120 mg/day of morphine (oral) is equivalent to 24.00 mg/day of hydromorphone (oral).
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,16.0,0.94,{'calculated dose': 16}
+3,iv_fentanyl,mcg/hour,oral_hydromorphone,mg/day,0.24,4.8,gpt-4.1-mini,"Convert 0.24 mcg/hour of fentanyl (iv) to mg/day of hydromorphone (oral).
+How many mg/day of hydromorphone (oral) is equivalent to 0.24 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+5 OME for hydromorphone (oral) means 10 mg/day of morphine (oral) is equivalent to 2.00 mg/day of hydromorphone (oral).
+And 120 mg/day of morphine (oral) is equivalent to 24.00 mg/day of hydromorphone (oral).
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,4.8,1.0,{'calculated dose': 4.8}
+3,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.72,72.0,gpt-4.1-mini,"Convert 0.72 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.72 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,86.4,1.2,{'calculated dose': 86.4}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.43,43.0,gpt-4.1-mini,"Convert 0.43 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.43 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,43.0,1.0,{'calculated dose': 43}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.34,34.0,gpt-4.1-mini,"Convert 0.34 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.34 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,34.0,1.0,{'calculated dose': 34}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.68,68.0,gpt-4.1-mini,"Convert 0.68 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.68 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,68.0,1.0,{'calculated dose': 68}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.1,10.0,gpt-4.1-mini,"Convert 0.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,10.0,1.0,{'calculated dose': 10}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.88,88.0,gpt-4.1-mini,"Convert 0.88 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.88 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,105.6,1.2,{'calculated dose': 105.6}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.14,114.0,gpt-4.1-mini,"Convert 1.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.14 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,1368.0,12.0,{'calculated dose': 1368}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.38,38.0,gpt-4.1-mini,"Convert 0.38 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.38 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,38.0,1.0,{'calculated dose': 38}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.46,46.0,gpt-4.1-mini,"Convert 0.46 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.46 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,46.0,1.0,{'calculated dose': 46}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,11.0,1.0,{'calculated dose': 11}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.23,23.0,gpt-4.1-mini,"Convert 0.23 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.23 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,23.0,1.0,{'calculated dose': 23}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.14,14.0,gpt-4.1-mini,"Convert 0.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.14 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,14.0,1.0,{'calculated dose': 14}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.06,106.0,gpt-4.1-mini,"Convert 1.06 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.06 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,127.2,1.2,{'calculated dose': 127.2}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.4,40.0,gpt-4.1-mini,"Convert 0.40 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.40 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,40.0,1.0,{'calculated dose': 40}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.12,12.0,gpt-4.1-mini,"Convert 0.12 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.12 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,12.0,1.0,{'calculated dose': 12}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.13,13.0,gpt-4.1-mini,"Convert 0.13 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.13 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,13.0,1.0,{'calculated dose': 13}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.51,51.0,gpt-4.1-mini,"Convert 0.51 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.51 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,51.0,1.0,{'calculated dose': 51}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.92,92.0,gpt-4.1-mini,"Convert 0.92 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.92 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,110.4,1.2,{'calculated dose': 110.4}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.74,74.0,gpt-4.1-mini,"Convert 0.74 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.74 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,74.0,1.0,{'calculated dose': 74}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.14,14.0,gpt-4.1-mini,"Convert 0.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.14 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,14.0,1.0,{'calculated dose': 14}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.5,50.0,gpt-4.1-mini,"Convert 0.50 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.50 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,50.0,1.0,{'calculated dose': 50}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.28,28.0,gpt-4.1-mini,"Convert 0.28 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.28 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,67.2,2.4,{'calculated dose': 67.2}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.27,27.0,gpt-4.1-mini,"Convert 0.27 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.27 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,27.0,1.0,{'calculated dose': 27}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.37,37.0,gpt-4.1-mini,"Convert 0.37 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.37 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,37.0,1.0,{'calculated dose': 37}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.26,26.0,gpt-4.1-mini,"Convert 0.26 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.26 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,26.0,1.0,{'calculated dose': 26}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.25,25.0,gpt-4.1-mini,"Convert 0.25 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.25 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,25.0,1.0,{'calculated dose': 25}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.38,38.0,gpt-4.1-mini,"Convert 0.38 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.38 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,38.0,1.0,{'calculated dose': 38}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.99,99.0,gpt-4.1-mini,"Convert 0.99 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.99 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,99.0,1.0,{'calculated dose': 99}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.92,92.0,gpt-4.1-mini,"Convert 0.92 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.92 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,110.4,1.2,{'calculated dose': 110.4}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.95,95.0,gpt-4.1-mini,"Convert 0.95 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.95 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,114.0,1.2,{'calculated dose': 114}
+6,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.21,21.0,gpt-4.1-mini,"Convert 0.21 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.21 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,50.4,2.4,{'calculated dose': 50.4}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.52,52.0,gpt-4.1-mini,"Convert 0.52 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.52 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,52.0,1.0,{'calculated dose': 52}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.1,10.0,gpt-4.1-mini,"Convert 0.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,10.0,1.0,{'calculated dose': 10}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.75,75.0,gpt-4.1-mini,"Convert 0.75 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.75 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,75.0,1.0,{'calculated dose': 75}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.33,33.0,gpt-4.1-mini,"Convert 0.33 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.33 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,33.0,1.0,{'calculated dose': 33}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.13,13.0,gpt-4.1-mini,"Convert 0.13 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.13 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,13.0,1.0,{'calculated dose': 13}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.47,47.0,gpt-4.1-mini,"Convert 0.47 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.47 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,47.0,1.0,{'calculated dose': 47}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.18,18.0,gpt-4.1-mini,"Convert 0.18 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.18 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,18.0,1.0,{'calculated dose': 18}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,15.0,1.0,{'calculated dose': 15}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.59,59.0,gpt-4.1-mini,"Convert 0.59 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.59 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,59.0,1.0,{'calculated dose': 59}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.11,111.0,gpt-4.1-mini,"Convert 1.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.11 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,111.0,1.0,{'calculated dose': 111}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,15.0,1.0,{'calculated dose': 15}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.88,88.0,gpt-4.1-mini,"Convert 0.88 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.88 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,88.0,1.0,{'calculated dose': 88}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.65,65.0,gpt-4.1-mini,"Convert 0.65 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.65 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,65.0,1.0,{'calculated dose': 65}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.83,83.0,gpt-4.1-mini,"Convert 0.83 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.83 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,83.0,1.0,{'calculated dose': 83}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.37,37.0,gpt-4.1-mini,"Convert 0.37 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.37 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,37.0,1.0,{'calculated dose': 37}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.53,53.0,gpt-4.1-mini,"Convert 0.53 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.53 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,53.0,1.0,{'calculated dose': 53}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.1,10.0,gpt-4.1-mini,"Convert 0.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,10.0,1.0,{'calculated dose': 10}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.6,60.0,gpt-4.1-mini,"Convert 0.60 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.60 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,60.0,1.0,{'calculated dose': 60}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.33,33.0,gpt-4.1-mini,"Convert 0.33 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.33 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,33.0,1.0,{'calculated dose': 33}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.55,55.0,gpt-4.1-mini,"Convert 0.55 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.55 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,55.0,1.0,{'calculated dose': 55}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.85,85.0,gpt-4.1-mini,"Convert 0.85 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.85 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,85.0,1.0,{'calculated dose': 85}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.22,22.0,gpt-4.1-mini,"Convert 0.22 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.22 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,22.0,1.0,{'calculated dose': 22}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.76,76.0,gpt-4.1-mini,"Convert 0.76 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.76 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,76.0,1.0,{'calculated dose': 76}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.8,80.0,gpt-4.1-mini,"Convert 0.80 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.80 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,80.0,1.0,{'calculated dose': 80}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.99,99.0,gpt-4.1-mini,"Convert 0.99 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.99 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,99.0,1.0,{'calculated dose': 99}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.85,85.0,gpt-4.1-mini,"Convert 0.85 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.85 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,85.0,1.0,{'calculated dose': 85}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,15.0,1.0,{'calculated dose': 15}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.12,12.0,gpt-4.1-mini,"Convert 0.12 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.12 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,12.0,1.0,{'calculated dose': 12}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.32,32.0,gpt-4.1-mini,"Convert 0.32 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.32 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,32.0,1.0,{'calculated dose': 32}
+7,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,15.0,1.0,{'calculated dose': 15}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.12,112.0,gpt-4.1-mini,"Convert 1.12 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.12 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,268.8,2.4,{'calculated dose': 268.8}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.1,110.0,gpt-4.1-mini,"Convert 1.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.10 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,110.0,1.0,{'calculated dose': 110}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.28,28.0,gpt-4.1-mini,"Convert 0.28 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.28 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,6.72,0.24,{'calculated dose': 6.72}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.12,12.0,gpt-4.1-mini,"Convert 0.12 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.12 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,12.0,1.0,{'calculated dose': 12}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.45,45.0,gpt-4.1-mini,"Convert 0.45 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.45 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,45.0,1.0,{'calculated dose': 45}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.22,22.0,gpt-4.1-mini,"Convert 0.22 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.22 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,52.8,2.4,{'calculated dose': 52.8}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.32,32.0,gpt-4.1-mini,"Convert 0.32 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.32 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,76.8,2.4,{'calculated dose': 76.8}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.13,13.0,gpt-4.1-mini,"Convert 0.13 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.13 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,31.2,2.4,{'calculated dose': 31.2}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,17.0,1.0,{'calculated dose': 17}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.43,43.0,gpt-4.1-mini,"Convert 0.43 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.43 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,10.32,0.24,{'calculated dose': 10.32}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.1,10.0,gpt-4.1-mini,"Convert 0.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,10.0,1.0,{'calculated dose': 10}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,17.0,1.0,{'calculated dose': 17}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,36.0,2.4,{'calculated dose': 36}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,17.0,1.0,{'calculated dose': 17}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.12,12.0,gpt-4.1-mini,"Convert 0.12 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.12 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,12.0,1.0,{'calculated dose': 12}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,11.0,1.0,{'calculated dose': 11.0}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.25,25.0,gpt-4.1-mini,"Convert 0.25 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.25 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,6.0,0.24,{'calculated dose': 6}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.06,106.0,gpt-4.1-mini,"Convert 1.06 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.06 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,106.0,1.0,{'calculated dose': 106}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.29,29.0,gpt-4.1-mini,"Convert 0.29 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.29 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,6.96,0.24,{'calculated dose': 6.96}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.2,20.0,gpt-4.1-mini,"Convert 0.20 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.20 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,48.0,2.4,{'calculated dose': 48}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.22,22.0,gpt-4.1-mini,"Convert 0.22 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.22 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,52.8,2.4,{'calculated dose': 52.8}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.67,67.0,gpt-4.1-mini,"Convert 0.67 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.67 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,16.8,0.25,{'calculated dose': 16.8}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.35,35.0,gpt-4.1-mini,"Convert 0.35 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.35 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,84.0,2.4,{'calculated dose': 84}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.24,24.0,gpt-4.1-mini,"Convert 0.24 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.24 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,57.6,2.4,{'calculated dose': 57.6}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.21,21.0,gpt-4.1-mini,"Convert 0.21 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.21 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,50.4,2.4,{'calculated dose': 50.4}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,17.0,1.0,{'calculated dose': 17.0}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,17.0,1.0,{'calculated dose': 17.0}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.31,31.0,gpt-4.1-mini,"Convert 0.31 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.31 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,31.0,1.0,{'calculated dose': 31}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.18,18.0,gpt-4.1-mini,"Convert 0.18 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.18 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,43.2,2.4,{'calculated dose': 43.2}
+8,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.1,10.0,gpt-4.1-mini,"Convert 0.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,True,10.0,1.0,{'calculated dose': 10}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.2,20.0,gpt-4.1-mini,"Convert 0.20 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.20 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,4.8,0.24,{'calculated dose': 4.8}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.13,113.0,gpt-4.1-mini,"Convert 1.13 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.13 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,27.12,0.24,{'calculated dose': 27.12}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.31,31.0,gpt-4.1-mini,"Convert 0.31 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.31 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,7.44,0.24,{'calculated dose': 7.44}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.18,18.0,gpt-4.1-mini,"Convert 0.18 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.18 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,10.8,0.6,{'calculated dose': 10.8}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.8,80.0,gpt-4.1-mini,"Convert 0.80 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.80 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,19.2,0.24,{'calculated dose': 19.2}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.4,40.0,gpt-4.1-mini,"Convert 0.40 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.40 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,9.6,0.24,{'calculated dose': 9.6}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.49,49.0,gpt-4.1-mini,"Convert 0.49 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.49 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,29.4,0.6,{'calculated dose': 29.4}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.19,19.0,gpt-4.1-mini,"Convert 0.19 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.19 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,11.4,0.6,{'calculated dose': 11.4}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.2,20.0,gpt-4.1-mini,"Convert 0.20 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.20 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,4.8,0.24,{'calculated dose': 4.8}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.32,32.0,gpt-4.1-mini,"Convert 0.32 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.32 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,11.52,0.36,{'calculated dose': 11.52}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.19,19.0,gpt-4.1-mini,"Convert 0.19 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.19 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,11.4,0.6,{'calculated dose': 11.4}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.25,25.0,gpt-4.1-mini,"Convert 0.25 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.25 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,1.5,0.06,{'calculated dose': 1.5}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,0.41,0.02,{'calculated dose': 0.41}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.96,96.0,gpt-4.1-mini,"Convert 0.96 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.96 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,11.5,0.12,{'calculated dose': 11.5}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,2.64,0.24,{'calculated dose': 2.64}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.24,24.0,gpt-4.1-mini,"Convert 0.24 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.24 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,0.576,0.02,{'calculated dose': 0.576}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.1,10.0,gpt-4.1-mini,"Convert 0.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,5.0,0.5,{'calculated dose': 5}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.48,48.0,gpt-4.1-mini,"Convert 0.48 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.48 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,28.8,0.6,{'calculated dose': 28.8}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.41,41.0,gpt-4.1-mini,"Convert 0.41 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.41 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,24.84,0.61,{'calculated dose': 24.84}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.91,91.0,gpt-4.1-mini,"Convert 0.91 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.91 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,21.84,0.24,{'calculated dose': 21.84}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.57,57.0,gpt-4.1-mini,"Convert 0.57 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.57 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,8.64,0.15,{'calculated dose': 8.64}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.33,33.0,gpt-4.1-mini,"Convert 0.33 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.33 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,0.8,0.02,{'calculated dose': 0.8}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.68,68.0,gpt-4.1-mini,"Convert 0.68 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.68 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,32.64,0.48,{'calculated dose': 32.64}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.39,39.0,gpt-4.1-mini,"Convert 0.39 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.39 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,23.4,0.6,{'calculated dose': 23.4}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.35,35.0,gpt-4.1-mini,"Convert 0.35 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.35 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,20.1,0.57,{'calculated dose': 20.1}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.4,40.0,gpt-4.1-mini,"Convert 0.40 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.40 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,23.0,0.57,{'calculated dose': 23}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.49,49.0,gpt-4.1-mini,"Convert 0.49 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.49 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,29.4,0.6,{'calculated dose': 29.4}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,6.6,0.6,{'calculated dose': 6.6}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.4,40.0,gpt-4.1-mini,"Convert 0.40 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.40 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,23.04,0.58,{'calculated dose': 23.04}
+9,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,2.64,0.24,{'calculated dose': 2.64}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,0.612,0.04,{'calculated dose': 0.612}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,2.64,0.24,{'calculated dose': 2.64}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.25,25.0,gpt-4.1-mini,"Convert 0.25 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.25 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,6.0,0.24,{'calculated dose': 6}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.14,14.0,gpt-4.1-mini,"Convert 0.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.14 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,8.4,0.6,{'calculated dose': 8.4}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.2,20.0,gpt-4.1-mini,"Convert 0.20 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.20 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,4.8,0.24,{'calculated dose': 4.8}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.04,104.0,gpt-4.1-mini,"Convert 1.04 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.04 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,24.96,0.24,{'calculated dose': 24.96}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.38,38.0,gpt-4.1-mini,"Convert 0.38 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.38 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,22.8,0.6,{'calculated dose': 22.8}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.46,46.0,gpt-4.1-mini,"Convert 0.46 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.46 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,27.6,0.6,{'calculated dose': 27.6}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.76,76.0,gpt-4.1-mini,"Convert 0.76 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.76 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,18.24,0.24,{'calculated dose': 18.24}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.38,38.0,gpt-4.1-mini,"Convert 0.38 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.38 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,22.8,0.6,{'calculated dose': 22.8}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.64,64.0,gpt-4.1-mini,"Convert 0.64 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.64 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,38.4,0.6,{'calculated dose': 38.4}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.39,39.0,gpt-4.1-mini,"Convert 0.39 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.39 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,28.08,0.72,{'calculated dose': 28.08}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.16,16.0,gpt-4.1-mini,"Convert 0.16 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.16 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,0.96,0.06,{'calculated dose': 0.96}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,9.0,0.6,{'calculated dose': 9}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.37,37.0,gpt-4.1-mini,"Convert 0.37 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.37 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,21.6,0.58,{'calculated dose': 21.6}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.18,18.0,gpt-4.1-mini,"Convert 0.18 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.18 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,10.8,0.6,{'calculated dose': 10.8}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,8.64,0.58,{'calculated dose': 8.64}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.14,14.0,gpt-4.1-mini,"Convert 0.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.14 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,8.4,0.6,{'calculated dose': 8.4}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.06,106.0,gpt-4.1-mini,"Convert 1.06 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.06 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,25.44,0.24,{'calculated dose': 25.44}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.09,109.0,gpt-4.1-mini,"Convert 1.09 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.09 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,26.16,0.24,{'calculated dose': 26.16}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.86,86.0,gpt-4.1-mini,"Convert 0.86 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.86 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,20.64,0.24,{'calculated dose': 20.64}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.37,37.0,gpt-4.1-mini,"Convert 0.37 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.37 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,22.32,0.6,{'calculated dose': 22.32}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.1,10.0,gpt-4.1-mini,"Convert 0.10 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,5.76,0.58,{'calculated dose': 5.76}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.29,29.0,gpt-4.1-mini,"Convert 0.29 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.29 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,17.52,0.6,{'calculated dose': 17.52}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,2.04,0.12,{'calculated dose': 2.04}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.25,25.0,gpt-4.1-mini,"Convert 0.25 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.25 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,6.0,0.24,{'calculated dose': 6}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.2,20.0,gpt-4.1-mini,"Convert 0.20 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.20 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,2.88,0.14,{'calculated dose': 2.88}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.19,19.0,gpt-4.1-mini,"Convert 0.19 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.19 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,4.56,0.24,{'calculated dose': 4.56}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.52,52.0,gpt-4.1-mini,"Convert 0.52 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.52 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,31.2,0.6,{'calculated dose': 31.2}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.24,24.0,gpt-4.1-mini,"Convert 0.24 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.24 mcg/hour of fentanyl (iv)?
+
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,False,11.52,0.48,{'calculated dose': 11.52}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.06,106.0,gpt-4.1-mini,"Convert 1.06 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.06 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,106.0,1.0,{'calculated dose': 106}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.63,63.0,gpt-4.1-mini,"Convert 0.63 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.63 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,63.0,1.0,{'calculated dose': 63}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.17,17.0,gpt-4.1-mini,"Convert 0.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.17 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,17.0,1.0,{'calculated dose': 17}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.99,99.0,gpt-4.1-mini,"Convert 0.99 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.99 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,99.0,1.0,{'calculated dose': 99}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.35,35.0,gpt-4.1-mini,"Convert 0.35 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.35 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,35.0,1.0,{'calculated dose': 35}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.92,92.0,gpt-4.1-mini,"Convert 0.92 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.92 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,92.0,1.0,{'calculated dose': 92}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.5,50.0,gpt-4.1-mini,"Convert 0.50 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.50 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,50.0,1.0,{'calculated dose': 50}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.35,35.0,gpt-4.1-mini,"Convert 0.35 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.35 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,35.0,1.0,{'calculated dose': 35}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.13,13.0,gpt-4.1-mini,"Convert 0.13 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.13 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,13.0,1.0,{'calculated dose': 13}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.12,12.0,gpt-4.1-mini,"Convert 0.12 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.12 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,12.0,1.0,{'calculated dose': 12}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.2,20.0,gpt-4.1-mini,"Convert 0.20 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.20 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,4.0,0.2,{'calculated dose': 4}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.39,39.0,gpt-4.1-mini,"Convert 0.39 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.39 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,39.0,1.0,{'calculated dose': 39}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.98,98.0,gpt-4.1-mini,"Convert 0.98 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.98 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,98.0,1.0,{'calculated dose': 98}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.17,117.0,gpt-4.1-mini,"Convert 1.17 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.17 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,117.0,1.0,{'calculated dose': 117}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.16,16.0,gpt-4.1-mini,"Convert 0.16 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.16 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,16.0,1.0,{'calculated dose': 16}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.39,39.0,gpt-4.1-mini,"Convert 0.39 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.39 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,39.0,1.0,{'calculated dose': 39}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.54,54.0,gpt-4.1-mini,"Convert 0.54 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.54 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,54.0,1.0,{'calculated dose': 54}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.54,54.0,gpt-4.1-mini,"Convert 0.54 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.54 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,54.0,1.0,{'calculated dose': 54}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.26,26.0,gpt-4.1-mini,"Convert 0.26 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.26 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,26.0,1.0,{'calculated dose': 26}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.15,15.0,gpt-4.1-mini,"Convert 0.15 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.15 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,15.0,1.0,{'calculated dose': 15}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.24,24.0,gpt-4.1-mini,"Convert 0.24 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.24 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,24.0,1.0,{'calculated dose': 24}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.26,26.0,gpt-4.1-mini,"Convert 0.26 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.26 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,26.0,1.0,{'calculated dose': 26}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.56,56.0,gpt-4.1-mini,"Convert 0.56 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.56 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,56.0,1.0,{'calculated dose': 56}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.9,90.0,gpt-4.1-mini,"Convert 0.90 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.90 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,90.0,1.0,{'calculated dose': 90}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.34,34.0,gpt-4.1-mini,"Convert 0.34 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.34 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,34.0,1.0,{'calculated dose': 34}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.66,66.0,gpt-4.1-mini,"Convert 0.66 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.66 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,66.0,1.0,{'calculated dose': 66}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.27,27.0,gpt-4.1-mini,"Convert 0.27 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.27 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,27.0,1.0,{'calculated dose': 27}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.18,18.0,gpt-4.1-mini,"Convert 0.18 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.18 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,18.0,1.0,{'calculated dose': 18}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.2,20.0,gpt-4.1-mini,"Convert 0.20 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.20 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,4.0,0.2,{'calculated dose': 4}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+Use the following conversion factor(s):
+100 OME: 1 mcg/hour of fentanyl (iv) is equivalent to 100 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,11.0,1.0,{'calculated dose': 11}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.22,22.0,gpt-4.1-mini,"Convert 0.22 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.22 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,22.0,1.0,{'calculated dose': 22}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.21,21.0,gpt-4.1-mini,"Convert 0.21 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.21 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,21.0,1.0,{'calculated dose': 21}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.25,25.0,gpt-4.1-mini,"Convert 0.25 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.25 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,60.0,2.4,{'calculated dose': 60}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.93,93.0,gpt-4.1-mini,"Convert 0.93 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.93 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,111.6,1.2,{'calculated dose': 111.6}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.04,104.0,gpt-4.1-mini,"Convert 1.04 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.04 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,124.8,1.2,{'calculated dose': 124.8}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.34,34.0,gpt-4.1-mini,"Convert 0.34 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.34 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,34.0,1.0,{'calculated dose': 34}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.21,21.0,gpt-4.1-mini,"Convert 0.21 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.21 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,21.0,1.0,{'calculated dose': 21}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.38,38.0,gpt-4.1-mini,"Convert 0.38 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.38 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,38.0,1.0,{'calculated dose': 38}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,11.0,1.0,{'calculated dose': 11}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.05,105.0,gpt-4.1-mini,"Convert 1.05 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.05 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,126.0,1.2,{'calculated dose': 126}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.71,71.0,gpt-4.1-mini,"Convert 0.71 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.71 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,71.0,1.0,{'calculated dose': 71}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.18,18.0,gpt-4.1-mini,"Convert 0.18 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.18 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,18.0,1.0,{'calculated dose': 18}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.49,49.0,gpt-4.1-mini,"Convert 0.49 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.49 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,117.6,2.4,{'calculated dose': 117.6}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.22,22.0,gpt-4.1-mini,"Convert 0.22 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.22 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,22.0,1.0,{'calculated dose': 22}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.13,13.0,gpt-4.1-mini,"Convert 0.13 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.13 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,13.0,1.0,{'calculated dose': 13}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,11.0,1.0,{'calculated dose': 11}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.25,25.0,gpt-4.1-mini,"Convert 0.25 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.25 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,24.0,0.96,{'calculated dose': 24}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.14,14.0,gpt-4.1-mini,"Convert 0.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.14 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,14.0,1.0,{'calculated dose': 14}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.51,51.0,gpt-4.1-mini,"Convert 0.51 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.51 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,51.0,1.0,{'calculated dose': 51}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.0,100.0,gpt-4.1-mini,"Convert 1.00 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.00 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,100.0,1.0,{'calculated dose': 100}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.27,27.0,gpt-4.1-mini,"Convert 0.27 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.27 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,27.0,1.0,{'calculated dose': 27}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.35,35.0,gpt-4.1-mini,"Convert 0.35 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.35 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,35.0,1.0,{'calculated dose': 35}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.43,43.0,gpt-4.1-mini,"Convert 0.43 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.43 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,43.0,1.0,{'calculated dose': 43.0}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.37,37.0,gpt-4.1-mini,"Convert 0.37 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.37 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,44.4,1.2,{'calculated dose': 44.4}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.11,11.0,gpt-4.1-mini,"Convert 0.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.11 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,11.0,1.0,{'calculated dose': 11}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.14,14.0,gpt-4.1-mini,"Convert 0.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.14 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,14.0,1.0,{'calculated dose': 14}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.14,14.0,gpt-4.1-mini,"Convert 0.14 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.14 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,14.0,1.0,{'calculated dose': 14}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.23,23.0,gpt-4.1-mini,"Convert 0.23 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.23 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,23.0,1.0,{'calculated dose': 23}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,1.11,111.0,gpt-4.1-mini,"Convert 1.11 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 1.11 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,132.0,1.19,{'calculated dose': 132}
+10,iv_fentanyl,mcg/hour,oral_morphine,mg/day,0.57,57.0,gpt-4.1-mini,"Convert 0.57 mcg/hour of fentanyl (iv) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 0.57 mcg/hour of fentanyl (iv)?
+
+100 OME for fentanyl (iv) means 10 mg/day of morphine (oral) is equivalent to 0.10 mcg/hour of fentanyl (iv).
+And 120 mg/day of morphine (oral) is equivalent to 1.20 mcg/hour of fentanyl (iv).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",False,True,57.0,1.0,{'calculated dose': 57}

@@ -242,7 +242,7 @@ class ExperimentFromCSVConverter:
         return counts
 
     @staticmethod
-    def from_csv(csv_file, experiment_id=None, filters=None):
+    def from_csv(csv_file, experiment_id=None, filters=None, prompt_conditions=None):
         """
         Create an Experiment object from a CSV file.
 
@@ -261,6 +261,44 @@ class ExperimentFromCSVConverter:
         if filters:
             for key, value in filters.items():
                 df = df[df[key] == value]
+
+        if prompt_conditions:
+            # Ensure all rows match the provided prompt_conditions
+            for condition in prompt_conditions:
+                for key, value in condition.items():
+                    df = df[df[key] == value]
+
+        # Extract unique opioid pairs and prompt conditions from the DataFrame
+        opioid_pairs = df[["from_opioid", "to_opioid"]].drop_duplicates().to_records(index=False)
+        prompt_conditions = df[["include_nielson", "include_examples"]].drop_duplicates().to_dict(orient="records")
+
+        # Create a mapping of opioid_pairs to their associated prompt_conditions
+        pair_condition_map = df.groupby(["from_opioid", "to_opioid"])[["include_nielson", "include_examples"]].apply(
+            lambda x: x.drop_duplicates().to_dict(orient="records")
+        )
+
+        # Check for missing prompt_conditions for each opioid pair
+        missing_conditions = {}
+        for pair, conditions in pair_condition_map.items():
+            missing = [cond for cond in prompt_conditions if cond not in conditions]
+            if missing:
+                missing_conditions[pair] = missing
+
+        # Check for prompt_conditions that are completely covered by all opioid_pairs
+        covered_conditions = []
+        for condition in prompt_conditions:
+            if all(condition in pair_condition_map[pair] for pair in pair_condition_map):
+                covered_conditions.append(condition)
+
+        # Raise an error if there are inconsistencies
+        if missing_conditions:
+            error_message = "Inconsistent prompt_conditions in the CSV file:\n"
+            error_message += "1. Opioid pairs missing some prompt_conditions:\n"
+            for pair, missing in missing_conditions.items():
+                error_message += f"   - {pair}: Missing {missing}\n"
+            error_message += "2. Prompt_conditions completely covered by all opioid_pairs:\n"
+            error_message += f"   - {covered_conditions}\n"
+            raise ValueError(error_message)
 
         # Extract unique opioid pairs from the DataFrame
         opioid_pairs = []
