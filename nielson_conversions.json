@@ -1,44 +1,506 @@
 {
-    "iv_fentanyl": {
-        "administration_method": "iv",
-        "substance": "fentanyl",
-        "conversion_factor": 100,
-        "unit": "mcg/hour"
+    "oral_codeine": {
+        "administration_method": "oral",
+        "substance": "codeine",
+        "conversion_factor": 0.1,
+        "unit": "mg/day",
+        "LQ": 0.1,
+        "UQ": 0.2
+    },
+    "oral_dextropropoxyphene": {
+        "administration_method": "oral",
+        "substance": "dextropropoxyphene",
+        "conversion_factor": 0.1,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "oral_dihydrocodeine": {
+        "administration_method": "oral",
+        "substance": "dihydrocodeine",
+        "conversion_factor": 0.1,
+        "unit": "mg/day",
+        "LQ": 0.1,
+        "UQ": 0.1
+    },
+    "oral_hydrocodone": {
+        "administration_method": "oral",
+        "substance": "hydrocodone",
+        "conversion_factor": 1.2,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
     },
     "oral_hydromorphone": {
         "administration_method": "oral",
         "substance": "hydromorphone",
-        "conversion_factor": 5,
-        "unit": "mg/day"
+        "conversion_factor": 5.0,
+        "unit": "mg/day",
+        "LQ": 5.0,
+        "UQ": 5.5
     },
-    "iv_hydromorphone": {
-        "administration_method": "iv",
-        "substance": "hydromorphone",
-        "conversion_factor": 20,
-        "unit": "mg/day"
+    "oral_levorphanol": {
+        "administration_method": "oral",
+        "substance": "levorphanol",
+        "conversion_factor": 13.8,
+        "unit": "mg/day",
+        "LQ": 11.3,
+        "UQ": 16.3
+    },
+    "oral_meperidine": {
+        "administration_method": "oral",
+        "substance": "meperidine",
+        "conversion_factor": 0.1,
+        "unit": "mg/day",
+        "LQ": 0.1,
+        "UQ": 0.1
+    },
+    "oral_methadone": {
+        "administration_method": "oral",
+        "substance": "methadone",
+        "conversion_factor": 4.7,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "oral_morphine": {
+        "administration_method": "oral",
+        "substance": "morphine",
+        "conversion_factor": 1.0,
+        "unit": "mg/day",
+        "LQ": 1.0,
+        "UQ": 1.0
     },
     "oral_oxycodone": {
         "administration_method": "oral",
         "substance": "oxycodone",
         "conversion_factor": 1.5,
-        "unit": "mg/day"
+        "unit": "mg/day",
+        "LQ": 1.5,
+        "UQ": 1.5
     },
-    "oral_codeine": {
+    "oral_oxymorphone": {
         "administration_method": "oral",
-        "substance": "codeine",
-        "conversion_factor": 0.15,
-        "unit": "mg/day"
+        "substance": "oxymorphone",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "oral_pentazocine": {
+        "administration_method": "oral",
+        "substance": "pentazocine",
+        "conversion_factor": 0.6,
+        "unit": "mg/day",
+        "LQ": 0.6,
+        "UQ": 0.6
+    },
+    "oral_tapentadol": {
+        "administration_method": "oral",
+        "substance": "tapentadol",
+        "conversion_factor": 0.4,
+        "unit": "mg/day",
+        "LQ": 0.4,
+        "UQ": 0.4
     },
     "oral_tramadol": {
         "administration_method": "oral",
         "substance": "tramadol",
+        "conversion_factor": 0.2,
+        "unit": "mg/day",
+        "LQ": 0.2,
+        "UQ": 0.2
+    },
+    "sublingual_buprenorphine": {
+        "administration_method": "sublingual",
+        "substance": "buprenorphine",
+        "conversion_factor": 38.8,
+        "unit": "mg/day",
+        "LQ": 37.5,
+        "UQ": 43.8
+    },
+    "sublingual_fentanyl": {
+        "administration_method": "sublingual",
+        "substance": "fentanyl",
         "conversion_factor": 0.1,
-        "unit": "mg/day"
+        "unit": "mcg/day",
+        "LQ": 0.1,
+        "UQ": 0.1
+    },
+    "sublingual_sufentanil": {
+        "administration_method": "sublingual",
+        "substance": "sufentanil",
+        "conversion_factor": 0.5,
+        "unit": "mcg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "transdermal_buprenorphine": {
+        "administration_method": "transdermal",
+        "substance": "buprenorphine",
+        "conversion_factor": 2.2,
+        "unit": "mcg/hr",
+        "LQ": 1.9,
+        "UQ": 2.4
+    },
+    "transdermal_fentanyl": {
+        "administration_method": "transdermal",
+        "substance": "fentanyl",
+        "conversion_factor": 2.7,
+        "unit": "mcg/hr",
+        "LQ": 2.4,
+        "UQ": 3.2
+    },
+    "oral_dihydrocodeine": {
+        "administration_method": "oral",
+        "substance": "dihydrocodeine",
+        "conversion_factor": 0.1,
+        "unit": "mg/day",
+        "LQ": 0.1,
+        "UQ": 0.1
+    },
+    "oral_hydrocodone": {
+        "administration_method": "oral",
+        "substance": "hydrocodone",
+        "conversion_factor": 1.2,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "oral_hydromorphone": {
+        "administration_method": "oral",
+        "substance": "hydromorphone",
+        "conversion_factor": 5.0,
+        "unit": "mg/day",
+        "LQ": 5.0,
+        "UQ": 5.5
+    },
+    "oral_levorphanol": {
+        "administration_method": "oral",
+        "substance": "levorphanol",
+        "conversion_factor": 13.8,
+        "unit": "mg/day",
+        "LQ": 11.3,
+        "UQ": 16.3
+    },
+    "oral_meperidine": {
+        "administration_method": "oral",
+        "substance": "meperidine",
+        "conversion_factor": 0.1,
+        "unit": "mg/day",
+        "LQ": 0.1,
+        "UQ": 0.1
+    },
+    "oral_methadone": {
+        "administration_method": "oral",
+        "substance": "methadone",
+        "conversion_factor": 4.7,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
     },
     "oral_morphine": {
         "administration_method": "oral",
         "substance": "morphine",
-        "conversion_factor": 1,
-        "unit": "mg/day"
+        "conversion_factor": 1.0,
+        "unit": "mg/day",
+        "LQ": 1.0,
+        "UQ": 1.0
+    },
+    "oral_oxycodone": {
+        "administration_method": "oral",
+        "substance": "oxycodone",
+        "conversion_factor": 1.5,
+        "unit": "mg/day",
+        "LQ": 1.5,
+        "UQ": 1.5
+    },
+    "oral_oxymorphone": {
+        "administration_method": "oral",
+        "substance": "oxymorphone",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "oral_pentazocine": {
+        "administration_method": "oral",
+        "substance": "pentazocine",
+        "conversion_factor": 0.6,
+        "unit": "mg/day",
+        "LQ": 0.6,
+        "UQ": 0.6
+    },
+    "oral_tapentadol": {
+        "administration_method": "oral",
+        "substance": "tapentadol",
+        "conversion_factor": 0.4,
+        "unit": "mg/day",
+        "LQ": 0.4,
+        "UQ": 0.4
+    },
+    "oral_tramadol": {
+        "administration_method": "oral",
+        "substance": "tramadol",
+        "conversion_factor": 0.2,
+        "unit": "mg/day",
+        "LQ": 0.2,
+        "UQ": 0.2
+    },
+    "sublingual_buprenorphine": {
+        "administration_method": "sublingual",
+        "substance": "buprenorphine",
+        "conversion_factor": 38.8,
+        "unit": "mg/day",
+        "LQ": 37.5,
+        "UQ": 43.8
+    },
+    "sublingual_fentanyl": {
+        "administration_method": "sublingual",
+        "substance": "fentanyl",
+        "conversion_factor": 0.1,
+        "unit": "mcg/day",
+        "LQ": 0.1,
+        "UQ": 0.1
+    },
+    "sublingual_sufentanil": {
+        "administration_method": "sublingual",
+        "substance": "sufentanil",
+        "conversion_factor": 0.5,
+        "unit": "mcg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "transdermal_buprenorphine": {
+        "administration_method": "transdermal",
+        "substance": "buprenorphine",
+        "conversion_factor": 2.2,
+        "unit": "mcg/hr",
+        "LQ": 1.9,
+        "UQ": 2.4
+    },
+    "transdermal_fentanyl": {
+        "administration_method": "transdermal",
+        "substance": "fentanyl",
+        "conversion_factor": 2.7,
+        "unit": "mcg/hr",
+        "LQ": 2.4,
+        "UQ": 3.2
+    },
+    "sc_codeine": {
+        "administration_method": "sc",
+        "substance": "codeine",
+        "conversion_factor": 0.3,
+        "unit": "mg/day",
+        "LQ": 0.3,
+        "UQ": 0.3
+    },
+    "iv_codeine": {
+        "administration_method": "iv",
+        "substance": "codeine",
+        "conversion_factor": 0.3,
+        "unit": "mg/day",
+        "LQ": 0.3,
+        "UQ": 0.3
+    },
+    "im_buprenorphine": {
+        "administration_method": "im",
+        "substance": "buprenorphine",
+        "conversion_factor": 75,
+        "unit": "mg/day",
+        "LQ": 75,
+        "UQ": 90.6
+    },
+    "iv_buprenorphine": {
+        "administration_method": "iv",
+        "substance": "buprenorphine",
+        "conversion_factor": 75,
+        "unit": "mg/day",
+        "LQ": 75,
+        "UQ": 90.6
+    },
+    "parenteral_butorphanol": {
+        "administration_method": "parenteral",
+        "substance": "butorphanol",
+        "conversion_factor": 15,
+        "unit": "mg/day",
+        "LQ": 15,
+        "UQ": 15
+    },
+    "parenteral_diamorphine": {
+        "administration_method": "parenteral",
+        "substance": "diamorphine",
+        "conversion_factor": 3.3,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "sc_hydromorphone": {
+        "administration_method": "sc",
+        "substance": "hydromorphone",
+        "conversion_factor": 17.5,
+        "unit": "mg/day",
+        "LQ": 16.9,
+        "UQ": 18.1
+    },
+    "iv_hydromorphone": {
+        "administration_method": "iv",
+        "substance": "hydromorphone",
+        "conversion_factor": 17.5,
+        "unit": "mg/day",
+        "LQ": 16.9,
+        "UQ": 18.1
+    },
+    "iv_fentanyl": {
+        "administration_method": "iv",
+        "substance": "fentanyl",
+        "conversion_factor": 0.2,
+        "unit": "mcg/day",
+        "LQ": 0.2,
+        "UQ": 0.3
+    },
+    "im_fentanyl": {
+        "administration_method": "im",
+        "substance": "fentanyl",
+        "conversion_factor": 0.2,
+        "unit": "mcg/day",
+        "LQ": 0.2,
+        "UQ": 0.3
+    },
+    "sc_fentanyl": {
+        "administration_method": "sc",
+        "substance": "fentanyl",
+        "conversion_factor": 0.2,
+        "unit": "mcg/day",
+        "LQ": 0.2,
+        "UQ": 0.3
+    },
+    "parenteral_levorphanol": {
+        "administration_method": "parenteral",
+        "substance": "levorphanol",
+        "conversion_factor": 20.0,
+        "unit": "mg/day",
+        "LQ": 18.8,
+        "UQ": 21.3
+    },
+    "parenteral_meperidine": {
+        "administration_method": "parenteral",
+        "substance": "meperidine",
+        "conversion_factor": 0.4,
+        "unit": "mg/day",
+        "LQ": 0.4,
+        "UQ": 0.4
+    },
+    "sc_morphine": {
+        "administration_method": "sc",
+        "substance": "morphine",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": 3.0,
+        "UQ": 3.0
+    },
+    "iv_morphine": {
+        "administration_method": "iv",
+        "substance": "morphine",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": 3.0,
+        "UQ": 3.0
+    },
+    "iv_methadone": {
+        "administration_method": "iv",
+        "substance": "methadone",
+        "conversion_factor": 13.5,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "parenteral_nalbuphine": {
+        "administration_method": "parenteral",
+        "substance": "nalbuphine",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": 3.0,
+        "UQ": 3.0
+    },
+    "sc_oxycodone": {
+        "administration_method": "sc",
+        "substance": "oxycodone",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": 3.0,
+        "UQ": 3.0
+    },
+    "iv_oxycodone": {
+        "administration_method": "iv",
+        "substance": "oxycodone",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": 3.0,
+        "UQ": 3.0
+    },
+    "parenteral_oxymorphone": {
+        "administration_method": "parenteral",
+        "substance": "oxymorphone",
+        "conversion_factor": 30.0,
+        "unit": "mg/day",
+        "LQ": 30.0,
+        "UQ": 30.0
+    },
+    "parenteral_pentazocine": {
+        "administration_method": "parenteral",
+        "substance": "pentazocine",
+        "conversion_factor": 1.1,
+        "unit": "mg/day",
+        "LQ": 1.0,
+        "UQ": 1.1
+    },
+    "iv_pethidine": {
+        "administration_method": "iv",
+        "substance": "pethidine",
+        "conversion_factor": 0.4,
+        "unit": "mg/day",
+        "LQ": 0.4,
+        "UQ": 0.4
+    },
+    "im_pethidine": {
+        "administration_method": "im",
+        "substance": "pethidine",
+        "conversion_factor": 0.4,
+        "unit": "mg/day",
+        "LQ": 0.4,
+        "UQ": 0.4
+    },
+    "iv_sufentanil": {
+        "administration_method": "iv",
+        "substance": "sufentanil",
+        "conversion_factor": 2.0,
+        "unit": "mcg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "sc_sufentanil": {
+        "administration_method": "sc",
+        "substance": "sufentanil",
+        "conversion_factor": 2.0,
+        "unit": "mcg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "rectal_oxycodone": {
+        "administration_method": "rectal",
+        "substance": "oxycodone",
+        "conversion_factor": 1.5,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
+    },
+    "rectal_oxymorphone": {
+        "administration_method": "rectal",
+        "substance": "oxymorphone",
+        "conversion_factor": 3.5,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null
     }
 }
