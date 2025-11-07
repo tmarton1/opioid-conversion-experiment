@@ -248,6 +248,9 @@ class ExperimentFromCSVConverter:
 
         Args:
             csv_file (str): Path to the CSV file containing experiment results.
+            experiment_id (int, optional): The ID of the experiment to recreate. If None, include all experiment IDs.
+            filters (dict, optional): Additional filters to apply (e.g., {"model": "gpt-4.1-mini"}).
+            prompt_conditions (list of dict, optional): List of dictionaries specifying prompt conditions to filter by. If None, include all prompt conditions.
 
         Returns:
             Experiment: An Experiment object with the data loaded from the CSV.
@@ -255,50 +258,23 @@ class ExperimentFromCSVConverter:
         # Load the CSV into a DataFrame
         df = pd.read_csv(csv_file)
 
-        # Apply filters
-        if experiment_id:
+        # Apply experiment_id filter if provided
+        if experiment_id is not None:
             df = df[df["experiment_id"] == experiment_id]
+
+        # Apply additional filters if provided
         if filters:
             for key, value in filters.items():
                 df = df[df[key] == value]
 
+        # Apply prompt_conditions filter if provided
         if prompt_conditions:
-            # Ensure all rows match the provided prompt_conditions
-            for condition in prompt_conditions:
-                for key, value in condition.items():
-                    df = df[df[key] == value]
-
-        # Extract unique opioid pairs and prompt conditions from the DataFrame
-        opioid_pairs = df[["from_opioid", "to_opioid"]].drop_duplicates().to_records(index=False)
-        prompt_conditions = df[["include_nielson", "include_examples"]].drop_duplicates().to_dict(orient="records")
-
-        # Create a mapping of opioid_pairs to their associated prompt_conditions
-        pair_condition_map = df.groupby(["from_opioid", "to_opioid"])[["include_nielson", "include_examples"]].apply(
-            lambda x: x.drop_duplicates().to_dict(orient="records")
-        )
-
-        # Check for missing prompt_conditions for each opioid pair
-        missing_conditions = {}
-        for pair, conditions in pair_condition_map.items():
-            missing = [cond for cond in prompt_conditions if cond not in conditions]
-            if missing:
-                missing_conditions[pair] = missing
-
-        # Check for prompt_conditions that are completely covered by all opioid_pairs
-        covered_conditions = []
-        for condition in prompt_conditions:
-            if all(condition in pair_condition_map[pair] for pair in pair_condition_map):
-                covered_conditions.append(condition)
-
-        # Raise an error if there are inconsistencies
-        if missing_conditions:
-            error_message = "Inconsistent prompt_conditions in the CSV file:\n"
-            error_message += "1. Opioid pairs missing some prompt_conditions:\n"
-            for pair, missing in missing_conditions.items():
-                error_message += f"   - {pair}: Missing {missing}\n"
-            error_message += "2. Prompt_conditions completely covered by all opioid_pairs:\n"
-            error_message += f"   - {covered_conditions}\n"
-            raise ValueError(error_message)
+            # Create a mask to filter rows that match any of the dictionaries in prompt_conditions
+            condition_mask = pd.concat(
+                [df[list(condition)].eq(pd.Series(condition)).all(axis=1) for condition in prompt_conditions],
+                axis=1
+            ).any(axis=1)
+            df = df[condition_mask]
 
         # Extract unique opioid pairs from the DataFrame
         opioid_pairs = []
@@ -320,10 +296,35 @@ class ExperimentFromCSVConverter:
             # Append the pair to the opioid_pairs list
             opioid_pairs.append((from_opioid, to_opioid))
 
-        # Create an Experiment object
-        experiment = Experiment(opioid_pairs)
+        # Extract unique prompt conditions
+        unique_conditions = df[["include_nielson", "include_examples"]].drop_duplicates().to_dict(orient="records")
 
-        # Populate the results directly from the CSV data
+        # Validate consistency of opioid_pairs and prompt_conditions
+        pair_condition_map = df.groupby(["from_opioid", "to_opioid"])[["include_nielson", "include_examples"]].apply(
+            lambda x: x.drop_duplicates().to_dict(orient="records")
+        ).to_dict()
+        missing_conditions = {}
+        for pair, conditions in pair_condition_map.items():
+            missing = [cond for cond in unique_conditions if cond not in conditions]
+            if missing:
+                missing_conditions[pair] = missing
+        covered_conditions = []
+        for condition in unique_conditions:
+            if all(condition in pair_condition_map[pair] for pair in pair_condition_map):
+                covered_conditions.append(condition)
+        if missing_conditions:
+            error_message = "Inconsistent prompt_conditions in the CSV file:\n"
+            error_message += "1. Opioid pairs missing some prompt_conditions:\n"
+            for pair, missing in missing_conditions.items():
+                error_message += f"   - {pair}: Missing {missing}\n"
+            error_message += "2. Prompt_conditions completely covered by all opioid_pairs:\n"
+            error_message += f"   - {covered_conditions}\n"
+            raise ValueError(error_message)
+
+        # Create an Experiment object
+        experiment = Experiment(opioid_pairs, prompt_conditions=unique_conditions)
+
+        # Populate the results directly from the filtered CSV data
         experiment.results = df.to_dict(orient="records")
 
         return experiment
