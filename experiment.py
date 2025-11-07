@@ -7,6 +7,7 @@ from conversion_service import ConversionService
 from nielson_data import NIELSON_CONVERSIONS
 from opioid import Opioid
 import os
+from datetime import datetime
 from itertools import product  # For generating combinations of opioid_pairs and prompt_conditions
 
 
@@ -35,7 +36,7 @@ class Experiment:
 
         return next_id
 
-    def __init__(self, opioid_pairs, prompt_conditions, repetitions=10, experiment_id=None):
+    def __init__(self, opioid_pairs, prompt_conditions, models, repetitions=10, experiment_id=None):
         """
         Initialize the Experiment class.
 
@@ -53,39 +54,42 @@ class Experiment:
             for from_opioid in opioid_pairs
         ]
         self.prompt_conditions = prompt_conditions
+        self.models = models
         self.repetitions = repetitions
         self.results = []  # To store results of all experiments
 
-        # Generate all combinations of opioid_pairs and prompt_conditions
-        self.combinations = list(product(opioid_pairs, prompt_conditions))
+        # Generate all combinations of opioid_pairs, prompt_conditions, and models
+        self.combinations = list(product(opioid_pairs, prompt_conditions, models))
 
         # Initialize the PromptService once for the entire experiment
         self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
 
     def run(self):
         """
-        Run the experiment for all combinations of opioid_pairs and prompt_conditions, repeated for the specified number of repetitions.
+        Run the experiment for all combinations of opioid_pairs, prompt_conditions, and models, repeated for the specified number of repetitions.
         """
-        for (from_opioid, to_opioid), condition in self.combinations:
+        for (from_opioid, to_opioid), condition, model in self.combinations:
             for _ in range(self.repetitions):
                 conversion = PromptedOpioidConversion(
                     from_opioid=from_opioid,
                     to_opioid=to_opioid,
                     include_nielson=condition["include_nielson"],
-                    include_examples=condition["include_examples"]
+                    include_examples=condition["include_examples"],
+                    model=model
                 )
                 conversion.generate_prompt(prompt_service=self.prompt_service)
                 try:
                     conversion.ask_model()
                     self.results.append({
-                        "experiment_id": self.experiment_id,  # Add experiment ID to each result
+                        "experiment_id": self.experiment_id, 
+                        "datetime": datetime.now(), # Add experiment ID to each result
                         "from_opioid": f"{from_opioid.administration_method}_{from_opioid.substance}",
                         "from_opioid_unit": from_opioid.unit,
                         "to_opioid": f"{to_opioid.administration_method}_{to_opioid.substance}",
                         "to_opioid_unit": to_opioid.unit,
                         "from_dose": conversion.from_dose,
                         "expected_to_dose": conversion.expected_to_dose,
-                        "model": conversion.model,
+                        "model": model,
                         "prompt": conversion.prompt,
                         "include_nielson": condition["include_nielson"],
                         "include_examples": condition["include_examples"],
