@@ -9,7 +9,12 @@ from opioid import Opioid
 import os
 from datetime import datetime
 from itertools import product  # For generating combinations of opioid_pairs and prompt_conditions
+import csv
 
+
+class CSVWriteError(Exception):
+    """Custom exception for errors when writing to the CSV file."""
+    pass
 
 class Experiment:
     ID_COUNTER_FILE = "experiment_id_counter.txt"  # File to store the current experiment ID
@@ -80,9 +85,9 @@ class Experiment:
                 conversion.generate_prompt(prompt_service=self.prompt_service)
                 try:
                     conversion.ask_model()
-                    self.results.append({
-                        "experiment_id": self.experiment_id, 
-                        "datetime": datetime.now(), # Add experiment ID to each result
+                    result = {
+                        "experiment_id": self.experiment_id,
+                        "datetime": datetime.now().isoformat(),  # Add timestamp
                         "from_opioid": f"{from_opioid.administration_method}_{from_opioid.substance}",
                         "from_opioid_unit": from_opioid.unit,
                         "to_opioid": f"{to_opioid.administration_method}_{to_opioid.substance}",
@@ -96,7 +101,11 @@ class Experiment:
                         "observed_to_dose": conversion.observed_to_dose,
                         "ratio_observed_expected": conversion.ratio_observed_expected,
                         "response": conversion.response
-                    })
+                    }
+                    # Save the result directly to the CSV file
+                    self.add_result_to_csv(result)
+                except CSVWriteError as e:
+                    print(f"Error writing result to CSV: {e}")
                 except Exception as e:
                     print(f"Error during conversion: {e}")
 
@@ -157,6 +166,38 @@ class Experiment:
                 print(f"Results saved to new file: {filename}")
         except Exception as e:
             print(f"Error saving to CSV: {e}")
+
+    def add_result_to_csv(self, result, filename="experiment_results.csv"):
+        """
+        Append a single result to the CSV file.
+
+        Args:
+            result (dict): The result to append to the CSV file.
+            filename (str): The name of the CSV file.
+
+        Raises:
+            CSVWriteError: If there is an error writing to the CSV file.
+        """
+        # Define the fieldnames (columns) for the CSV file
+        fieldnames = [
+            "experiment_id", "datetime", "from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit",
+            "from_dose", "expected_to_dose", "model", "prompt", "include_nielson",
+            "include_examples", "observed_to_dose", "ratio_observed_expected", "response"
+        ]
+
+        try:
+            # Open the CSV file in append mode
+            with open(filename, mode="a", newline="") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+                # Write the header if the file is empty
+                if csvfile.tell() == 0:
+                    writer.writeheader()
+
+                # Write the result to the CSV file
+                writer.writerow(result)
+        except Exception as e:
+            raise CSVWriteError(f"Failed to write result to CSV file '{filename}': {e}")
 
     def visualize(self):
         """
