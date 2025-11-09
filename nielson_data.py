@@ -8,7 +8,8 @@ def load_nielson_conversions(json_path: str):
     return {
         key: {
             "conversion_factor": value["conversion_factor"],
-            "unit": value.get("unit", "mg/day")
+            "unit": value.get("unit", "mg/day"),
+            "priority": value.get("priority", None)
         }
         for key, value in data.items()
     }

@@ -64,7 +64,7 @@ class Experiment:
         self.results = []  # To store results of all experiments
 
         # Generate all combinations of opioid_pairs, prompt_conditions, and models
-        self.combinations = list(product(opioid_pairs, prompt_conditions, models))
+        self.combinations = list(product(self.opioid_pairs, self.prompt_conditions, self.models))
 
         # Initialize the PromptService once for the entire experiment
         self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
