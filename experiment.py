@@ -268,14 +268,19 @@ class Experiment:
             # Get unique pairs and assign colors dynamically
             unique_pairs = list(df.groupby(["from_opioid", "to_opioid"]).groups.keys())
             n_pairs = len(unique_pairs)
-            cmap = plt.cm.get_cmap("Spectral", n_pairs)  # Dynamic number of colors
+            cmap = plt.cm.get_cmap("Spectral", n_pairs)
             pair_colors = {pair: cmap(i) for i, pair in enumerate(unique_pairs)}
 
             for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
                 color = pair_colors[(from_opioid, to_opioid)]
                 sorted_ratios = np.sort(group["ratio_observed_expected"])
                 cdf = np.arange(1, len(sorted_ratios) + 1) / len(sorted_ratios)
-                ax.plot(sorted_ratios, cdf, label=f"{from_opioid} → {to_opioid}", color=color)
+                ax.plot(sorted_ratios, cdf, label=f"{from_opioid} → {to_opioid}", color=color, alpha=0.7)
+
+            # Add overall CDF in black
+            all_ratios = np.sort(df["ratio_observed_expected"])
+            all_cdf = np.arange(1, len(all_ratios) + 1) / len(all_ratios)
+            ax.plot(all_ratios, all_cdf, label="Overall", color="black", linewidth=2)
 
             ax.axvline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
             ax.axvline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
@@ -330,6 +335,19 @@ class Experiment:
                 acceptable_prop = acceptable_count / total if total > 0 else 0
                 acceptable_proportions.append(acceptable_prop)
 
+            # Calculate overall proportions
+            all_ratios = df["ratio_observed_expected"]
+            total_all = len(all_ratios)
+            tight_count_all = ((all_ratios >= 0.95) & (all_ratios <= 1.05)).sum()
+            tight_prop_all = tight_count_all / total_all if total_all > 0 else 0
+            acceptable_count_all = ((all_ratios >= 0.7) & (all_ratios <= 1.3)).sum() - tight_count_all
+            acceptable_prop_all = acceptable_count_all / total_all if total_all > 0 else 0
+
+            # Add overall to the lists
+            pair_names.append("Overall")
+            tight_proportions.append(tight_prop_all)
+            acceptable_proportions.append(acceptable_prop_all)
+
             # Create stacked bar chart
             x_pos = np.arange(len(pair_names))
             
@@ -343,6 +361,12 @@ class Experiment:
                 # Top bar: acceptable range excluding tight (alpha=0.6)
                 ax.bar(x_pos[i], acceptable_proportions[i], bottom=tight_proportions[i], 
                        color=color, alpha=0.6, label=f"0.7-1.3 (excl. tight)" if i == 0 else "")
+
+            # Add overall bar in black
+            overall_idx = len(unique_pairs)
+            ax.bar(x_pos[overall_idx], tight_proportions[overall_idx], color="black", alpha=1.0)
+            ax.bar(x_pos[overall_idx], acceptable_proportions[overall_idx], 
+                   bottom=tight_proportions[overall_idx], color="black", alpha=0.6)
 
             ax.set_xlabel("Opioid Pair")
             ax.set_ylabel("Proportion")
