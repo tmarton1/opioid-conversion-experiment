@@ -78,7 +78,7 @@
         "unit": "mg/day",
         "LQ": 1.0,
         "UQ": 1.0,
-        "priority": 1
+        "priority": null
     },
     "oral_oxycodone": {
         "administration_method": "oral",
