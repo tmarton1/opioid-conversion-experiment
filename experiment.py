@@ -224,10 +224,10 @@ class Experiment:
             if ax is None:
                 fig, ax = plt.subplots(figsize=(10, 4))
 
-            cmap = plt.cm.get_cmap("Spectral", 15)
-
-            # Assign a unique color to each opioid pair
+            # Get unique pairs and assign colors dynamically
             unique_pairs = list(df.groupby(["from_opioid", "to_opioid"]).groups.keys())
+            n_pairs = len(unique_pairs)
+            cmap = plt.cm.get_cmap("Spectral", n_pairs)  # Dynamic number of colors
             pair_colors = {pair: cmap(i) for i, pair in enumerate(unique_pairs)}
 
             for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
@@ -265,10 +265,10 @@ class Experiment:
             if ax is None:
                 fig, ax = plt.subplots(figsize=(10, 4))
 
-            cmap = plt.cm.get_cmap("Spectral", 15)
-
-            # Assign a unique color to each opioid pair
+            # Get unique pairs and assign colors dynamically
             unique_pairs = list(df.groupby(["from_opioid", "to_opioid"]).groups.keys())
+            n_pairs = len(unique_pairs)
+            cmap = plt.cm.get_cmap("Spectral", n_pairs)  # Dynamic number of colors
             pair_colors = {pair: cmap(i) for i, pair in enumerate(unique_pairs)}
 
             for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
@@ -303,15 +303,57 @@ class Experiment:
             if ax is None:
                 fig, ax = plt.subplots(figsize=(10, 4))
 
-            ax.hist(df["ratio_observed_expected"], bins=20, edgecolor="black", alpha=0.7)
-            ax.axvline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
-            ax.axvline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
-            ax.axvline(1.3, color="orange", linestyle="--", label="Upper Bound (1.3)")
-            ax.set_xlabel("Ratio Observed/Expected")
-            ax.set_ylabel("Frequency")
-            ax.set_title(title if title else "Histogram of Ratio Observed/Expected")
+            # Get unique pairs and assign colors dynamically
+            unique_pairs = list(df.groupby(["from_opioid", "to_opioid"]).groups.keys())
+            n_pairs = len(unique_pairs)
+            cmap = plt.cm.get_cmap("Spectral", n_pairs)
+            pair_colors = {pair: cmap(i) for i, pair in enumerate(unique_pairs)}
+
+            # Calculate proportions for each opioid pair
+            pair_names = []
+            tight_proportions = []  # 0.95 to 1.05
+            acceptable_proportions = []  # 0.7 to 1.3 (excluding tight range)
+
+            for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
+                pair_names.append(f"{from_opioid} → {to_opioid}")
+                
+                ratios = group["ratio_observed_expected"]
+                total = len(ratios)
+                
+                # Count ratios in tight range (0.95 to 1.05)
+                tight_count = ((ratios >= 0.95) & (ratios <= 1.05)).sum()
+                tight_prop = tight_count / total if total > 0 else 0
+                tight_proportions.append(tight_prop)
+                
+                # Count ratios in acceptable range (0.7 to 1.3) excluding tight range
+                acceptable_count = ((ratios >= 0.7) & (ratios <= 1.3)).sum() - tight_count
+                acceptable_prop = acceptable_count / total if total > 0 else 0
+                acceptable_proportions.append(acceptable_prop)
+
+            # Create stacked bar chart
+            x_pos = np.arange(len(pair_names))
+            
+            for i, pair in enumerate(unique_pairs):
+                color = pair_colors[pair]
+                
+                # Bottom bar: tight range (alpha=1)
+                ax.bar(x_pos[i], tight_proportions[i], color=color, alpha=1.0, 
+                       label=f"0.95-1.05" if i == 0 else "")
+                
+                # Top bar: acceptable range excluding tight (alpha=0.6)
+                ax.bar(x_pos[i], acceptable_proportions[i], bottom=tight_proportions[i], 
+                       color=color, alpha=0.6, label=f"0.7-1.3 (excl. tight)" if i == 0 else "")
+
+            ax.set_xlabel("Opioid Pair")
+            ax.set_ylabel("Proportion")
+            ax.set_title(title if title else "Proportion of Ratios in Target Ranges by Opioid Pair")
+            ax.set_xticks(x_pos)
+            ax.set_xticklabels(pair_names, rotation=45, ha='right')
+            ax.set_ylim(0, 1)
+            ax.axhline(0.5, color='gray', linestyle='--', alpha=0.5)
             ax.legend()
-            ax.grid()
+            ax.grid(axis='y', alpha=0.3)
+            plt.tight_layout()
 
 
 class ExperimentFromCSVConverter:
