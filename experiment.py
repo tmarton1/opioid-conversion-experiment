@@ -296,6 +296,10 @@ class Experiment:
 
 
 class ExperimentFromCSVConverter:
+    """
+    A class to convert experiment results from a CSV file back into an Experiment object.
+    """
+    
     @staticmethod
     def list_experiment_ids(csv_file):
         """
@@ -423,3 +427,81 @@ class ExperimentFromCSVConverter:
         experiment.results = df.to_dict(orient="records")
 
         return experiment
+
+    @staticmethod
+    def format_experiment_title(model: str, prompt_conditions: dict) -> str:
+        """
+        Format a human-readable title for an experiment based on model and prompt conditions.
+        
+        Args:
+            model (str): The model name.
+            prompt_conditions (dict): Dictionary with keys like 'include_nielson', 'include_examples'.
+        
+        Returns:
+            str: Formatted title string.
+        """
+        nielson_text = "with Nielson reference" if prompt_conditions.get("include_nielson") else "no Nielson reference"
+        examples_text = "with examples" if prompt_conditions.get("include_examples") else "no examples"
+        return f"Model: {model} | {nielson_text}, {examples_text}"
+    
+    @classmethod
+    def plot_comparison(cls, csv_file: str, experiment_configs: List[dict], 
+                       plot_type: str = "scatter", figsize: tuple = (10, 12),
+                       debug: bool = False):
+        """
+        Plot multiple experiments for comparison.
+        
+        Args:
+            csv_file (str): Path to the CSV file containing experiment results.
+            experiment_configs (List[dict]): List of experiment configurations, each containing:
+                - model (str): The model name to filter by
+                - prompt_conditions (dict): The prompt conditions to filter by
+                - experiment_id (int): The experiment ID to filter by
+            plot_type (str): Type of plot to generate (e.g., "scatter", "cdf", "histogram"). Default is "scatter".
+            figsize (tuple): Figure size (width, height). Default is (10, 12).
+            debug (bool): Whether to print debug information. Default is False.
+        
+        Returns:
+            tuple: (fig, axes) The matplotlib figure and axes objects.
+        """
+        import matplotlib.pyplot as plt
+        
+        n_experiments = len(experiment_configs)
+        fig, axes = plt.subplots(n_experiments, 1, figsize=figsize)
+        
+        # Ensure axes is always iterable (handle single subplot case)
+        if n_experiments == 1:
+            axes = [axes]
+        
+        for i, exp_config in enumerate(experiment_configs):
+            if debug:
+                print(f"Plotting experiment {i} on axes[{i}]")
+                print(f"Filters: {exp_config['prompt_conditions']}")
+                print(f"Axes object: {axes[i]}")
+            
+            # Retrieve the experiment
+            experiment = cls.from_csv(
+                csv_file,
+                experiment_id=exp_config["experiment_id"],
+                filters={"model": exp_config["model"]},
+                prompt_conditions=[exp_config["prompt_conditions"]]
+            )
+            
+            # Generate title
+            title = cls.format_experiment_title(
+                exp_config["model"], 
+                exp_config["prompt_conditions"]
+            )
+            
+            # Visualize on the respective axis
+            experiment.visualize(plots=[plot_type], title=title, ax=axes[i])
+            
+            # Add legend
+            handles, labels = axes[i].get_legend_handles_labels()
+            axes[i].legend(handles, labels, loc="upper left", bbox_to_anchor=(1.05, 1))
+        
+        # Adjust layout
+        plt.tight_layout()
+        plt.subplots_adjust(right=0.85)
+        
+        return fig, axes
