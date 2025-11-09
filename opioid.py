@@ -1,6 +1,6 @@
 from typing import List, Tuple, Union
 from dataclasses import dataclass
-from itertools import combinations
+from itertools import permutations, combinations
 from nielson_data import NIELSON_CONVERSIONS
 
 @dataclass
@@ -26,7 +26,7 @@ class OpioidPairGenerator:
         """
         self.priority_logic = priority_logic
 
-    def generate_opioid_list_or_pairs(self, pairs: bool = True) -> Union[List[Opioid],List[Tuple[Opioid, Opioid]]]:
+    def generate_opioid_list_or_pairs(self, pairs: bool = True, use_permutations: bool = False) -> Union[List[Opioid],List[Tuple[Opioid, Opioid]]]:
         """
         Generate a list of unique opioid pairs based on the priority logic.
 
@@ -49,8 +49,12 @@ class OpioidPairGenerator:
         ]
 
         if pairs:
-            # Generate unique combinations of opioid pairs
-            opioid_pairs = list(combinations(opioid_objects, 2))
+            if use_permutations:
+                # Generate ordered pairs (permutations)
+                opioid_pairs = list(permutations(opioid_objects, 2))
+            else:
+                # Generate unique combinations of opioid pairs
+                opioid_pairs = list(combinations(opioid_objects, 2))
             return opioid_pairs
         else:
             # Return the list of individual opioids
