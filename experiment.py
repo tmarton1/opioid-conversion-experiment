@@ -1,3 +1,4 @@
+from typing import List
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,7 +9,8 @@ from nielson_data import NIELSON_CONVERSIONS
 from opioid import Opioid
 import os
 from datetime import datetime
-from itertools import product  # For generating combinations of opioid_pairs and prompt_conditions
+from itertools import product 
+from matplotlib.ticker import ScalarFormatter
 import csv
 
 
@@ -199,53 +201,98 @@ class Experiment:
         except Exception as e:
             raise CSVWriteError(f"Failed to write result to CSV file '{filename}': {e}")
 
-    def visualize(self):
+    def visualize(self, plots: List[str] = None, title: str = None, ax=None):
         """
         Visualize the results using matplotlib.
+
+        Args:
+            plots (List[str], optional): A list of plot types to generate. Options are:
+                - "scatter": Scatter plot of Expected vs Observed Dose.
+            - "cdf": CDF of Ratio Observed/Expected.
+            - "histogram": Histogram of Ratio Observed/Expected.
+            If None, all plots will be generated.
+            title (str, optional): Custom title for the plot. If None, a default title will be used.
+            ax (matplotlib.axes.Axes, optional): The axes on which to plot. If None, a new figure will be created.
         """
+        if plots is None:
+            plots = ["scatter", "cdf", "histogram"]
+
         df = self.to_dataframe()
 
-        # Scatter plot: Expected vs Observed Dose
-        plt.figure(figsize=(5, 5))
-        for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
-            plt.scatter(group["expected_to_dose"], group["ratio_observed_expected"], label=f"{from_opioid} → {to_opioid}")
-        plt.axhline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
-        plt.axhline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
-        plt.axhline(1.3, color="orange", linestyle="--", label="Upper Bound (1.3)")
-        plt.xlabel("Expected Dose")
-        plt.ylabel("Ratio Observed/Expected")
-        plt.title("Expected Dose vs Ratio Observed/Expected")
-        plt.legend()
-        plt.grid()
-        plt.show()
+        if "scatter" in plots:
+            # Scatter plot: Expected vs Observed Dose
+            if ax is None:
+                fig, ax = plt.subplots(figsize=(10, 4))
 
-        # CDF of Ratio Observed/Expected
-        plt.figure(figsize=(5, 3))
-        for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
-            sorted_ratios = np.sort(group["ratio_observed_expected"])
-            cdf = np.arange(len(sorted_ratios)) / float(len(sorted_ratios))
-            plt.plot(sorted_ratios, cdf, label=f"{from_opioid} → {to_opioid}")
-        plt.axvline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
-        plt.axvline(1.3, color="orange", linestyle="--", label="Upper Bound (1.3)")
-        plt.xlabel("Ratio Observed/Expected")
-        plt.ylabel("CDF")
-        plt.title("CDF of Ratio Observed/Expected")
-        plt.legend()
-        plt.grid()
-        plt.show()
+            cmap = plt.cm.get_cmap("Spectral", 15)  # Use the Spectral colormap with at least 15 colors
 
-        # Histogram: Proportion of Ratios Inside 0.7 - 1.3
-        plt.figure(figsize=(5, 3))
-        df["ratio_observed_expected"].hist(bins=20, edgecolor="black")
-        plt.axvline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
-        plt.axvline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
-        plt.axvline(1.3, color="orange", linestyle="--", label="Upper Bound (1.3)")
-        plt.xlabel("Ratio Observed/Expected")
-        plt.ylabel("Frequency")
-        plt.title("Distribution of Ratio Observed/Expected")
-        plt.legend()
-        plt.grid()
-        plt.show()
+            # Assign a unique color to each opioid pair
+            unique_pairs = list(df.groupby(["from_opioid", "to_opioid"]).groups.keys())
+            pair_colors = {pair: cmap(i) for i, pair in enumerate(unique_pairs)}
+
+            for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
+                color = pair_colors[(from_opioid, to_opioid)]
+                ax.scatter(
+                    group["expected_to_dose"],
+                    group["ratio_observed_expected"],
+                    label=f"{from_opioid} → {to_opioid}",
+                    color=color,
+                    alpha=0.6  # Set transparency
+                )
+            ax.axhline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
+            ax.axhline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
+            ax.axhline(1.3, color="orange", linestyle="--", label="Upper Bound (1.3)")
+            ax.set_xlabel("Expected Dose")
+            ax.set_ylabel("Ratio Observed/Expected")
+            ax.set_title(title if title else "Expected Dose vs Ratio Observed/Expected")
+            ax.grid()
+
+            # Set y-axis to log scale
+            ax.set_yscale("log")
+
+            # Hardcode y-axis tick marks
+            y_ticks = [0.1, 0.3, 0.7, 1.0, 1.3, 2, 5, 10, 30]
+            ax.set_yticks(y_ticks)
+            ax.set_yticklabels([str(tick) for tick in y_ticks])
+
+            # Format the y-axis to show raw values
+            ax.yaxis.set_major_formatter(ScalarFormatter())
+            ax.tick_params(axis="y", which="both", labelsize=10)
+
+            # Move the legend outside the plot if using a single plot
+            if ax is None:
+                plt.tight_layout()
+                plt.show()
+
+        if "cdf" in plots:
+            # CDF of Ratio Observed/Expected
+            plt.figure(figsize=(5, 3))
+            for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
+                sorted_ratios = np.sort(group["ratio_observed_expected"])
+                cdf = np.arange(len(sorted_ratios)) / float(len(sorted_ratios))
+                plt.plot(sorted_ratios, cdf, label=f"{from_opioid} → {to_opioid}")
+            plt.axvline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
+            plt.axvline(1.3, color="orange", linestyle="--", label="Upper Bound (1.3)")
+            plt.xlabel("Ratio Observed/Expected")
+            plt.ylabel("CDF")
+            plt.title("CDF of Ratio Observed/Expected")
+            plt.legend()
+            plt.grid()
+            plt.show()
+
+        if "histogram" in plots:
+            # Histogram: Proportion of Ratios Inside 0.7 - 1.3
+            plt.figure(figsize=(5, 3))
+            df["ratio_observed_expected"].hist(bins=20, edgecolor="black")
+            plt.axvline(1.0, color="red", linestyle="--", label="Ideal Ratio (1.0)")
+            plt.axvline(0.7, color="orange", linestyle="--", label="Lower Bound (0.7)")
+            plt.axvline(1.3, color="orange", linestyle="--", label="Upper Bound (1.3)")
+            plt.xlabel("Ratio Observed/Expected")
+            plt.ylabel("Frequency")
+            plt.title("Distribution of Ratio Observed/Expected")
+            plt.legend()
+            plt.grid()
+            plt.show()
 
 
 class ExperimentFromCSVConverter:
@@ -344,6 +391,9 @@ class ExperimentFromCSVConverter:
         # Extract unique prompt conditions
         unique_conditions = df[["include_nielson", "include_examples"]].drop_duplicates().to_dict(orient="records")
 
+        # Extract unique models
+        models = df["model"].unique().tolist()
+        
         # Validate consistency of opioid_pairs and prompt_conditions
         pair_condition_map = df.groupby(["from_opioid", "to_opioid"])[["include_nielson", "include_examples"]].apply(
             lambda x: x.drop_duplicates().to_dict(orient="records")
@@ -367,7 +417,7 @@ class ExperimentFromCSVConverter:
             raise ValueError(error_message)
 
         # Create an Experiment object
-        experiment = Experiment(opioid_pairs, prompt_conditions=unique_conditions)
+        experiment = Experiment(opioid_pairs, prompt_conditions=unique_conditions, models=models)
 
         # Populate the results directly from the filtered CSV data
         experiment.results = df.to_dict(orient="records")
