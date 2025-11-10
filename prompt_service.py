@@ -6,6 +6,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import re
+import google.generativeai as genai
 
 @dataclass
 class PromptedOpioidConversion:
@@ -23,17 +24,31 @@ class PromptedOpioidConversion:
 
     # Class-level attribute for the OpenAI client
     client = None
+    anthropic_client = None
+    groq_client = None
 
     @classmethod
     def initialize_client(cls):
         """
-        Initialize the OpenAI client as a class-level attribute.
+        Initialize all API clients.
         """
-        load_dotenv()
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            raise ValueError("OPENAI_API_KEY not found in environment variables.")
-        cls.client = OpenAI()
+        if cls.client is None:
+            load_dotenv()
+            api_key = os.getenv("OPENAI_API_KEY")
+            if not api_key:
+                raise ValueError("OPENAI_API_KEY not found in environment variables.")
+            cls.client = OpenAI(api_key=api_key)
+        
+        if cls.anthropic_client is None and os.getenv("ANTHROPIC_API_KEY"):
+            from anthropic import Anthropic
+            cls.anthropic_client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+        
+        if cls.groq_client is None and os.getenv("GROQ_API_KEY"):
+            from groq import Groq
+            cls.groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        
+        if os.getenv("GOOGLE_API_KEY"):
+            genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
     def __post_init__(self, conversion_service=None):
         """
@@ -77,47 +92,109 @@ class PromptedOpioidConversion:
         )
         return self.prompt
     
+    def _extract_numeric_value(self, response_text: str) -> float:
+        """
+        Extract a numeric value from the model's response.
+        Handles various formats including dictionaries, plain numbers, and text.
+        """
+        # Try to extract from dictionary format: {'calculated dose': value}
+        dict_match = re.search(r"['\"]calculated dose['\"]:\s*([\d.]+)", response_text)
+        if dict_match:
+            return float(dict_match.group(1))
+        
+        # Try to extract any number from the response
+        number_match = re.search(r"(\d+\.?\d*)", response_text)
+        if number_match:
+            return float(number_match.group(1))
+        
+        raise ValueError(f"Could not extract numeric value from response: {response_text}")
+    
     def ask_model(self):
-        """
-        Query the OpenAI model with the generated prompt.
-
-        Returns:
-            float: The observed dose predicted by the model.
-        """
-        if not self.prompt:
-            raise ValueError("Prompt has not been generated. Call `generate_prompt` first.")
-
-        if not PromptedOpioidConversion.client:
-            raise ValueError("OpenAI client has not been initialized. Call `PromptedOpioidConversion.initialize_client()` first.")
-
-        # Query the model
-        response = PromptedOpioidConversion.client.chat.completions.create(
-            model=self.model,
-            messages=[{"role": "user", "content": self.prompt}]
-        )
-
-        # Store the raw text of the response
-        self.response = response.choices[0].message.content.strip()
-
-        # Extract the observed dose from the model's response
-        try:
-            # Ensure the response matches the expected format
-            if self.response.startswith("{") and self.response.endswith("}") and "calculated dose" in self.response:
-                # Extract the value after "calculated dose"
-                match = re.search(r"'calculated dose'\s*:\s*([\d.]+)", self.response)
-                if match:
-                    self.observed_to_dose = float(match.group(1))
-                else:
-                    raise ValueError("The response does not contain a valid numeric value for 'calculated dose'.")
+        """Query the model and return the observed dose."""
+        if self.model.startswith("gpt"):
+            # OpenAI
+            response = self.client.chat.completions.create(  # Changed from openai_client to client
+                model=self.model,
+                messages=[{"role": "user", "content": self.prompt}],
+                max_tokens=50,
+                temperature=0.0
+            )
+            response_text = response.choices[0].message.content.strip()
+            
+        elif self.model.startswith("claude"):
+            # Anthropic
+            response = self.anthropic_client.messages.create(
+                model=self.model,
+                max_tokens=50,
+                temperature=0.0,
+                messages=[{"role": "user", "content": self.prompt}]
+            )
+            response_text = response.content[0].text.strip()
+            
+        elif self.model.startswith("llama"):
+            # Meta via Groq
+            response = self.groq_client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": self.prompt}],
+                max_tokens=50,
+                temperature=0.0
+            )
+            response_text = response.choices[0].message.content.strip()
+            
+        elif self.model.startswith("models/gemini"):
+            # Google Gemini with safety settings
+            safety_settings = [
+                {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
+                {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
+            ]
+            
+            gemini_model = genai.GenerativeModel(self.model)
+            response = gemini_model.generate_content(
+                self.prompt,
+                safety_settings=safety_settings,
+                generation_config=genai.GenerationConfig(
+                    max_output_tokens=500,
+                    temperature=0.0
+                )
+            )
+            
+            # Check if response has valid content
+            if response.candidates and response.candidates[0].content.parts:
+                response_text = response.text.strip()
             else:
-                raise ValueError("The response does not match the expected format: {'calculated dose': XX}.")
-        except Exception as e:
-            raise ValueError(f"Error parsing the model response. Response: {self.response}") from e
-
-        # Calculate the ratio of observed to expected dose
-        if self.expected_to_dose:
-            self.ratio_observed_expected = round(self.observed_to_dose / self.expected_to_dose, 2)
-
+                # Get detailed error information
+                finish_reason = response.candidates[0].finish_reason if response.candidates else "UNKNOWN"
+                finish_reason_name = {
+                    0: "FINISH_REASON_UNSPECIFIED",
+                    1: "STOP (normal completion)",
+                    2: "MAX_TOKENS (ran out of tokens)",
+                    3: "SAFETY (blocked by safety filters)",
+                    4: "RECITATION (blocked due to recitation)",
+                    5: "OTHER"
+                }.get(finish_reason, f"UNKNOWN({finish_reason})")
+                
+                safety_ratings = response.candidates[0].safety_ratings if response.candidates else []
+                safety_info = "\n".join([f"  - {rating.category}: {rating.probability}" for rating in safety_ratings])
+                
+                prompt_feedback = response.prompt_feedback
+                
+                error_msg = f"""Gemini failed to generate response:
+Finish Reason: {finish_reason_name}
+Safety Ratings:
+{safety_info if safety_info else '  (none)'}
+Prompt Feedback: {prompt_feedback}
+Prompt (first 200 chars): {self.prompt[:200]}..."""
+                
+                raise ValueError(error_msg)
+        
+        else:
+            raise ValueError(f"Unsupported model: {self.model}")
+        
+        # Extract numeric value
+        self.observed_to_dose = self._extract_numeric_value(response_text)
+        self.ratio_observed_expected = self.observed_to_dose / self.expected_to_dose
         return self.observed_to_dose
 
 
