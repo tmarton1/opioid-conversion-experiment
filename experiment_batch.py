@@ -295,12 +295,12 @@ class ExperimentBatch:
             # Summary plots
             if include_summary_plots:
                 # Overall CDF
-                fig, ax = self.plot_overall_cdf(figsize=(14, 8), colormap=colormap)
+                fig, ax = self.plot_overall_cdf(figsize=(10, 4), colormap=colormap)
                 pdf.savefig(fig, bbox_inches='tight')
                 plt.close(fig)
                 
                 # Overall Histogram
-                fig, ax = self.plot_overall_histogram(figsize=(14, 8), colormap=colormap)
+                fig, ax = self.plot_overall_histogram(figsize=(10, 4), colormap=colormap)
                 pdf.savefig(fig, bbox_inches='tight')
                 plt.close(fig)
             
@@ -313,7 +313,38 @@ class ExperimentBatch:
                 d['Keywords'] = metadata.get('keywords', '')
                 d['Creator'] = metadata.get('creator', 'Python matplotlib')
     
-    
+    @staticmethod
+    def reorganize_csv(input_file: str, output_file: str):
+        """
+        Reorganize the CSV by combining all experiment_ids into a single dataset,
+        adding a new column 'ome' to indicate if 'oral_morphine' is one of the opioids,
+        and assigning new experiment_ids:
+        - experiment_id=1 for ome=True
+        - experiment_id=2 for ome=False
+
+        Args:
+            input_file (str): Path to the input CSV file.
+            output_file (str): Path to the output CSV file.
+        """
+        import pandas as pd
+
+        # Read the input CSV
+        df = pd.read_csv(input_file)
+
+        # Add the 'ome' column: True if 'oral_morphine' is in either 'from_opioid' or 'to_opioid'
+        df['ome'] = df.apply(
+            lambda row: 'oral_morphine' in (row['from_opioid'], row['to_opioid']),
+            axis=1
+        )
+
+        # Assign new experiment_id based on the 'ome' column
+        df['experiment_id'] = df['ome'].apply(lambda x: 1 if x else 2)
+
+        # Save the reorganized DataFrame to the output CSV
+        df.to_csv(output_file, index=False)
+
+        print(f"Reorganized CSV saved to {output_file}")
+
     @staticmethod
     def summarize_csv(csv_file="experiment_results.csv"):
         """
