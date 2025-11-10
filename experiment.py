@@ -318,6 +318,7 @@ class Experiment:
             pair_names = []
             tight_proportions = []  # 0.95 to 1.05
             acceptable_proportions = []  # 0.7 to 1.3 (excluding tight range)
+            broad_proportions = []  # 0.3 to 3 (excluding acceptable range)
 
             for (from_opioid, to_opioid), group in df.groupby(["from_opioid", "to_opioid"]):
                 pair_names.append(f"{from_opioid} → {to_opioid}")
@@ -334,6 +335,11 @@ class Experiment:
                 acceptable_count = ((ratios >= 0.7) & (ratios <= 1.3)).sum() - tight_count
                 acceptable_prop = acceptable_count / total if total > 0 else 0
                 acceptable_proportions.append(acceptable_prop)
+                
+                # Count ratios in broad range (0.3 to 3) excluding acceptable range
+                broad_count = ((ratios >= 0.3) & (ratios <= 3)).sum() - tight_count - acceptable_count
+                broad_prop = broad_count / total if total > 0 else 0
+                broad_proportions.append(broad_prop)
 
             # Calculate overall proportions
             all_ratios = df["ratio_observed_expected"]
@@ -342,11 +348,14 @@ class Experiment:
             tight_prop_all = tight_count_all / total_all if total_all > 0 else 0
             acceptable_count_all = ((all_ratios >= 0.7) & (all_ratios <= 1.3)).sum() - tight_count_all
             acceptable_prop_all = acceptable_count_all / total_all if total_all > 0 else 0
+            broad_count_all = ((all_ratios >= 0.3) & (all_ratios <= 3)).sum() - tight_count_all - acceptable_count_all
+            broad_prop_all = broad_count_all / total_all if total_all > 0 else 0
 
             # Add overall to the lists
             pair_names.append("Overall")
             tight_proportions.append(tight_prop_all)
             acceptable_proportions.append(acceptable_prop_all)
+            broad_proportions.append(broad_prop_all)
 
             # Create stacked bar chart
             x_pos = np.arange(len(pair_names))
@@ -358,15 +367,23 @@ class Experiment:
                 ax.bar(x_pos[i], tight_proportions[i], color=color, alpha=1.0, 
                        label=f"0.95-1.05" if i == 0 else "")
                 
-                # Top bar: acceptable range excluding tight (alpha=0.6)
+                # Middle bar: acceptable range excluding tight (alpha=0.6)
                 ax.bar(x_pos[i], acceptable_proportions[i], bottom=tight_proportions[i], 
                        color=color, alpha=0.6, label=f"0.7-1.3 (excl. tight)" if i == 0 else "")
+                
+                # Top bar: broad range excluding acceptable (alpha=0.3)
+                ax.bar(x_pos[i], broad_proportions[i], 
+                       bottom=tight_proportions[i] + acceptable_proportions[i], 
+                       color=color, alpha=0.3, label=f"0.3-3 (excl. acceptable)" if i == 0 else "")
 
             # Add overall bar in black
             overall_idx = len(unique_pairs)
             ax.bar(x_pos[overall_idx], tight_proportions[overall_idx], color="black", alpha=1.0)
             ax.bar(x_pos[overall_idx], acceptable_proportions[overall_idx], 
                    bottom=tight_proportions[overall_idx], color="black", alpha=0.6)
+            ax.bar(x_pos[overall_idx], broad_proportions[overall_idx], 
+                   bottom=tight_proportions[overall_idx] + acceptable_proportions[overall_idx], 
+                   color="black", alpha=0.3)
 
             ax.set_xlabel("Opioid Pair")
             ax.set_ylabel("Proportion")
@@ -377,6 +394,71 @@ class Experiment:
             ax.axhline(0.5, color='gray', linestyle='--', alpha=0.5)
             ax.legend()
             ax.grid(axis='y', alpha=0.3)
+            plt.tight_layout()
+
+        if "ratio_regression" in plots:
+            # Only create a new figure if ax is not provided
+            if ax is None:
+                fig, ax = plt.subplots(figsize=(10, 4))
+
+            # Get unique pairs and assign colors dynamically
+            unique_pairs = list(df.groupby(["from_opioid", "to_opioid"]).groups.keys())
+            n_pairs = len(unique_pairs)
+            cmap = plt.cm.get_cmap("Spectral", n_pairs)
+            pair_colors = {pair: cmap(i) for i, pair in enumerate(unique_pairs)}
+
+            # Store results for each pair
+            pair_labels = []
+            means = []
+            stds = []
+            p_values = []
+            
+            # Group by opioid pair and calculate statistics
+            for pair, group in df.groupby(['from_opioid', 'to_opioid']):
+                pair_labels.append(f"{pair[0]} → {pair[1]}")
+                
+                # Perform linear regression: ratio ~ expected_dose
+                x = group['expected_to_dose'].values
+                y = group['ratio_observed_expected'].values
+                
+                slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+                p_values.append(p_value)
+                
+                # Calculate mean and std of ratio
+                means.append(y.mean())
+                stds.append(y.std())
+            
+            # Plot each pair with appropriate styling
+            x_positions = np.arange(len(pair_labels))
+            
+            for i, (pair, p_val) in enumerate(zip(unique_pairs, p_values)):
+                color = pair_colors[pair]
+                
+                # Determine edge color based on p-value for that specific pair
+                edgecolor = 'black' if p_val < 0.05 else color
+                linewidth = 2 if p_val < 0.05 else 1
+                
+                # Plot with error bars
+                ax.errorbar(x_positions[i], means[i], yerr=stds[i], 
+                           fmt='o', color=color, 
+                           markeredgecolor=edgecolor, markeredgewidth=linewidth,
+                           markersize=8, capsize=5, capthick=1.5,
+                           label=f"{pair_labels[i]} (p={p_val:.3f})", alpha=0.8)
+            
+            # Add reference lines
+            ax.axhline(1.0, color='red', linestyle='--', linewidth=2, label='Ideal Ratio (1.0)')
+            ax.axhline(0.7, color='orange', linestyle='--', linewidth=1.5, alpha=0.6, label='Lower Bound (0.7)')
+            ax.axhline(1.3, color='orange', linestyle='--', linewidth=1.5, alpha=0.6, label='Upper Bound (1.3)')
+            
+            ax.set_ylabel('Mean Ratio (Observed/Expected)', fontsize=11)
+            ax.set_title(title if title else 'Mean Ratio by Opioid Pair with Regression P-values', fontsize=12)
+            
+            # Remove x-axis labels and ticks
+            ax.set_xticks([])
+            ax.set_xlabel('')
+            
+            ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
+            ax.grid(alpha=0.3, axis='y')
             plt.tight_layout()
 
 
