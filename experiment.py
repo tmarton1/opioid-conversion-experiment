@@ -210,12 +210,13 @@ class Experiment:
                 - "scatter": Scatter plot of Expected vs Observed Dose.
                 - "cdf": CDF of Ratio Observed/Expected.
                 - "histogram": Histogram of Ratio Observed/Expected.
+                - "ratio_regression": Mean Ratio vs Regression Slope.
                 If None, all plots will be generated.
             title (str, optional): Custom title for the plot. If None, a default title will be used.
             ax (matplotlib.axes.Axes, optional): The axes on which to plot. If None, a new figure will be created.
         """
         if plots is None:
-            plots = ["scatter", "cdf", "histogram"]
+            plots = ["scatter", "cdf", "histogram", "ratio_regression"]
 
         df = self.to_dataframe()
 
@@ -395,70 +396,70 @@ class Experiment:
             ax.legend()
             ax.grid(axis='y', alpha=0.3)
             plt.tight_layout()
-
+            
         if "ratio_regression" in plots:
+            """
+            Plot regression slope (x-axis) vs mean ratio (y-axis) with error bars.
+            Each point corresponds to one opioid pair, one prompt condition, and one model.
+            """
+
             # Only create a new figure if ax is not provided
             if ax is None:
-                fig, ax = plt.subplots(figsize=(10, 4))
+                fig, ax = plt.subplots(figsize=(10, 6))
 
-            # Get unique pairs and assign colors dynamically
+            # Get unique pairs and assign colors dynamically (reuse Spectral colormap logic)
             unique_pairs = list(df.groupby(["from_opioid", "to_opioid"]).groups.keys())
             n_pairs = len(unique_pairs)
             cmap = plt.cm.get_cmap("Spectral", n_pairs)
             pair_colors = {pair: cmap(i) for i, pair in enumerate(unique_pairs)}
 
-            # Store results for each pair
-            pair_labels = []
-            means = []
-            stds = []
-            p_values = []
-            
-            # Group by opioid pair and calculate statistics
-            for pair, group in df.groupby(['from_opioid', 'to_opioid']):
-                pair_labels.append(f"{pair[0]} → {pair[1]}")
-                
-                # Perform linear regression: ratio ~ expected_dose
-                x = group['expected_to_dose'].values
-                y = group['ratio_observed_expected'].values
-                
-                slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
-                p_values.append(p_value)
-                
-                # Calculate mean and std of ratio
-                means.append(y.mean())
-                stds.append(y.std())
-            
-            # Plot each pair with appropriate styling
-            x_positions = np.arange(len(pair_labels))
-            
-            for i, (pair, p_val) in enumerate(zip(unique_pairs, p_values)):
-                color = pair_colors[pair]
-                
-                # Determine edge color based on p-value for that specific pair
-                edgecolor = 'black' if p_val < 0.05 else color
-                linewidth = 2 if p_val < 0.05 else 1
-                
-                # Plot with error bars
-                ax.errorbar(x_positions[i], means[i], yerr=stds[i], 
-                           fmt='o', color=color, 
-                           markeredgecolor=edgecolor, markeredgewidth=linewidth,
-                           markersize=8, capsize=5, capthick=1.5,
-                           label=f"{pair_labels[i]} (p={p_val:.3f})", alpha=0.8)
-            
+            # Group by opioid pair, prompt condition, and model
+            grouped = df.groupby(["from_opioid", "to_opioid", "include_nielson", "include_examples", "model"])
+
+            # Loop through each group and calculate statistics
+            for (from_opioid, to_opioid, include_nielson, include_examples, model), group in grouped:
+                # Perform linear regression: Expected vs. Ratio (Observed/Expected)
+                x = group["expected_to_dose"].values
+                y = group["ratio_observed_expected"].values
+
+                if len(x) > 1:
+                    slope, intercept, r_value, p_value, std_err = stats.linregress(x, y)
+
+                    # Calculate mean and std of the ratio
+                    mean_ratio = np.mean(y)
+                    std_ratio = np.std(y)
+
+                    # One-tailed test: is slope < 0?
+                    if slope < 0:
+                        p_value_one_tailed = p_value / 2
+                    else:
+                        p_value_one_tailed = 1 - (p_value / 2)
+
+                    # Determine significance
+                    significance = '***' if p_value_one_tailed < 0.001 else \
+                                  '**' if p_value_one_tailed < 0.01 else \
+                                  '*' if p_value_one_tailed < 0.05 else 'ns'
+
+                    # Get color for the opioid pair
+                    pair = (from_opioid, to_opioid)
+                    color = pair_colors.get(pair, "gray")  # Default to gray if pair not found
+
+                    # Plot point with error bars and alpha transparency
+                    label = f"{from_opioid} → {to_opioid} | {model} | Nielson: {include_nielson}, Examples: {include_examples}"
+                    ax.errorbar(slope, mean_ratio, yerr=std_ratio,
+                                fmt='o', markersize=8, capsize=5, color=color, alpha=0.7,
+                                label=f"{label} (p={p_value_one_tailed:.3f}, {significance})")
+
             # Add reference lines
-            ax.axhline(1.0, color='red', linestyle='--', linewidth=2, label='Ideal Ratio (1.0)')
-            ax.axhline(0.7, color='orange', linestyle='--', linewidth=1.5, alpha=0.6, label='Lower Bound (0.7)')
-            ax.axhline(1.3, color='orange', linestyle='--', linewidth=1.5, alpha=0.6, label='Upper Bound (1.3)')
-            
-            ax.set_ylabel('Mean Ratio (Observed/Expected)', fontsize=11)
-            ax.set_title(title if title else 'Mean Ratio by Opioid Pair with Regression P-values', fontsize=12)
-            
-            # Remove x-axis labels and ticks
-            ax.set_xticks([])
-            ax.set_xlabel('')
-            
-            ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
-            ax.grid(alpha=0.3, axis='y')
+            ax.axhline(y=1, color='gray', linestyle='--', alpha=0.5, linewidth=1, label='Mean Ratio = 1')
+            ax.axvline(x=0, color='gray', linestyle='--', alpha=0.5, linewidth=1, label='Slope = 0')
+
+            # Set axis labels and title
+            ax.set_xlabel('Regression Slope (Expected vs Ratio)', fontsize=12)
+            ax.set_ylabel('Mean Ratio (Observed/Expected)', fontsize=12)
+            ax.set_title(title if title else 'Regression Slope vs Mean Ratio', fontsize=14)
+            ax.legend(fontsize=8, bbox_to_anchor=(1.05, 1), loc='upper left')
+            ax.grid(True, alpha=0.3)
             plt.tight_layout()
 
 

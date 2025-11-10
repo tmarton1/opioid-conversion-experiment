@@ -155,7 +155,7 @@ class PromptedOpioidConversion:
                 self.prompt,
                 safety_settings=safety_settings,
                 generation_config=genai.GenerationConfig(
-                    max_output_tokens=500,
+                    max_output_tokens=1000,
                     temperature=0.0
                 )
             )

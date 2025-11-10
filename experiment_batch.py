@@ -312,3 +312,242 @@ class ExperimentBatch:
                 d['Subject'] = metadata.get('subject', '')
                 d['Keywords'] = metadata.get('keywords', '')
                 d['Creator'] = metadata.get('creator', 'Python matplotlib')
+    
+    
+    @staticmethod
+    def summarize_csv(csv_file="experiment_results.csv"):
+        """
+        Summarize ALL entries in the CSV file with detailed experiment metadata.
+        Returns a comprehensive summary DataFrame with experiment configurations.
+        """
+        import pandas as pd
+        
+        df = pd.read_csv(csv_file)
+        
+        print("=" * 80)
+        print(f"FULL CSV SUMMARY: {csv_file}")
+        print("=" * 80)
+        print(f"\nTotal entries: {len(df)}")
+        print(f"Unique experiments: {df['experiment_id'].nunique()}")
+        print(f"Unique models: {df['model'].nunique()}")
+        print(f"Experiment IDs: {sorted(df['experiment_id'].unique())}")
+        print(f"Models: {sorted(df['model'].unique())}")
+        
+        # Build comprehensive summary DataFrame
+        summary_data = []
+        
+        priority_1_opioids = ['oral_hydromorphone', 'oral_morphine', 'oral_oxycodone', 
+                              'iv_hydromorphone', 'iv_morphine']
+        priority_2_opioids = ['oral_codeine', 'oral_hydrocodone', 'oral_methadone', 
+                              'oral_oxymorphone', 'oral_tapentadol', 'oral_tramadol',
+                              'sublingual_buprenorphine', 'transdermal_fentanyl',
+                              'iv_fentanyl', 'sc_fentanyl']
+        
+        for exp_id in sorted(df['experiment_id'].unique()):
+            exp_df = df[df['experiment_id'] == exp_id]
+            
+            # Get unique models for this experiment
+            models = sorted(exp_df['model'].unique())
+            
+            # Get prompt conditions
+            nielson_vals = exp_df['include_nielson'].unique()
+            examples_vals = exp_df['include_examples'].unique()
+            
+            # Determine conversion type and priorities
+            to_opioids = exp_df['to_opioid'].unique()
+            from_opioids = exp_df['from_opioid'].unique()
+            all_opioids = set(from_opioids) | set(to_opioids)
+            
+            # Determine if pairs
+            is_pairs = not (len(to_opioids) == 1 and 'oral_morphine' in to_opioids)
+            
+            # Check if permutations were used
+            uses_permutations = False
+            if is_pairs:
+                pairs = set()
+                for _, row in exp_df.iterrows():
+                    pairs.add((row['from_opioid'], row['to_opioid']))
+                
+                for from_op, to_op in pairs:
+                    if (to_op, from_op) in pairs:
+                        uses_permutations = True
+                        break
+            
+            # Determine priority level
+            if all_opioids.issubset(set(priority_1_opioids)):
+                priority = "Priority 1"
+            elif all_opioids.issubset(set(priority_1_opioids + priority_2_opioids)):
+                has_p1 = bool(all_opioids.intersection(set(priority_1_opioids)))
+                has_p2 = bool(all_opioids.intersection(set(priority_2_opioids)))
+                if has_p1 and has_p2:
+                    priority = "Priority 1 & 2"
+                elif has_p2:
+                    priority = "Priority 2"
+                else:
+                    priority = "Priority 1"
+            else:
+                priority = "Mixed/Unknown"
+            
+            # Add row for each model in this experiment
+            for model in models:
+                model_df = exp_df[exp_df['model'] == model]
+                
+                summary_data.append({
+                    'experiment_id': exp_id,
+                    'model': model,
+                    'count': len(model_df),
+                    'priority': priority,
+                    'pairs': is_pairs,
+                    'use_permutations': uses_permutations if is_pairs else None,
+                    'include_nielson': ', '.join(map(str, sorted(nielson_vals))),
+                    'include_examples': ', '.join(map(str, sorted(examples_vals))),
+                    'from_opioids_count': len(from_opioids),
+                    'to_opioids_count': len(to_opioids)
+                })
+        
+        summary_df = pd.DataFrame(summary_data)
+        
+        print("\n" + "=" * 80)
+        print("COMPREHENSIVE SUMMARY TABLE")
+        print("=" * 80)
+        print(summary_df.to_string(index=False))
+        
+        # Also show the pivot table
+        pivot = df.pivot_table(
+            index='experiment_id',
+            columns='model',
+            values='from_dose',
+            aggfunc='count',
+            fill_value=0
+        )
+        
+        print("\n" + "=" * 80)
+        print("PIVOT TABLE (experiment_id vs model)")
+        print("=" * 80)
+        print(pivot)
+        print("\n" + "=" * 80)
+        
+        return summary_df
+    
+    def summarize_batch(self):
+        """
+        Summarize the filtered data in this batch with detailed experiment metadata.
+        Shows prompt conditions, opioid priorities, and conversion types for batch data only.
+        """
+        print("=" * 80)
+        print("BATCH SUMMARY (Filtered Data)")
+        print("=" * 80)
+        print(f"\nTotal entries: {len(self.df)}")
+        print(f"Unique experiments in batch: {self.df['experiment_id'].nunique()}")
+        print(f"Unique models in batch: {self.df['model'].nunique()}")
+        print(f"Experiment IDs: {sorted(self.df['experiment_id'].unique())}")
+        print(f"Models: {sorted(self.df['model'].unique())}")
+        
+        # Detailed experiment configuration
+        print("\n" + "=" * 80)
+        print("EXPERIMENT CONFIGURATIONS")
+        print("=" * 80)
+        
+        for exp_id in sorted(self.df['experiment_id'].unique()):
+            exp_df = self.df[self.df['experiment_id'] == exp_id]
+            
+            # Get experiment name if available
+            exp_name = self.experiment_names.get(exp_id, "")
+            if exp_name:
+                print(f"\n--- Experiment {exp_id}: {exp_name} ---")
+            else:
+                print(f"\n--- Experiment {exp_id} ---")
+            
+            print(f"  Total conversions: {len(exp_df)}")
+            print(f"  Models: {sorted(exp_df['model'].unique())}")
+            
+            # Prompt conditions
+            nielson_vals = exp_df['include_nielson'].unique()
+            examples_vals = exp_df['include_examples'].unique()
+            print(f"  Prompt conditions:")
+            print(f"    - include_nielson: {nielson_vals}")
+            print(f"    - include_examples: {examples_vals}")
+            
+            # Determine if pairs or to oral morphine
+            to_opioids = exp_df['to_opioid'].unique()
+            from_opioids = exp_df['from_opioid'].unique()
+            
+            if len(to_opioids) == 1 and 'oral_morphine' in to_opioids:
+                print(f"  Conversion type: All opioids → oral morphine")
+                print(f"  From opioids ({len(from_opioids)}): {sorted(from_opioids)}")
+            else:
+                print(f"  Conversion type: Opioid pairs")
+                print(f"  From opioids ({len(from_opioids)}): {sorted(from_opioids)}")
+                print(f"  To opioids ({len(to_opioids)}): {sorted(to_opioids)}")
+                
+                # Check if permutations were used
+                pairs = set()
+                for _, row in exp_df.iterrows():
+                    pairs.add((row['from_opioid'], row['to_opioid']))
+                
+                reverse_pairs = 0
+                for from_op, to_op in pairs:
+                    if (to_op, from_op) in pairs:
+                        reverse_pairs += 1
+                
+                if reverse_pairs > 0:
+                    print(f"  Uses permutations: YES (both A→B and B→A)")
+                else:
+                    print(f"  Uses permutations: NO (one direction only)")
+            
+            # Determine priority level (infer from opioid names)
+            priority_1_opioids = ['oral_hydromorphone', 'oral_morphine', 'oral_oxycodone', 
+                                  'iv_hydromorphone', 'iv_morphine']
+            priority_2_opioids = ['oral_codeine', 'oral_hydrocodone', 'oral_methadone', 
+                                  'oral_oxymorphone', 'oral_tapentadol', 'oral_tramadol',
+                                  'sublingual_buprenorphine', 'transdermal_fentanyl',
+                                  'iv_fentanyl', 'sc_fentanyl']
+            
+            all_opioids = set(from_opioids) | set(to_opioids)
+            
+            if all_opioids.issubset(set(priority_1_opioids)):
+                print(f"  Opioid priority: Priority 1 only")
+            elif all_opioids.issubset(set(priority_1_opioids + priority_2_opioids)):
+                has_p1 = bool(all_opioids.intersection(set(priority_1_opioids)))
+                has_p2 = bool(all_opioids.intersection(set(priority_2_opioids)))
+                if has_p1 and has_p2:
+                    print(f"  Opioid priority: Priority 1 & 2")
+                elif has_p2:
+                    print(f"  Opioid priority: Priority 2 only")
+                else:
+                    print(f"  Opioid priority: Priority 1 only")
+            else:
+                print(f"  Opioid priority: Mixed/Unknown")
+        
+        # Summary by experiment_id and model
+        print("\n" + "=" * 80)
+        print("COUNTS BY EXPERIMENT AND MODEL")
+        print("=" * 80)
+        summary = self.df.groupby(['experiment_id', 'model']).size().reset_index(name='count')
+        print(summary.to_string(index=False))
+        
+        # Detailed summary
+        print("\n" + "=" * 80)
+        print("DETAILED BREAKDOWN (with prompt conditions)")
+        print("=" * 80)
+        detailed = self.df.groupby([
+            'experiment_id', 'model', 'include_nielson', 'include_examples'
+        ]).size().reset_index(name='count')
+        print(detailed.to_string(index=False))
+        
+        # Pivot table
+        pivot = self.df.pivot_table(
+            index='experiment_id',
+            columns='model',
+            values='from_dose',
+            aggfunc='count',
+            fill_value=0
+        )
+        
+        print("\n" + "=" * 80)
+        print("PIVOT TABLE (experiment_id vs model)")
+        print("=" * 80)
+        print(pivot)
+        print("\n" + "=" * 80)
+        
+        return summary
