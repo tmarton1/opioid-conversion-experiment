@@ -267,51 +267,98 @@ class ExperimentBatch:
         colormap: str = 'parula'
     ):
         """
-        Generate a multi-page PDF with experiment comparison plots.
-        
+        Generate a PDF with visualizations for the experiment batch.
+
         Args:
-            output_pdf: Path to the output PDF file
-            plot_types: List of plot types to generate (e.g., ["scatter", "cdf", "histogram"])
-            figsize: Figure size for each plot page
-            metadata: Dictionary of PDF metadata
-            include_summary_plots: Whether to include overall CDF and histogram summary plots
-            colormap: Colormap to use (default: 'parula', alternatives: 'viridis', 'plasma', 'turbo')
+            output_pdf (str): Path to the output PDF file.
+            plot_types (list): List of plot types to generate (e.g., ["scatter", "ratio_regression", "cdf", "histogram"]).
+            figsize (tuple): Figure size for the plots.
+            metadata (dict): Metadata for the PDF.
+            include_summary_plots (bool): Whether to include summary plots.
+            colormap (str): Colormap to use for the plots.
         """
-        if plot_types is None:
-            plot_types = ["scatter", "cdf", "histogram"]
-        
-        with PdfPages(output_pdf) as pdf:
-            # Individual experiment plots
+
+        with PdfPages(output_pdf, metadata=metadata) as pdf:
             for plot_type in plot_types:
-                fig, axes = ExperimentFromCSVConverter.plot_comparison(
-                    self.csv_file,
-                    self.experiment_configs,
-                    plot_type=plot_type,
-                    figsize=figsize
-                )
-                pdf.savefig(fig, bbox_inches='tight')
-                plt.close(fig)
-            
-            # Summary plots
-            if include_summary_plots:
-                # Overall CDF
-                fig, ax = self.plot_overall_cdf(figsize=(10, 4), colormap=colormap)
-                pdf.savefig(fig, bbox_inches='tight')
-                plt.close(fig)
-                
-                # Overall Histogram
-                fig, ax = self.plot_overall_histogram(figsize=(10, 4), colormap=colormap)
-                pdf.savefig(fig, bbox_inches='tight')
-                plt.close(fig)
-            
-            # Add metadata
-            if metadata:
-                d = pdf.infodict()
-                d['Title'] = metadata.get('title', 'Experiment Comparison')
-                d['Author'] = metadata.get('author', '')
-                d['Subject'] = metadata.get('subject', '')
-                d['Keywords'] = metadata.get('keywords', '')
-                d['Creator'] = metadata.get('creator', 'Python matplotlib')
+                if plot_type in ["scatter", "ratio_regression"]:
+                    # Iterate over prompt conditions and experiment IDs
+                    for prompt_condition, prompt_group in self.df.groupby(self.prompt_conditions_list):
+                        for experiment_id, exp_group in prompt_group.groupby("experiment_id"):
+                            try:
+                                # Check if the group has data
+                                if exp_group.empty:
+                                    print(f"Skipping plot for {plot_type}, prompt_condition={prompt_condition}, experiment_id={experiment_id}: No data.")
+                                    continue
+
+                                # Create the plot
+                                fig, ax = plt.subplots(figsize=figsize)
+                                if plot_type == "scatter":
+                                    self._plot_scatter(ax, exp_group, colormap)
+                                elif plot_type == "ratio_regression":
+                                    self._plot_ratio_regression(ax, exp_group, colormap)
+
+                                # Add titles and save the figure
+                                ax.set_title(f"{plot_type.capitalize()} (Prompt: {prompt_condition}, Experiment ID: {experiment_id})")
+                                plt.tight_layout()
+                                pdf.savefig(fig)
+                                plt.close(fig)
+
+                            except Exception as e:
+                                print(f"Error generating {plot_type} for prompt_condition={prompt_condition}, experiment_id={experiment_id}: {e}")
+                                continue
+
+                elif plot_type in ["cdf", "histogram"]:
+                    try:
+                        # Generate summary plots
+                        fig, ax = plt.subplots(figsize=figsize)
+                        if plot_type == "cdf":
+                            sns.ecdfplot(data=self.df, x="ratio_observed_expected", hue="experiment_id", ax=ax, palette=colormap)
+                            ax.set_title("CDF of Ratio Observed/Expected")
+                        elif plot_type == "histogram":
+                            sns.histplot(data=self.df, x="ratio_observed_expected", hue="experiment_id", ax=ax, palette=colormap, kde=True)
+                            ax.set_title("Histogram of Ratio Observed/Expected")
+                        plt.tight_layout()
+                        pdf.savefig(fig)
+                        plt.close(fig)
+
+                    except Exception as e:
+                        print(f"Error generating {plot_type}: {e}")
+                        continue
+
+        print(f"PDF generated: {output_pdf}")
+
+    def _plot_scatter(self, ax, group, colormap):
+        """Helper function to create scatter plots."""
+        for (from_opioid, to_opioid), sub_group in group.groupby(["from_opioid", "to_opioid"]):
+            ax.scatter(
+                sub_group["expected_to_dose"],
+                sub_group["observed_to_dose"],
+                label=f"{from_opioid} → {to_opioid}",
+                alpha=0.7
+            )
+        ax.set_xlabel("Expected Dose")
+        ax.set_ylabel("Observed Dose")
+        ax.legend(fontsize=8, bbox_to_anchor=(1.05, 1), loc='upper left')
+
+    def _plot_ratio_regression(self, ax, group, colormap):
+        """Helper function to create ratio regression plots."""
+        from scipy import stats
+        for (from_opioid, to_opioid), sub_group in group.groupby(["from_opioid", "to_opioid"]):
+            slope, intercept, r_value, p_value, std_err = stats.linregress(
+                sub_group["expected_to_dose"], sub_group["ratio_observed_expected"]
+            )
+            mean_ratio = sub_group["ratio_observed_expected"].mean()
+            std_ratio = sub_group["ratio_observed_expected"].std()
+            ax.errorbar(
+                slope, mean_ratio, yerr=std_ratio,
+                fmt='o', alpha=0.7,
+                label=f"{from_opioid} → {to_opioid}"
+            )
+        ax.axhline(y=1, color='gray', linestyle='--', alpha=0.5, linewidth=1)
+        ax.axvline(x=0, color='gray', linestyle='--', alpha=0.5, linewidth=1)
+        ax.set_xlabel("Regression Slope")
+        ax.set_ylabel("Mean Ratio (Observed/Expected)")
+        ax.legend(fontsize=8, bbox_to_anchor=(1.05, 1), loc='upper left')
     
     @staticmethod
     def reorganize_csv(input_file: str, output_file: str):

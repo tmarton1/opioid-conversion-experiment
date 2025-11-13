@@ -85868,3 +85868,199 @@ Use the following conversion factor(s):
 
 
 Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,0.651,1.0015384615384615,
+1096,2025-11-12T21:49:22.578788,oral_hydrocodone,mg/day,oral_morphine,mg/day,10.45740498367263,12.548885980407155,openai/gpt-4.1,"Convert 10.46 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 10.46 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,12.55,1.0000887743816131,
+1096,2025-11-12T21:49:24.133344,oral_hydrocodone,mg/day,oral_morphine,mg/day,33.37616583086635,40.05139899703962,anthropic/claude-3.5-sonnet:20241022,"Convert 33.38 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 33.38 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,40.056,1.0001148774593547,
+1096,2025-11-12T21:49:25.820720,oral_hydrocodone,mg/day,oral_morphine,mg/day,19.7320469401615,23.6784563281938,mistralai/mistral-large-2407,"Convert 19.73 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 19.73 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,23.676,0.9998962631617637,
+1096,2025-11-12T21:49:26.309789,oral_hydrocodone,mg/day,oral_morphine,mg/day,67.13363186833449,80.56035824200139,mistralai/mixtral-8x22b-instruct,"Convert 67.13 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 67.13 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,80.556,0.9999459009108637,
+1096,2025-11-12T21:49:30.942274,oral_hydrocodone,mg/day,oral_morphine,mg/day,87.97756086239767,105.5730730348772,google/gemini-2.5-pro,"Convert 87.98 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 87.98 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,105.576,1.0000277245422404,
+1096,2025-11-12T21:49:31.928641,oral_hydrocodone,mg/day,oral_morphine,mg/day,18.295635346125287,21.954762415350345,cohere/command-r-plus-08-2024,"Convert 18.30 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 18.30 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,21.96,1.000238562574742,
+1096,2025-11-12T21:49:33.601315,oral_hydrocodone,mg/day,oral_morphine,mg/day,25.565463228082784,30.678555873699338,ai21/jamba-mini-1.7,"Convert 25.57 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 25.57 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,30.684,1.000177457059031,
+1096,2025-11-12T21:49:34.999535,oral_hydrocodone,mg/day,oral_morphine,mg/day,29.681879589506238,35.61825550740748,qwen/qwen-2.5-72b-instruct,"Convert 29.68 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 29.68 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,35.616,0.9999366755228365,
+1096,2025-11-12T21:49:35.457557,oral_hydrocodone,mg/day,oral_morphine,mg/day,34.12338886639963,40.94806663967955,meta-llama/llama-3.3-70b-instruct,"Convert 34.12 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 34.12 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,40.944,0.9999006878709236,
+1096,2025-11-12T21:49:37.019683,oral_hydrocodone,mg/day,oral_morphine,mg/day,13.84451980519568,16.613423766234817,deepseek/deepseek-chat,"Convert 13.84 mg/day of hydrocodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 13.84 mg/day of hydrocodone (oral)?
+
+Use the following conversion factor(s):
+1.2 OME: 1 mg/day of hydrocodone (oral) is equivalent to 1.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,16.608,0.9996735310968327,
+1096,2025-11-12T21:49:37.767619,oral_hydromorphone,mg/day,oral_morphine,mg/day,7.835362303317327,39.17681151658663,openai/gpt-4.1,"Convert 7.84 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 7.84 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,39.2,1.0005918930743904,
+1096,2025-11-12T21:49:39.340255,oral_hydromorphone,mg/day,oral_morphine,mg/day,14.253668194878642,71.26834097439321,anthropic/claude-3.5-sonnet:20241022,"Convert 14.25 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 14.25 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,71.25,0.9997426490620878,
+1096,2025-11-12T21:49:40.074616,oral_hydromorphone,mg/day,oral_morphine,mg/day,19.096897369680303,95.48448684840152,mistralai/mistral-large-2407,"Convert 19.10 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 19.10 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,95.5,1.000162467769483,
+1096,2025-11-12T21:49:40.541471,oral_hydromorphone,mg/day,oral_morphine,mg/day,20.67216610096013,103.36083050480065,mistralai/mixtral-8x22b-instruct,"Convert 20.67 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 20.67 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,103.35,0.9998952165462704,
+1096,2025-11-12T21:49:46.181461,oral_hydromorphone,mg/day,oral_morphine,mg/day,16.357145493072398,81.78572746536199,google/gemini-2.5-pro,"Convert 16.36 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 16.36 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,81.8,1.0001745113124298,
+1096,2025-11-12T21:49:47.254517,oral_hydromorphone,mg/day,oral_morphine,mg/day,3.2592268396667663,16.29613419833383,cohere/command-r-plus-08-2024,"Convert 3.26 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 3.26 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,16.3,1.0002372220073252,
+1096,2025-11-12T21:49:48.386764,oral_hydromorphone,mg/day,oral_morphine,mg/day,3.8342662633180424,19.171331316590212,ai21/jamba-large-1.7,"Convert 3.83 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 3.83 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,19.15,0.9988873325363818,
+1096,2025-11-12T21:49:49.151860,oral_hydromorphone,mg/day,oral_morphine,mg/day,12.167372504701088,60.836862523505445,ai21/jamba-mini-1.7,"Convert 12.17 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 12.17 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,24.34,0.40008637839592387,
+1096,2025-11-12T21:49:49.733378,oral_hydromorphone,mg/day,oral_morphine,mg/day,5.002281293832269,25.011406469161344,qwen/qwen-2.5-72b-instruct,"Convert 5.00 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 5.00 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,25.0,0.9995439493106713,
+1096,2025-11-12T21:49:50.445049,oral_hydromorphone,mg/day,oral_morphine,mg/day,18.41614653821903,92.08073269109516,meta-llama/llama-3.3-70b-instruct,"Convert 18.42 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 18.42 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,92.1,1.0002092436532783,
+1096,2025-11-12T21:49:51.935325,oral_hydromorphone,mg/day,oral_morphine,mg/day,18.0722430404195,90.3612152020975,deepseek/deepseek-chat,"Convert 18.07 mg/day of hydromorphone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 18.07 mg/day of hydromorphone (oral)?
+
+Use the following conversion factor(s):
+5.0 OME: 1 mg/day of hydromorphone (oral) is equivalent to 5.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,90.35,0.9998758847800749,
+1096,2025-11-12T21:49:52.958776,oral_oxycodone,mg/day,oral_morphine,mg/day,69.50933929000536,104.26400893500804,openai/gpt-4.1,"Convert 69.51 mg/day of oxycodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 69.51 mg/day of oxycodone (oral)?
+
+Use the following conversion factor(s):
+1.5 OME: 1 mg/day of oxycodone (oral) is equivalent to 1.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,104.265,1.0000095053413165,
+1096,2025-11-12T21:49:54.451386,oral_oxycodone,mg/day,oral_morphine,mg/day,51.86831297028571,77.80246945542856,anthropic/claude-3.5-sonnet:20241022,"Convert 51.87 mg/day of oxycodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 51.87 mg/day of oxycodone (oral)?
+
+Use the following conversion factor(s):
+1.5 OME: 1 mg/day of oxycodone (oral) is equivalent to 1.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,77.805,1.0000325252474525,
+1096,2025-11-12T21:49:55.300249,oral_oxycodone,mg/day,oral_morphine,mg/day,29.86474869868805,44.79712304803208,mistralai/mistral-large-2407,"Convert 29.86 mg/day of oxycodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 29.86 mg/day of oxycodone (oral)?
+
+Use the following conversion factor(s):
+1.5 OME: 1 mg/day of oxycodone (oral) is equivalent to 1.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,44.79,0.9998409931810924,
+1096,2025-11-12T21:49:55.677470,oral_oxycodone,mg/day,oral_morphine,mg/day,24.243700834508278,36.36555125176242,mistralai/mixtral-8x22b-instruct,"Convert 24.24 mg/day of oxycodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 24.24 mg/day of oxycodone (oral)?
+
+Use the following conversion factor(s):
+1.5 OME: 1 mg/day of oxycodone (oral) is equivalent to 1.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,36.36,0.9998473486150674,
+1096,2025-11-12T21:50:01.338295,oral_oxycodone,mg/day,oral_morphine,mg/day,72.78258316705204,109.17387475057805,google/gemini-2.5-pro,"Convert 72.78 mg/day of oxycodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 72.78 mg/day of oxycodone (oral)?
+
+Use the following conversion factor(s):
+1.5 OME: 1 mg/day of oxycodone (oral) is equivalent to 1.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,109.17,0.9999645084450204,
+1096,2025-11-12T21:50:02.802581,oral_oxycodone,mg/day,oral_morphine,mg/day,22.367611387357233,33.55141708103585,cohere/command-r-plus-08-2024,"Convert 22.37 mg/day of oxycodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 22.37 mg/day of oxycodone (oral)?
+
+Use the following conversion factor(s):
+1.5 OME: 1 mg/day of oxycodone (oral) is equivalent to 1.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,33.555,1.0001067889012107,
+1096,2025-11-12T21:50:04.426722,oral_oxycodone,mg/day,oral_morphine,mg/day,55.347733776872644,83.02160066530897,ai21/jamba-mini-1.7,"Convert 55.35 mg/day of oxycodone (oral) to mg/day of morphine (oral).
+How many mg/day of morphine (oral) is equivalent to 55.35 mg/day of oxycodone (oral)?
+
+Use the following conversion factor(s):
+1.5 OME: 1 mg/day of oxycodone (oral) is equivalent to 1.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary.",True,False,82.95,0.9991375658294326,
