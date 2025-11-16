@@ -50,6 +50,12 @@ class OpioidPairConsensus:
         # Get observed coefficients and weights from each model
         observed_coeffs = self.analysis_df['observed_coefficient_mean'].values
         weights = self.analysis_df['weight'].values
+
+        # per-model SDs (intrinsic per-response noise for each model)
+        if 'observed_coefficient_std' in self.analysis_df.columns:
+            per_model_sd = self.analysis_df['observed_coefficient_std'].values
+        else:
+            per_model_sd = None
         
         if len(observed_coeffs) == 0:
             raise ValueError(f"No model data found for {self.from_opioid} -> {self.to_opioid}")
@@ -61,6 +67,8 @@ class OpioidPairConsensus:
         
         observed_coeffs = observed_coeffs[valid_mask]
         weights = weights[valid_mask]
+        if per_model_sd is not None:
+            per_model_sd = per_model_sd[valid_mask]
         
         # Normalize weights so they sum to 1 (these are the v values)
         total_weight = np.sum(weights)
@@ -104,6 +112,19 @@ class OpioidPairConsensus:
         else:
             self.t_score = np.nan
             self.p_value = np.nan
+
+        if per_model_sd is not None:
+            # Within-model variance term: sum_j v_j * sigma_j^2
+            within_var = np.sum(self.normalized_weights * (per_model_sd ** 2))
+
+            # Between-model variance term (no Bessel correction here)
+            between_var = np.sum(self.normalized_weights * deviations_squared)
+
+            self.sigma_cons_sq = within_var + between_var
+            self.sigma_cons = np.sqrt(self.sigma_cons_sq)
+        else:
+            self.sigma_cons_sq = np.nan
+            self.sigma_cons = np.nan
     
     def to_dict(self) -> Dict:
         """
@@ -123,6 +144,7 @@ class OpioidPairConsensus:
             'effective_n_models': self.effective_n_models,
             'weighted_variance': self.weighted_variance,
             'se_consensus': self.se_consensus,
+            'sigma_cons': self.sigma_cons,
             't_score': self.t_score,
             'df': self.df,
             'p_value': self.p_value,

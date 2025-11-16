@@ -6,6 +6,7 @@ from itertools import product
 from typing import List, Dict, Optional
 from experiment import ExperimentFromCSVConverter
 import numpy as np
+import seaborn as sns
 
 
 # Define a Parula-like colormap with peach/red tones
@@ -68,6 +69,39 @@ class ExperimentBatch:
                 models, prompt_conditions_list, experiment_ids
             )
         ]
+        
+        # Load and filter the DataFrame
+        df = pd.read_csv(csv_file)
+        
+        # Filter by experiment IDs
+        df = df[df['experiment_id'].isin(experiment_ids)]
+        
+        # Filter by models
+        df = df[df['model'].isin(models)]
+        
+        # Filter by prompt conditions
+        condition_filters = []
+        for prompt_conditions in prompt_conditions_list:
+            condition_mask = pd.Series([True] * len(df), index=df.index)
+            for key, value in prompt_conditions.items():
+                condition_mask &= (df[key] == value)
+            condition_filters.append(condition_mask)
+        
+        # Combine all condition filters with OR
+        if condition_filters:
+            combined_filter = condition_filters[0]
+            for mask in condition_filters[1:]:
+                combined_filter |= mask
+            df = df[combined_filter]
+        
+        # Store the filtered DataFrame
+        self.df = df
+        
+        if len(self.df) == 0:
+            print("WARNING: No data matches the specified filters!")
+            print(f"  Experiment IDs: {experiment_ids}")
+            print(f"  Models: {models}")
+            print(f"  Prompt conditions: {prompt_conditions_list}")
     
     def _get_experiment_name(self, experiment_id: int) -> str:
         """Get the custom name for an experiment, or default to 'Exp {id}'."""
@@ -176,87 +210,337 @@ class ExperimentBatch:
         
         return fig, ax
     
-    def plot_overall_histogram(self, figsize=(7, 3.5), ax=None, colormap='parula'):
+    def plot_overall_histogram(self, figsize=(12, 8), colormap='Spectral', sort_by_best=False):
         """
-        Create a stacked histogram comparing overall performance across all experiment configurations.
+        Generate an overall stacked histogram comparing all experiment configurations,
+        sorted by the proportion in the 0.95-1.05 range.
         
         Args:
-            figsize: Figure size
-            ax: Optional axes to plot on
-            colormap: Colormap to use (ignored for histogram, kept for consistency)
+            figsize (tuple): Figure size
+            colormap (str): Colormap to use (not used - custom colors applied)
+            sort_by_best (bool): Whether to sort by best performance (0.95-1.05 range)
             
         Returns:
-            fig, ax
+            tuple: (fig, ax) matplotlib figure and axes objects
         """
-        if ax is None:
-            fig, ax = plt.subplots(figsize=figsize)
-        else:
-            fig = ax.get_figure()
+        import numpy as np
         
-        labels = []
-        tight_proportions = []
-        acceptable_proportions = []
-        broad_proportions = []
+        # Clean model names - remove provider prefix
+        self.df['model_clean'] = self.df['model'].apply(
+            lambda x: x.split('/')[-1] if '/' in x else x
+        )
         
-        for i, config in enumerate(self.experiment_configs):
-            experiment = ExperimentFromCSVConverter.from_csv(
-                self.csv_file,
-                experiment_id=config["experiment_id"],
-                filters={"model": config["model"]},
-                prompt_conditions=[config["prompt_conditions"]]
+        # Get prompt condition columns
+        prompt_cols = list(self.prompt_conditions_list[0].keys()) if self.prompt_conditions_list else []
+        
+        # Find constant columns (same value across all rows)
+        constant_conditions = {}
+        for col in prompt_cols:
+            unique_vals = self.df[col].unique()
+            if len(unique_vals) == 1:
+                constant_conditions[col] = unique_vals[0]
+        
+        # Variable columns for grouping
+        variable_cols = [col for col in prompt_cols if col not in constant_conditions]
+        groupby_cols = variable_cols + ["experiment_id", "model_clean"]
+        
+        # Calculate proportions for each configuration
+        config_proportions = []
+        for name, group in self.df.groupby(groupby_cols):
+            proportions = {'config': name}
+            total = len(group)
+            ratio = group['ratio_observed_expected']
+            
+            # Count each range
+            tight_count = ((ratio >= 0.95) & (ratio <= 1.05)).sum()
+            acceptable_count = ((ratio >= 0.7) & (ratio <= 1.3)).sum()
+            broad_count = ((ratio >= 0.3) & (ratio <= 3.0)).sum()
+            
+            # Calculate MUTUALLY EXCLUSIVE proportions
+            proportions['0.95-1.05'] = tight_count / total
+            proportions['0.7-1.3'] = (acceptable_count - tight_count) / total  # Exclude tight
+            proportions['0.3-3.0'] = (broad_count - acceptable_count) / total  # Exclude acceptable and tight
+            
+            config_proportions.append(proportions)
+        
+        # Convert to DataFrame and sort by target proportion (descending)
+        prop_df = pd.DataFrame(config_proportions)
+         # Sort if requested
+        if sort_by_best:
+            prop_df = prop_df.sort_values('0.95-1.05', ascending=False)
+
+        
+        # Create labels for x-axis (only variable conditions)
+        if variable_cols:
+            prop_df['label'] = prop_df['config'].apply(
+                lambda x: ', '.join([f"{col}={x[i]}" for i, col in enumerate(variable_cols)] + 
+                                [f"exp={x[len(variable_cols)]}", f"{x[len(variable_cols)+1]}"])
             )
-            df = experiment.to_dataframe()
-            all_ratios = df["ratio_observed_expected"]
-            
-            # Create label
-            nielson = "N" if config['prompt_conditions'].get('include_nielson') else "no-N"
-            examples = "E" if config['prompt_conditions'].get('include_examples') else "no-E"
-            exp_name = self._get_experiment_name(config["experiment_id"])
-            labels.append(f"{config['model']}\n{exp_name}\n{nielson}, {examples}")
-            
-            # Calculate proportions
-            total = len(all_ratios)
-            tight_count = ((all_ratios >= 0.95) & (all_ratios <= 1.05)).sum()
-            tight_prop = tight_count / total if total > 0 else 0
-            tight_proportions.append(tight_prop)
-            
-            acceptable_count = ((all_ratios >= 0.7) & (all_ratios <= 1.3)).sum() - tight_count
-            acceptable_prop = acceptable_count / total if total > 0 else 0
-            acceptable_proportions.append(acceptable_prop)
-            
-            broad_count = ((all_ratios >= 0.3) & (all_ratios <= 3)).sum() - tight_count - acceptable_count
-            broad_prop = broad_count / total if total > 0 else 0
-            broad_proportions.append(broad_prop)
+        else:
+            prop_df['label'] = prop_df['config'].apply(
+                lambda x: f"exp={x[0]}, {x[1]}" if isinstance(x, tuple) else f"{x}"
+            )
         
-        # Create stacked bar chart with black bars
-        x_pos = np.arange(len(labels))
+        # Create stacked bar chart
+        fig, ax = plt.subplots(figsize=figsize)
+        x_pos = np.arange(len(prop_df))
         
-        # Bottom bar: tight range (alpha=1)
-        ax.bar(x_pos, tight_proportions, color='black', alpha=1.0, label="0.95-1.05")
+        # Stack from bottom to top
+        ax.bar(x_pos, prop_df['0.95-1.05'], color='black', label='0.95-1.05', width=0.8)
         
-        # Middle bar: acceptable range (alpha=0.6)
-        ax.bar(x_pos, acceptable_proportions, bottom=tight_proportions,
-               color='black', alpha=0.6, label="0.7-1.3")
+        ax.bar(x_pos, prop_df['0.7-1.3'], bottom=prop_df['0.95-1.05'],
+            color='gray', label='0.7-1.3', width=0.8)
         
-        # Top bar: broad range (alpha=0.3)
-        ax.bar(x_pos, broad_proportions,
-               bottom=np.array(tight_proportions) + np.array(acceptable_proportions),
-               color='black', alpha=0.3, label="0.3-3")
+        ax.bar(x_pos, prop_df['0.3-3.0'], 
+            bottom=prop_df['0.95-1.05'] + prop_df['0.7-1.3'],
+            color='lightgray', label='0.3-3.0', width=0.8)
         
-        ax.set_ylabel("Proportion", fontsize=10)
-        ax.set_title("Overall Proportion Comparison Across Experiments", fontsize=11)
+        # Create title with constant conditions
+        title = "Proportion of Ratio Observed/Expected by Range"
+        if constant_conditions:
+            const_str = ', '.join([f"{k}={v}" for k, v in constant_conditions.items()])
+            title += f"\n({const_str})"
+        
+        ax.set_title(title, fontsize=14, pad=20)
+        ax.set_xlabel('Configuration', fontsize=12)
+        ax.set_ylabel('Proportion', fontsize=12)
         ax.set_xticks(x_pos)
-        ax.set_xticklabels(labels, fontsize=7, rotation=45, ha='right')
+        ax.set_xticklabels(prop_df['label'], rotation=45, ha='right', fontsize=8)
+        ax.legend(title='Ratio Range', bbox_to_anchor=(1.05, 1), loc='upper left')
         ax.set_ylim(0, 1)
-        ax.axhline(0.5, color='gray', linestyle='--', alpha=0.5)
-        ax.legend(fontsize=8)
-        ax.grid(axis='y', alpha=0.3)
         
-        # Add more space at the bottom for rotated labels
         plt.tight_layout()
-        
         return fig, ax
     
+    def plot_nielson_effect(self, figsize=(10, 8), range_broad=(0.5, 2.0)):
+        """
+        Create a scatter plot comparing model performance with and without Nielson data.
+        X-axis: Proportion within 0.95-1.05 when include_nielson=True
+        Y-axis: Proportion within range_broad when include_nielson=False
+        
+        Args:
+            figsize (tuple): Figure size
+            
+        Returns:
+            tuple: (fig, ax) matplotlib figure and axes objects
+        """
+        
+        # Clean model names
+        self.df['model_clean'] = self.df['model'].apply(
+            lambda x: x.split('/')[-1] if '/' in x else x
+        )
+        
+        model_performance = []
+        
+        for model in self.df['model_clean'].unique():
+            model_data = self.df[self.df['model_clean'] == model]
+            
+            # Performance WITH Nielson (include_nielson=True)
+            with_nielson = model_data[model_data['include_nielson'] == True]
+            if len(with_nielson) > 0:
+                ratio_with = with_nielson['ratio_observed_expected']
+                prop_tight_with = ((ratio_with >= 0.95) & (ratio_with <= 1.05)).sum() / len(ratio_with)
+            else:
+                prop_tight_with = None
+            
+            # Performance WITHOUT Nielson (include_nielson=False)
+            without_nielson = model_data[model_data['include_nielson'] == False]
+            if len(without_nielson) > 0:
+                ratio_without = without_nielson['ratio_observed_expected']
+                prop_broad_without = ((ratio_without >= range_broad[0]) & (ratio_without <= range_broad[1])).sum() / len(ratio_without)
+            else:
+                prop_broad_without = None
+            
+            # Only add if both conditions exist
+            if prop_tight_with is not None and prop_broad_without is not None:
+                model_performance.append({
+                    'model': model,
+                    'with_nielson': prop_tight_with,
+                    'without_nielson': prop_broad_without
+                })
+        
+        # Convert to DataFrame
+        perf_df = pd.DataFrame(model_performance)
+        
+        # Create scatter plot
+        fig, ax = plt.subplots(figsize=figsize)
+        
+        ax.scatter(perf_df['with_nielson'], perf_df['without_nielson'], 
+                s=50, alpha=0.6, color='black', zorder=3)
+        
+        # Add model labels with adjust_text for better positioning
+        texts = []
+        for _, row in perf_df.iterrows():
+            text = ax.text(row['with_nielson'], row['without_nielson'], 
+                        row['model'],
+                        fontsize=7, ha='center', va='bottom')
+            texts.append(text)
+        
+        # Try to import adjust_text for automatic label adjustment
+        try:
+            from adjustText import adjust_text
+            adjust_text(texts, 
+                    arrowprops=dict(arrowstyle='-', color='gray', lw=0.5, alpha=0.5),
+                    expand_points=(1.5, 1.5),
+                    force_points=(0.5, 0.5))
+        except ImportError:
+            print("Install adjustText for better label positioning: pip install adjustText")
+            # Fallback: just offset labels slightly
+            for text in texts:
+                text.set_position((text.get_position()[0], text.get_position()[1] + 0.01))
+        
+        # Add diagonal reference line (y=x) only within data range
+        x_min = perf_df['without_nielson'].min()
+        x_max = perf_df['without_nielson'].max()
+        y_min = perf_df['with_nielson'].min()
+        y_max = perf_df['with_nielson'].max()
+
+        
+        diag_min = max(x_min, y_min)
+        diag_max = min(x_max, y_max)
+        ax.plot([0, 1], [0, 1], 'r--', alpha=0.3, label='Equal proportion', zorder=1)
+        
+        # Build title based on experiment IDs in the batch
+        exp_ids = sorted(self.df['experiment_id'].unique())
+        if len(exp_ids) == 1:
+            exp_name = self.experiment_names.get(exp_ids[0], f"Experiment {exp_ids[0]}")
+            title_suffix = f"\n({exp_name})"
+        else:
+            exp_names = [self.experiment_names.get(eid, f"Exp {eid}") for eid in exp_ids]
+            title_suffix = f"\n({', '.join(exp_names)})"
+
+        ax.set_xlabel('Proportion within 0.95-1.05\n(with Nielson conversion table)', fontsize=9)
+        ax.set_ylabel(f'Proportion within {range_broad[0]}-{range_broad[1]}\n(without Nielson conversion table)', fontsize=9)
+        ax.set_title(f'Effect of Including Nielson Conversion Table on Model Performance{title_suffix}', 
+                    fontsize=10, pad=15)
+        
+        # Expand axis limits to give space for labels
+        x_margin = (x_max - x_min) * 0.15  # 15% margin
+        y_margin = (y_max - y_min) * 0.15
+        
+        ax.set_xlim(x_min - x_margin, x_max + x_margin)
+        ax.set_ylim(y_min - y_margin, y_max + y_margin)
+        
+        ax.grid(True, alpha=0.3, zorder=0)
+        ax.legend(fontsize=7)
+        ax.tick_params(axis='both', labelsize=8)
+        
+        plt.tight_layout()
+        return fig, ax
+        
+    def plot_ome_effect(self, figsize=(10, 8), range_broad=(0.6, 1.7), include_nielson=True):
+        """
+        Create a scatter plot comparing model performance on OME vs non-OME experiments.
+        X-axis: Proportion within range_broad for OME experiments (experiment_id == 1)
+        Y-axis: Proportion within range_broad for non-OME experiments (experiment_id == 2)
+        
+        Args:
+            figsize (tuple): Figure size
+            range_broad (tuple): Range for both axes metric (default: 0.6-1.7)
+            include_nielson (bool): Filter for include_nielson condition (default: True)
+            
+        Returns:
+            tuple: (fig, ax) matplotlib figure and axes objects
+        """
+        import numpy as np
+        
+        # Clean model names
+        self.df['model_clean'] = self.df['model'].apply(
+            lambda x: x.split('/')[-1] if '/' in x else x
+        )
+        
+        # Filter for the specified nielson condition
+        df_filtered = self.df[self.df['include_nielson'] == include_nielson].copy()
+        
+        model_performance = []
+        
+        for model in df_filtered['model_clean'].unique():
+            model_data = df_filtered[df_filtered['model_clean'] == model]
+            
+            # Performance on OME experiments (experiment_id == 1)
+            ome_data = model_data[model_data['experiment_id'] == 1]
+            if len(ome_data) > 0:
+                ratio_ome = ome_data['ratio_observed_expected']
+                prop_ome = ((ratio_ome >= range_broad[0]) & (ratio_ome <= range_broad[1])).sum() / len(ratio_ome)
+            else:
+                prop_ome = None
+            
+            # Performance on non-OME experiments (experiment_id == 2)
+            nonome_data = model_data[model_data['experiment_id'] == 2]
+            if len(nonome_data) > 0:
+                ratio_nonome = nonome_data['ratio_observed_expected']
+                prop_nonome = ((ratio_nonome >= range_broad[0]) & (ratio_nonome <= range_broad[1])).sum() / len(ratio_nonome)
+            else:
+                prop_nonome = None
+            
+            # Only add if both conditions exist
+            if prop_ome is not None and prop_nonome is not None:
+                model_performance.append({
+                    'model': model,
+                    'ome': prop_ome,
+                    'nonome': prop_nonome
+                })
+        
+        # Convert to DataFrame
+        perf_df = pd.DataFrame(model_performance)
+        
+        # Create scatter plot
+        fig, ax = plt.subplots(figsize=figsize)
+        
+        ax.scatter(perf_df['ome'], perf_df['nonome'], 
+                s=50, alpha=0.6, color='black', zorder=3)
+        
+        # Add model labels with adjust_text for better positioning
+        texts = []
+        for _, row in perf_df.iterrows():
+            text = ax.text(row['ome'], row['nonome'], 
+                        row['model'],
+                        fontsize=7, ha='center', va='bottom')
+            texts.append(text)
+        
+        # Try to import adjust_text for automatic label adjustment
+        try:
+            from adjustText import adjust_text
+            adjust_text(texts, 
+                    arrowprops=dict(arrowstyle='-', color='gray', lw=0.5, alpha=0.5),
+                    expand_points=(1.5, 1.5),
+                    force_points=(0.5, 0.5))
+        except ImportError:
+            print("Install adjustText for better label positioning: pip install adjustText")
+            # Fallback: just offset labels slightly
+            for text in texts:
+                text.set_position((text.get_position()[0], text.get_position()[1] + 0.01))
+        
+        # Add diagonal reference line (y=x) only within data range
+        x_min = perf_df['ome'].min()
+        x_max = perf_df['ome'].max()
+        y_min = perf_df['nonome'].min()
+        y_max = perf_df['nonome'].max()
+        
+        diag_min = max(x_min, y_min)
+        diag_max = min(x_max, y_max)
+        ax.plot([diag_min, diag_max], [diag_min, diag_max], 'r--', alpha=0.3, label='Equal performance', zorder=1)
+        
+        nielson_str = "with Nielson table" if include_nielson else "without Nielson table"
+        ax.set_xlabel(f'Proportion within {range_broad[0]}-{range_broad[1]}\n(OME: oral morphine included)', fontsize=9)
+        ax.set_ylabel(f'Proportion within {range_broad[0]}-{range_broad[1]}\n(Non-OME: oral morphine excluded)', fontsize=9)
+        ax.set_title(f'OME vs Non-OME Performance Comparison ({nielson_str})', 
+                    fontsize=10, pad=15)
+        
+        # Expand axis limits to give space for labels
+        x_margin = (x_max - x_min) * 0.15  # 15% margin
+        y_margin = (y_max - y_min) * 0.15
+        
+        ax.set_xlim(x_min - x_margin, x_max + x_margin)
+        ax.set_ylim(y_min - y_margin, y_max + y_margin)
+        
+        ax.grid(True, alpha=0.3, zorder=0)
+        ax.legend(fontsize=7)
+        ax.tick_params(axis='both', labelsize=8)
+        
+        plt.tight_layout()
+        return fig, ax
+
     def generate_pdf(
         self,
         output_pdf: str,
@@ -264,7 +548,9 @@ class ExperimentBatch:
         figsize: tuple = (10, 48),
         metadata: Dict = None,
         include_summary_plots: bool = True,
-        colormap: str = 'parula'
+        only_summary_plots: bool = False,
+        colormap: str = 'parula',
+        sort_by_best: bool = False
     ):
         """
         Generate a PDF with visualizations for the experiment batch.
@@ -277,52 +563,90 @@ class ExperimentBatch:
             include_summary_plots (bool): Whether to include summary plots.
             colormap (str): Colormap to use for the plots.
         """
-
+        prompt_cols = list(self.prompt_conditions_list[0].keys()) if self.prompt_conditions_list else []
+        
         with PdfPages(output_pdf, metadata=metadata) as pdf:
+            # Add summary plots at the beginning if requested
+            if include_summary_plots:
+                try:
+                    # Overall CDF
+                    fig_cdf, ax_cdf = self.plot_overall_cdf(figsize=(12, 8), colormap=colormap)
+                    pdf.savefig(fig_cdf, bbox_inches='tight')
+                    plt.close(fig_cdf)
+                    
+                    # Overall Histogram
+                    fig_hist, ax_hist = self.plot_overall_histogram(figsize=(12, 8), colormap=colormap, sort_by_best=sort_by_best)
+                    pdf.savefig(fig_hist, bbox_inches='tight')
+                    plt.close(fig_hist)
+                    
+                except Exception as e:
+                    print(f"Error generating summary plots: {e}")
+                    import traceback
+                    traceback.print_exc()
+            
+            if only_summary_plots:
+                print(f"PDF generated with only summary plots: {output_pdf}")
+                return
+
+            # Generate individual plots
             for plot_type in plot_types:
                 if plot_type in ["scatter", "ratio_regression"]:
-                    # Iterate over prompt conditions and experiment IDs
-                    for prompt_condition, prompt_group in self.df.groupby(self.prompt_conditions_list):
-                        for experiment_id, exp_group in prompt_group.groupby("experiment_id"):
-                            try:
-                                # Check if the group has data
-                                if exp_group.empty:
-                                    print(f"Skipping plot for {plot_type}, prompt_condition={prompt_condition}, experiment_id={experiment_id}: No data.")
-                                    continue
-
-                                # Create the plot
-                                fig, ax = plt.subplots(figsize=figsize)
-                                if plot_type == "scatter":
-                                    self._plot_scatter(ax, exp_group, colormap)
-                                elif plot_type == "ratio_regression":
-                                    self._plot_ratio_regression(ax, exp_group, colormap)
-
-                                # Add titles and save the figure
-                                ax.set_title(f"{plot_type.capitalize()} (Prompt: {prompt_condition}, Experiment ID: {experiment_id})")
-                                plt.tight_layout()
-                                pdf.savefig(fig)
-                                plt.close(fig)
-
-                            except Exception as e:
-                                print(f"Error generating {plot_type} for prompt_condition={prompt_condition}, experiment_id={experiment_id}: {e}")
+                    # Group by prompt condition columns and experiment ID
+                    if prompt_cols:
+                        groupby_cols = prompt_cols + ["experiment_id"]
+                    else:
+                        groupby_cols = ["experiment_id"]
+                    
+                    for group_keys, exp_group in self.df.groupby(groupby_cols):
+                        try:
+                            # Check if the group has data
+                            if exp_group.empty:
+                                print(f"Skipping plot for {plot_type}, group={group_keys}: No data.")
                                 continue
+
+                            # Create the plot
+                            fig, ax = plt.subplots(figsize=figsize)
+                            if plot_type == "scatter":
+                                self._plot_scatter(ax, exp_group, colormap)
+                            elif plot_type == "ratio_regression":
+                                self._plot_ratio_regression(ax, exp_group, colormap)
+
+                            # Create title with group information
+                            if len(groupby_cols) > 1:
+                                group_info = dict(zip(groupby_cols, group_keys if isinstance(group_keys, tuple) else [group_keys]))
+                                title = f"{plot_type.capitalize()} - " + ", ".join([f"{k}={v}" for k, v in group_info.items()])
+                            else:
+                                title = f"{plot_type.capitalize()} - Experiment ID: {group_keys}"
+                            
+                            ax.set_title(title)
+                            plt.tight_layout()
+                            pdf.savefig(fig)
+                            plt.close(fig)
+
+                        except Exception as e:
+                            print(f"Error generating {plot_type} for group={group_keys}: {e}")
+                            import traceback
+                            traceback.print_exc()
+                            continue
 
                 elif plot_type in ["cdf", "histogram"]:
                     try:
                         # Generate summary plots
                         fig, ax = plt.subplots(figsize=figsize)
                         if plot_type == "cdf":
-                            sns.ecdfplot(data=self.df, x="ratio_observed_expected", hue="experiment_id", ax=ax, palette=colormap)
-                            ax.set_title("CDF of Ratio Observed/Expected")
+                            sns.ecdfplot(data=self.df, x="ratio_observed_expected", hue="model", ax=ax, palette=colormap)
+                            ax.set_title("CDF of Ratio Observed/Expected by Model")
                         elif plot_type == "histogram":
-                            sns.histplot(data=self.df, x="ratio_observed_expected", hue="experiment_id", ax=ax, palette=colormap, kde=True)
-                            ax.set_title("Histogram of Ratio Observed/Expected")
+                            sns.histplot(data=self.df, x="ratio_observed_expected", hue="model", ax=ax, palette=colormap, kde=True)
+                            ax.set_title("Histogram of Ratio Observed/Expected by Model")
                         plt.tight_layout()
                         pdf.savefig(fig)
                         plt.close(fig)
 
                     except Exception as e:
                         print(f"Error generating {plot_type}: {e}")
+                        import traceback
+                        traceback.print_exc()
                         continue
 
         print(f"PDF generated: {output_pdf}")
