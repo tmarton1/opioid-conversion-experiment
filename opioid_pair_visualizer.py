@@ -13,6 +13,9 @@ class OpioidPairVisualizer:
     """
     Creates a multi-panel visualization for opioid pair conversion analysis.
     """
+
+    EPSILON_FOR_WEIGHT = 5e-2
+    MAX_WEIGHT = 1.0 / EPSILON_FOR_WEIGHT
     
     def __init__(self,
                  experiment_results_csv: str,
@@ -175,13 +178,17 @@ class OpioidPairVisualizer:
         w1 = width - w2 - w3    # main panel
 
         # Create subplots — returns p1, p2, legend_items
-        p1, p2_renderers_dict, legend_items = self._create_coefficient_and_jitter_plots(
+        p1, p2_renderers_dict, legend_items = self._create_coefficient_and_beeswarm_plots(
             w1, w2, height
         )
         p2 = p2_renderers_dict['figure']
         # we just computed normalized_weight in the CSV; no extra info needed here
 
         p3 = self._create_consensus_plot(w3, height)
+
+        self._force_y_range(p1)
+        self._force_y_range(p2)
+        self._force_y_range(p3)
 
         # Link y-ranges so they're aligned vertically
         p2.y_range = p1.y_range
@@ -190,11 +197,14 @@ class OpioidPairVisualizer:
         # Legend (tall)
         legend_fig = self._create_legend(height, legend_items)
 
-        # NEW: stacked vertical weight bar to the right of the legend
+        # Stacked vertical normalized-weight bar
         weight_fig = self._create_weight_bar(height, legend_items)
 
+        # NEW: vertical raw-weight bar by model (5th subplot)
+        raw_weight_fig = self._create_weight_raw_bar(height, legend_items)
+
         # Create layout: plots + legend + weight bar
-        layout = row(p1, p2, p3, weight_fig, legend_fig)
+        layout = row(p1, p2, p3, weight_fig, legend_fig, raw_weight_fig)
 
         if output_html:
             output_file(output_html)
@@ -203,7 +213,7 @@ class OpioidPairVisualizer:
         return layout
 
     
-    def _create_coefficient_and_jitter_plots(self, width1: int, width2: int, height: int) -> tuple:
+    def _create_coefficient_and_beeswarm_plots(self, width1: int, width2: int, height: int) -> tuple:
         """
         Create both subplot 1 and subplot 2, collecting all renderers for the legend.
         
@@ -214,10 +224,13 @@ class OpioidPairVisualizer:
             - legend_items is list of (model_name, [renderers]) for legend
         """
         # --- Subplot 1: raw points per model ---
+        title_main = f"{self.from_opioid} \u2192 {self.to_opioid}"
+        title_sub = self._prompt_conditions_label()
+
         p1 = figure(
             width=width1,
             height=height,
-            title=f"{self.from_opioid} \u2192 {self.to_opioid}",
+            title=f"{title_main}\n{title_sub}",
             x_axis_label=f"From Dose ({self.from_unit})",
             y_axis_label=f"Observed Coefficient ({self.to_unit}/{self.from_unit})",
             x_axis_type="log",
@@ -635,3 +648,127 @@ class OpioidPairVisualizer:
         p.add_tools(hover)
 
         return p
+    
+    def _create_weight_raw_bar(self, height: int, legend_items: List[tuple]) -> figure:
+        """
+        Create a vertical bar plot where:
+          - x-axis: model (same order as the legend)
+          - y-axis: raw weight (from pair_model_analysis.csv)
+        Y-range is fixed from 0 to the theoretical maximum based on epsilon.
+
+        Colors match self.model_colors; alpha matches _calculate_alpha(weight).
+        """
+        # Use categorical x-axis for model names
+        model_names_ordered: List[str] = []
+
+        raw_weights: List[float] = []
+        colors: List[str] = []
+        alphas: List[float] = []
+
+        # legend_items has (model_name_clean, [renderers])
+        # We want bars in exactly that order
+        for model_name_clean, _renderers in legend_items:
+            # Find the full model name from the cleaned name
+            full_model = None
+            for m in self.model_order:
+                clean = m.split('/')[-1] if '/' in m else m
+                if clean == model_name_clean:
+                    full_model = m
+                    break
+
+            if full_model is None:
+                continue
+
+            # Look up this model in pair_data to get its raw weight
+            model_rows = self.pair_data[self.pair_data["model"] == full_model]
+            if len(model_rows) == 0:
+                continue
+
+            w_raw = float(model_rows["weight"].iloc[0])
+            if not np.isfinite(w_raw):
+                continue
+
+            model_names_ordered.append(model_name_clean)
+            raw_weights.append(w_raw)
+
+            color = self.model_colors.get(full_model, "#000000")
+            colors.append(color)
+
+            alpha = self._calculate_alpha(w_raw)
+            alphas.append(alpha)
+
+        if not model_names_ordered:
+            # Nothing to show; return an empty figure
+            p = figure(
+                width=200,
+                height=height,
+                toolbar_location=None,
+                x_range=[],
+                y_range=(0, self.MAX_WEIGHT),
+                outline_line_color=None,
+            )
+            p.xaxis.visible = False
+            p.yaxis.visible = False
+            p.grid.visible = False
+            return p
+
+        # Create figure with categorical x-range in the legend order
+        p = figure(
+            width=200,
+            height=height,
+            x_range=model_names_ordered,
+            y_range=(0, self.MAX_WEIGHT),
+            toolbar_location=None,
+            title="Raw weight by model",
+        )
+
+        # Remove x-axis labels, ticks, and grid
+        p.xaxis.visible = False
+        p.xgrid.visible = False
+
+        source = ColumnDataSource(
+            data=dict(
+                model=model_names_ordered,
+                weight_raw=raw_weights,
+                color=colors,
+                alpha=alphas,
+            )
+        )
+
+        p.vbar(
+            x="model",
+            top="weight_raw",
+            bottom=0,
+            width=0.8,
+            color="color",
+            alpha="alpha",
+            line_color="color",
+            line_alpha="alpha",
+            source=source,
+        )
+
+        # Hover with model + raw weight
+        hover = HoverTool(
+            tooltips=[
+                ("Model", "@model"),
+                ("Raw weight", "@weight_raw{0.00}"),
+            ]
+        )
+        p.add_tools(hover)
+
+        return p
+
+    
+    def _force_y_range(self, p):
+        L = float(self.literature_coeff)
+        p.y_range.start = 0.04 * L
+        p.y_range.end = 25.0 * L
+    
+    def _prompt_conditions_label(self) -> str:
+        inc_n = self.prompt_conditions.get("include_nielson", False)
+        inc_ex = self.prompt_conditions.get("include_examples", False)
+
+        return (
+            f"(Nielson: {'yes' if inc_n else 'no'}, "
+            f"Examples: {'yes' if inc_ex else 'no'})"
+        )

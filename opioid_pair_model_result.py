@@ -143,8 +143,10 @@ class OpioidPairModelResult:
         Returns:
             (f, w) tuple
         """
-        if self.r_squared is not None:
-            self.f = np.exp(-4 * self.r_squared)
+        if self.r_squared is not None and np.isfinite(self.r_squared):
+            # Do not reward negative R²; clamp at 0
+            r_for_weight = max(self.r_squared, 0.0)
+            self.f = float(np.exp(-4 * r_for_weight))
         else:
             self.f = np.nan
         
