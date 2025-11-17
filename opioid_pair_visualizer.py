@@ -8,7 +8,6 @@ from bokeh.io import output_file, save
 from beeswarm import BeeswarmPlacer
 from typing import Optional, Dict, List
 import colorsys
-import math
 
 class OpioidPairVisualizer:
     """
@@ -135,14 +134,10 @@ class OpioidPairVisualizer:
         return dict(zip(unique_models, colors))
     
     def _calculate_alpha(self, weight: float) -> float:
-        """
-        Calculate alpha transparency based on weight.
-        High weights (near 10) should have 0.9 transparency.
-        Minimum transparency is 0.2.
-        """
-        # Normalize weight to alpha range [0.2, 0.9]
         max_weight = 10.0
-        alpha = 0.2 + (min(weight, max_weight) / max_weight) * 0.7
+        min_alpha = 0.05
+        max_alpha = 0.9
+        alpha = min_alpha + (min(weight, max_weight) / max_weight) * (max_alpha - min_alpha)
         return alpha
     
     def _p_to_stars(self, p: float) -> str:
@@ -169,46 +164,44 @@ class OpioidPairVisualizer:
         
         return base_ticks
     
-    def create_plot(self, width: int = 1200, height: int = 400, 
+    def create_plot(self, width: int = 500, height: int = 300, 
                    output_html: Optional[str] = None) -> row:
         """
-        Create the three-panel visualization with legend to the right.
-        
-        Args:
-            width: Total width of the main plots (legend is additional)
-            height: Height of the plot panels
-            output_html: Optional path to save HTML file
-            
-        Returns:
-            Bokeh row layout with plots and legend
+        Create the three-panel visualization with legend and a weight bar to the right.
         """
         # Calculate subplot widths
-        # Subplot 2 is wider to accommodate 2x jitter width
-        w2 = int(width * 0.10)  
-        w3 = int(w2 / 3)      # Half of subplot 2
-        w1 = width - w2 - w3    # Remainder goes to subplot 1
-        
-        # Create subplots - now returns renderers for both subplots 1 and 2
-        p1, p2_renderers_dict, legend_items = self._create_coefficient_and_jitter_plots(w1, w2, height)
+        w2 = int(width * 0.20)  # jitter panel width
+        w3 = int(w2 * 0.5)      # consensus panel
+        w1 = width - w2 - w3    # main panel
+
+        # Create subplots — returns p1, p2, legend_items
+        p1, p2_renderers_dict, legend_items = self._create_coefficient_and_jitter_plots(
+            w1, w2, height
+        )
         p2 = p2_renderers_dict['figure']
+        # we just computed normalized_weight in the CSV; no extra info needed here
+
         p3 = self._create_consensus_plot(w3, height)
-        
-        # Link y-ranges so they're aligned
+
+        # Link y-ranges so they're aligned vertically
         p2.y_range = p1.y_range
         p3.y_range = p1.y_range
-        
-        # Create separate legend to the right (taller to fit all models)
+
+        # Legend (tall)
         legend_fig = self._create_legend(height, legend_items)
-        
-        # Create layout: plots in a row, legend to the right
-        layout = row(p1, p2, p3, legend_fig)
-        
-        # Save or show
+
+        # NEW: stacked vertical weight bar to the right of the legend
+        weight_fig = self._create_weight_bar(height, legend_items)
+
+        # Create layout: plots + legend + weight bar
+        layout = row(p1, p2, p3, weight_fig, legend_fig)
+
         if output_html:
             output_file(output_html)
             save(layout)
-        
+
         return layout
+
     
     def _create_coefficient_and_jitter_plots(self, width1: int, width2: int, height: int) -> tuple:
         """
@@ -235,6 +228,7 @@ class OpioidPairVisualizer:
         # Y-axis ticks in raw space
         y_ticks = self._get_log_ticks(include_literature=True)
         p1.yaxis.ticker = y_ticks
+        p1.xaxis.minor_tick_line_color = None
 
         # Literature coefficient line
         x_min = self.raw_data["from_dose"].min()
@@ -352,6 +346,7 @@ class OpioidPairVisualizer:
 
                 idx = models_list_p2.index(model_name_clean)
 
+                raw_w = float(model_data_p2["weight"].iloc[0])
                 norm_w = float(model_data_p2["normalized_weight"].iloc[0])
 
                 source_model = ColumnDataSource(
@@ -360,6 +355,7 @@ class OpioidPairVisualizer:
                         y=[y_values_p2[idx]],
                         model=[models_list_p2[idx]],
                         weight_norm=[norm_w],
+                        weight_raw=[raw_w],
                     )
                 )
 
@@ -386,15 +382,13 @@ class OpioidPairVisualizer:
                     ("Model", "@model"),
                     ("Coefficient", "@y{0.000}"),
                     ("Normalized weight", "@weight_norm{0.00}"),
-                    # ("Raw weight", "@weight_raw{0.00}"),  # optional
+                    ("Raw weight", "@weight_raw{0.00}"),  # optional
                 ]
             )
             p2.add_tools(hover)
 
         p2_dict = {"figure": p2}
         return p1, p2_dict, legend_items
-
-
     
     def _create_consensus_plot(self, width: int, height: int) -> figure:
         """
@@ -477,63 +471,167 @@ class OpioidPairVisualizer:
     def _create_legend(self, height: int, legend_items: List[tuple]) -> figure:
         """
         Create a separate legend figure to the right of the plots.
-        Height is 2x the main plots to accommodate all models.
         Legend controls both subplot 1 and subplot 2.
-        
-        Args:
-            height: Height of the main plots
-            legend_items: List of (label, [renderer1, renderer2]) tuples
+
+        This version makes the legend wider and splits items into two columns
+        so it doesn't get too tall.
         """
-        # Create a minimal figure just for the legend (2x height)
+        # Wider, normal height figure just for the legend
         legend_fig = figure(
-            width=200,
-            height=height * 2,  # Double the height
+            width=400,          # twice-ish the previous width
+            height=height,      # same vertical extent as main plots
             toolbar_location=None,
-            outline_line_color=None
+            outline_line_color=None,
         )
-        
-        # Hide axes
+
+        # Hide axes and grids
         legend_fig.xaxis.visible = False
         legend_fig.yaxis.visible = False
         legend_fig.xgrid.visible = False
         legend_fig.ygrid.visible = False
-        
-        # Create dummy invisible glyphs for the legend with proper circles
+
+        # Create dummy glyphs for the legend with proper colors
         legend_items_with_glyphs = []
         for model_name, renderers in legend_items:
-            # Get the color for this model
-            # Find the full model name from the cleaned name
+            # Find full model name from the cleaned name
             full_model = None
             for m in self.model_order:
-                clean = m.split('/')[-1] if '/' in m else m
+                clean = m.split("/")[-1] if "/" in m else m
                 if clean == model_name:
                     full_model = m
                     break
-            
-            color = self.model_colors.get(full_model, '#000000')
-            
-            # Create a visible dummy glyph on the legend figure
-            dummy_glyph = legend_fig.circle(
-                [0], [0],  # Position doesn't matter
+
+            color = self.model_colors.get(full_model, "#000000")
+
+            dummy_glyph = legend_fig.scatter(
+                [0], [0],
                 size=10,
                 color=color,
                 alpha=0.7,
-                visible=True  # Make it invisible on the plot
+                marker="circle",
+                visible=True,
             )
-            
-            # Combine the dummy glyph with the actual renderers
+
             legend_items_with_glyphs.append((model_name, [dummy_glyph] + renderers))
-        
-        # Create legend with click policy to hide (toggle individual items on/off)
+
+        # Legend with two columns
         legend = Legend(
-            items=legend_items_with_glyphs, 
-            location='top_left', 
-            orientation='vertical', 
+            items=legend_items_with_glyphs,
+            location="top_left",
+            orientation="vertical",
             spacing=3,
-            label_text_font_size='9pt',
-            label_text_color='black',  # Force black text
-            click_policy="hide"  # Hide individual items when clicked
+            label_text_font_size="9pt",
+            label_text_color="black",
+            click_policy="hide",
+            ncols=2,                     # <-- key change: two columns of items
         )
-        legend_fig.add_layout(legend, 'center')
-        
+
+        legend_fig.add_layout(legend, "center")
         return legend_fig
+
+    def _create_weight_bar(self, height: int, legend_items: List[tuple]) -> figure:
+        """
+        Create a vertical stacked bar showing the normalized consensus weights (v_j)
+        for each model, in the same order and color as the legend.
+
+        Uses `normalized_weight` from self.pair_data.
+        """
+        # Narrow, tall figure (same height scale as legend)
+        p = figure(
+            width=25,
+            height=height,
+            toolbar_location=None,
+            outline_line_color=None,
+            x_range=(0, 1),
+            y_range=(0, 1),
+        )
+
+        # No axes or grids
+        p.xaxis.visible = False
+        p.yaxis.visible = False
+        p.xgrid.grid_line_color = None
+        p.ygrid.grid_line_color = None
+
+        # Build segment list in the same order as the legend
+        models_for_bar = []
+        weights_for_bar = []
+        colors_for_bar = []
+
+        # We have full model names in self.model_order and
+        # cleaned names (no prefix) in legend_items.
+        for model_name_clean, _renderers in legend_items:
+            full_model = None
+            for m in self.model_order:
+                clean = m.split('/')[-1] if '/' in m else m
+                if clean == model_name_clean:
+                    full_model = m
+                    break
+
+            if full_model is None:
+                continue
+
+            model_rows = self.pair_data[self.pair_data['model'] == full_model]
+            if len(model_rows) == 0:
+                continue
+
+            norm_w = float(model_rows['normalized_weight'].iloc[0])
+            if not np.isfinite(norm_w) or norm_w <= 0:
+                continue
+
+            color = self.model_colors.get(full_model, '#000000')
+
+            models_for_bar.append(model_name_clean)
+            weights_for_bar.append(norm_w)
+            colors_for_bar.append(color)
+
+        if not models_for_bar:
+            return p  # nothing to show
+
+        # Normalize again so segments fill the bar exactly
+        total = float(sum(weights_for_bar))
+        if total <= 0:
+            return p
+
+        weights_for_bar = [w / total for w in weights_for_bar]
+
+        # Reverse order so top of bar is first in legend
+        models_for_bar = models_for_bar[::-1]
+        weights_for_bar = weights_for_bar[::-1]
+        colors_for_bar = colors_for_bar[::-1]
+
+        # Compute bottoms / tops as cumulative sums in [0,1]
+        bottoms = [0.0]
+        for w in weights_for_bar[:-1]:
+            bottoms.append(bottoms[-1] + w)
+        tops = [b + w for b, w in zip(bottoms, weights_for_bar)]
+
+        source = ColumnDataSource(
+            data=dict(
+                left=[0.0] * len(models_for_bar),
+                right=[1.0] * len(models_for_bar),
+                bottom=bottoms,
+                top=tops,
+                model=models_for_bar,
+                weight_norm=weights_for_bar,
+                color=colors_for_bar,
+            )
+        )
+
+        p.quad(
+            left="left",
+            right="right",
+            bottom="bottom",
+            top="top",
+            color="color",
+            source=source,
+        )
+
+        hover = HoverTool(
+            tooltips=[
+                ("Model", "@model"),
+                ("Normalized weight", "@weight_norm{0.00}")
+            ]
+        )
+        p.add_tools(hover)
+
+        return p

@@ -36,6 +36,22 @@ class OpioidPairModelResult:
         self.prompt_conditions = prompt_conditions
         self.results_df = results_df
         self.expected_coefficient = expected_coefficient
+
+        # Derived flag: ome means converting TO oral morphine
+        self.ome: Optional[bool] = (self.to_opioid == "oral_morphine")
+
+        # If the raw data has an 'ome' column, sanity-check consistency
+        if "ome" in self.results_df.columns:
+            raw_ome_values = self.results_df["ome"].dropna().unique()
+            if len(raw_ome_values) > 0:
+                # If data says something different than the naming convention, warn
+                raw_ome_bool = bool(raw_ome_values[0])
+                if raw_ome_bool != self.ome:
+                    print(
+                        f"Warning: 'ome' column ({raw_ome_bool}) disagrees with "
+                        f"to_opioid == 'oral_morphine' ({self.ome}) for "
+                        f"{self.from_opioid} -> {self.to_opioid}, model={self.model}."
+                    )
         
         # Results to be calculated
         self.observed_coefficient_mean = None
@@ -163,6 +179,7 @@ class OpioidPairModelResult:
             'model': self.model,
             'include_nielson': self.prompt_conditions.get('include_nielson', False),
             'include_examples': self.prompt_conditions.get('include_examples', False),
+            'ome': self.ome,
             'expected_coefficient': self.expected_coefficient,
             'observed_coefficient_mean': self.observed_coefficient_mean,
             'observed_coefficient_std': self.observed_coefficient_std,

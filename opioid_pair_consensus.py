@@ -42,6 +42,22 @@ class OpioidPairConsensus:
         self.analysis_df = analysis_df
         self.expected_coefficient = expected_coefficient
 
+        # Derived: ome is true exactly when converting TO oral morphine
+        self.ome: Optional[bool] = (self.to_opioid == "oral_morphine")
+
+        # If analysis_df came from pair_model_analysis.csv and has an ome column,
+        # sanity-check that it matches the derived flag.
+        if "ome" in self.analysis_df.columns:
+            raw_ome = self.analysis_df["ome"].dropna().unique()
+            if len(raw_ome) > 0:
+                raw_flag = bool(raw_ome[0])
+                if raw_flag != self.ome:
+                    print(
+                        f"Warning: 'ome' column ({raw_flag}) disagrees with "
+                        f"to_opioid == 'oral_morphine' ({self.ome}) for "
+                        f"{self.from_opioid} -> {self.to_opioid}."
+                    )
+
         # Outputs
         self.normalized_weights = None  # v_j
         self.consensus_log_coefficient = None
@@ -155,6 +171,8 @@ class OpioidPairConsensus:
             "opioid_pair": f"{self.from_opioid} -> {self.to_opioid}",
             "include_nielson": self.prompt_conditions.get("include_nielson", False),
             "include_examples": self.prompt_conditions.get("include_examples", False),
+            # NEW: propagate ome (derived from to_opioid)
+            "ome": self.ome,
             "expected_coefficient": self.expected_coefficient,
 
             # location
@@ -443,7 +461,7 @@ class OpioidPairConsensus:
             print(
                 "Added columns: consensus_log_coefficient, consensus_coefficient, "
                 "se_consensus_log, sigma_log_cons, t_score_log, df, p_value_log, "
-                "normalized_weight, consensus_center_t, consensus_expected_z2"
+                "normalized_weight, consensus_center_t, consensus_expected_z2, ome"
             )
 
         return merged
