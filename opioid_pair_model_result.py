@@ -137,7 +137,7 @@ class OpioidPairModelResult:
     def calculate_weights(self) -> Tuple[float, float]:
         """
         Calculate f and w:
-        f = exp(-4 * R^2)
+        f = exp(-.1 * R^2)
         w = f / (log_std^2 + epsilon)
         
         Returns:
@@ -146,7 +146,7 @@ class OpioidPairModelResult:
         if self.r_squared is not None and np.isfinite(self.r_squared):
             # Do not reward negative R²; clamp at 0
             r_for_weight = max(self.r_squared, 0.0)
-            self.f = float(np.exp(-4 * r_for_weight))
+            self.f = float(np.exp(-.1 * r_for_weight))
         else:
             self.f = np.nan
         
