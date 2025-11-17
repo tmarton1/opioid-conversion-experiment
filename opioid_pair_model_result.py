@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple, Optional
 from pathlib import Path
 import csv
 from scipy import stats
+from opioid import Opioid
 
 class OpioidPairModelResult:
     """
@@ -40,6 +41,8 @@ class OpioidPairModelResult:
         self.observed_coefficient_mean = None
         self.observed_coefficient_std = None
         self.observed_coefficient_cv = None
+        self.observed_log_coefficient_mean = None
+        self.observed_log_coefficient_std = None
         self.r_squared = None
         self.f = None
         self.weight = None
@@ -53,12 +56,22 @@ class OpioidPairModelResult:
         """
         # Get the coefficients (ratios) for this specific combination
         coefficients = self.results_df['observed_to_dose'] / self.results_df['from_dose']
+        positive_mask = coefficients > 0
+        if not all(positive_mask):
+            coefficients = coefficients[positive_mask]
+
+        if len(coefficients) == 0:
+            raise ValueError(f"No positive coefficients found for {self.from_opioid} -> {self.to_opioid}, {self.model}")
         
         if len(coefficients) == 0:
             raise ValueError(f"No data found for {self.from_opioid} -> {self.to_opioid}, {self.model}")
         
         self.observed_coefficient_mean = np.mean(coefficients)
         self.observed_coefficient_std = np.std(coefficients, ddof=1)  # Sample std
+
+        log_coefficients = np.log(coefficients)
+        self.observed_log_coefficient_mean = float(np.mean(log_coefficients))
+        self.observed_log_coefficient_std = float(np.std(log_coefficients, ddof=1))
         
         # Coefficient of variation (CV)
         if self.observed_coefficient_mean != 0:
@@ -71,8 +84,8 @@ class OpioidPairModelResult:
     def perform_regression(self) -> float:
         """
         Perform regression analysis:
-        M0: c = a + error (null model)
-        M1: c = beta_0 + beta_1 * dose_to + error
+        M0: log_c = log_a + error (null model)
+        M1: log_c = beta_0 + beta_1 * dose_to + error
         
         Calculate R^2 = 1 - s1^2/s0^2
         
@@ -80,19 +93,22 @@ class OpioidPairModelResult:
             R^2 value
         """
         coefficients = self.results_df['observed_to_dose'] / self.results_df['from_dose']
-        dose_to = self.results_df['expected_to_dose'].values
+        positive_mask = coefficients > 0
+        coefficients = coefficients[positive_mask]
+        dose_to = self.results_df.loc[positive_mask, "expected_to_dose"].values
+        log_coefficients = np.log(coefficients)
         
         # M0: Null model - variance around mean
-        s0_squared = np.var(coefficients, ddof=1)
+        s0_squared = np.var(log_coefficients, ddof=1)
         
         # M1: Linear regression
         # Use scipy.stats.linregress for simple linear regression
-        slope, intercept, r_value, p_value, std_err = stats.linregress(dose_to, coefficients)
+        slope, intercept, r_value, p_value, std_err = stats.linregress(dose_to, log_coefficients)
         
         # Calculate residuals and residual variance
         predictions = slope * dose_to + intercept
-        residuals = coefficients - predictions
-        s1_squared = np.var(residuals, ddof=2)  # ddof=2 for two parameters (slope, intercept)
+        residuals = log_coefficients - predictions
+        s1_squared = np.var(residuals, ddof=2) if len(log_coefficients) > 2 else  np.var(residuals, ddof=1)# ddof=2 for two parameters (slope, intercept)
         
         # R^2
         if s0_squared != 0:
@@ -106,7 +122,7 @@ class OpioidPairModelResult:
         """
         Calculate f and w:
         f = exp(-4 * R^2)
-        w = f / (std^2 + epsilon)
+        w = f / (log_std^2 + epsilon)
         
         Returns:
             (f, w) tuple
@@ -115,9 +131,11 @@ class OpioidPairModelResult:
             self.f = np.exp(-4 * self.r_squared)
         else:
             self.f = np.nan
-            
-        if self.observed_coefficient_std is not None and self.observed_coefficient_std != 0:
-            self.weight = self.f / (self.observed_coefficient_std ** 2 + 1e-2)
+        
+        epsilon = 5e-2
+        if self.observed_log_coefficient_std is not None and self.observed_log_coefficient_std != 0:
+            denom = self.observed_log_coefficient_std ** 2 + epsilon
+            self.weight = float(self.f / denom) if denom > 0 else np.nan
         else:
             self.weight = np.nan
             
@@ -149,6 +167,8 @@ class OpioidPairModelResult:
             'observed_coefficient_mean': self.observed_coefficient_mean,
             'observed_coefficient_std': self.observed_coefficient_std,
             'observed_coefficient_cv': self.observed_coefficient_cv,
+            'observed_log_coefficient_mean': self.observed_log_coefficient_mean,
+            'observed_log_coefficient_std': self.observed_log_coefficient_std,
             'r_squared': self.r_squared,
             'f': self.f,
             'weight': self.weight,
@@ -225,9 +245,7 @@ class OpioidPairModelResult:
         # Calculate expected coefficient from Nielson data
         expected_coeff = None
         if conversion_service:
-            try:
-                from opioid import Opioid
-                
+            try:                
                 # Parse opioid strings (format: "administration_substance")
                 from_parts = from_opioid.split('_', 1)  # Split only on first underscore
                 to_parts = to_opioid.split('_', 1)
@@ -303,9 +321,7 @@ class OpioidPairModelResult:
             # Calculate expected coefficient from Nielson data
             expected_coeff = None
             if conversion_service:
-                try:
-                    from opioid import Opioid
-                    
+                try:                    
                     # Parse opioid strings (format: "administration_substance")
                     from_parts = from_opioid.split('_', 1)  # Split only on first underscore
                     to_parts = to_opioid.split('_', 1)
