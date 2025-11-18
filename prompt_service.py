@@ -126,7 +126,8 @@ class PromptedOpioidConversion:
         """Check if a model ID should be routed through OpenRouter."""
         openrouter_prefixes = [
             "openai/", "anthropic/", "mistralai/", "google/",
-            "cohere/", "ai21/", "qwen/", "meta-llama/", "deepseek/"
+            "cohere/", "ai21/", "qwen/", "meta-llama/", "deepseek/",
+            "groq/"
         ]
         return any(model_id.startswith(prefix) for prefix in openrouter_prefixes)
 
