@@ -4,7 +4,7 @@ from bokeh.layouts import column
 from bokeh.io import output_file, save, show
 
 from opioid_pair_visualizer import OpioidPairVisualizer
-from opioid_pair_batch import OpioidPairBatch, PairPromptKey
+from opioid_pair_batch import OpioidPairBatch
 
 
 class OpioidPairBatchVisualizer:
@@ -37,8 +37,6 @@ class OpioidPairBatchVisualizer:
         """
         Create a vertical stack (grid) of per-pair visualizations.
 
-        The browser window will be scrollable if this is tall, which is what we want.
-
         Args:
             output_html: If provided, write the layout to this HTML file.
             show_inline: If True, call bokeh.io.show(layout).
@@ -55,6 +53,7 @@ class OpioidPairBatchVisualizer:
             }
 
             try:
+                # Use the existing constructor - it loads its own data
                 vis = OpioidPairVisualizer(
                     experiment_results_csv=self.batch.experiment_results_csv,
                     pair_model_csv=self.batch.pair_model_csv,

@@ -7,7 +7,7 @@ from bokeh.palettes import Spectral11
 from bokeh.io import output_file, save
 from beeswarm import BeeswarmPlacer
 from typing import Optional, Dict, List
-import colorsys
+from visualization_config import get_model_order, assign_model_colors
 
 class OpioidPairVisualizer:
     """
@@ -83,58 +83,13 @@ class OpioidPairVisualizer:
         # Get literature coefficient from pair_data
         self.literature_coeff = self.pair_data['expected_coefficient'].iloc[0]
         
-        # Define consistent model order (by company/family)
-        self.model_order = self._get_model_order()
+        # Define consistent model order using shared config
+        available_models = self.raw_data['model'].unique().tolist()
+        self.model_order = get_model_order(available_models)
         
-        # Assign colors to models
-        self.model_colors = self._assign_colors()
+        # Assign colors to models using shared config
+        self.model_colors = assign_model_colors(self.model_order)
         
-    def _get_model_order(self) -> List[str]:
-        """Define a consistent, meaningful order for models."""
-        # Group by company/family
-        model_groups = {
-            'OpenAI': ['openai/gpt-4.1', 'gpt-4.1-mini', 'gpt-3.5-turbo'],
-            'Anthropic': ['anthropic/claude-3.5-sonnet:20241022', 'claude-3-5-haiku-20241022'],
-            'Google': ['google/gemini-2.5-pro', 'models/gemini-2.5-flash'],
-            'Meta': ['meta-llama/llama-3.3-70b-instruct', 'llama-3.3-70b-versatile'],
-            'Mistral': ['mistralai/mistral-large-2407', 'mistralai/mixtral-8x22b-instruct'],
-            'AI21': ['ai21/jamba-large-1.7', 'ai21/jamba-mini-1.7'],
-            'Cohere': ['cohere/command-r-plus-08-2024'],
-            'Qwen': ['qwen/qwen-2.5-72b-instruct'],
-            'DeepSeek': ['deepseek/deepseek-chat']
-        }
-        
-        # Flatten to ordered list
-        ordered_models = []
-        for group in model_groups.values():
-            ordered_models.extend(group)
-        
-        # Add any models not in the predefined order
-        unique_models = self.raw_data['model'].unique()
-        for model in unique_models:
-            if model not in ordered_models:
-                ordered_models.append(model)
-        
-        return ordered_models
-    
-    def _assign_colors(self) -> Dict[str, str]:
-        """Assign colors to models using a readable gradient."""
-        unique_models = [m for m in self.model_order if m in self.raw_data['model'].values]
-        n_models = len(unique_models)
-        
-        # Use Spectral palette or generate colors if needed
-        if n_models <= 11:
-            colors = Spectral11[:n_models]
-        else:
-            # Generate colors using HSV space for more colors
-            colors = []
-            for i in range(n_models):
-                hue = i / n_models
-                rgb = colorsys.hsv_to_rgb(hue, 0.7, 0.9)
-                hex_color = '#%02x%02x%02x' % tuple(int(c * 255) for c in rgb)
-                colors.append(hex_color)
-        
-        return dict(zip(unique_models, colors))
     
     def _calculate_alpha(self, weight: float) -> float:
         max_weight = 10.0
@@ -200,11 +155,14 @@ class OpioidPairVisualizer:
         # Stacked vertical normalized-weight bar
         weight_fig = self._create_weight_bar(height, legend_items)
 
-        # NEW: vertical raw-weight bar by model (5th subplot)
+        # vertical raw-weight bar by model (5th subplot)
         raw_weight_fig = self._create_weight_raw_bar(height, legend_items)
 
+        # Accuracy stacked bar chart
+        accuracy_fig = self._create_model_accuracy_subplot(height, legend_items)
+
         # Create layout: plots + legend + weight bar
-        layout = row(p1, p2, p3, weight_fig, legend_fig, raw_weight_fig)
+        layout = row(p1, p2, p3, weight_fig, legend_fig, raw_weight_fig, accuracy_fig)
 
         if output_html:
             output_file(output_html)
@@ -758,6 +716,151 @@ class OpioidPairVisualizer:
 
         return p
 
+    def _create_model_accuracy_subplot(self, height: int, legend_items: List[tuple]) -> figure:
+        """
+        Create a stacked bar chart showing model accuracy ranges.
+        
+        For each model (in legend order):
+        - Bottom bar (alpha=0.9): Proportion within 0.85-1.15x of expected
+        - Top bar (alpha=0.3): Proportion within 0.6-1.7x (excluding 0.95-1.05x)
+        
+        Args:
+            height: Height of the subplot
+            legend_items: List of (model_name_clean, renderers) tuples
+        
+        Returns:
+            Bokeh figure with stacked bars
+        """
+        from bokeh.models import HoverTool
+        
+        # Build data in legend order
+        model_names_ordered: List[str] = []
+        tight_props: List[float] = []  # 0.85-1.15x
+        caution_props: List[float] = []  # 0.6-1.7x (excluding tight)
+        colors_list: List[str] = []
+        
+        for model_name_clean, _renderers in legend_items:
+            # Find full model name
+            full_model = None
+            for m in self.model_order:
+                clean = m.split('/')[-1] if '/' in m else m
+                if clean == model_name_clean:
+                    full_model = m
+                    break
+            
+            if full_model is None:
+                continue
+            
+            # Get raw data for this model
+            model_data = self.raw_data[self.raw_data['model'] == full_model]
+            if len(model_data) == 0:
+                continue
+            
+            ratios = model_data['ratio_observed_expected'].values
+            ratios = ratios[~np.isnan(ratios)]
+            
+            if len(ratios) == 0:
+                continue
+            
+            # Calculate proportions
+            tight = np.sum((ratios >= 0.85) & (ratios <= 1.15)) / len(ratios)
+            broad = np.sum((ratios >= 0.6) & (ratios <= 1.7)) / len(ratios)
+            caution = broad - tight  # Caution is broad minus tight
+            
+            model_names_ordered.append(model_name_clean)
+            tight_props.append(tight)
+            caution_props.append(caution)
+            colors_list.append(self.model_colors.get(full_model, '#000000'))
+        
+        if not model_names_ordered:
+            # Return empty figure
+            p = figure(
+                width=200,
+                height=height,
+                toolbar_location=None,
+                outline_line_color=None
+            )
+            p.xaxis.visible = False
+            p.yaxis.visible = False
+            return p
+        
+        # Create figure with categorical x-axis
+        p = figure(
+            width=200,
+            height=height,
+            x_range=model_names_ordered,
+            y_range=(0, 1),
+            toolbar_location=None,
+            title="Accuracy Ranges"
+        )
+        
+        # Create data sources for stacked bars
+        source_tight = ColumnDataSource(data=dict(
+            x=model_names_ordered,
+            top=tight_props,
+            color=colors_list,
+            model=model_names_ordered
+        ))
+        
+        tops_caution = [t + c for t, c in zip(tight_props, caution_props)]
+        source_caution = ColumnDataSource(data=dict(
+            x=model_names_ordered,
+            top=tops_caution,
+            bottom=tight_props,
+            color=colors_list,
+            caution=caution_props,
+            model=model_names_ordered
+        ))
+        
+        # Bottom: tight range (0.95-1.05x) with alpha=0.9
+        tight_bars = p.vbar(
+            x='x',
+            top='top',
+            width=0.8,
+            color='color',
+            alpha=0.9,
+            source=source_tight
+        )
+        
+        # Top: caution range (0.6-1.7x, excluding tight) with alpha=0.3
+        caution_bars = p.vbar(
+            x='x',
+            top='top',
+            bottom='bottom',
+            width=0.8,
+            color='color',
+            alpha=0.3,
+            source=source_caution
+        )
+        
+        # Add hover tools
+        hover_tight = HoverTool(
+            tooltips=[
+                ('Model', '@model'),
+                ('Tight (±15%)', '@top{0.0%}')
+            ],
+            renderers=[tight_bars]
+        )
+        p.add_tools(hover_tight)
+        
+        hover_caution = HoverTool(
+            tooltips=[
+                ('Model', '@model'),
+                ('Caution', '@caution{0.0%}')
+            ],
+            renderers=[caution_bars]
+        )
+        p.add_tools(hover_caution)
+        
+        # Hide x-axis (no labels)
+        p.xaxis.visible = False
+        p.xgrid.grid_line_color = None
+        
+        # Y-axis styling
+        p.yaxis.axis_label = "Proportion"
+        
+        return p
+    
     
     def _force_y_range(self, p):
         L = float(self.literature_coeff)
@@ -772,3 +875,40 @@ class OpioidPairVisualizer:
             f"(Nielson: {'yes' if inc_n else 'no'}, "
             f"Examples: {'yes' if inc_ex else 'no'})"
         )
+
+    @classmethod
+    def from_batch_data(
+        cls,
+        key: 'PairPromptKey',
+        pair_model_data: pd.DataFrame,
+        experiment_data: pd.DataFrame,
+        consensus_data: pd.DataFrame,
+    ) -> "OpioidPairVisualizer":
+        """
+        Create a visualizer from pre-filtered batch data instead of loading CSVs.
+        
+        Args:
+            key: The PairPromptKey identifying this pair
+            pair_model_data: Filtered pair_model_analysis.csv rows for this pair
+            experiment_data: Filtered experiment_results rows for this pair
+            consensus_data: Filtered consensus rows for this pair
+        """
+        instance = cls.__new__(cls)
+        
+        instance.from_opioid = key.from_opioid
+        instance.to_opioid = key.to_opioid
+        instance.opioid_pair = key.pair_name
+        instance.prompt_conditions = {
+            "include_nielson": key.include_nielson,
+            "include_examples": key.include_examples,
+        }
+        
+        # Use the pre-filtered data instead of loading
+        instance.pair_model_data = pair_model_data
+        instance.raw_data = experiment_data
+        instance.consensus_data = consensus_data
+        
+        # Process the data (existing logic)
+        instance._process_data()
+        
+        return instance
