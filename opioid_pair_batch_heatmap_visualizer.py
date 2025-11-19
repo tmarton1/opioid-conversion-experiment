@@ -1,13 +1,17 @@
 from typing import Optional, List
 import numpy as np
 from bokeh.plotting import figure, output_file, save, show
-from bokeh.layouts import column
+from bokeh.layouts import row, column
 from bokeh.models import LinearColorMapper, ColorBar, BasicTicker, PrintfTickFormatter
-from bokeh.models import ColumnDataSource, HoverTool
+from bokeh.models import ColumnDataSource, HoverTool, Legend, LegendItem
 from bokeh.transform import transform
 from bokeh.palettes import Greys256
 from opioid_pair_batch import OpioidPairBatch
-from visualization_config import get_model_order, normalize_model_name
+from visualization_config import get_model_order, assign_model_colors, normalize_model_name
+from visualization_config import (
+    TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
+    BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+)
 
 class OpioidPairBatchHeatmapVisualizer:
     """
@@ -15,8 +19,8 @@ class OpioidPairBatchHeatmapVisualizer:
     
     Three subplots:
     1. Raw weight heatmap
-    2. Proportion in broad range (0.6-1.7x)
-    3. Proportion in tight range (0.85-1.15x)
+    2. Proportion in broad range 
+    3. Proportion in tight range 
     """
     
     def __init__(self, batch: OpioidPairBatch, cell_size: int = 30,
@@ -39,14 +43,15 @@ class OpioidPairBatchHeatmapVisualizer:
         # Get data from batch and order models
         all_models = batch.get_models()
         self.models = get_model_order(all_models)
+        self.model_colors = assign_model_colors(self.models)
         self.pairs = batch.get_pairs()
         
         print(f"Found {len(self.models)} models and {len(self.pairs)} pairs")
         
         # Compute matrices using batch methods (reordered for model order)
         self.weight_matrix = self._compute_ordered_matrix(batch.compute_weight_matrix(), all_models)
-        self.broad_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix(0.6, 1.7), all_models)
-        self.tight_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix(0.85, 1.15), all_models)
+        self.broad_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER), all_models)
+        self.tight_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER), all_models)
         
         # Add summary statistics
         self._add_summaries()
@@ -65,26 +70,10 @@ class OpioidPairBatchHeatmapVisualizer:
         return matrix[new_order, :]
     
     def _add_summaries(self):
-        """Add mean row and mean column to each matrix."""
-        # Add mean column (mean across pairs for each model)
-        col_means_weight = np.nanmean(self.weight_matrix, axis=1, keepdims=True)
-        col_means_broad = np.nanmean(self.broad_range_matrix, axis=1, keepdims=True)
-        col_means_tight = np.nanmean(self.tight_range_matrix, axis=1, keepdims=True)
-        
-        self.weight_matrix = np.hstack([self.weight_matrix, col_means_weight])
-        self.broad_range_matrix = np.hstack([self.broad_range_matrix, col_means_broad])
-        self.tight_range_matrix = np.hstack([self.tight_range_matrix, col_means_tight])
-        
-        # Add mean row (mean across models for each pair + overall mean)
-        row_means_weight = np.nanmean(self.weight_matrix, axis=0, keepdims=True)
-        row_means_broad = np.nanmean(self.broad_range_matrix, axis=0, keepdims=True)
-        row_means_tight = np.nanmean(self.tight_range_matrix, axis=0, keepdims=True)
-        
-        self.weight_matrix = np.vstack([self.weight_matrix, row_means_weight])
-        self.broad_range_matrix = np.vstack([self.broad_range_matrix, row_means_broad])
-        self.tight_range_matrix = np.vstack([self.tight_range_matrix, row_means_tight])
-        
-        # Update pairs and models to include summary labels
+        """Add mean row and mean column to each matrix, and update labels."""
+        self.weight_matrix = self.batch.get_weight_matrix_with_summary()
+        self.broad_range_matrix = self.batch.get_range_matrix_with_summary(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER)
+        self.tight_range_matrix = self.batch.get_range_matrix_with_summary(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER)
         self.pairs = self.pairs + ['Mean']
         self.models = self.models + ['Mean']
     
@@ -232,6 +221,113 @@ class OpioidPairBatchHeatmapVisualizer:
         
         return p
     
+    def _create_mean_accuracy_bar_chart(self, width=1600, height=500):
+        model_order = self.models[:-1]
+        model_colors = self.model_colors
+
+        tight_means, caution_means = self.batch.get_mean_accuracy_by_model(model_order)
+        clean_names = [m.split('/')[-1] if '/' in m else m for m in model_order]
+        colors = [model_colors.get(m, "#000000") for m in model_order]
+
+        tops_caution = [t + c for t, c in zip(tight_means, caution_means)]
+        source_tight = ColumnDataSource(data=dict(
+            x=list(range(len(clean_names))),
+            top=tight_means,
+            color=colors,
+            model=clean_names
+        ))
+        source_caution = ColumnDataSource(data=dict(
+            x=list(range(len(clean_names))),
+            top=tops_caution,
+            bottom=tight_means,
+            color=colors,
+            caution=caution_means,
+            model=clean_names
+        ))
+
+        p = figure(
+            width=width,
+            height=height,
+            x_range=(-0.5, len(clean_names)-0.5),
+            y_range=(0, max(tops_caution) * 1.05 if tops_caution else 1),
+            toolbar_location=None,
+            title="Mean Model Accuracy Across All Pairs"
+        )
+
+        tight_bars = p.vbar(
+            x='x',
+            top='top',
+            width=0.8,
+            color='color',
+            alpha=0.9,
+            source=source_tight
+        )
+        caution_bars = p.vbar(
+            x='x',
+            top='top',
+            bottom='bottom',
+            width=0.8,
+            color='color',
+            alpha=0.3,
+            source=source_caution
+        )
+
+        hover_tight = HoverTool(
+            tooltips=[
+                ('Model', '@model'),
+                ('Tight (±15%)', '@top{0.0%}')
+            ],
+            renderers=[tight_bars]
+        )
+        hover_caution = HoverTool(
+            tooltips=[
+                    ('Model', '@model'),
+                    ('Caution', '@caution{0.0%}')
+            ],
+            renderers=[caution_bars]
+        )
+        p.add_tools(hover_tight)
+        p.add_tools(hover_caution)
+
+        p.xaxis.visible = False
+        p.xgrid.visible = False
+        p.yaxis.axis_label = "Mean Proportion"
+
+        return p
+
+    def _create_model_legend(self, width=50, height=250):
+        model_order = self.models[:-1]
+        model_colors = self.model_colors
+        clean_names = [m.split('/')[-1] if '/' in m else m for m in model_order]
+        colors = [model_colors.get(m, "#000000") for m in model_order]
+
+        half = (len(clean_names) + 1) // 2
+
+        def legend_column(names, colors, width, height):
+            n = len(names)
+            y_gap = height / (n + 1)
+            y_positions = [height - (i + 1) * y_gap for i in range(n)]
+            fig = figure(
+                width=width,
+                height=height,
+                x_range=(0, 40),
+                y_range=(0, height),
+                toolbar_location=None,
+                outline_line_color=None,
+            )
+            fig.xaxis.visible = False
+            fig.yaxis.visible = False
+            fig.xgrid.visible = False
+            fig.ygrid.visible = False
+            fig.scatter([8]*n, y_positions, color=colors, marker="circle", size=8, alpha=0.6)
+            fig.text([11]*n, y_positions, text=names, text_font_size="10pt", text_baseline="middle", text_align="left")
+            return fig
+
+        legend_fig1 = legend_column(clean_names[:half], colors[:half], width, height)
+        legend_fig2 = legend_column(clean_names[half:], colors[half:], width, height)
+
+        return row(legend_fig1, legend_fig2)
+    
     def create_heatmaps(self, output_html: Optional[str] = None) -> column:
         """
         Create all three heatmaps.
@@ -251,18 +347,24 @@ class OpioidPairBatchHeatmapVisualizer:
         
         heatmap2 = self._create_heatmap(
             self.broad_range_matrix,
-            title="Proportion in Broad Range (0.6-1.7x)",
+            title="Proportion in Broad Range",
             colormap_range=(0, 1)
         )
         
         heatmap3 = self._create_heatmap(
             self.tight_range_matrix,
-            title="Proportion in Tight Range (0.85-1.15x)",
+            title="Proportion in Tight Range",
             colormap_range=(0, 1)
         )
-        
-        # Arrange vertically
-        layout = column(heatmap1, heatmap2, heatmap3)
+        # Create bar chart and legend
+        mean_accuracy_bar = self._create_mean_accuracy_bar_chart(width=350, height=200)
+        model_legend = self._create_model_legend(width=180, height=250)
+
+        # Place bar chart and legend side-by-side
+        bar_and_legend = row(mean_accuracy_bar, model_legend)
+
+        # Arrange everything vertically
+        layout = column(heatmap1, heatmap2, heatmap3, bar_and_legend)
         
         # Save and show if requested
         if output_html:

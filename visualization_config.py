@@ -5,7 +5,9 @@ Ensures consistent model ordering and coloring across all visualizations.
 
 from typing import List, Dict
 import colorsys
+import os
 from bokeh.palettes import Spectral11
+from playwright.async_api import async_playwright
 
 
 # Model name aliases (maps non-prefixed names to canonical names)
@@ -30,7 +32,6 @@ MODEL_ORDER = [
     'mistralai/mixtral-8x22b-instruct',
     'google/gemini-2.5-pro',
     'google/gemini-2.5-flash',
-    'models/gemini-2.5-flash',  # Alternative path
     'cohere/command-r-plus-08-2024',
     'ai21/jamba-large-1.7',
     'ai21/jamba-mini-1.7',
@@ -40,6 +41,11 @@ MODEL_ORDER = [
     'deepseek/deepseek-chat'
 ]
 
+# Range thresholds for opioid conversion visualizations
+TIGHT_RANGE_LOWER = 0.85
+TIGHT_RANGE_UPPER = 1.15
+BROAD_RANGE_LOWER = 0.6
+BROAD_RANGE_UPPER = 1.7
 
 def normalize_model_name(model: str) -> str:
     """
@@ -131,3 +137,61 @@ def assign_model_colors(models: List[str]) -> Dict[str, str]:
     # Map original model names to colors via their normalized forms
     return {model: normalized_color_map[normalize_model_name(model)] 
             for model in models}
+
+def get_model_color(model_name, model_order=None):
+    """
+    Return the color for a given model name, using the assigned colors.
+    If model_order is not provided, use Spectral11 and normalized name.
+    """
+    if model_order is None:
+        model_order = [model_name]
+    model_colors = assign_model_colors(model_order)
+    return model_colors.get(model_name, "#000000")
+
+async def convert_to_pdf_auto_size(html_file: str, pdf_file: str,
+                                   scale: float = 2.0,
+                                   max_width: int = 2400):
+    """
+    Convert HTML to PDF with automatic width and height calculation.
+    
+    Args:
+        html_file: Path to input HTML
+        pdf_file: Path to output PDF
+        scale: Resolution scale
+        max_width: Maximum width in pixels (to prevent excessively wide PDFs)
+    """
+    
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page(device_scale_factor=scale)
+        await page.goto(f"file://{os.path.abspath(html_file)}")
+        await page.wait_for_load_state("networkidle")
+
+        # Wait a moment to ensure all rendering is complete
+        await page.wait_for_timeout(6000)
+        
+        # Get the actual content dimensions
+        dimensions = await page.evaluate("""
+            () => ({
+                width: document.documentElement.scrollWidth,
+                height: document.documentElement.scrollHeight
+            })
+        """)
+        
+        content_width = min(dimensions['width'], max_width)
+        content_height = dimensions['height']
+        
+        # Add some padding
+        total_width = content_width + 20
+        total_height = content_height + 20
+        
+        await page.pdf(
+            path=pdf_file,
+            width=f"{total_width}px",
+            height=f"{total_height}px",
+            print_background=True,
+            margin={"top": "10px", "right": "10px", "bottom": "10px", "left": "10px"}
+        )
+        await browser.close()
+        
+        print(f"✓ Generated PDF: {total_width}px x {total_height}px")

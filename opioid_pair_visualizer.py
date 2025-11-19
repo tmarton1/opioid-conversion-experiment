@@ -8,6 +8,10 @@ from bokeh.io import output_file, save
 from beeswarm import BeeswarmPlacer
 from typing import Optional, Dict, List
 from visualization_config import get_model_order, assign_model_colors
+from visualization_config import (
+    TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
+    BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+)
 
 class OpioidPairVisualizer:
     """
@@ -721,9 +725,9 @@ class OpioidPairVisualizer:
         Create a stacked bar chart showing model accuracy ranges.
         
         For each model (in legend order):
-        - Bottom bar (alpha=0.9): Proportion within 0.85-1.15x of expected
-        - Top bar (alpha=0.3): Proportion within 0.6-1.7x (excluding 0.95-1.05x)
-        
+        - Bottom bar (alpha=0.9): Proportion within tight range of expected
+        - Top bar (alpha=0.3): Proportion within broad range of expected (excluding tight)
+
         Args:
             height: Height of the subplot
             legend_items: List of (model_name_clean, renderers) tuples
@@ -735,8 +739,8 @@ class OpioidPairVisualizer:
         
         # Build data in legend order
         model_names_ordered: List[str] = []
-        tight_props: List[float] = []  # 0.85-1.15x
-        caution_props: List[float] = []  # 0.6-1.7x (excluding tight)
+        tight_props: List[float] = []  
+        caution_props: List[float] = []  
         colors_list: List[str] = []
         
         for model_name_clean, _renderers in legend_items:
@@ -763,8 +767,8 @@ class OpioidPairVisualizer:
                 continue
             
             # Calculate proportions
-            tight = np.sum((ratios >= 0.85) & (ratios <= 1.15)) / len(ratios)
-            broad = np.sum((ratios >= 0.6) & (ratios <= 1.7)) / len(ratios)
+            tight = np.sum((ratios >= TIGHT_RANGE_LOWER) & (ratios <= TIGHT_RANGE_UPPER)) / len(ratios)
+            broad = np.sum((ratios >= BROAD_RANGE_LOWER) & (ratios <= BROAD_RANGE_UPPER)) / len(ratios)
             caution = broad - tight  # Caution is broad minus tight
             
             model_names_ordered.append(model_name_clean)

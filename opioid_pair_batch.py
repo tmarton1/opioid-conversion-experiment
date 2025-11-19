@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from typing import Optional, List, Dict, Any, Sequence
-
+from visualization_config import get_model_order, normalize_model_name
+from visualization_config import (
+    TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
+    BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+)
 import numpy as np
 import pandas as pd
 
@@ -117,9 +121,57 @@ class OpioidPairBatch:
         
         return pd.DataFrame()
     
+    @staticmethod
+    def add_mean_row_and_col(matrix: np.ndarray) -> np.ndarray:
+        """
+        Add mean column (across pairs) and mean row (across models) to a matrix.
+        Returns new matrix with summary row/col.
+        """
+        # Mean column (mean across pairs for each model)
+        col_means = np.nanmean(matrix, axis=1, keepdims=True)
+        matrix = np.hstack([matrix, col_means])
+        # Mean row (mean across models for each pair + overall mean)
+        row_means = np.nanmean(matrix, axis=0, keepdims=True)
+        matrix = np.vstack([matrix, row_means])
+        return matrix
+
+    def get_weight_matrix_with_summary(self) -> np.ndarray:
+        """Return weight matrix with mean row and column."""
+        matrix = self.compute_weight_matrix()
+        return self.add_mean_row_and_col(matrix)
+
+    def get_range_matrix_with_summary(self, lower: float, upper: float) -> np.ndarray:
+        """Return range matrix with mean row and column."""
+        matrix = self.compute_range_matrix(lower, upper)
+        return self.add_mean_row_and_col(matrix)
+    
+    def get_mean_accuracy_by_model(self, model_order: List[str]) -> (List[float], List[float]):
+        """
+        Returns tight_means and caution_means for each model in model_order.
+        """
+        tight_matrix = self.get_range_matrix_with_summary(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER)
+        broad_matrix = self.get_range_matrix_with_summary(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER)
+        tight_means = []
+        caution_means = []
+        for i, model in enumerate(model_order):
+            tight = np.nanmean(tight_matrix[i, :-1])
+            broad = np.nanmean(broad_matrix[i, :-1])
+            caution = broad - tight
+            tight_means.append(tight)
+            caution_means.append(caution)
+        return tight_means, caution_means
+    
     def get_models(self) -> List[str]:
-        """Get sorted list of unique models in the batch."""
-        return sorted(self.pair_model_data['model'].unique())
+        """
+        Return the canonical ordered list of model names for visualization,
+        using normalization and ordering logic consistent with other plots.
+        """
+        raw_models = list(self.pair_model_data['model'].unique())
+        # Normalize model names if needed
+        normalized_models = [normalize_model_name(m) for m in raw_models]
+        # Get canonical order
+        ordered_models = get_model_order(normalized_models)
+        return ordered_models
     
     def get_pairs(self) -> List[str]:
         """Get list of unique opioid pairs in key order."""
