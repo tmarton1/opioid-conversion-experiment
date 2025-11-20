@@ -159,7 +159,7 @@
         "unit": "mcg/hr",
         "LQ": 1.9,
         "UQ": 2.4,
-        "priority": null
+        "priority": 3
     },
     "transdermal_fentanyl": {
         "administration_method": "transdermal",
@@ -195,7 +195,7 @@
         "unit": "mg/day",
         "LQ": 75,
         "UQ": 90.6,
-        "priority": null
+        "priority": 3
     },
     "iv_buprenorphine": {
         "administration_method": "iv",
@@ -204,7 +204,7 @@
         "unit": "mg/day",
         "LQ": 75,
         "UQ": 90.6,
-        "priority": null
+        "priority": 3
     },
     "parenteral_butorphanol": {
         "administration_method": "parenteral",
@@ -312,7 +312,7 @@
         "unit": "mg/day",
         "LQ": null,
         "UQ": null,
-        "priority": null
+        "priority": 3
     },
     "parenteral_nalbuphine": {
         "administration_method": "parenteral",
@@ -321,7 +321,7 @@
         "unit": "mg/day",
         "LQ": 3.0,
         "UQ": 3.0,
-        "priority": null
+        "priority": 3
     },
     "sc_oxycodone": {
         "administration_method": "sc",
