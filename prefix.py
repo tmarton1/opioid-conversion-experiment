@@ -29,21 +29,28 @@ MODEL_PREFIXES = {
     "models/gemini-2.5-flash": "google/",
 }
 
+MODEL_ALIASES = {
+    "anthropic/claude-3.5-haiku": "anthropic/claude-3-5-haiku-20241022",
+    "claude-3.5-haiku": "anthropic/claude-3-5-haiku-20241022",
+    "claude-3-5-haiku": "anthropic/claude-3-5-haiku-20241022",
+}
+
+def harmonize(name):
+    # Check for alias match first
+    if name in MODEL_ALIASES:
+        return MODEL_ALIASES[name]
+    base = name.split('/')[-1]
+    for key, prefix in MODEL_PREFIXES.items():
+        if base == key.split('/')[-1]:
+            return prefix + base if prefix else name
+    return name
+
 def harmonize_model_names(csv_path, output_path=None, model_column="model"):
     """
     Ensures all model names in the CSV have the correct prefix.
     Writes to output_path if provided, otherwise overwrites the input file.
     """
     df = pd.read_csv(csv_path)
-    def harmonize(name):
-        # Remove any existing prefix
-        base = name.split('/')[-1]
-        # Find canonical prefix
-        for key, prefix in MODEL_PREFIXES.items():
-            if base == key.split('/')[-1]:
-                return prefix + base if prefix else name
-        return name  # fallback: leave unchanged if not found
-
     df[model_column] = df[model_column].apply(harmonize)
     out = output_path if output_path else csv_path
     df.to_csv(out, index=False)

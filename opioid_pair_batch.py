@@ -1,10 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional, List, Dict, Any, Sequence
 from visualization_config import get_model_order, normalize_model_name
-from visualization_config import (
-    TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
-    BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
-)
 import numpy as np
 import pandas as pd
 
@@ -140,17 +136,17 @@ class OpioidPairBatch:
         matrix = self.compute_weight_matrix()
         return self.add_mean_row_and_col(matrix)
 
-    def get_range_matrix_with_summary(self, lower: float, upper: float) -> np.ndarray:
+    def get_range_matrix_with_summary(self, range_type: str = "tight") -> np.ndarray:
         """Return range matrix with mean row and column."""
-        matrix = self.compute_range_matrix(lower, upper)
+        matrix = self.compute_range_matrix(range_type)
         return self.add_mean_row_and_col(matrix)
     
     def get_mean_accuracy_by_model(self, model_order: List[str]) -> (List[float], List[float]):
         """
         Returns tight_means and caution_means for each model in model_order.
         """
-        tight_matrix = self.get_range_matrix_with_summary(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER)
-        broad_matrix = self.get_range_matrix_with_summary(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER)
+        tight_matrix = self.get_range_matrix_with_summary("tight")
+        broad_matrix = self.get_range_matrix_with_summary("broad")
         tight_means = []
         caution_means = []
         for i, model in enumerate(model_order):
@@ -243,33 +239,59 @@ class OpioidPairBatch:
         return result
     
     def compute_weight_matrix(self) -> np.ndarray:
-        """Compute matrix of weights (models × pairs)."""
+        """
+        Compute matrix of weights (models × pairs) using precomputed values from pair_model_analysis.csv.
+        """
         models = self.get_models()
         pairs = self.get_pairs()
         matrix = np.full((len(models), len(pairs)), np.nan)
-        
+
         for pair_idx, pair_name in enumerate(pairs):
+            from_opioid, to_opioid = pair_name.split(' -> ')
             for model_idx, model in enumerate(models):
-                data = self.get_data_for_pair_model(pair_name, model)
-                if 'weight' in data and pd.notna(data['weight']):
-                    matrix[model_idx, pair_idx] = data['weight']
-        
+                row = self.pair_model_data[
+                    (self.pair_model_data['from_opioid'] == from_opioid) &
+                    (self.pair_model_data['to_opioid'] == to_opioid) &
+                    (self.pair_model_data['model'] == model)
+                ]
+                if len(row) > 0 and 'weight' in row.columns:
+                    value = row['weight'].iloc[0]
+                    if pd.notna(value):
+                        matrix[model_idx, pair_idx] = value
+
         return matrix
     
-    def compute_range_matrix(self, lower: float, upper: float) -> np.ndarray:
-        """Compute matrix of proportions within range (models × pairs)."""
+    def compute_range_matrix(self, range_type: str = "tight") -> np.ndarray:
+        """
+        Compute matrix of proportions within range (models × pairs) using precomputed values from pair_model_analysis.csv.
+        Automatically finds the correct column for 'tight' or 'broad' range.
+        """
         models = self.get_models()
         pairs = self.get_pairs()
         matrix = np.full((len(models), len(pairs)), np.nan)
-        
+
+        # Find the column name for the range type
+        col_name = None
+        for col in self.pair_model_data.columns:
+            if col.startswith(f"{range_type}("):
+                col_name = col
+                break
+        if col_name is None:
+            raise ValueError(f"No column found for range type '{range_type}' in pair_model_analysis.csv")
+
         for pair_idx, pair_name in enumerate(pairs):
+            from_opioid, to_opioid = pair_name.split(' -> ')
             for model_idx, model in enumerate(models):
-                data = self.get_data_for_pair_model(pair_name, model)
-                if 'ratios' in data and len(data['ratios']) > 0:
-                    ratios = data['ratios']
-                    prop = np.sum((ratios >= lower) & (ratios <= upper)) / len(ratios)
-                    matrix[model_idx, pair_idx] = prop
-        
+                row = self.pair_model_data[
+                    (self.pair_model_data['from_opioid'] == from_opioid) &
+                    (self.pair_model_data['to_opioid'] == to_opioid) &
+                    (self.pair_model_data['model'] == model)
+                ]
+                if len(row) > 0 and col_name in row.columns:
+                    value = row[col_name].iloc[0]
+                    if pd.notna(value):
+                        matrix[model_idx, pair_idx] = value
+
         return matrix
 
     # ---------------------- construction helpers --------------------

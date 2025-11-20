@@ -8,10 +8,7 @@ from bokeh.transform import transform
 from bokeh.palettes import Greys256
 from opioid_pair_batch import OpioidPairBatch
 from visualization_config import get_model_order, assign_model_colors, normalize_model_name
-from visualization_config import (
-    TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
-    BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
-)
+
 
 class OpioidPairBatchHeatmapVisualizer:
     """
@@ -50,8 +47,8 @@ class OpioidPairBatchHeatmapVisualizer:
         
         # Compute matrices using batch methods (reordered for model order)
         self.weight_matrix = self._compute_ordered_matrix(batch.compute_weight_matrix(), all_models)
-        self.broad_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER), all_models)
-        self.tight_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER), all_models)
+        self.broad_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix("broad"), all_models)
+        self.tight_range_matrix = self._compute_ordered_matrix(batch.compute_range_matrix("tight"), all_models)
         
         # Add summary statistics
         self._add_summaries()
@@ -72,8 +69,8 @@ class OpioidPairBatchHeatmapVisualizer:
     def _add_summaries(self):
         """Add mean row and mean column to each matrix, and update labels."""
         self.weight_matrix = self.batch.get_weight_matrix_with_summary()
-        self.broad_range_matrix = self.batch.get_range_matrix_with_summary(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER)
-        self.tight_range_matrix = self.batch.get_range_matrix_with_summary(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER)
+        self.broad_range_matrix = self.batch.get_range_matrix_with_summary("broad")
+        self.tight_range_matrix = self.batch.get_range_matrix_with_summary("tight")
         self.pairs = self.pairs + ['Mean']
         self.models = self.models + ['Mean']
     
@@ -249,7 +246,7 @@ class OpioidPairBatchHeatmapVisualizer:
             width=width,
             height=height,
             x_range=(-0.5, len(clean_names)-0.5),
-            y_range=(0, max(tops_caution) * 1.05 if tops_caution else 1),
+            y_range=(0, 1.05),
             toolbar_location=None,
             title="Mean Model Accuracy Across All Pairs"
         )

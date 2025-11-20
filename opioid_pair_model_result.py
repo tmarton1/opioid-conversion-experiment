@@ -5,6 +5,7 @@ from pathlib import Path
 import csv
 from scipy import stats
 from opioid import Opioid
+from visualization_config import TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
 
 class OpioidPairModelResult:
     """
@@ -159,21 +160,35 @@ class OpioidPairModelResult:
             
         return self.f, self.weight
     
+    def calculate_proportion_within_range(self, lower: float, upper: float) -> float:
+        """
+        Calculate the proportion of observed doses within [lower, upper] * expected_coefficient.
+        """
+        if self.expected_coefficient is None:
+            return np.nan
+        observed = self.results_df['observed_to_dose']
+        expected = self.results_df['expected_to_dose']
+        ratios = observed / expected
+        mask = (ratios >= lower) & (ratios <= upper)
+        return mask.mean() if len(mask) > 0 else np.nan
+
     def calculate_all(self):
         """
-        Perform all calculations in sequence.
+        Perform all calculations in sequence, including tight/broad proportions.
         """
         self.calculate_coefficients()
         self.perform_regression()
         self.calculate_weights()
-    
+        # Calculate tight and broad proportions
+        self.tight_proportion = self.calculate_proportion_within_range(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER)
+        self.broad_proportion = self.calculate_proportion_within_range(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER)
+
     def to_dict(self) -> Dict:
         """
-        Convert results to dictionary for CSV writing.
-        
-        Returns:
-            Dictionary with all result fields
+        Convert results to dictionary for CSV writing, including tight/broad columns.
         """
+        tight_col = f"tight({TIGHT_RANGE_LOWER},{TIGHT_RANGE_UPPER})"
+        broad_col = f"broad({BROAD_RANGE_LOWER},{BROAD_RANGE_UPPER})"
         return {
             'from_opioid': self.from_opioid,
             'to_opioid': self.to_opioid,
@@ -191,7 +206,9 @@ class OpioidPairModelResult:
             'r_squared': self.r_squared,
             'f': self.f,
             'weight': self.weight,
-            'n_observations': len(self.results_df)
+            'n_observations': len(self.results_df),
+            tight_col: self.tight_proportion,
+            broad_col: self.broad_proportion
         }
     
     def append_to_csv(self, csv_file: str):

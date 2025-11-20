@@ -1,0 +1,49 @@
+import pandas as pd
+
+class ModelBatchMeansBuilder:
+    def __init__(self, pair_model_csv="pair_model_analysis.csv"):
+        self.df = pd.read_csv(pair_model_csv)
+
+    def filter_df(self, ome, include_nielson):
+        df = self.df.copy()
+        if ome is not None:
+            df = df[df["ome"] == ome]
+        if include_nielson is not None:
+            df = df[df["include_nielson"] == include_nielson]
+        return df
+
+    def get_range_col(self, prefix):
+        for col in self.df.columns:
+            if col.startswith(prefix):
+                return col
+        raise ValueError(f"No column found for prefix '{prefix}'")
+
+    def build_means_df(self, combinations):
+        tight_col = self.get_range_col("tight(")
+        broad_col = self.get_range_col("broad(")
+        rows = []
+        for combo in combinations:
+            batch_name = combo["batch_name"]
+            ome = combo.get("ome", None)
+            include_nielson = combo.get("include_nielson", None)
+            filtered = self.filter_df(ome, include_nielson)
+            for model in filtered["model"].unique():
+                model_df = filtered[filtered["model"] == model]
+                mean_weight = model_df["weight"].mean()
+                mean_in_tight = model_df[tight_col].mean()
+                mean_in_broad = model_df[broad_col].mean()
+                rows.append({
+                    "model": model,
+                    "batch_name": batch_name,
+                    "ome": ome,
+                    "include_nielson": include_nielson,
+                    "mean_weight": mean_weight,
+                    "mean_in_tight": mean_in_tight,
+                    "mean_in_broad": mean_in_broad
+                })
+        return pd.DataFrame(rows)
+
+    def save_means_df(self, combinations, output_csv):
+        means_df = self.build_means_df(combinations)
+        means_df.to_csv(output_csv, index=False)
+        print(f"✓ Saved batch means to {output_csv}")

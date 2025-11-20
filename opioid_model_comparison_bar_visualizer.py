@@ -1,6 +1,6 @@
 import numpy as np
 from bokeh.plotting import figure, show
-from bokeh.models import ColumnDataSource, HoverTool, FactorRange
+from bokeh.models import ColumnDataSource, HoverTool, FactorRange, Label, LabelSet
 from visualization_config import get_model_order, assign_model_colors, normalize_model_name
 from visualization_config import (
     TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
@@ -38,7 +38,7 @@ class OpioidModelComparisonBarVisualizer:
             batch_list.append(batch)
         return cls(batch_list, combinations)
 
-    def plot(self, width=400, height=200, title="Model Comparison Across Conditions"):
+    def plot(self, width=500, height=300, title="Model Comparison Across Conditions"):
         # Exclude summary column/row ('Mean') for plotting
         model_order = self.models[:-1]
         n_models = len(model_order)
@@ -133,12 +133,36 @@ class OpioidModelComparisonBarVisualizer:
         p.add_tools(hover_caution)
 
         p.xaxis.major_label_orientation = 1.0
-        p.xaxis.visible = True
-
         p.xaxis.visible = False
         p.xgrid.visible = False
-        p.yaxis.axis_label = "Mean Proportion"
-        p.legend.title = "Condition"
-        p.legend.location = "top_left"
+
+        # Add custom bar labels (condition labels for each bar)
+        bar_labels = LabelSet(
+            x='x',
+            y=0,
+            text='combo',  # Show the condition name below each bar
+            level='glyph',
+            x_offset=0,
+            y_offset=-15,
+            source=source_tight,
+            text_font_size="8pt",
+            angle=1.0
+        )
+        p.add_layout(bar_labels)
+
+
+        for i, model in enumerate(model_order):
+            # Use the first combo for each model group
+            x_val = (model.split('/')[-1] if '/' in model else model, self.combinations[0]["name"])
+            group_label = Label(
+                x=x_val,
+                y=-0.08,  # Adjust as needed
+                text=model.split('/')[-1] if '/' in model else model,
+                x_offset=0,
+                y_offset=-30,
+                text_font_size="10pt",
+                text_align="center"
+            )
+            p.add_layout(group_label)
 
         return p
