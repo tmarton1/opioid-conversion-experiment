@@ -1,168 +1,322 @@
+import pandas as pd
+from bokeh.layouts import column
+from bokeh.io import output_file, save
+from bokeh.plotting import figure
+from bokeh.models import LabelSet, ColumnDataSource, HoverTool, FactorRange, Legend, LegendItem, Div
+from visualization_config import MODEL_COLOR_DICT, convert_to_pdf_auto_size, get_model_order, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER, assign_model_colors
+import matplotlib.pyplot as plt
+from adjustText import adjust_text
+import io
+from PIL import Image
 import numpy as np
-from bokeh.plotting import figure, show
-from bokeh.models import ColumnDataSource, HoverTool, FactorRange, Label, LabelSet
-from visualization_config import get_model_order, assign_model_colors, normalize_model_name
-from visualization_config import (
-    TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
-    BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
-)
-from opioid_pair_batch import OpioidPairBatch
 
 class OpioidModelComparisonBarVisualizer:
-    def __init__(self, batch_list, combinations):
-        self.batch_list = batch_list
-        self.combinations = combinations
-
-        # Infer models from the first batch, using the same logic as the heatmap visualizer
-        all_models = batch_list[0].get_models()
-        self.models = get_model_order(all_models)
-        self.model_colors = assign_model_colors(self.models)
+    def __init__(self, batch_names, batch_means_csv="model_batch_means.csv", batch_label_dict=None):
+        self.batch_names = batch_names
+        self.batch_means_csv = batch_means_csv
+        self.df = pd.read_csv(batch_means_csv)
+        self.data = [self.df[self.df["batch_name"] == name] for name in batch_names]
+        self.batch_label_dict = batch_label_dict or {}
 
     @classmethod
-    def from_combinations(cls, combinations, experiment_results_csv, pair_model_csv, consensus_csv):
-        batch_list = []
-        for combo in combinations:
-            filter_spec = {
-                "include_nielson": combo["include_nielson"],
-                "include_examples": False,
-                "exclude_self_pairs": True,
-            }
-            if combo.get("ome") is not None:
-                filter_spec["ome"] = combo["ome"]
-            batch = OpioidPairBatch.from_filter_specs(
-                experiment_results_csv=experiment_results_csv,
-                pair_model_csv=pair_model_csv,
-                consensus_csv=consensus_csv,
-                filter_specs=[filter_spec],
-            )
-            batch_list.append(batch)
-        return cls(batch_list, combinations)
+    def from_combinations(cls, batch_names, batch_means_csv="model_batch_means.csv", batch_label_dict=None):
+        return cls(batch_names, batch_means_csv, batch_label_dict)
 
-    def plot(self, width=500, height=300, title="Model Comparison Across Conditions"):
-        # Exclude summary column/row ('Mean') for plotting
-        model_order = self.models[:-1]
-        n_models = len(model_order)
-        n_combos = len(self.combinations)
+    def plot(self, title="Model Comparison", width=900, height=400, bar_group_spacing=1.0, bar_width_ratio=0.7):
+        # Get models from your data
+        models = self.data[0]["model"].tolist()
+        # Order models canonically
+        ordered_models = get_model_order(models)
+        model_colors = {m: MODEL_COLOR_DICT.get(m, "#1f77b4") for m in ordered_models}
 
-        # Prepare data for grouped bar chart
-        x = []
-        tight_means = []
-        caution_means = []
-        tops_caution = []
-        colors = []
-        combo_labels = []
-        model_labels = []
-
-        for i, model in enumerate(model_order):
-            for j, combo in enumerate(self.combinations):
-                batch = self.batch_list[j]
-                batch_tight_means, batch_caution_means = batch.get_mean_accuracy_by_model(model_order)
-                tight = batch_tight_means[i]
-                caution = batch_caution_means[i]
-                tops_caution.append(tight + caution)
-                tight_means.append(tight)
-                caution_means.append(caution)
-                clean = model.split('/')[-1] if '/' in model else model
-                model_labels.append(clean)
-                combo_labels.append(combo["name"])
-                x.append((clean, combo["name"]))
-                colors.append(self.model_colors.get(model, "#000000"))
-
-
-        source_tight = ColumnDataSource(data=dict(
-            x=x,
-            top=tight_means,
-            color=colors,
-            model=model_labels,
-            combo=combo_labels
-        ))
-        source_caution = ColumnDataSource(data=dict(
-            x=x,
-            top=tops_caution,
-            bottom=tight_means,
-            color=colors,
-            caution=caution_means,
-            model=model_labels,
-            combo=combo_labels
-        ))
-
+        # Use ordered_models for x_factors and all plotting
+        clean_names = [m.split('/')[-1] if '/' in m else m for m in ordered_models]
+        batch_labels = [self.batch_label_dict.get(name, name) for name in self.batch_names]
+        x_factors = [(clean_name, label) for clean_name in clean_names for label in batch_labels]
         p = figure(
             width=width,
             height=height,
-            x_range=FactorRange(*x),
-            y_range=(0, max(tops_caution) * 1.05 if tops_caution else 1),
+            x_range=FactorRange(*x_factors),
+            y_range=(0, 1.05),
             toolbar_location=None,
             title=title
         )
 
+        clean_map = {m: m.split('/')[-1] if '/' in m else m for m in ordered_models}
+
+        # Prepare data for all bars
+        bar_data = {
+            "x": [],
+            "top": [],
+            "bottom": [],
+            "broad": [],
+            "broad_top": [],
+            "model": [],
+            "batch": [],
+            "color": []
+        }
+        for batch_idx, batch_df in enumerate(self.data):
+            tight_means = batch_df["mean_in_tight"].tolist()
+            broad_means = batch_df["mean_in_broad"].tolist()
+            batch_label = batch_labels[batch_idx]
+
+            batch_df_ordered = (
+                batch_df.set_index("model")
+                .reindex(ordered_models)
+                .reset_index()
+            )
+
+            for _, row in batch_df_ordered.iterrows():
+                model_full = row["model"]
+                clean_name = clean_map[model_full]
+
+                tight = row["mean_in_tight"]
+                broad = row["mean_in_broad"]
+                
+                bar_data["x"].append((clean_name, batch_label))
+                bar_data["top"].append(tight)
+                bar_data["bottom"].append(0)
+                bar_data["broad"].append(broad-tight)
+                bar_data["broad_top"].append(broad)
+                bar_data["model"].append(clean_name)
+                bar_data["batch"].append(batch_label)
+                bar_data["color"].append(model_colors.get(model_full, "#1f77b4"))
+
+        source = ColumnDataSource(bar_data)
+        bar_width = bar_width_ratio / len(self.batch_names)
         tight_bars = p.vbar(
             x='x',
             top='top',
-            width=0.8,
+            width=bar_width,
             color='color',
             alpha=0.9,
-            source=source_tight,
+            source=source
         )
-        caution_bars = p.vbar(
+        broad_bars = p.vbar(
             x='x',
-            top='top',
-            bottom='bottom',
-            width=0.8,
+            top='broad_top',
+            bottom='top',
+            width=bar_width,
             color='color',
             alpha=0.3,
-            source=source_caution
+            source=source
         )
 
         hover_tight = HoverTool(
             tooltips=[
                 ('Model', '@model'),
-                ('Condition', '@combo'),
-                ('Tight (±15%)', '@top{0.0%}')
+                ('Batch', '@batch'),
+                (f'Tight ({TIGHT_RANGE_LOWER:.0%}–{TIGHT_RANGE_UPPER:.0%})', '@top{0.0%}')
             ],
             renderers=[tight_bars]
         )
-        hover_caution = HoverTool(
+        hover_broad = HoverTool(
             tooltips=[
                 ('Model', '@model'),
-                ('Condition', '@combo'),
-                ('Caution', '@caution{0.0%}')
+                ('Batch', '@batch'),
+                (f'Broad ({BROAD_RANGE_LOWER:.0%}–{BROAD_RANGE_UPPER:.0%})', '@broad{0.0%}')
             ],
-            renderers=[caution_bars]
+            renderers=[broad_bars]
         )
         p.add_tools(hover_tight)
-        p.add_tools(hover_caution)
+        p.add_tools(hover_broad)
 
+        p.xaxis.group_text_font_size = "0pt"
         p.xaxis.major_label_orientation = 1.0
-        p.xaxis.visible = False
+        p.xaxis.major_label_text_font_size = "7pt"
+        p.xaxis.major_tick_line_color = None
+        p.xaxis.minor_tick_line_color = None
+        p.xaxis.separator_line_color = None
         p.xgrid.visible = False
+        p.xgrid.grid_line_color = None
+        p.yaxis.axis_label = "Mean Proportion within Range"
 
-        # Add custom bar labels (condition labels for each bar)
-        bar_labels = LabelSet(
-            x='x',
-            y=0,
-            text='combo',  # Show the condition name below each bar
-            level='glyph',
-            x_offset=0,
-            y_offset=-15,
-            source=source_tight,
-            text_font_size="8pt",
-            angle=1.0
+        # Add invisible black bars for legend only
+        legend_source = ColumnDataSource(dict(x=[(clean_names[0], batch_labels[0])], top=[0]))
+        tight_dummy = p.vbar(x='x', top='top', width=0.2, color='black', alpha=0.9, source=legend_source, visible=True)
+        broad_dummy = p.vbar(x='x', top='top', width=0.2, color='black', alpha=0.3, source=legend_source, visible=True)
+
+        legend_items = [
+            LegendItem(label=f"Tight Range ({TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)", renderers=[tight_dummy]),
+            LegendItem(label=f"Broad Range ({BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)", renderers=[broad_dummy])
+        ]
+        legend = Legend(items=legend_items)
+        p.add_layout(legend, 'right')
+        p.legend.label_text_font_size = "7pt"
+
+        # One label per model, positioned above the *first* batch in that group
+        label_source = ColumnDataSource(dict(
+            x=[(name, batch_labels[0]) for name in clean_names],
+            y=[.6] * len(clean_names),   # just below the top of y_range
+            text=clean_names               # or an abbreviated version if you want
+        ))
+
+        model_labels = LabelSet(
+            x='x', y='y', text='text', source=label_source,
+            text_font_size="7pt",
+            text_align="left",
+            text_baseline="bottom",
+            angle=np.pi/2,
+            x_offset=5,
         )
-        p.add_layout(bar_labels)
 
-
-        for i, model in enumerate(model_order):
-            # Use the first combo for each model group
-            x_val = (model.split('/')[-1] if '/' in model else model, self.combinations[0]["name"])
-            group_label = Label(
-                x=x_val,
-                y=-0.08,  # Adjust as needed
-                text=model.split('/')[-1] if '/' in model else model,
-                x_offset=0,
-                y_offset=-30,
-                text_font_size="10pt",
-                text_align="center"
-            )
-            p.add_layout(group_label)
+        p.add_layout(model_labels)
 
         return p
+
+
+class ModelComparisonFigureBuilder:
+    def __init__(self, batch_means_csv="model_batch_means.csv", batch_label_dict=None):
+        self.batch_means_csv = batch_means_csv
+        self.batch_label_dict = batch_label_dict or {
+            'ome_n0': 'naive',
+            'ome_n1': 'with Nielson',
+            'pairs_n0': 'naive',
+            'pairs_n1': 'with Nielson',
+            'all_n0': 'naive',
+            'all_n1': 'with Nielson'
+        }
+
+    def matplotlib_scatter_to_bokeh(self, fig):
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight', dpi=150)
+        buf.seek(0)
+        img = Image.open(buf).convert("RGBA")
+        img = img.transpose(Image.FLIP_TOP_BOTTOM)  # Flip vertically for Bokeh
+        arr = np.array(img)
+        # Convert RGBA to uint32 for Bokeh
+        view = arr.view(dtype=np.uint32).reshape(arr.shape[0], arr.shape[1])
+        height, width = arr.shape[:2]
+        p = figure(width=width, height=height, x_range=(0, width), y_range=(0, height), toolbar_location=None)
+        p.image_rgba(image=[view], x=0, y=0, dw=width, dh=height)
+        p.axis.visible = False
+        p.grid.visible = False
+        return p
+
+    def build_figures(self):
+        combinations_list = [
+            ["all_n0", "all_n1"],
+            ["ome_n0", "ome_n1"],
+            ["pairs_n0", "pairs_n1"]
+        ]
+        titles = [
+            "All Opioid Pairs",
+            "Oral Morphine Conversions",
+            "Conversions w/o Oral Morphine"
+        ]
+        figures = []
+
+        # Bar charts
+        for combos, title in zip(combinations_list, titles):
+            visualizer = OpioidModelComparisonBarVisualizer.from_combinations(
+                combos,
+                batch_means_csv=self.batch_means_csv,
+                batch_label_dict=self.batch_label_dict
+            )
+            fig = visualizer.plot(title=title, width=800, height=300, bar_group_spacing=1.0, bar_width_ratio=1.5)
+            figures.append(fig)
+
+        # Scatter plot 1: broad range, oral morphine naive vs. pairs naive
+        df = pd.read_csv(self.batch_means_csv)
+        # Filter for broad range, naive
+        ome_naive = df[(df["batch_name"] == "ome_n0")].sort_values("model")
+        pairs_naive = df[(df["batch_name"] == "pairs_n0")].sort_values("model")
+        models = ome_naive["model"].tolist()
+        colors = [assign_model_colors(models)[m] for m in models]
+        clean_names = [m.split('/')[-1] if '/' in m else m for m in models]
+
+        source1 = ColumnDataSource(data=dict(
+            x=pairs_naive["mean_in_broad"],
+            y=ome_naive["mean_in_broad"],
+            label=clean_names
+        ))
+
+
+        p1 = figure(
+            width=600, height=400,
+            title="Naive Knowledge of Opioid Conversions",
+            x_range=(0, 1.05), y_range=(0, 1.05),
+            toolbar_location=None
+        )
+        p1.scatter(
+            x=pairs_naive["mean_in_broad"],
+            y=ome_naive["mean_in_broad"],
+            color=colors,
+            alpha=0.6,
+            size=12
+        )
+        labels1 = LabelSet(x='x', y='y', text='label', level='glyph',
+                           x_offset=5, y_offset=5, source=source1, text_font_size="8pt")
+        p1.add_layout(labels1)
+        p1.line([0, 1.05], [0, 1.05], color="black", line_dash="dashed", line_width=1)
+        p1.xaxis.axis_label = f"Conversions w/o Oral Morphine (Proportion {BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)"
+        p1.yaxis.axis_label = f"Oral Morphine Conversions (Proportion i{BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)"
+
+        return figures
+    
+    async def save(self, html_path="model_comparison_bar.html", pdf_path="model_comparison_bar.pdf"):
+        grand_title = Div(text="<h2>Model Comparison Figures</h2>", styles={"text-align": "center"})
+        figs = self.build_figures()
+        output_file(html_path)
+        save(column(grand_title, *figs))
+        await convert_to_pdf_auto_size(html_path, pdf_path, scale=2.0)
+
+    def save_scatter_figures_pdf(self, pdf_path="model_comparison_scatter.pdf"):
+        df = pd.read_csv(self.batch_means_csv)
+
+        # Scatter 1: Naive Knowledge of Opioid Conversions
+        ome_naive = df[df["batch_name"] == "ome_n0"].sort_values("model")
+        pairs_naive = df[df["batch_name"] == "pairs_n0"].sort_values("model")
+        models = ome_naive["model"].tolist()
+        clean_names = [m.split('/')[-1] if '/' in m else m for m in models]
+
+        # Assign colors by model name for each point
+        colors = [MODEL_COLOR_DICT.get(m, "#1f77b4") for m in ome_naive["model"]]
+
+        fig1, ax1 = plt.subplots(figsize=(6, 4))
+        ax1.scatter(
+            pairs_naive["mean_in_broad"], ome_naive["mean_in_broad"],
+            c=colors, alpha=0.9, s=60
+        )
+        ax1.plot([0, 1.05], [0, 1.05], color="black", linestyle="dashed", linewidth=1)
+        ax1.set_xlim(0, 1.05)
+        ax1.set_ylim(0, 1.05)
+        ax1.set_title("Naive Knowledge of Opioid Conversions")
+        ax1.set_xlabel(f"Conversions w/o Oral Morphine (Proportion {BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)", fontsize=8, fontstyle='italic')
+        ax1.set_ylabel(f"Oral Morphine Conversions (Proportion {BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)", fontsize=8, fontstyle='italic')
+        texts = []
+        for x, y, label in zip(pairs_naive["mean_in_broad"], ome_naive["mean_in_broad"], clean_names):
+            texts.append(ax1.text(x, y, label, fontsize=6, ha='left', va='bottom'))
+        adjust_text(texts, ax=ax1, arrowprops=dict(arrowstyle='-', color='gray'))
+        plt.tight_layout()
+
+        # Scatter 2: Nielson Effect
+        all_nielson = df[df["batch_name"] == "all_n1"].sort_values("model")
+        colors2 = [MODEL_COLOR_DICT.get(m, "#1f77b4") for m in all_nielson["model"]]
+        clean_names2 = [m.split('/')[-1] if '/' in m else m for m in all_nielson["model"]]
+
+
+        fig2, ax2 = plt.subplots(figsize=(6, 4))
+        ax2.scatter(
+            ome_naive["mean_in_broad"], all_nielson["mean_in_tight"],
+            c=colors2, alpha=0.9, s=60
+        )
+        ax2.plot([0, 1.05], [0, 1.05], color="black", linestyle="dashed", linewidth=1)
+        ax2.set_xlim(0, 1.05)
+        ax2.set_ylim(0, 1.05)
+        ax2.set_title("Nielson Effect")
+        ax2.set_xlabel(f"Oral Morphine Conversions (Proportion {BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)", fontsize=8, fontstyle='italic')
+        ax2.set_ylabel(f"All Opioid Pair Conversions with Nielson (Proportion {TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)", fontsize=8, fontstyle='italic')
+        texts2 = []
+        for x, y, label in zip(ome_naive["mean_in_broad"], all_nielson["mean_in_tight"], clean_names2):
+            texts2.append(ax2.text(x, y, label, fontsize=6, ha='left', va='bottom'))
+        adjust_text(texts2, ax=ax2, arrowprops=dict(arrowstyle='-', color='gray'))
+        plt.tight_layout()
+
+        # Save both figures to one PDF
+        from matplotlib.backends.backend_pdf import PdfPages
+        with PdfPages(pdf_path) as pdf:
+            pdf.savefig(fig1)
+            pdf.savefig(fig2)
+        plt.close(fig1)
+        plt.close(fig2)

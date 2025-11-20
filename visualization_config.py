@@ -41,6 +41,25 @@ MODEL_ORDER = [
     'deepseek/deepseek-chat'
 ]
 
+MODEL_COLOR_DICT = {
+    'openai/gpt-4.1': '#e54444',
+    'openai/gpt-4.1-mini': '#e58144',
+    'openai/gpt-3.5-turbo': '#e5bd44',
+    'anthropic/claude-3.5-sonnet:20241022': '#d1e544',
+    'anthropic/claude-3-5-haiku-20241022': '#95e544',
+    'mistralai/mistral-large-2407': '#58e544',
+    'mistralai/mixtral-8x22b-instruct': '#44e56d',
+    'google/gemini-2.5-pro': '#44e5a9',
+    'google/gemini-2.5-flash': '#44e5e5',
+    'cohere/command-r-plus-08-2024': '#44a9e5',
+    'ai21/jamba-large-1.7': '#446de5',
+    'ai21/jamba-mini-1.7': '#5844e5',
+    'qwen/qwen-2.5-72b-instruct': '#9544e5',
+    'meta-llama/llama-3.3-70b-instruct': '#d144e5',
+    'meta-llama/llama-3.3-70b-versatile': '#e544bd',
+    'deepseek/deepseek-chat': '#e54481'
+}
+
 # Range thresholds for opioid conversion visualizations
 TIGHT_RANGE_LOWER = 0.85
 TIGHT_RANGE_UPPER = 1.15
@@ -102,41 +121,8 @@ def get_model_order(available_models: List[str] = None) -> List[str]:
     return ordered + sorted(extras)
 
 
-def assign_model_colors(models: List[str]) -> Dict[str, str]:
-    """
-    Assign consistent colors to models based on their normalized names.
-    Models with the same normalized name get the same color.
-    
-    Args:
-        models: List of model names to assign colors to
-    
-    Returns:
-        Dictionary mapping model names to hex color strings
-    """
-    # Normalize models for color assignment
-    normalized_models = [normalize_model_name(m) for m in models]
-    unique_normalized = list(dict.fromkeys(normalized_models))  # Preserve order, remove dupes
-    
-    n_models = len(unique_normalized)
-    
-    # Use Spectral palette or generate colors if needed
-    if n_models <= 11:
-        colors = Spectral11[:n_models]
-    else:
-        # Generate colors using HSV space for more colors
-        colors = []
-        for i in range(n_models):
-            hue = i / n_models
-            rgb = colorsys.hsv_to_rgb(hue, 0.7, 0.9)
-            hex_color = '#%02x%02x%02x' % tuple(int(c * 255) for c in rgb)
-            colors.append(hex_color)
-    
-    # Create color mapping for normalized names
-    normalized_color_map = dict(zip(unique_normalized, colors))
-    
-    # Map original model names to colors via their normalized forms
-    return {model: normalized_color_map[normalize_model_name(model)] 
-            for model in models}
+def assign_model_colors(models):
+    return {m: MODEL_COLOR_DICT.get(m, "#1f77b4") for m in models}
 
 def get_model_color(model_name, model_order=None):
     """
