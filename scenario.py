@@ -65,13 +65,19 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
         include_examples=False,
         conversion_service=None
     ):
-        sampled_dose_dict = scenario.sample_dose()
-        scenario_text = scenario.fill_text(sampled_dose_dict)
+        self.scenario = scenario
+        self.model = model
+        self.include_nielson = include_nielson
+        self.include_examples = include_examples
+        self.conversion_service = conversion_service
+
+        self.sampled_dose_dict = scenario.sample_dose()
+        self.scenario_text = scenario.fill_text(self.sampled_dose_dict)
         to_opioid = Opioid(**scenario.to_opioid)
-        from_opioids_doses = scenario.build_from_opioids_doses(sampled_dose_dict)
-        if len(from_opioids_doses) > 1:
+        self.from_opioids_doses = scenario.build_from_opioids_doses(self.sampled_dose_dict)
+        if len(self.from_opioids_doses) > 1:
             super().__init__(
-                from_opioids_doses=from_opioids_doses,
+                from_opioids_doses=self.from_opioids_doses,
                 to_opioid=to_opioid,
                 model=model,
                 include_nielson=include_nielson,
@@ -80,15 +86,15 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
             )
         else:
             super().__init__(
-                from_opioid=from_opioids_doses[0][0],
+                from_opioid=self.from_opioids_doses[0][0],
                 to_opioid=to_opioid,
-                from_dose=from_opioids_doses[0][1],
+                from_dose=self.from_opioids_doses[0][1],
                 model=model,
                 include_nielson=include_nielson,
                 include_examples=include_examples,
                 conversion_service=conversion_service
             )
-        self.scenario_text = scenario_text
+        self.scenario_text = self.scenario_text
         self.vignette_id = scenario.vignette_id
         self.output_unit = getattr(scenario, "output_unit", to_opioid.unit)
         output_conversion = getattr(scenario, "output_conversion", None)
