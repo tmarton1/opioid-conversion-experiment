@@ -53,3 +53,28 @@ class ConversionService:
         oral_morphine_equivalent = dose_from * from_conversion
         expected_dose_to = oral_morphine_equivalent / to_conversion
         return expected_dose_to
+    
+    def calculate_expected_dose_multiple(self, from_opioids_doses: List[Tuple[Opioid, float]], to_opioid: Opioid) -> float:
+        """
+        Convert multiple opioid doses to a single target opioid dose.
+
+        Args:
+            from_opioids_doses (List[Tuple[Opioid, float]]): List of (Opioid, dose) pairs.
+            to_opioid (Opioid): The target opioid.
+
+        Returns:
+            float: The expected dose of the target opioid.
+        """
+        total_ome = 0.0
+        for opioid, dose in from_opioids_doses:
+            # Convert each opioid dose to oral morphine equivalent (OME)
+            ome = self.calculate_expected_dose(dose, opioid, Opioid(administration_method="oral", substance="morphine"))
+            total_ome += ome
+
+        # Convert total OME to target opioid
+        expected_dose_to = self.calculate_expected_dose(
+            total_ome,
+            Opioid(administration_method="oral", substance="morphine"),
+            to_opioid
+        )
+        return expected_dose_to

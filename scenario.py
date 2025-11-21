@@ -35,6 +35,26 @@ class Scenario:
         for k, v in all_values.items():
             text = text.replace(f"{{{{{k}}}}}", str(v))
         return text
+    
+    def build_from_opioids_doses(self, sampled_dose):
+        from_opioids_doses = []
+        # If from_opioid is a list, build tuples
+        if isinstance(self.from_opioid, list):
+            for opioid_dict in self.from_opioid:
+                opioid = Opioid(
+                    administration_method=opioid_dict["administration_method"],
+                    substance=opioid_dict["substance"],
+                    unit=opioid_dict.get("unit", "mg/day")
+                )
+                dose_key = opioid_dict["dose_placeholder"].replace("{{", "").replace("}}", "")
+                dose = sampled_dose[dose_key]
+                from_opioids_doses.append((opioid, dose))
+        else:
+            opioid = Opioid(**self.from_opioid)
+            dose_key = self.dose_placeholder.replace("{{", "").replace("}}", "")
+            dose = sampled_dose[dose_key]
+            from_opioids_doses.append((opioid, dose))
+        return from_opioids_doses
 
 class ScenarioPromptedConversion(PromptedOpioidConversion):
     def __init__(
@@ -46,19 +66,28 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
         conversion_service=None
     ):
         sampled_dose_dict = scenario.sample_dose()
-        sampled_dose = sampled_dose_dict["dose"]
         scenario_text = scenario.fill_text(sampled_dose_dict)
-        from_opioid = Opioid(**scenario.from_opioid)
         to_opioid = Opioid(**scenario.to_opioid)
-        super().__init__(
-            from_opioid=from_opioid,
-            to_opioid=to_opioid,
-            from_dose=sampled_dose,
-            model=model,
-            include_nielson=include_nielson,
-            include_examples=include_examples,
-            conversion_service=conversion_service
-        )
+        from_opioids_doses = scenario.build_from_opioids_doses(sampled_dose_dict)
+        if len(from_opioids_doses) > 1:
+            super().__init__(
+                from_opioids_doses=from_opioids_doses,
+                to_opioid=to_opioid,
+                model=model,
+                include_nielson=include_nielson,
+                include_examples=include_examples,
+                conversion_service=conversion_service
+            )
+        else:
+            super().__init__(
+                from_opioid=from_opioids_doses[0][0],
+                to_opioid=to_opioid,
+                from_dose=from_opioids_doses[0][1],
+                model=model,
+                include_nielson=include_nielson,
+                include_examples=include_examples,
+                conversion_service=conversion_service
+            )
         self.scenario_text = scenario_text
         self.vignette_id = scenario.vignette_id
         self.output_unit = getattr(scenario, "output_unit", to_opioid.unit)
@@ -71,12 +100,21 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
             self.output_dose = self.expected_to_dose
 
     def generate_prompt(self, prompt_service: PromptService):
-        self.prompt = prompt_service.generate_prompt(
-            from_opioid=self.from_opioid,
-            to_opioid=self.to_opioid,
-            from_dose=self.from_dose,
-            include_nielson=self.include_nielson,
-            include_examples=self.include_examples,
-            scenario_text=self.scenario_text
-        )
+        if hasattr(self, "from_opioids_doses") and self.from_opioids_doses:
+            self.prompt = prompt_service.generate_prompt(
+                from_opioids_doses=self.from_opioids_doses,
+                to_opioid=self.to_opioid,
+                include_nielson=self.include_nielson,
+                include_examples=self.include_examples,
+                scenario_text=self.scenario_text
+            )
+        else:
+            self.prompt = prompt_service.generate_prompt(
+                from_opioid=self.from_opioid,
+                to_opioid=self.to_opioid,
+                from_dose=self.from_dose,
+                include_nielson=self.include_nielson,
+                include_examples=self.include_examples,
+                scenario_text=self.scenario_text
+            )
         return self.prompt

@@ -9,16 +9,24 @@
   },
   "v2": {
     "vignette_id": "v2",
-    "text": "A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone every 6 hours for a total administration of {{oral}} mg/day. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone {{oral_dose}} mg PO every 4 hours and additional hydromorphone {{iv_dose}} mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.",
+    "text": "A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone {{pre_dose_6hr}} mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone {{post_oral_dose_4hr}} mg PO every 4 hours and additional hydromorphone {{post_iv_dose_4hr}} mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?",
     "from_opioid": [
-      {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{oral_dose}}"},
-      {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/", "dose_placeholder": "{{iv_dose}}"}
+      {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_oral_dose}}"},
+      {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_iv_dose}}"}
     ],
     "to_opioid": {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day"},
     "dose_distribution": {
-      "oral_dose": [2],
-      "iv_dose": [1]
-    }
+      "pre_oral_dose": [8],
+      "post_oral_dose": [12],
+      "post_iv_dose": [6]
+    },
+    "derived_values": {
+        "pre_dose_6hr": "pre_oral_dose/4",
+        "post_oral_dose_4hr": "post_oral_dose/6",
+        "post_iv_dose_4hr": "post_iv_dose/6"
+    },
+    "output_unit": "mg/4hr",
+    "output_conversion": "expected_to_dose/6"
   },
   "v3": {
     "vignette_id": "v3",
