@@ -9,10 +9,12 @@ from dotenv import load_dotenv
 import os
 import re
 import google.generativeai as genai
+from typing import List, Tuple
 
 
 class PromptedOpioidConversion:
     from_opioid: Opioid
+    from_opioids_doses: List[Tuple[Opioid, float]] = None
     to_opioid: Opioid = field(default_factory=lambda: Opioid(administration_method="oral", substance="morphine"))
     from_dose: float = None
     expected_to_dose: float = None
@@ -71,7 +73,7 @@ class PromptedOpioidConversion:
             genai.configure(api_key=google_key)
             cls.google_configured = True
 
-    def __init__(self, from_opioid, to_opioid=None, from_dose=None, model="gpt-4.1-mini",
+    def __init__(self, from_opioid=None, to_opioid=None, from_dose=None, from_opioids_doses= None, model="gpt-4.1-mini",
                  include_nielson=False, include_examples=False, conversion_service=None):
         """
         Initialize a PromptedOpioidConversion instance.
@@ -86,6 +88,7 @@ class PromptedOpioidConversion:
             conversion_service (ConversionService, optional): Service for dose calculations.
         """
         # Store opioid information
+        self.from_opioids_doses = from_opioids_doses
         self.from_opioid = from_opioid
         self.to_opioid = to_opioid if to_opioid else Opioid(
             administration_method="oral",
@@ -100,21 +103,24 @@ class PromptedOpioidConversion:
         
         # Initialize conversion service if not provided
         if not conversion_service:
-            from nielson_data import NIELSON_CONVERSIONS
             conversion_service = ConversionService(NIELSON_CONVERSIONS)
-        
-        # Generate random dose if not provided
-        if from_dose is None:
-            self.from_dose = conversion_service.generate_random_dose(from_opioid)
+
+        if self.from_opioids_doses:
+            # Multi-opioid scenario
+            self.expected_to_dose = conversion_service.calculate_expected_dose_multiple(
+                self.from_opioids_doses, self.to_opioid
+            )
+            self.from_dose = None
         else:
-            self.from_dose = from_dose
-        
-        # Calculate expected dose
-        self.expected_to_dose = conversion_service.calculate_expected_dose(
-            self.from_dose,
-            self.from_opioid,
-            self.to_opioid
-        )
+            if from_dose is None:
+                self.from_dose = conversion_service.generate_random_dose(from_opioid)
+            else:
+                self.from_dose = from_dose
+            self.expected_to_dose = conversion_service.calculate_expected_dose(
+                self.from_dose,
+                self.from_opioid,
+                self.to_opioid
+            )
         
         # Initialize result variables
         self.prompt = None
@@ -326,7 +332,8 @@ class PromptService:
         to_opioid: Opioid,
         from_dose: float,
         include_nielson: bool = True,
-        include_examples: bool = True
+        include_examples: bool = True,
+        scenario_text: str = None
     ) -> str:
         """
         Generate a prompt for the model based on the given inputs.
@@ -341,9 +348,12 @@ class PromptService:
         Returns:
             str: The generated prompt.
         """
-        prompt = f"Convert {from_dose:.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}) to {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}).\n" \
-                 f"How many {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}) is equivalent to {from_dose:.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method})?\n\n"
-        
+        if scenario_text:
+            prompt = scenario_text + "\n\n"
+        else:
+            prompt = f"Convert {from_dose:.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}) to {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}).\n" \
+                    f"How many {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}) is equivalent to {from_dose:.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method})?\n\n"
+            
         from_conversion = NIELSON_CONVERSIONS.get(f"{from_opioid.administration_method}_{from_opioid.substance}", None)
         to_conversion = NIELSON_CONVERSIONS.get(f"{to_opioid.administration_method}_{to_opioid.substance}", None)
         
@@ -351,16 +361,24 @@ class PromptService:
             if from_conversion and to_conversion:
                 prompt += f"Use the following conversion factor(s):\n"
                 prompt += f"{from_conversion['conversion_factor']} OME: 1 {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}) is equivalent to {from_conversion['conversion_factor']} mg/day morphine (oral).\n"
-                if to_opioid != Opioid(administration_method="oral", substance="morphine"):
-                    prompt += f"{to_conversion['conversion_factor']} OME: 1 {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}) is equivalent to {to_conversion['conversion_factor']} mg/day morphine (oral).\n\n"
+                nielson_unit = to_conversion['unit']
+                if not (
+                    to_opioid.administration_method == "oral"
+                    and to_opioid.substance == "morphine"
+                ):
+                    prompt += f"{to_conversion['conversion_factor']} OME: 1 {nielson_unit} of {to_opioid.substance} ({to_opioid.administration_method}) is equivalent to {to_conversion['conversion_factor']} mg/day morphine (oral).\n\n"
 
         if include_examples:
             prompt += (
                 f"{from_conversion['conversion_factor']} OME for {from_opioid.substance} ({from_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to {self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), from_opioid):.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}).\n"
                 f"And 120 mg/day of morphine (oral) is equivalent to {self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), from_opioid):.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}).\n")
-            if to_opioid != Opioid(administration_method="oral", substance="morphine"):
+            nielson_unit = to_conversion['unit']
+            if not (
+                    to_opioid.administration_method == "oral"
+                    and to_opioid.substance == "morphine"
+                ):
                 prompt += (
-                    f"{to_conversion['conversion_factor']} OME for {to_opioid.substance} ({to_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to {self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}).\n"
+                    f"{to_conversion['conversion_factor']} OME for {to_opioid.substance} ({to_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to {self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {nielson_unit} of {to_opioid.substance} ({to_opioid.administration_method}).\n"
                     f"And 120 mg/day of morphine (oral) is equivalent to {self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method})."
                 )
 

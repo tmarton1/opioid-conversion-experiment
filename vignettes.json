@@ -1,0 +1,36 @@
+{
+  "v1": {
+    "vignette_id": "v1",
+    "text": "A 68 year old man with an intrathecal morphine pump treating post-amputation pain is admitted for pump failure. The intrathecal pump is programmed to administer {{dose}} mg of morphine daily. Convert the intrathecal morphine dose to an intravenous equivalent.",
+    "from_opioid": {"administration_method": "intrathecal", "substance": "morphine", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "iv", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": [10],
+    "dose_placeholder": "{{dose}}"
+  },
+  "v2": {
+    "vignette_id": "v2",
+    "text": "A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone every 6 hours for a total administration of {{oral}} mg/day. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone {{oral_dose}} mg PO every 4 hours and additional hydromorphone {{iv_dose}} mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.",
+    "from_opioid": [
+      {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{oral_dose}}"},
+      {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/", "dose_placeholder": "{{iv_dose}}"}
+    ],
+    "to_opioid": {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day"},
+    "dose_distribution": {
+      "oral_dose": [2],
+      "iv_dose": [1]
+    }
+  },
+  "v3": {
+    "vignette_id": "v3",
+    "text": "A 9 year old child with 30% body surface area burns has been receiving hydromorphone via a PCA pump. The patient used {{dose_4hr}} mg of intravenous hydromorphone over the past 4 hours. The primary burn service would like to switch the patient to oral morphine. Convert the hydromorphone usage into oral morphine in mg/4hr.",
+    "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": [12],
+    "dose_placeholder": "{{dose}}",
+    "derived_values": {
+        "dose_4hr": "dose/6"
+    },
+    "output_unit": "mg/4hr",
+    "output_conversion": "expected_to_dose/6"
+  }
+}
