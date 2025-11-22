@@ -3,7 +3,7 @@ import numpy as np
 from typing import Dict, Optional
 from pathlib import Path
 import csv
-from visualization_config import TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
 from opioid_pair_consensus import OpioidPairConsensus
 
 class VignetteModelResult:
@@ -59,7 +59,7 @@ class VignetteModelResult:
             self.observed_log_dose_cv = np.nan
 
     def calculate_weights(self):
-        epsilon = 5e-2
+        epsilon = EPSILON_FOR_WEIGHT
         if self.observed_log_dose_cv is not None:
             self.weight = 1.0 / (self.observed_log_dose_cv ** 2 + epsilon)
         else:

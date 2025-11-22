@@ -5,7 +5,7 @@ from pathlib import Path
 import csv
 from scipy import stats
 from opioid import Opioid
-from visualization_config import TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
 
 class OpioidPairModelResult:
     """
@@ -151,7 +151,7 @@ class OpioidPairModelResult:
         else:
             self.f = np.nan
         
-        epsilon = 5e-2
+        epsilon = EPSILON_FOR_WEIGHT
         if self.observed_log_coefficient_std is not None and self.observed_log_coefficient_std != 0:
             denom = self.observed_log_coefficient_std ** 2 + epsilon
             self.weight = float(self.f / denom) if denom > 0 else np.nan

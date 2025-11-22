@@ -66,6 +66,8 @@ TIGHT_RANGE_UPPER = 1.15
 BROAD_RANGE_LOWER = 0.6
 BROAD_RANGE_UPPER = 1.7
 
+EPSILON_FOR_WEIGHT = 5e-2
+
 def normalize_model_name(model: str) -> str:
     """
     Normalize a model name to its canonical form.
