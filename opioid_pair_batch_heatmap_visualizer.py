@@ -41,7 +41,7 @@ class OpioidPairBatchHeatmapVisualizer:
         all_models = batch.get_models()
         self.models = get_model_order(all_models)
         self.model_colors = assign_model_colors(self.models)
-        self.pairs = batch.get_pairs()
+        self.pairs = batch.get_items()
         
         print(f"Found {len(self.models)} models and {len(self.pairs)} pairs")
         

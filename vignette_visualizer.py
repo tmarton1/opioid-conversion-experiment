@@ -6,12 +6,13 @@ from visualization_config import TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RAN
 from beeswarm import BeeswarmPlacer
 from bokeh.models import ColumnDataSource, HoverTool, FixedTicker, Span, Legend, LegendItem
 import numpy as np
+import json
 
 class VignetteVisualizer(Visualizer):
     def __init__(
         self,
         experiment_results_csv: str,
-        model_csv: str,
+        vignette_model_csv: str,
         consensus_csv: str,
         vignette_id: str,
         prompt_conditions: dict,
@@ -20,7 +21,7 @@ class VignetteVisualizer(Visualizer):
         self.prompt_conditions = prompt_conditions
         self.consensus_plot_type = "dose"
 
-        self.model_data = self._load_model_data(model_csv, vignette_id, prompt_conditions)
+        self.model_data = self._load_model_data(vignette_model_csv, vignette_id, prompt_conditions)
         self.consensus_data = self._load_consensus_data(consensus_csv, vignette_id, prompt_conditions)
         self.model_order = [m for m in MODEL_ORDER if m in self.model_data['model'].unique()]        
         self.model_colors = MODEL_COLOR_DICT
@@ -31,7 +32,25 @@ class VignetteVisualizer(Visualizer):
         self.broad_col = next((col for col in self.model_data.columns if col.startswith("broad")), None)
         if not self.tight_col or not self.broad_col:
             raise ValueError("Could not find tight or broad columns in analysis CSV.")
-
+    
+    def _get_scenario_text(self, vignette_id, num_chars=70):
+        # Load vignettes.json once (consider caching if called repeatedly)
+        with open("vignettes.json", "r") as f:
+            vignettes = json.load(f)
+        text = vignettes[vignette_id]["text"]
+        title = text[:num_chars]
+        if len(text) > num_chars:
+            title += "..."
+        return title
+    
+    def _prompt_conditions_label(self) -> str:
+        inc_n = self.prompt_conditions.get("include_nielson", False)
+        inc_ex = self.prompt_conditions.get("include_examples", False)
+        return (
+            f"(Nielson: {'yes' if inc_n else 'no'}, "
+            f"Examples: {'yes' if inc_ex else 'no'})"
+        )
+    
     def _create_beeswarm_subplot(self, width, height):
         """
         Create a beeswarm plot for model-level doses.
@@ -143,16 +162,19 @@ class VignetteVisualizer(Visualizer):
         Create a CDF plot for model-level doses.
         """
         # Prepare figure
+        title_main = self._get_scenario_text(self.vignette_id)
+        title_sub = self._prompt_conditions_label()
+
         x_axis_label = f"Dose ({self.to_unit})" if self.to_unit else "Dose"
         p = figure(
             width=width,
             height=height,
-            title="Dose CDFs by Model",
             x_axis_label=x_axis_label,
             y_axis_label="CDF",
             x_axis_type="log",
             toolbar_location=None,
-            x_range=(0.18, 210)
+            x_range=(0.18, 210),
+            title=f"{title_main}\n{title_sub}",
         )
         p.xaxis.ticker = FixedTicker(ticks=[0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200])
         renderers = []
