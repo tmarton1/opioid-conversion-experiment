@@ -16,6 +16,13 @@ class Visualizer:
         self.from_unit = from_unit
         self.to_unit = to_unit
 
+        # Find tight and broad columns by name (they may have quotes)
+        self.tight_col = next((col for col in self.model_data.columns if col.startswith("tight")), None)
+        self.broad_col = next((col for col in self.model_data.columns if col.startswith("broad")), None)
+        if not self.tight_col or not self.broad_col:
+            raise ValueError("Could not find tight or broad columns in analysis CSV.")
+
+
     def _calculate_alpha(self, weight: float) -> float:
         max_weight = 10.0
         min_alpha = 0.05
@@ -245,10 +252,7 @@ class Visualizer:
         tight_props = []
         caution_props = []
         colors_list = []
-        # Use self.raw_data if available, else fallback to self.model_data
-        data_source = getattr(self, "raw_data", self.model_data)
         for model_name_clean, _ in legend_items:
-            # Find full model name
             full_model = None
             for m in self.model_order:
                 clean = m.split('/')[-1] if '/' in m else m
@@ -257,15 +261,11 @@ class Visualizer:
                     break
             if full_model is None:
                 continue
-            model_data = data_source[data_source['model'] == full_model]
+            model_data = self.model_data[self.model_data['model'] == full_model]
             if len(model_data) == 0:
                 continue
-            ratios = model_data['ratio_observed_expected'].values
-            ratios = ratios[~np.isnan(ratios)]
-            if len(ratios) == 0:
-                continue
-            tight = np.sum((ratios >= TIGHT_RANGE_LOWER) & (ratios <= TIGHT_RANGE_UPPER)) / len(ratios)
-            broad = np.sum((ratios >= BROAD_RANGE_LOWER) & (ratios <= BROAD_RANGE_UPPER)) / len(ratios)
+            tight = float(model_data[self.tight_col].iloc[0])
+            broad = float(model_data[self.broad_col].iloc[0])
             caution = broad - tight
             model_names_ordered.append(model_name_clean)
             tight_props.append(tight)
@@ -351,9 +351,9 @@ class Visualizer:
             log_value = self.consensus_data.get('consensus_log_coefficient')
             literature_coeff = getattr(self, "literature_coeff", None)
         else:
-            y_label = f"Dose ({self.to_unit})"
+            y_label = ""
             y_value = self.consensus_data.get('consensus_dose')
-            se = self.consensus_data.get('se_consensus_log')
+            se = self.consensus_data.get('se_consensus_log_dose')
             log_value = self.consensus_data.get('consensus_log_dose')
             literature_coeff = None
 
@@ -376,7 +376,18 @@ class Visualizer:
         # Hide y-axis labels (but keep axis for alignment)
         p.yaxis.major_label_text_font_size = '0pt'
 
-        # Set y-ticks if you have a method for it
+        # Set y-ticks and range for dose plot
+        if plot_type == "dose":
+            from bokeh.models import FixedTicker, Span
+            p.y_range.start = 0.18
+            p.y_range.end = 210
+            p.yaxis.ticker = FixedTicker(ticks=[0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200])
+            # Add expected_to_dose as dashed horizontal line
+            expected_to_dose = self.consensus_data.get('expected_to_dose')
+            if expected_to_dose is not None:
+                expected_span = Span(location=float(expected_to_dose), dimension='width',
+                                    line_color='gray', line_dash='dashed', line_width=2)
+                p.add_layout(expected_span)
         if hasattr(self, "_get_log_ticks"):
             p.yaxis.ticker = self._get_log_ticks(include_literature=True)
 
@@ -414,5 +425,23 @@ class Visualizer:
                     text_baseline='bottom'
                 )
                 p.add_layout(label)
+            
+            source = ColumnDataSource(data=dict(
+                x=[0.5],
+                y=[consensus_raw],
+                consensus=[consensus_raw],
+                se=[se if se is not None else 0],
+                p_value=[self.consensus_data.get('p_value_log')]
+            ))
+            scatter_renderer = p.scatter("x", "y", source=source, size=10, color='black', alpha=0.8, marker='circle')
+            hover = HoverTool(
+                tooltips=[
+                    ("Consensus", "@consensus{0.000}"),
+                    ("SE", "@se{0.000}"),
+                    ("p-value", "@p_value")
+                ],
+                renderers=[scatter_renderer]
+            )
+            p.add_tools(hover)
 
         return p

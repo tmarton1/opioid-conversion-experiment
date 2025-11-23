@@ -271,9 +271,9 @@ class VignetteModelConsensus(OpioidPairConsensus):
             'consensus_dose': consensus_dose,
             'weighted_variance_log': weighted_variance_log,
             'se_consensus_log_dose': se_consensus_log_dose,
-            'df_log_dose': df_log_dose,
-            't_score_log_dose': t_score_log_dose,
-            'p_value_log_dose': p_value_log_dose,
+            'df_log': df_log_dose,
+            't_score_log': t_score_log_dose,
+            'p_value_log': p_value_log_dose,
             'effective_n_models': effective_n_models,
             'expected_to_dose': expected_to_dose,
         }
