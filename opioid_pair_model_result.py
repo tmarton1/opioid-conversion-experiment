@@ -321,6 +321,7 @@ class OpioidPairModelResult:
                                 csv_file: str,
                                 output_file: str,
                                 conversion_service=None,
+                                groupby_fields=None,
                                 verbose: bool = True):
         """
         Process all unique combinations from an experiment results CSV.
@@ -335,10 +336,17 @@ class OpioidPairModelResult:
             List of OpioidPairModelResult instances
         """
         df = pd.read_csv(csv_file)
+
+        # Default grouping: include units
+        if groupby_fields is None:
+            groupby_fields = [
+                'from_opioid', 'from_unit',
+                'to_opioid', 'to_unit',
+                'model', 'include_nielson', 'include_examples'
+            ]
         
         # Group by the key dimensions
-        groups = df.groupby(['from_opioid', 'to_opioid', 'model', 'include_nielson', 'include_examples'])
-        
+        groups = df.groupby(groupby_fields)
         total = len(groups)
         processed = 0
         results_list = []
@@ -348,49 +356,48 @@ class OpioidPairModelResult:
         if output_path.exists():
             output_path.unlink()
         
-        for (from_opioid, to_opioid, model, include_nielson, include_examples), group_df in groups:
+        for group_keys, group_df in groups:
+            # Unpack keys according to groupby_fields
+            key_dict = dict(zip(groupby_fields, group_keys))
             prompt_conditions = {
-                'include_nielson': include_nielson,
-                'include_examples': include_examples
+                'include_nielson': key_dict.get('include_nielson', False),
+                'include_examples': key_dict.get('include_examples', False)
             }
             
             # Calculate expected coefficient from Nielson data
             expected_coeff = None
             if conversion_service:
-                try:                    
-                    # Parse opioid strings (format: "administration_substance")
-                    from_parts = from_opioid.split('_', 1)  # Split only on first underscore
-                    to_parts = to_opioid.split('_', 1)
-                    
+                try:
                     from_opioid_obj = Opioid(
-                        administration_method=from_parts[0],
-                        substance=from_parts[1]
+                        administration_method=key_dict['from_opioid'].split('_', 1)[0],
+                        substance=key_dict['from_opioid'].split('_', 1)[1],
+                        unit=key_dict.get('from_unit')
                     )
                     to_opioid_obj = Opioid(
-                        administration_method=to_parts[0],
-                        substance=to_parts[1]
+                        administration_method=key_dict['to_opioid'].split('_', 1)[0],
+                        substance=key_dict['to_opioid'].split('_', 1)[1],
+                        unit=key_dict.get('to_unit')
                     )
-                    
-                    # Calculate expected coefficient using conversion service
-                    # Use a standard dose of 1.0 to get the conversion factor
                     expected_to_dose = conversion_service.calculate_expected_dose(
                         1.0, from_opioid_obj, to_opioid_obj
                     )
-                    expected_coeff = expected_to_dose  # This is the conversion factor
-                    
+                    expected_coeff = expected_to_dose
                 except Exception as e:
                     if verbose:
-                        print(f"Could not calculate expected coefficient for {from_opioid} -> {to_opioid}: {e}")
-            
+                        print(f"Could not calculate expected coefficient for {key_dict['from_opioid']} -> {key_dict['to_opioid']}: {e}")
+                        
             # Create analyzer
             analyzer = cls(
-                from_opioid=from_opioid,
-                to_opioid=to_opioid,
-                model=model,
+                from_opioid=key_dict['from_opioid'],
+                to_opioid=key_dict['to_opioid'],
+                model=key_dict['model'],
                 prompt_conditions=prompt_conditions,
                 results_df=group_df,
                 expected_coefficient=expected_coeff
             )
+            # Optionally, set units as attributes if needed
+            analyzer.from_unit = key_dict.get('from_unit')
+            analyzer.to_unit = key_dict.get('to_unit')
             
             # Calculate all metrics
             try:
@@ -406,7 +413,7 @@ class OpioidPairModelResult:
                     print(f"Processed {processed}/{total} combinations...")
                     
             except Exception as e:
-                print(f"Error processing {from_opioid} -> {to_opioid}, {model}: {e}")
+                print(f"Error processing {key_dict['from_opioid']} -> {key_dict['to_opioid']}, {key_dict['model']}: {e}")
         
         if verbose:
             print(f"Completed! Processed {processed}/{total} combinations.")
