@@ -7,6 +7,7 @@ from beeswarm import BeeswarmPlacer
 from bokeh.models import ColumnDataSource, HoverTool, FixedTicker, Span, Legend, LegendItem
 import numpy as np
 import json
+from opioid import opioid_list_to_str, dict_to_opioid
 
 class VignetteVisualizer(Visualizer):
     def __init__(
@@ -161,10 +162,29 @@ class VignetteVisualizer(Visualizer):
         """
         Create a CDF plot for model-level doses.
         """
-        # Prepare figure
-        title_main = self._get_scenario_text(self.vignette_id)
-        title_sub = self._prompt_conditions_label()
+        with open("vignettes.json", "r") as f:
+            vignettes = json.load(f)
+        vignette_info = vignettes[self.vignette_id]
+        vignette_key = vignette_info.get("vignette_key", self.vignette_id)
+        scenario_text = vignette_info["text"][:80]
+        if len(vignette_info["text"]) > 80:
+            scenario_text += "..."
 
+        from_opioids = vignette_info["from_opioid"]
+        to_opioid = vignette_info["to_opioid"]
+
+        if isinstance(from_opioids, list):
+            from_opioids = [dict_to_opioid(o) for o in from_opioids]
+        else:
+            from_opioids = dict_to_opioid(from_opioids)
+        to_opioid = dict_to_opioid(to_opioid)
+
+        from_opioid_str = opioid_list_to_str(from_opioids)
+        to_opioid_str = to_opioid.to_str()
+        prompt_label = self._prompt_conditions_label()
+
+        # Three-line title
+        title = f"{vignette_key}\n{from_opioid_str} → {to_opioid_str}\n{scenario_text}\n{prompt_label}"
         x_axis_label = f"Dose ({self.to_unit})" if self.to_unit else "Dose"
         p = figure(
             width=width,
@@ -174,7 +194,7 @@ class VignetteVisualizer(Visualizer):
             x_axis_type="log",
             toolbar_location=None,
             x_range=(0.18, 210),
-            title=f"{title_main}\n{title_sub}",
+            title=title,
         )
         p.xaxis.ticker = FixedTicker(ticks=[0.2, 0.5, 1, 2, 5, 10, 20, 50, 100, 200])
         renderers = []

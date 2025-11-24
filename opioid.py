@@ -11,10 +11,14 @@ class Opioid:
 
     def __post_init__(self):
         key = f"{self.administration_method}_{self.substance}"
-        if key in NIELSON_CONVERSIONS:
-            self.unit = NIELSON_CONVERSIONS[key]["unit"]
-        else:
-            raise KeyError(f"Opioid key '{key}' not found in Nielson conversions.")
+        if self.unit is None:
+            if key in NIELSON_CONVERSIONS:
+                self.unit = NIELSON_CONVERSIONS[key]["unit"]
+            else:
+                raise KeyError(f"Opioid key '{key}' not found in Nielson conversions.")
+        
+    def to_str(self):
+        return f"{self.administration_method}_{self.substance}"
         
 class OpioidPairGenerator:
     def __init__(self, priority_logic):
@@ -59,3 +63,19 @@ class OpioidPairGenerator:
         else:
             # Return the list of individual opioids
             return opioid_objects
+        
+def dict_to_opioid(d):
+    """
+    Create an Opioid object from a dict, ignoring extra fields.
+    """
+    allowed_keys = {"administration_method", "substance", "unit"}
+    filtered = {k: v for k, v in d.items() if k in allowed_keys}
+    return Opioid(**filtered)
+
+def opioid_list_to_str(opioids):
+    """
+    Convert a single Opioid or a list of Opioid objects to a comma-separated string.
+    """
+    if isinstance(opioids, list):
+        return ",".join([o.to_str() for o in opioids])
+    return opioids.to_str()

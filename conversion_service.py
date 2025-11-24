@@ -47,11 +47,24 @@ class ConversionService:
             raise KeyError(f"Opioid keys '{from_key}' or '{to_key}' not found in Nielson conversions.")
         
         from_conversion = self.nielson_conversions[from_key]["conversion_factor"]
-        to_conversion = self.nielson_conversions[to_key]["conversion_factor"] 
+        to_conversion = self.nielson_conversions[to_key]["conversion_factor"]
+        nielson_unit = self.nielson_conversions[to_key]["unit"]
 
         # Convert dose_from to oral morphine equivalent, then to target opioid
         oral_morphine_equivalent = dose_from * from_conversion
         expected_dose_to = oral_morphine_equivalent / to_conversion
+
+            # Unit correction logic
+        if to_opioid.unit != nielson_unit:
+            # Example: mg/day to mg/4hr
+            if nielson_unit == "mg/day" and to_opioid.unit == "mg/4hr":
+                expected_dose_to = expected_dose_to / 6
+            elif nielson_unit == "mg/day" and to_opioid.unit == "mg/hour":
+                expected_dose_to = expected_dose_to / 24
+            # Add more conversion rules here as needed
+            else:
+                raise ValueError(f"Unit conversion from '{nielson_unit}' to '{to_opioid.unit}' is not implemented.")
+
         return expected_dose_to
     
     def calculate_expected_dose_multiple(self, from_opioids_doses: List[Tuple[Opioid, float]], to_opioid: Opioid) -> float:
