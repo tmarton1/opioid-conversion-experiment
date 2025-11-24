@@ -59,6 +59,8 @@ class ConversionService:
             # Example: mg/day to mg/4hr
             if nielson_unit == "mg/day" and to_opioid.unit == "mg/4hr":
                 expected_dose_to = expected_dose_to / 6
+            elif nielson_unit == "mg/day" and to_opioid.unit == "mg/4 hours":
+                expected_dose_to = expected_dose_to / 6
             elif nielson_unit == "mg/day" and to_opioid.unit == "mg/hour":
                 expected_dose_to = expected_dose_to / 24
             # Add more conversion rules here as needed

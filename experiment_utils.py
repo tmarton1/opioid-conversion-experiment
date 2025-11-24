@@ -1,4 +1,9 @@
 import pandas as pd
+from prefix import harmonize_model_names
+from conversion_service import ConversionService
+from nielson_data import NIELSON_CONVERSIONS
+from opioid_pair_model_result import OpioidPairModelResult
+from opioid_pair_consensus import OpioidPairConsensus
 
 def add_ome_column(input_csv: str, output_csv: str = None):
     """
@@ -23,3 +28,53 @@ def add_ome_column(input_csv: str, output_csv: str = None):
     # Save back to CSV
     df.to_csv(output_csv, index=False)
     print(f"Added 'ome' column to {output_csv}")
+
+def processing_pipeline(
+    input_csv,
+    output_csv,
+    variable_model_csv,
+    consensus_csv,
+    mode="pair",  # "pair" or "vignette"
+    verbose=True
+):
+
+    add_ome_column(input_csv=input_csv, output_csv=output_csv)
+    harmonize_model_names(output_csv)
+
+    if mode == "pair":
+
+        conversion_service = ConversionService(NIELSON_CONVERSIONS)
+
+        OpioidPairModelResult.process_all_combinations(
+            csv_file=output_csv,
+            output_file=variable_model_csv,
+            conversion_service=conversion_service,
+            verbose=verbose
+        )
+        OpioidPairConsensus.process_all_combinations(
+            csv_file=variable_model_csv,
+            output_file=consensus_csv,
+            conversion_service=conversion_service,
+            verbose=verbose
+        )
+        OpioidPairConsensus.update_pair_model_analysis(
+            pair_model_csv=variable_model_csv,
+            consensus_csv=consensus_csv,
+            output_csv=variable_model_csv,
+            verbose=verbose
+        )
+    elif mode == "vignette":
+        from vignette_model_result import VignetteModelResult, VignetteModelConsensus
+
+        VignetteModelResult.process_all_combinations(
+            csv_file=output_csv,
+            output_file=variable_model_csv,
+            verbose=verbose
+        )
+        VignetteModelConsensus.process_all_combinations(
+            csv_file=variable_model_csv,
+            output_file=consensus_csv,
+            verbose=verbose
+        )
+    else:
+        raise ValueError("mode must be 'pair' or 'vignette'")

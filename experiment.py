@@ -43,7 +43,7 @@ class Experiment:
 
         return next_id
 
-    def __init__(self, opioid_pairs, prompt_conditions, models, repetitions=10, experiment_id=None):
+    def __init__(self, opioid_pairs, prompt_conditions, models, repetitions=10, experiment_id=None, filename="experiment_results.csv"):
         """
         Initialize the Experiment class.
 
@@ -70,6 +70,7 @@ class Experiment:
 
         # Initialize the PromptService once for the entire experiment
         self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
+        self.filename = filename
 
     def run(self):
         """
@@ -105,7 +106,7 @@ class Experiment:
                         "response": conversion.response
                     }
                     # Save the result directly to the CSV file
-                    self.add_result_to_csv(result)
+                    self.add_result_to_csv(result, filename=self.filename)
                 except CSVWriteError as e:
                     print(f"Error writing result to CSV: {e}")
                 except Exception as e:
