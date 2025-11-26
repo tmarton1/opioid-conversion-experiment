@@ -22,7 +22,6 @@ class PairPromptKey:
         """Return formatted pair name."""
         return f"{self.from_opioid} -> {self.to_opioid}"
 
-
 class OpioidPairBatch:
     """
     Manages a batch of opioid pair conversions with their associated data.
@@ -99,10 +98,12 @@ class OpioidPairBatch:
         
         for key in self._keys:
             mask = (
-                (df['from_opioid'] == key.from_opioid) &
-                (df['to_opioid'] == key.to_opioid) &
-                (df['include_nielson'] == key.include_nielson) &
-                (df['include_examples'] == key.include_examples)
+            (df['from_opioid'] == key.from_opioid) &
+            (df.get('from_opioid_unit', None) == key.from_opioid_unit if 'from_opioid_unit' in df.columns else True) &
+            (df['to_opioid'] == key.to_opioid) &
+            (df.get('to_opioid_unit', None) == key.to_opioid_unit if 'to_opioid_unit' in df.columns else True) &
+            (df['include_nielson'] == key.include_nielson) &
+            (df['include_examples'] == key.include_examples)
             )
             if key.ome is not None and 'ome' in df.columns:
                 mask &= (df['ome'] == key.ome)
@@ -344,7 +345,7 @@ class OpioidPairBatch:
         df = pd.read_csv(pair_model_csv)
 
         # Work at the (pair, prompt_conditions, ome) level
-        group_cols = ["from_opioid", "to_opioid", "include_nielson", "include_examples"]
+        group_cols = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples"]
         if "ome" in df.columns:
             group_cols.append("ome")
 
@@ -408,7 +409,9 @@ class OpioidPairBatch:
             ome_value = row["ome"] if "ome" in row.index else None
             key = PairPromptKey(
                 from_opioid=row["from_opioid"],
+                from_opioid_unit=row["from_opioid_unit"],
                 to_opioid=row["to_opioid"],
+                to_opioid_unit=row["to_opioid_unit"],
                 include_nielson=bool(row["include_nielson"]),
                 include_examples=bool(row["include_examples"]),
                 ome=ome_value if pd.notna(ome_value) else None,

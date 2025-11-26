@@ -59,7 +59,9 @@ class OpioidPairBatchVisualizer:
                     pair_model_csv=self.batch.pair_model_csv,
                     consensus_csv=self.batch.consensus_csv,
                     from_opioid=key.from_opioid,
+                    from_opioid_unit=key.from_opioid_unit,
                     to_opioid=key.to_opioid,
+                    to_opioid_unit=key.to_opioid_unit,
                     prompt_conditions=prompt_conditions,
                 )
 
@@ -71,7 +73,7 @@ class OpioidPairBatchVisualizer:
             except ValueError as e:
                 # e.g. if there is some mismatch across CSVs for this key
                 print(
-                    f"Skipping {key.from_opioid} -> {key.to_opioid} "
+                    f"Skipping {key.from_opioid} ({key.from_opioid_unit}) -> {key.to_opioid} ({key.to_opioid_unit}) "
                     f"(Nielson={key.include_nielson}, Examples={key.include_examples}): {e}"
                 )
 

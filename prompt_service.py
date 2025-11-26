@@ -390,18 +390,20 @@ class PromptService:
                     key = (opioid.administration_method, opioid.substance)
                     if key not in included_keys:
                         from_conversion = NIELSON_CONVERSIONS.get(f"{opioid.administration_method}_{opioid.substance}", None)
+                        nielson_unit = from_conversion['unit'] if from_conversion else opioid.unit
                         if from_conversion:
                             prompt += (
-                                f"{from_conversion['conversion_factor']} OME: 1 {opioid.unit} of {opioid.substance} ({opioid.administration_method}) "
+                                f"{from_conversion['conversion_factor']} OME: 1 {nielson_unit} of {opioid.substance} ({opioid.administration_method}) "
                                 f"is equivalent to {from_conversion['conversion_factor']} mg/day morphine (oral).\n"
                             )
                         included_keys.add(key)
             else:
                 key = (from_opioid.administration_method, from_opioid.substance)
                 from_conversion = NIELSON_CONVERSIONS.get(f"{from_opioid.administration_method}_{from_opioid.substance}", None)
+                nielson_unit = from_conversion['unit'] if from_conversion else from_opioid.unit
                 if from_conversion:
                     prompt += (
-                        f"{from_conversion['conversion_factor']} OME: 1 {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}) "
+                        f"{from_conversion['conversion_factor']} OME: 1 {nielson_unit} of {from_opioid.substance} ({from_opioid.administration_method}) "
                         f"is equivalent to {from_conversion['conversion_factor']} mg/day morphine (oral).\n"
                     )
                 included_keys.add(key)
@@ -447,7 +449,7 @@ class PromptService:
             ):
                 prompt += (
                     f"{to_conversion['conversion_factor']} OME for {to_opioid.substance} ({to_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to "
-                    f"{self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {nielson_unit} of {to_opioid.substance} ({to_opioid.administration_method}).\n"
+                    f"{self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}).\n"
                     f"And 120 mg/day of morphine (oral) is equivalent to "
                     f"{self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method})."
                 )

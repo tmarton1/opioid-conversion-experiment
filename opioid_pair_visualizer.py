@@ -21,10 +21,14 @@ class OpioidPairVisualizer(Visualizer):
                  pair_model_csv: str,
                  consensus_csv: str,
                  from_opioid: str,
+                 from_opioid_unit: str,
                  to_opioid: str,
+                 to_opioid_unit: str,
                  prompt_conditions: Dict[str, bool]):
         self.from_opioid = from_opioid
+        self.from_opioid_unit = from_opioid_unit
         self.to_opioid = to_opioid
+        self.to_opioid_unit = to_opioid_unit
         self.prompt_conditions = prompt_conditions
         self.consensus_plot_type = "coefficient"
 
@@ -32,7 +36,9 @@ class OpioidPairVisualizer(Visualizer):
         experiment_df = pd.read_csv(experiment_results_csv)
         self.raw_data = experiment_df[
             (experiment_df['from_opioid'] == from_opioid) &
+            (experiment_df['from_opioid_unit'] == from_opioid_unit) &
             (experiment_df['to_opioid'] == to_opioid) &
+            (experiment_df['to_opioid_unit'] == to_opioid_unit) &
             (experiment_df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
             (experiment_df['include_examples'] == prompt_conditions.get('include_examples', False))
         ].copy()
@@ -48,7 +54,9 @@ class OpioidPairVisualizer(Visualizer):
         pair_model_df = pd.read_csv(pair_model_csv)
         self.pair_data = pair_model_df[
             (pair_model_df['from_opioid'] == from_opioid) &
+            (pair_model_df['from_opioid_unit'] == from_opioid_unit) &
             (pair_model_df['to_opioid'] == to_opioid) &
+            (pair_model_df['to_opioid_unit'] == to_opioid_unit) &
             (pair_model_df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
             (pair_model_df['include_examples'] == prompt_conditions.get('include_examples', False))
         ].copy()
@@ -57,12 +65,14 @@ class OpioidPairVisualizer(Visualizer):
         consensus_df = pd.read_csv(consensus_csv)
         consensus_filtered = consensus_df[
             (consensus_df['from_opioid'] == from_opioid) &
+            (consensus_df['from_opioid_unit'] == from_opioid_unit) &
             (consensus_df['to_opioid'] == to_opioid) &
+            (consensus_df['to_opioid_unit'] == to_opioid_unit) &
             (consensus_df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
             (consensus_df['include_examples'] == prompt_conditions.get('include_examples', False))
         ]
         self.consensus_data = consensus_filtered.iloc[0] if len(consensus_filtered) > 0 else None
-
+        
         if len(self.raw_data) == 0:
             raise ValueError(f"No raw data found for {from_opioid} -> {to_opioid} with conditions {prompt_conditions}")
 
@@ -104,15 +114,15 @@ class OpioidPairVisualizer(Visualizer):
         )
 
     def _create_coefficient_and_beeswarm_plots(self, width1: int, width2: int, height: int) -> tuple:
-        title_main = f"{self.from_opioid} \u2192 {self.to_opioid}"
+        title_main = f"{self.from_opioid}_{self.from_opioid_unit} \u2192 {self.to_opioid}_{self.to_opioid_unit}"
         title_sub = self._prompt_conditions_label()
 
         p1 = figure(
             width=width1,
             height=height,
             title=f"{title_main}\n{title_sub}",
-            x_axis_label=f"From Dose ({self.from_unit})",
-            y_axis_label=f"Observed Coefficient ({self.to_unit}/{self.from_unit})",
+            x_axis_label=f"From Dose ({self.from_opioid_unit})",
+            y_axis_label=f"Observed Coefficient ({self.to_opioid_unit}/{self.from_opioid_unit})",
             x_axis_type="log",
             y_axis_type="log",
             toolbar_location=None,

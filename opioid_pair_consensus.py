@@ -31,13 +31,17 @@ class OpioidPairConsensus:
     def __init__(
         self,
         from_opioid: str,
+        from_opioid_unit: str,
         to_opioid: str,
+        to_opioid_unit: str,
         prompt_conditions: Dict[str, bool],
         analysis_df: pd.DataFrame,
         expected_coefficient: Optional[float] = None,
     ):
         self.from_opioid = from_opioid
+        self.from_opioid_unit = from_opioid_unit
         self.to_opioid = to_opioid
+        self.to_opioid_unit = to_opioid_unit
         self.prompt_conditions = prompt_conditions
         self.analysis_df = analysis_df
         self.expected_coefficient = expected_coefficient
@@ -167,7 +171,9 @@ class OpioidPairConsensus:
 
         return {
             "from_opioid": self.from_opioid,
+            "from_opioid_unit": self.from_opioid_unit,
             "to_opioid": self.to_opioid,
+            "to_opioid_unit": self.to_opioid_unit,
             "opioid_pair": f"{self.from_opioid} -> {self.to_opioid}",
             "include_nielson": self.prompt_conditions.get("include_nielson", False),
             "include_examples": self.prompt_conditions.get("include_examples", False),
@@ -252,48 +258,7 @@ class OpioidPairConsensus:
         csv_file: str,
         output_file: str,
         conversion_service=None,
-        verbose: bool = True,
-    ):
-        """
-        Build consensus rows for every opioid-pair + prompt condition combination
-        found in pair_model_analysis.csv.
-        """
-        df = pd.read_csv(csv_file)
-
-        groups = df.groupby(
-            ["from_opioid", "to_opioid", "include_nielson", "include_examples"]
-        )
-
-        out = Path(output_file)
-        if out.exists():
-            out.unlink()
-
-        results = []
-        for (from_opioid, to_opioid, inc_n, inc_ex), group_df in groups:
-            prompt = {"include_nielson": inc_n, "include_examples": inc_ex}
-
-            expected_coeff = group_df["expected_coefficient"].iloc[0]
-
-            consensus = cls(
-                from_opioid, to_opioid, prompt, group_df, expected_coefficient=expected_coeff
-            )
-            consensus.calculate_consensus()
-            consensus.append_to_csv(output_file)
-            results.append(consensus)
-
-        if verbose:
-            print(f"Processed {len(groups)} combinations.")
-            print(f"Saved consensus to {output_file}")
-
-        return results
-
-    # ------------------------------------------------------------------
-    @classmethod
-    def process_all_combinations(
-        cls,
-        csv_file: str,
-        output_file: str,
-        conversion_service=None,
+        groupby_fields=None,
         verbose: bool = True,
     ):
         """
@@ -303,10 +268,10 @@ class OpioidPairConsensus:
         Pairs with no valid weighted models are skipped.
         """
         df = pd.read_csv(csv_file)
+        if groupby_fields is None:
+            groupby_fields = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples"]
 
-        groups = df.groupby(
-            ["from_opioid", "to_opioid", "include_nielson", "include_examples"]
-        )
+        groups = df.groupby(groupby_fields)
 
         out = Path(output_file)
         if out.exists():
@@ -315,7 +280,7 @@ class OpioidPairConsensus:
         results = []
         skipped = 0
 
-        for (from_opioid, to_opioid, inc_n, inc_ex), group_df in groups:
+        for (from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, inc_n, inc_ex), group_df in groups:
             prompt = {"include_nielson": inc_n, "include_examples": inc_ex}
 
             # If there is literally no row, just skip
@@ -328,10 +293,12 @@ class OpioidPairConsensus:
             expected_coeff = group_df["expected_coefficient"].iloc[0]
 
             consensus = cls(
-                from_opioid,
-                to_opioid,
-                prompt,
-                group_df,
+                from_opioid=from_opioid,
+                from_opioid_unit=from_opioid_unit,
+                to_opioid=to_opioid,
+                to_opioid_unit=to_opioid_unit,
+                prompt_conditions=prompt,
+                analysis_df=group_df,
                 expected_coefficient=expected_coeff,
             )
 
@@ -393,7 +360,9 @@ class OpioidPairConsensus:
             consensus_df[
                 [
                     "from_opioid",
+                    "from_opioid_unit",
                     "to_opioid",
+                    "to_opioid_unit",
                     "include_nielson",
                     "include_examples",
                     "consensus_log_coefficient",
@@ -406,7 +375,7 @@ class OpioidPairConsensus:
                     "p_value_log",
                 ]
             ],
-            on=["from_opioid", "to_opioid", "include_nielson", "include_examples"],
+            on=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples"],
             how="left",
             suffixes=("", "_consensus"),
         )
@@ -414,7 +383,7 @@ class OpioidPairConsensus:
         # ---- NEW: compute normalized_weight v_j within each pair/prompt group ----
         merged["normalized_weight"] = 0.0  # default
 
-        group_cols = ["from_opioid", "to_opioid", "include_nielson", "include_examples"]
+        group_cols = ["from_opioid", "from_opioid_unit","to_opioid", "to_opioid_unit", "include_nielson", "include_examples"]
 
         for _, idx in merged.groupby(group_cols).groups.items():
             idx = list(idx)

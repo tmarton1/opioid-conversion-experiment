@@ -44,8 +44,13 @@ class BatchVisualizer:
                 if self.VisualizerClass is OpioidPairVisualizer:
                     if hasattr(key, "from_opioid"):
                         vis_kwargs["from_opioid"] = key.from_opioid
+                    if hasattr(key, "from_opioid_unit"):
+                        vis_kwargs["from_opioid_unit"] = key.from_opioid_unit
                     if hasattr(key, "to_opioid"):
                         vis_kwargs["to_opioid"] = key.to_opioid
+                    if hasattr(key, "to_opioid_unit"):
+                        vis_kwargs["to_opioid_unit"] = key.to_opioid_unit
+
                 elif self.VisualizerClass is VignetteVisualizer:
                     if hasattr(key, "vignette_id"):
                         vis_kwargs["vignette_id"] = key.vignette_id

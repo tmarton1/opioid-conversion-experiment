@@ -15,7 +15,9 @@ class OpioidPairModelResult:
     
     def __init__(self, 
                  from_opioid: str,
+                 from_opioid_unit: str,
                  to_opioid: str,
+                 to_opioid_unit: str,
                  model: str,
                  prompt_conditions: Dict[str, bool],
                  results_df: pd.DataFrame,
@@ -32,7 +34,9 @@ class OpioidPairModelResult:
             expected_coefficient: Expected coefficient from Nielson data (if available)
         """
         self.from_opioid = from_opioid
+        self.from_opioid_unit = from_opioid_unit
         self.to_opioid = to_opioid
+        self.to_opioid_unit = to_opioid_unit
         self.model = model
         self.prompt_conditions = prompt_conditions
         self.results_df = results_df
@@ -191,7 +195,9 @@ class OpioidPairModelResult:
         broad_col = f"broad({BROAD_RANGE_LOWER},{BROAD_RANGE_UPPER})"
         return {
             'from_opioid': self.from_opioid,
+            'from_opioid_unit': self.from_opioid_unit,
             'to_opioid': self.to_opioid,
+            'to_opioid_unit': self.to_opioid_unit,
             'opioid_pair': f"{self.from_opioid} -> {self.to_opioid}",
             'model': self.model,
             'include_nielson': self.prompt_conditions.get('include_nielson', False),
@@ -278,6 +284,11 @@ class OpioidPairModelResult:
                 f"  prompt_conditions: {prompt_conditions}"
             )
         
+        # Extract units from the filtered dataframe (assumes all rows have same units)
+        from_opioid_unit = filtered_df['from_opioid_unit'].iloc[0] if 'from_opioid_unit' in filtered_df.columns else None
+        to_opioid_unit = filtered_df['to_opioid_unit'].iloc[0] if 'to_opioid_unit' in filtered_df.columns else None
+
+        
         # Calculate expected coefficient from Nielson data
         expected_coeff = None
         if conversion_service:
@@ -288,19 +299,20 @@ class OpioidPairModelResult:
                 
                 from_opioid_obj = Opioid(
                     administration_method=from_parts[0],
-                    substance=from_parts[1]
+                    substance=from_parts[1],
+                    unit=from_opioid_unit
                 )
                 to_opioid_obj = Opioid(
                     administration_method=to_parts[0],
-                    substance=to_parts[1]
+                    substance=to_parts[1],
+                    unit=to_opioid_unit
                 )
                 
                 # Calculate expected coefficient using conversion service
                 # Use a standard dose of 1.0 to get the conversion factor
-                expected_to_dose = conversion_service.calculate_expected_dose(
+                expected_coeff = conversion_service.calculate_expected_dose(
                     1.0, from_opioid_obj, to_opioid_obj
                 )
-                expected_coeff = expected_to_dose  # This is the conversion factor
                 
             except Exception as e:
                 print(f"Could not calculate expected coefficient for {from_opioid} -> {to_opioid}: {e}")
@@ -309,7 +321,9 @@ class OpioidPairModelResult:
         # Create instance
         return cls(
             from_opioid=from_opioid,
+            from_opioid_unit=from_opioid_unit,
             to_opioid=to_opioid,
+            to_opioid_unit=to_opioid_unit,
             model=model,
             prompt_conditions=prompt_conditions,
             results_df=filtered_df,
@@ -340,8 +354,8 @@ class OpioidPairModelResult:
         # Default grouping: include units
         if groupby_fields is None:
             groupby_fields = [
-                'from_opioid', 'from_unit',
-                'to_opioid', 'to_unit',
+                'from_opioid', 'from_opioid_unit',
+                'to_opioid', 'to_opioid_unit',
                 'model', 'include_nielson', 'include_examples'
             ]
         
@@ -371,17 +385,16 @@ class OpioidPairModelResult:
                     from_opioid_obj = Opioid(
                         administration_method=key_dict['from_opioid'].split('_', 1)[0],
                         substance=key_dict['from_opioid'].split('_', 1)[1],
-                        unit=key_dict.get('from_unit')
+                        unit=key_dict.get('from_opioid_unit')
                     )
                     to_opioid_obj = Opioid(
                         administration_method=key_dict['to_opioid'].split('_', 1)[0],
                         substance=key_dict['to_opioid'].split('_', 1)[1],
-                        unit=key_dict.get('to_unit')
+                        unit=key_dict.get('to_opioid_unit')
                     )
-                    expected_to_dose = conversion_service.calculate_expected_dose(
+                    expected_coeff = conversion_service.calculate_expected_dose(
                         1.0, from_opioid_obj, to_opioid_obj
                     )
-                    expected_coeff = expected_to_dose
                 except Exception as e:
                     if verbose:
                         print(f"Could not calculate expected coefficient for {key_dict['from_opioid']} -> {key_dict['to_opioid']}: {e}")
@@ -389,15 +402,14 @@ class OpioidPairModelResult:
             # Create analyzer
             analyzer = cls(
                 from_opioid=key_dict['from_opioid'],
+                from_opioid_unit=key_dict.get('from_opioid_unit'),
                 to_opioid=key_dict['to_opioid'],
+                to_opioid_unit=key_dict.get('to_opioid_unit'),
                 model=key_dict['model'],
                 prompt_conditions=prompt_conditions,
                 results_df=group_df,
                 expected_coefficient=expected_coeff
             )
-            # Optionally, set units as attributes if needed
-            analyzer.from_unit = key_dict.get('from_unit')
-            analyzer.to_unit = key_dict.get('to_unit')
             
             # Calculate all metrics
             try:

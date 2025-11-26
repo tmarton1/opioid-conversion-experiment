@@ -10,14 +10,16 @@ import warnings
 @dataclass(frozen=True)
 class PairPromptKey:
     from_opioid: str
+    from_opioid_unit: str
     to_opioid: str
+    to_opioid_unit: str
     include_nielson: bool
     include_examples: bool
     ome: Optional[bool] = None
 
     @property
     def pair_name(self) -> str:
-        return f"{self.from_opioid} -> {self.to_opioid}"
+        return f"{self.from_opioid} ({self.from_opioid_unit}) -> {self.to_opioid} ({self.to_opioid_unit})"
 
 @dataclass(frozen=True)
 class VignettePromptKey:
@@ -258,7 +260,7 @@ class Batch:
 # ------------------- OpioidPairBatch -------------------
 
 class OpioidPairBatch(Batch):
-    group_cols = ["from_opioid", "to_opioid", "include_nielson", "include_examples", "ome"]
+    group_cols = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "ome"]
     key_type = PairPromptKey
     item_id_col = "pair_name"
     default_model_csv_attr = "pair_model_csv"

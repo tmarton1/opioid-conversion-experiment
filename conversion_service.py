@@ -26,7 +26,21 @@ class ConversionService:
             raise KeyError(f"Opioid key '{opioid_key}' not found in Nielson conversions.")
         
         conversion_factor = self.nielson_conversions[opioid_key]['conversion_factor']
-        return oral_morphine_dose / conversion_factor
+        nielson_unit = self.nielson_conversions[opioid_key]['unit']
+
+        dose_in_nielson_unit = oral_morphine_dose / conversion_factor
+
+        # Convert to requested unit if needed
+        dose_in_requested_unit = dose_in_nielson_unit
+        if from_opioid.unit != nielson_unit:
+            if nielson_unit == "mg/day" and from_opioid.unit == "mg/hour":
+                dose_in_requested_unit = dose_in_nielson_unit / 24
+            elif nielson_unit == "mg/day" and from_opioid.unit in ["mg/4hr", "mg/4 hours"]:
+                dose_in_requested_unit = dose_in_nielson_unit / 6
+            else:
+                raise ValueError(f"Unit conversion from '{nielson_unit}' to '{from_opioid.unit}' is not implemented.")
+
+        return dose_in_requested_unit
     
     def calculate_expected_dose(self, dose_from: float, from_opioid: Opioid, to_opioid: Opioid) -> float:
         """
@@ -48,24 +62,39 @@ class ConversionService:
         
         from_conversion = self.nielson_conversions[from_key]["conversion_factor"]
         to_conversion = self.nielson_conversions[to_key]["conversion_factor"]
-        nielson_unit = self.nielson_conversions[to_key]["unit"]
+        nielson_from_unit = self.nielson_conversions[from_key]["unit"]
+        nielson_to_unit = self.nielson_conversions[to_key]["unit"]
+
+        # --- Unit correction for from_opioid ---
+        dose_from_nielson = dose_from
+        if from_opioid.unit != nielson_from_unit:
+            # Example: mg/hour to mg/day
+            if from_opioid.unit == "mg/hour" and nielson_from_unit == "mg/day":
+                dose_from_nielson = dose_from * 24
+            elif from_opioid.unit == "mg/4hr" and nielson_from_unit == "mg/day":
+                dose_from_nielson = dose_from * 6
+            elif from_opioid.unit == "mg/4 hours" and nielson_from_unit == "mg/day":
+                dose_from_nielson = dose_from * 6
+            else:
+                raise ValueError(f"Unit conversion from '{from_opioid.unit}' to '{nielson_from_unit}' is not implemented.")
+
 
         # Convert dose_from to oral morphine equivalent, then to target opioid
-        oral_morphine_equivalent = dose_from * from_conversion
+        oral_morphine_equivalent = dose_from_nielson * from_conversion
         expected_dose_to = oral_morphine_equivalent / to_conversion
 
-            # Unit correction logic
-        if to_opioid.unit != nielson_unit:
+        dose_from_nielson = dose_from
+        if to_opioid.unit != nielson_to_unit:
             # Example: mg/day to mg/4hr
-            if nielson_unit == "mg/day" and to_opioid.unit == "mg/4hr":
+            if nielson_to_unit == "mg/day" and to_opioid.unit == "mg/4hr":
                 expected_dose_to = expected_dose_to / 6
-            elif nielson_unit == "mg/day" and to_opioid.unit == "mg/4 hours":
+            elif nielson_to_unit == "mg/day" and to_opioid.unit == "mg/4 hours":
                 expected_dose_to = expected_dose_to / 6
-            elif nielson_unit == "mg/day" and to_opioid.unit == "mg/hour":
+            elif nielson_to_unit == "mg/day" and to_opioid.unit == "mg/hour":
                 expected_dose_to = expected_dose_to / 24
             # Add more conversion rules here as needed
             else:
-                raise ValueError(f"Unit conversion from '{nielson_unit}' to '{to_opioid.unit}' is not implemented.")
+                raise ValueError(f"Unit conversion from '{nielson_to_unit}' to '{to_opioid.unit}' is not implemented.")
 
         return expected_dose_to
     
@@ -83,13 +112,13 @@ class ConversionService:
         total_ome = 0.0
         for opioid, dose in from_opioids_doses:
             # Convert each opioid dose to oral morphine equivalent (OME)
-            ome = self.calculate_expected_dose(dose, opioid, Opioid(administration_method="oral", substance="morphine"))
+            ome = self.calculate_expected_dose(dose, opioid, Opioid(administration_method="oral", substance="morphine", unit="mg/day"))
             total_ome += ome
 
         # Convert total OME to target opioid
         expected_dose_to = self.calculate_expected_dose(
             total_ome,
-            Opioid(administration_method="oral", substance="morphine"),
+            Opioid(administration_method="oral", substance="morphine", unit="mg/day"),
             to_opioid
         )
         return expected_dose_to
