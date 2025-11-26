@@ -25,6 +25,7 @@ class PromptedOpioidConversion:
     observed_to_dose: float = None
     ratio_observed_expected: float = None
     response: str = None
+    ask_for_units: bool = False
 
     # Class-level clients (initialized once)
     openai_client = None
@@ -74,7 +75,7 @@ class PromptedOpioidConversion:
             cls.google_configured = True
 
     def __init__(self, from_opioid=None, to_opioid=None, from_dose=None, from_opioids_doses= None, model="gpt-4.1-mini",
-                 include_nielson=False, include_examples=False, conversion_service=None):
+                 include_nielson=False, include_examples=False, conversion_service=None, ask_for_units=False):
         """
         Initialize a PromptedOpioidConversion instance.
         
@@ -126,6 +127,7 @@ class PromptedOpioidConversion:
         self.prompt = None
         self.observed_to_dose = None
         self.ratio_observed_expected = None
+        self.ask_for_units = ask_for_units
 
     @staticmethod
     def _is_openrouter_model(model_id):
@@ -247,7 +249,7 @@ class PromptedOpioidConversion:
                 self.prompt,
                 safety_settings=safety_settings,
                 generation_config=genai.GenerationConfig(
-                    max_output_tokens=500,
+                    max_output_tokens=1024,
                     temperature=0.0
                 )
             )
@@ -295,7 +297,8 @@ class PromptedOpioidConversion:
                 to_opioid=self.to_opioid,
                 include_nielson=self.include_nielson,
                 include_examples=self.include_examples,
-                scenario_text=self.scenario_text if hasattr(self, "scenario_text") else None
+                scenario_text=self.scenario_text if hasattr(self, "scenario_text") else None,
+                ask_for_units=self.ask_for_units
             )
         
         else:
@@ -305,7 +308,8 @@ class PromptedOpioidConversion:
                 from_dose=self.from_dose,
                 include_nielson=self.include_nielson,
                 include_examples=self.include_examples,
-                scenario_text=self.scenario_text if hasattr(self, "scenario_text") else None
+                scenario_text=self.scenario_text if hasattr(self, "scenario_text") else None,
+                ask_for_units=self.ask_for_units
             )
             return self.prompt
     
@@ -345,7 +349,8 @@ class PromptService:
         from_opioids_doses: List[Tuple[Opioid, float]] = None,
         include_nielson: bool = True,
         include_examples: bool = True,
-        scenario_text: str = None
+        scenario_text: str = None,
+        ask_for_units: bool = False
     ) -> str:
         """
         Generate a prompt for the model based on the given inputs.
@@ -453,6 +458,11 @@ class PromptService:
                     f"And 120 mg/day of morphine (oral) is equivalent to "
                     f"{self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method})."
                 )
-
-        prompt += "\nExpress the response in the format {'calculated dose': value}.  Do not include any additional text in your response, only the dictionary."
+        
+        if ask_for_units and to_opioid is not None:
+            prompt += f"\nExpress the response in the format {{'calculated dose': value, 'units': '{to_opioid.unit}'}}. Do not include any additional text in your response, only the dictionary."
+        elif ask_for_units:
+            prompt += "\nExpress the response in the format {'calculated dose': value, 'units': <unit>}. Do not include any additional text in your response, only the dictionary."
+        else:
+            prompt += "\nExpress the response in the format {'calculated dose': value}. Do not include any additional text in your response, only the dictionary."
         return prompt

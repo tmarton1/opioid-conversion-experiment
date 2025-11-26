@@ -33,7 +33,7 @@
         "unit": "mg/day",
         "LQ": null,
         "UQ": null,
-        "priority": 1
+        "priority": 2
     },
     "oral_hydromorphone": {
         "administration_method": "oral",
@@ -78,7 +78,7 @@
         "unit": "mg/day",
         "LQ": 1.0,
         "UQ": 1.0,
-        "priority": null
+        "priority": 1
     },
     "oral_oxycodone": {
         "administration_method": "oral",
@@ -123,7 +123,7 @@
         "unit": "mg/day",
         "LQ": 0.2,
         "UQ": 0.2,
-        "priority": 1
+        "priority": 2
     },
     "sublingual_buprenorphine": {
         "administration_method": "sublingual",
@@ -141,7 +141,7 @@
         "unit": "mcg/day",
         "LQ": 0.1,
         "UQ": 0.1,
-        "priority": 4
+        "priority": null
     },
     "sublingual_sufentanil": {
         "administration_method": "sublingual",
@@ -159,7 +159,7 @@
         "unit": "mcg/hr",
         "LQ": 1.9,
         "UQ": 2.4,
-        "priority": 3
+        "priority": null
     },
     "transdermal_fentanyl": {
         "administration_method": "transdermal",
@@ -177,7 +177,7 @@
         "unit": "mg/day",
         "LQ": 0.3,
         "UQ": 0.3,
-        "priority": 4
+        "priority": null
     },
     "iv_codeine": {
         "administration_method": "iv",
@@ -186,7 +186,7 @@
         "unit": "mg/day",
         "LQ": 0.3,
         "UQ": 0.3,
-        "priority": 4
+        "priority": null
     },
     "im_buprenorphine": {
         "administration_method": "im",
@@ -195,7 +195,7 @@
         "unit": "mg/day",
         "LQ": 75,
         "UQ": 90.6,
-        "priority": 3
+        "priority": null
     },
     "iv_buprenorphine": {
         "administration_method": "iv",
@@ -204,7 +204,7 @@
         "unit": "mg/day",
         "LQ": 75,
         "UQ": 90.6,
-        "priority": 3
+        "priority": null
     },
     "parenteral_butorphanol": {
         "administration_method": "parenteral",
@@ -231,7 +231,7 @@
         "unit": "mg/day",
         "LQ": 16.9,
         "UQ": 18.1,
-        "priority": 4
+        "priority": null
     },
     "iv_hydromorphone": {
         "administration_method": "iv",
@@ -312,7 +312,7 @@
         "unit": "mg/day",
         "LQ": null,
         "UQ": null,
-        "priority": 3
+        "priority": null
     },
     "parenteral_nalbuphine": {
         "administration_method": "parenteral",
@@ -321,7 +321,7 @@
         "unit": "mg/day",
         "LQ": 3.0,
         "UQ": 3.0,
-        "priority": 3
+        "priority": null
     },
     "sc_oxycodone": {
         "administration_method": "sc",
@@ -348,7 +348,7 @@
         "unit": "mg/day",
         "LQ": 30.0,
         "UQ": 30.0,
-        "priority": 4
+        "priority": null
     },
     "parenteral_pentazocine": {
         "administration_method": "parenteral",
@@ -357,7 +357,7 @@
         "unit": "mg/day",
         "LQ": 1.0,
         "UQ": 1.1,
-        "priority": 4
+        "priority": null
     },
     "iv_pethidine": {
         "administration_method": "iv",
@@ -384,7 +384,7 @@
         "unit": "mcg/day",
         "LQ": null,
         "UQ": null,
-        "priority": 4
+        "priority": null
     },
     "sc_sufentanil": {
         "administration_method": "sc",
@@ -393,7 +393,7 @@
         "unit": "mcg/day",
         "LQ": null,
         "UQ": null,
-        "priority": 4
+        "priority": null
     },
     "rectal_oxycodone": {
         "administration_method": "rectal",
