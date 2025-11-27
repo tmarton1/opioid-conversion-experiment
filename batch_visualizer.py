@@ -4,7 +4,7 @@ from bokeh.layouts import column
 from bokeh.io import output_file, save, show
 
 from opioid_pair_visualizer import OpioidPairVisualizer
-from opioid_pair_batch import OpioidPairBatch
+from batch import OpioidPairBatch
 from typing import Optional
 
 class BatchVisualizer:
@@ -27,6 +27,7 @@ class BatchVisualizer:
                 prompt_conditions = {
                     "include_nielson": getattr(key, "include_nielson", None),
                     "include_examples": getattr(key, "include_examples", None),
+                    "explain_units": getattr(key, "explain_units", None),
                 }
                 # Prepare kwargs for the visualizer
                 if not isinstance(self.model_csv_attr, str):

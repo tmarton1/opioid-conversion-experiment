@@ -202,6 +202,8 @@ class OpioidPairModelResult:
             'model': self.model,
             'include_nielson': self.prompt_conditions.get('include_nielson', False),
             'include_examples': self.prompt_conditions.get('include_examples', False),
+            'ask_for_units': self.prompt_conditions.get('ask_for_units', False),
+            'explain_units': self.prompt_conditions.get('explain_units', False),
             'ome': self.ome,
             'expected_coefficient': self.expected_coefficient,
             'observed_coefficient_mean': self.observed_coefficient_mean,
@@ -272,7 +274,9 @@ class OpioidPairModelResult:
             (df['to_opioid'] == to_opioid) &
             (df['model'] == model) &
             (df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
-            (df['include_examples'] == prompt_conditions.get('include_examples', False))
+            (df['include_examples'] == prompt_conditions.get('include_examples', False)) &
+            (df.get('ask_for_units', False) == prompt_conditions.get('ask_for_units', False)) &
+            (df.get('explain_units', False) == prompt_conditions.get('explain_units', False))
         ].copy()
         
         if len(filtered_df) == 0:
@@ -356,7 +360,7 @@ class OpioidPairModelResult:
             groupby_fields = [
                 'from_opioid', 'from_opioid_unit',
                 'to_opioid', 'to_opioid_unit',
-                'model', 'include_nielson', 'include_examples'
+                'model', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
             ]
         
         # Group by the key dimensions
@@ -375,7 +379,9 @@ class OpioidPairModelResult:
             key_dict = dict(zip(groupby_fields, group_keys))
             prompt_conditions = {
                 'include_nielson': key_dict.get('include_nielson', False),
-                'include_examples': key_dict.get('include_examples', False)
+                'include_examples': key_dict.get('include_examples', False),
+                'ask_for_units': key_dict.get('ask_for_units', False),
+                'explain_units': key_dict.get('explain_units', False)
             }
             
             # Calculate expected coefficient from Nielson data

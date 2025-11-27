@@ -177,6 +177,8 @@ class OpioidPairConsensus:
             "opioid_pair": f"{self.from_opioid} -> {self.to_opioid}",
             "include_nielson": self.prompt_conditions.get("include_nielson", False),
             "include_examples": self.prompt_conditions.get("include_examples", False),
+            "ask_for_units": self.prompt_conditions.get("ask_for_units", False),
+            "explain_units": self.prompt_conditions.get("explain_units", False),
             # NEW: propagate ome (derived from to_opioid)
             "ome": self.ome,
             "expected_coefficient": self.expected_coefficient,
@@ -269,7 +271,7 @@ class OpioidPairConsensus:
         """
         df = pd.read_csv(csv_file)
         if groupby_fields is None:
-            groupby_fields = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples"]
+            groupby_fields = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "ask_for_units", "explain_units"],
 
         groups = df.groupby(groupby_fields)
 
@@ -280,8 +282,8 @@ class OpioidPairConsensus:
         results = []
         skipped = 0
 
-        for (from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, inc_n, inc_ex), group_df in groups:
-            prompt = {"include_nielson": inc_n, "include_examples": inc_ex}
+        for (from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, inc_n, inc_ex, explain_units), group_df in groups:
+            prompt = {"include_nielson": inc_n, "include_examples": inc_ex, "explain_units": explain_units}
 
             # If there is literally no row, just skip
             if len(group_df) == 0:

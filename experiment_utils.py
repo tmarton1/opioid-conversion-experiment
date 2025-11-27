@@ -49,14 +49,14 @@ def processing_pipeline(
             csv_file=output_csv,
             output_file=variable_model_csv,
             conversion_service=conversion_service,
-            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "model", "include_nielson", "include_examples"],
+            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "model", "include_nielson", "include_examples", "explain_units"],
             verbose=verbose
         )
         OpioidPairConsensus.process_all_combinations(
             csv_file=variable_model_csv,
             output_file=consensus_csv,
             conversion_service=conversion_service,
-            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples"],
+            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "explain_units"],
             verbose=verbose
         )
         OpioidPairConsensus.update_pair_model_analysis(

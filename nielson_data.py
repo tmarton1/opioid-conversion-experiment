@@ -15,7 +15,7 @@ def load_nielson_conversions(json_path: str):
     }
 
 # Load Nielson conversions globally
-NIELSON_CONVERSIONS = load_nielson_conversions(Path("nielson_ome.json"))
+NIELSON_CONVERSIONS = load_nielson_conversions(Path("resources/nielson_ome.json"))
 
 class NielsonDataCSVConverter:
     def __init__(self, json_file, csv_file):

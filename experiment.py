@@ -83,7 +83,9 @@ class Experiment:
                     to_opioid=to_opioid,
                     include_nielson=condition["include_nielson"],
                     include_examples=condition["include_examples"],
-                    model=model
+                    model=model,
+                    ask_for_units=condition.get("ask_for_units", False),
+                    explain_units=condition.get("explain_units", False)
                 )
                 conversion.generate_prompt(prompt_service=self.prompt_service)
                 try:
@@ -102,6 +104,7 @@ class Experiment:
                         "include_nielson": condition["include_nielson"],
                         "include_examples": condition["include_examples"],
                         "ask_for_units": condition.get("ask_for_units", False),
+                        "explain_units": condition.get("explain_units", False),
                         "observed_to_dose": conversion.observed_to_dose,
                         "ratio_observed_expected": conversion.ratio_observed_expected,
                         "response": conversion.response
@@ -128,7 +131,7 @@ class Experiment:
         fieldnames = [
             "experiment_id", "datetime", "from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit",
             "from_dose", "expected_to_dose", "model", "prompt", "include_nielson",
-            "include_examples", "ask_for_units","observed_to_dose", "ratio_observed_expected", "response"
+            "include_examples", "ask_for_units", "explain_units", "observed_to_dose", "ratio_observed_expected", "response"
         ]
 
         try:
