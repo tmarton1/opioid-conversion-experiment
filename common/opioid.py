@@ -1,7 +1,7 @@
 from typing import List, Tuple, Union
 from dataclasses import dataclass
 from itertools import permutations, combinations
-from nielson_data import NIELSON_CONVERSIONS
+from resources.nielson_data import NIELSON_CONVERSIONS
 
 @dataclass
 class Opioid:

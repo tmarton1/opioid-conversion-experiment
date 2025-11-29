@@ -1,13 +1,13 @@
-from visualizer import Visualizer
+from visualize.visualizer import Visualizer
 from bokeh.plotting import figure
 from bokeh.layouts import row
-from visualization_config import MODEL_COLOR_DICT, MODEL_ORDER
-from visualization_config import TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
-from beeswarm import BeeswarmPlacer
+from visualize.visualization_config import MODEL_COLOR_DICT, MODEL_ORDER
+from visualize.visualization_config import TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from visualize.beeswarm import BeeswarmPlacer
 from bokeh.models import ColumnDataSource, HoverTool, FixedTicker, Span, Legend, LegendItem
 import numpy as np
 import json
-from opioid import opioid_list_to_str, dict_to_opioid
+from common.opioid import opioid_list_to_str, dict_to_opioid
 
 class VignetteVisualizer(Visualizer):
     def __init__(

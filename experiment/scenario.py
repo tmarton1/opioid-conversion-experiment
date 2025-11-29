@@ -1,5 +1,5 @@
-from opioid import Opioid
-from prompt_service import PromptedOpioidConversion, PromptService
+from common.opioid import Opioid
+from experiment.prompt_service import PromptedOpioidConversion, PromptService
 import re
 
 class Scenario:

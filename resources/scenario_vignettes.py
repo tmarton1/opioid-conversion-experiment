@@ -10,4 +10,4 @@ def load_scenarios(json_path: str):
     }
 
 # Load scenarios globally
-SCENARIO_VIGNETTES = load_scenarios(Path("vignettes.json"))
+SCENARIO_VIGNETTES = load_scenarios(Path("resources/vignettes.json"))

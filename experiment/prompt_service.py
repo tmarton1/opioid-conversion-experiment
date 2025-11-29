@@ -1,7 +1,7 @@
-from opioid import Opioid
-from nielson_data import NIELSON_CONVERSIONS
+from common.opioid import Opioid
+from resources.nielson_data import NIELSON_CONVERSIONS
 from dataclasses import dataclass, field
-from conversion_service import ConversionService
+from common.conversion_service import ConversionService
 from openai import OpenAI
 from anthropic import Anthropic
 from groq import Groq

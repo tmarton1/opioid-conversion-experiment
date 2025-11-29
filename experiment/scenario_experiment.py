@@ -1,8 +1,8 @@
-from experiment import Experiment
+from experiment.experiment import Experiment
 from datetime import datetime
-from conversion_service import ConversionService
-from nielson_data import NIELSON_CONVERSIONS
-from prompt_service import PromptService
+from common.conversion_service import ConversionService
+from resources.nielson_data import NIELSON_CONVERSIONS
+from experiment.prompt_service import PromptService
 import csv
 
 class CSVWriteError(Exception):
@@ -70,7 +70,7 @@ class ScenarioExperiment(Experiment):
                         "response": scenario_conversion.response,
                         "multiple_from_opioids": multiple_from_opioids
                     }
-                    self.add_result_to_csv(result, filename="scenario_experiment_results.csv")
+                    self.add_result_to_csv(result, filename=self.filename)
                 except Exception as e:
                     print(f"Error during scenario conversion: {e}")
                 
@@ -81,6 +81,8 @@ class ScenarioExperiment(Experiment):
             "include_nielson", "include_examples", "observed_to_dose", "ratio_observed_expected",
             "response", "multiple_from_opioids"
         ]
+        if filename is None:
+            filename = self.filename
         try:
             with open(filename, mode="a", newline="") as csvfile:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)

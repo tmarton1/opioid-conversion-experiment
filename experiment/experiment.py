@@ -3,10 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
-from prompt_service import PromptedOpioidConversion, PromptService
-from conversion_service import ConversionService
-from nielson_data import NIELSON_CONVERSIONS
-from opioid import Opioid
+from experiment.prompt_service import PromptedOpioidConversion, PromptService
+from common.conversion_service import ConversionService
+from resources.nielson_data import NIELSON_CONVERSIONS
+from common.opioid import Opioid
 import os
 from datetime import datetime
 from itertools import product 

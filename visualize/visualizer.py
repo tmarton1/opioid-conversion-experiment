@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from bokeh.plotting import figure
 from bokeh.models import HoverTool, Label, ColumnDataSource, Legend
-from visualization_config import get_model_order, assign_model_colors, EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from visualize.visualization_config import get_model_order, assign_model_colors, EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
 
 class Visualizer:
     MAX_WEIGHT = 1.0 / EPSILON_FOR_WEIGHT

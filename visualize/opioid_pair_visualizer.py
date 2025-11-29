@@ -3,9 +3,9 @@ import numpy as np
 from bokeh.plotting import figure, show
 from bokeh.layouts import row
 from bokeh.models import HoverTool, Label, ColumnDataSource
-from visualization_config import get_model_order, assign_model_colors, EPSILON_FOR_WEIGHT
-from visualizer import Visualizer
-from beeswarm import BeeswarmPlacer
+from visualize.visualization_config import get_model_order, assign_model_colors, EPSILON_FOR_WEIGHT
+from visualize.visualizer import Visualizer
+from visualize.beeswarm import BeeswarmPlacer
 from typing import Optional, Dict, List
 
 class OpioidPairVisualizer(Visualizer):

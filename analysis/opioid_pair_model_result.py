@@ -4,8 +4,8 @@ from typing import Dict, List, Tuple, Optional
 from pathlib import Path
 import csv
 from scipy import stats
-from opioid import Opioid
-from visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from common.opioid import Opioid
+from visualize.visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
 
 class OpioidPairModelResult:
     """
@@ -427,7 +427,7 @@ class OpioidPairModelResult:
                 results_list.append(analyzer)
                 processed += 1
                 
-                if verbose and processed % 10 == 0:
+                if verbose and processed % 50 == 0:
                     print(f"Processed {processed}/{total} combinations...")
                     
             except Exception as e:

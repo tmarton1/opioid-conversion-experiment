@@ -1,10 +1,10 @@
-from opioid_pair_visualizer import OpioidPairVisualizer
-from vignette_visualizer import VignetteVisualizer
+from visualize.opioid_pair_visualizer import OpioidPairVisualizer
+from visualize.vignette_visualizer import VignetteVisualizer
 from bokeh.layouts import column
 from bokeh.io import output_file, save, show
 
-from opioid_pair_visualizer import OpioidPairVisualizer
-from batch import OpioidPairBatch
+from visualize.opioid_pair_visualizer import OpioidPairVisualizer
+from analysis.batch import OpioidPairBatch
 from typing import Optional
 
 class BatchVisualizer:

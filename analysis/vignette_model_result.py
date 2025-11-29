@@ -3,8 +3,8 @@ import numpy as np
 from typing import Dict, Optional
 from pathlib import Path
 import csv
-from visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
-from opioid_pair_consensus import OpioidPairConsensus
+from visualize.visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from analysis.opioid_pair_consensus import OpioidPairConsensus
 
 class VignetteModelResult:
     """
@@ -212,7 +212,7 @@ class VignetteModelResult:
                 analyzer.append_to_csv(output_file)
                 results_list.append(analyzer)
                 processed += 1
-                if verbose and processed % 10 == 0:
+                if verbose and processed % 50 == 0:
                     print(f"Processed {processed}/{total} combinations...")
             except Exception as e:
                 print(f"Error processing vignette {vignette_id}, model {model}: {e}")

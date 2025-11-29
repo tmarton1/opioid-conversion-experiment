@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional, List, Dict, Any, Sequence, Type
-from visualization_config import get_model_order, normalize_model_name
+from visualize.visualization_config import get_model_order, normalize_model_name
 import numpy as np
 import pandas as pd
 import warnings

@@ -367,6 +367,8 @@ class OpioidPairConsensus:
                     "to_opioid_unit",
                     "include_nielson",
                     "include_examples",
+                    "ask_for_units",
+                    "explain_units",
                     "consensus_log_coefficient",
                     "consensus_coefficient",
                     "weighted_variance_log",
@@ -377,7 +379,7 @@ class OpioidPairConsensus:
                     "p_value_log",
                 ]
             ],
-            on=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples"],
+            on=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples","ask_for_units", "explain_units"],
             how="left",
             suffixes=("", "_consensus"),
         )

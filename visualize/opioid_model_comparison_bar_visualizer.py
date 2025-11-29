@@ -3,7 +3,7 @@ from bokeh.layouts import column
 from bokeh.io import output_file, save
 from bokeh.plotting import figure
 from bokeh.models import LabelSet, ColumnDataSource, HoverTool, FactorRange, Legend, LegendItem, Div
-from visualization_config import MODEL_COLOR_DICT, convert_to_pdf_auto_size, get_model_order, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER, assign_model_colors
+from visualize.visualization_config import MODEL_COLOR_DICT, convert_to_pdf_auto_size, get_model_order, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER, assign_model_colors
 import matplotlib.pyplot as plt
 from adjustText import adjust_text
 import io

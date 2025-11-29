@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from opioid import Opioid
+from common.opioid import Opioid
 from typing import Dict, Tuple
 import numpy as np
 

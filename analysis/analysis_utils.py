@@ -1,9 +1,9 @@
 import pandas as pd
-from prefix import harmonize_model_names
-from conversion_service import ConversionService
-from nielson_data import NIELSON_CONVERSIONS
-from opioid_pair_model_result import OpioidPairModelResult
-from opioid_pair_consensus import OpioidPairConsensus
+from analysis.prefix import harmonize_model_names
+from common.conversion_service import ConversionService
+from resources.nielson_data import NIELSON_CONVERSIONS
+from analysis.opioid_pair_model_result import OpioidPairModelResult
+from analysis.opioid_pair_consensus import OpioidPairConsensus
 
 def add_ome_column(input_csv: str, output_csv: str = None):
     """
@@ -66,7 +66,7 @@ def processing_pipeline(
             verbose=verbose
         )
     elif mode == "vignette":
-        from vignette_model_result import VignetteModelResult, VignetteModelConsensus
+        from analysis.vignette_model_result import VignetteModelResult, VignetteModelConsensus
 
         VignetteModelResult.process_all_combinations(
             csv_file=output_csv,

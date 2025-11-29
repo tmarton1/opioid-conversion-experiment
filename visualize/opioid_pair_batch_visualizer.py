@@ -3,7 +3,7 @@ from typing import Optional
 from bokeh.layouts import column
 from bokeh.io import output_file, save, show
 
-from opioid_pair_visualizer import OpioidPairVisualizer
+from visualize.opioid_pair_visualizer import OpioidPairVisualizer
 from opioid_pair_batch import OpioidPairBatch
 
 
