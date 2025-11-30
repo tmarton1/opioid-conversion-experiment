@@ -63,12 +63,16 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
         model="gpt-4.1-mini",
         include_nielson=False,
         include_examples=False,
+        ask_for_units=False,
+        explain_units=False,
         conversion_service=None
     ):
         self.scenario = scenario
         self.model = model
         self.include_nielson = include_nielson
         self.include_examples = include_examples
+        self.ask_for_units = ask_for_units
+        self.explain_units = explain_units
         self.conversion_service = conversion_service
 
         self.sampled_dose_dict = scenario.sample_dose()
@@ -82,6 +86,8 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 model=model,
                 include_nielson=include_nielson,
                 include_examples=include_examples,
+                ask_for_units=ask_for_units,
+                explain_units=explain_units,
                 conversion_service=conversion_service
             )
         else:
@@ -92,6 +98,8 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 model=model,
                 include_nielson=include_nielson,
                 include_examples=include_examples,
+                ask_for_units=ask_for_units,
+                explain_units=explain_units,
                 conversion_service=conversion_service
             )
         self.scenario_text = self.scenario_text
@@ -112,6 +120,8 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 to_opioid=self.to_opioid,
                 include_nielson=self.include_nielson,
                 include_examples=self.include_examples,
+                ask_for_units=self.ask_for_units,
+                explain_units=self.explain_units,
                 scenario_text=self.scenario_text
             )
         else:
@@ -121,6 +131,8 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 from_dose=self.from_dose,
                 include_nielson=self.include_nielson,
                 include_examples=self.include_examples,
+                ask_for_units=self.ask_for_units,
+                explain_units=self.explain_units,
                 scenario_text=self.scenario_text
             )
         return self.prompt

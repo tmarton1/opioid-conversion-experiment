@@ -464,7 +464,7 @@ class PromptService:
                     f"And 120 mg/day of morphine (oral) is equivalent to "
                     f"{self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method})."
                 )
-        if explain_units and to_opioid.unit == 'mg/4 hours':
+        if explain_units and (to_opioid.unit == 'mg/4 hours' or to_opioid.unit == 'mg/4hr'):
             prompt += "\nNotice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. \nThe equivalent dose over 4 hours should be 1/6 the total dose for 1 day."
         
         if ask_for_units and to_opioid is not None:
