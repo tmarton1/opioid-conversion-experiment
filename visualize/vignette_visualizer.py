@@ -34,7 +34,7 @@ class VignetteVisualizer(Visualizer):
         if not self.tight_col or not self.broad_col:
             raise ValueError("Could not find tight or broad columns in analysis CSV.")
     
-    def _get_scenario_text(self, vignette_id, num_chars=70):
+    def _get_vignette_text(self, vignette_id, num_chars=70):
         # Load vignettes.json once (consider caching if called repeatedly)
         with open("vignettes.json", "r") as f:
             vignettes = json.load(f)
@@ -165,10 +165,10 @@ class VignetteVisualizer(Visualizer):
         with open("vignettes.json", "r") as f:
             vignettes = json.load(f)
         vignette_info = vignettes[self.vignette_id]
-        vignette_key = vignette_info.get("vignette_key", self.vignette_id)
-        scenario_text = vignette_info["text"][:80]
+        scenario_key = vignette_info.get("scenario_key", self.vignette_id)
+        vignette_text = vignette_info["text"][:80]
         if len(vignette_info["text"]) > 80:
-            scenario_text += "..."
+            vignette_text += "..."
 
         from_opioids = vignette_info["from_opioid"]
         to_opioid = vignette_info["to_opioid"]
@@ -184,7 +184,7 @@ class VignetteVisualizer(Visualizer):
         prompt_label = self._prompt_conditions_label()
 
         # Three-line title
-        title = f"{vignette_key}\n{from_opioid_str} → {to_opioid_str}\n{scenario_text}\n{prompt_label}"
+        title = f"{scenario_key}\n{from_opioid_str} → {to_opioid_str}\n{vignette_text}\n{prompt_label}"
         x_axis_label = f"Dose ({self.to_unit})" if self.to_unit else "Dose"
         p = figure(
             width=width,

@@ -76,7 +76,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
         self.conversion_service = conversion_service
 
         self.sampled_dose_dict = scenario.sample_dose()
-        self.scenario_text = scenario.fill_text(self.sampled_dose_dict)
+        self.vignette_text = scenario.fill_text(self.sampled_dose_dict)
         to_opioid = Opioid(**scenario.to_opioid)
         self.from_opioids_doses = scenario.build_from_opioids_doses(self.sampled_dose_dict)
         if len(self.from_opioids_doses) > 1:
@@ -102,7 +102,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 explain_units=explain_units,
                 conversion_service=conversion_service
             )
-        self.scenario_text = self.scenario_text
+        self.vignette_text = self.vignette_text
         self.vignette_id = scenario.vignette_id
         self.output_unit = getattr(scenario, "output_unit", to_opioid.unit)
         output_conversion = getattr(scenario, "output_conversion", None)
@@ -122,7 +122,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 include_examples=self.include_examples,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units,
-                scenario_text=self.scenario_text
+                vignette_text=self.vignette_text
             )
         else:
             self.prompt = prompt_service.generate_prompt(
@@ -133,6 +133,6 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 include_examples=self.include_examples,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units,
-                scenario_text=self.scenario_text
+                vignette_text=self.vignette_text
             )
         return self.prompt

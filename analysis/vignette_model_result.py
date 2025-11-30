@@ -14,6 +14,7 @@ class VignetteModelResult:
 
     def __init__(self, 
                  vignette_id: str,
+                 scenario_key: str,
                  from_opioid: str,
                  from_opioid_unit: str,
                  to_opioid: str,
@@ -24,6 +25,7 @@ class VignetteModelResult:
                  prompt_conditions: Dict[str, bool],
                  results_df: pd.DataFrame):
         self.vignette_id = vignette_id
+        self.scenario_key = scenario_key
         self.from_opioid = from_opioid
         self.from_opioid_unit = from_opioid_unit
         self.to_opioid = to_opioid
@@ -83,6 +85,7 @@ class VignetteModelResult:
         broad_col = f"broad({BROAD_RANGE_LOWER},{BROAD_RANGE_UPPER})"
         return {
             'vignette_id': self.vignette_id,
+            'scenario_key': self.scenario_key,
             'from_opioid': self.from_opioid,
             'from_opioid_unit': self.from_opioid_unit,
             'to_opioid': self.to_opioid,
@@ -92,6 +95,8 @@ class VignetteModelResult:
             'model': self.model,
             'include_nielson': self.prompt_conditions.get('include_nielson', False),
             'include_examples': self.prompt_conditions.get('include_examples', False),
+            'ask_for_units': self.prompt_conditions.get('ask_for_units', False),
+            'explain_units': self.prompt_conditions.get('explain_units', False),
             'expected_to_dose': self.expected_to_dose,
             'observed_dose_mean': self.observed_dose_mean,
             'observed_dose_std': self.observed_dose_std,
@@ -119,6 +124,7 @@ class VignetteModelResult:
     def from_csv_filter(cls,
                     csv_file: str,
                     vignette_id: str,
+                    scenario_key: str,
                     from_opioid: str,
                     from_opioid_unit: str,
                     multiple_from_opioids: bool,
@@ -131,6 +137,7 @@ class VignetteModelResult:
         Args:
             csv_file: Path to scenario experiment results CSV
             vignette_id: Vignette identifier
+            scenario_key: Scenario key
             from_opioid: Source opioid
             from_opioid_unit: Source opioid unit
             multiple_from_opioids: Multiple opioids flag
@@ -144,19 +151,23 @@ class VignetteModelResult:
         df = pd.read_csv(csv_file)
         filtered_df = df[
             (df['vignette_id'] == vignette_id) &
+            (df['scenario_key'] == scenario_key) &
             (df['from_opioid'] == from_opioid) &
             (df['from_opioid_unit'] == from_opioid_unit) &
             (df['multiple_from_opioids'] == multiple_from_opioids) &
             (df['ome'] == ome) &
             (df['model'] == model) &
             (df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
-            (df['include_examples'] == prompt_conditions.get('include_examples', False))
+            (df['include_examples'] == prompt_conditions.get('include_examples', False)) &
+            (df.get('ask_for_units', False) == prompt_conditions.get('ask_for_units', False)) &
+            (df.get('explain_units', False) == prompt_conditions.get('explain_units', False))
         ].copy()
 
         if len(filtered_df) == 0:
             raise ValueError(
                 f"No data found for combination:\n"
                 f"  vignette_id: {vignette_id}\n"
+                f"  scenario_key: {scenario_key}\n"
                 f"  from_opioid: {from_opioid}\n"
                 f"  from_opioid_unit: {from_opioid_unit}\n"
                 f"  multiple_from_opioids: {multiple_from_opioids}\n"
@@ -167,6 +178,7 @@ class VignetteModelResult:
 
         return cls(
             vignette_id=vignette_id,
+            scenario_key=scenario_key,
             from_opioid=from_opioid,
             from_opioid_unit=from_opioid_unit,
             multiple_from_opioids=multiple_from_opioids,
@@ -180,8 +192,8 @@ class VignetteModelResult:
     def process_all_combinations(cls, csv_file: str, output_file: str, verbose: bool = True):
         df = pd.read_csv(csv_file)
         groups = df.groupby([
-            'vignette_id', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit','multiple_from_opioids', 'ome',
-            'model', 'include_nielson', 'include_examples'
+            'vignette_id', 'scenario_key', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit','multiple_from_opioids', 'ome',
+            'model', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
         ])
         total = len(groups)
         processed = 0
@@ -189,14 +201,17 @@ class VignetteModelResult:
         output_path = Path(output_file)
         if output_path.exists():
             output_path.unlink()
-        for (vignette_id, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, multiple_from_opioids, ome,
-             model, include_nielson, include_examples), group_df in groups:
+        for (vignette_id, scenario_key, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, multiple_from_opioids, ome,
+             model, include_nielson, include_examples, ask_for_units, explain_units), group_df in groups:
             prompt_conditions = {
                 'include_nielson': include_nielson,
-                'include_examples': include_examples
+                'include_examples': include_examples,
+                'ask_for_units': ask_for_units,
+                'explain_units': explain_units
             }
             analyzer = cls(
                 vignette_id=vignette_id,
+                scenario_key=scenario_key,
                 from_opioid=from_opioid,
                 from_opioid_unit=from_opioid_unit,
                 to_opioid=to_opioid,
@@ -286,8 +301,8 @@ class VignetteModelConsensus(OpioidPairConsensus):
 
         df = pd.read_csv(csv_file)
         groups = df.groupby([
-            'vignette_id', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit',
-            'multiple_from_opioids', 'ome', 'include_nielson', 'include_examples'
+            'vignette_id', 'scenario_key', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit',
+            'multiple_from_opioids', 'ome', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
         ])
         total = len(groups)
         processed = 0
@@ -296,13 +311,14 @@ class VignetteModelConsensus(OpioidPairConsensus):
         if output_path.exists():
             output_path.unlink()
         for keys, group_df in groups:
-            (vignette_id, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit,
-             multiple_from_opioids, ome, include_nielson, include_examples) = keys
+            (vignette_id, scenario_key, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit,
+             multiple_from_opioids, ome, include_nielson, include_examples, ask_for_units, explain_units) = keys
 
             stats_dict = cls.calculate_consensus_stats(group_df)
 
             consensus_dict = {
                 'vignette_id': vignette_id,
+                'scenario_key': scenario_key,
                 'from_opioid': from_opioid,
                 'from_opioid_unit': from_opioid_unit,
                 'to_opioid': to_opioid,
@@ -311,7 +327,9 @@ class VignetteModelConsensus(OpioidPairConsensus):
                 'ome': ome,
                 'include_nielson': include_nielson,
                 'include_examples': include_examples,
-                **stats_dict,
+                'ask_for_units': ask_for_units,
+                'explain_units': explain_units,
+                  **stats_dict,
             }
             file_exists = output_path.exists() and output_path.stat().st_size > 0
             with open(output_file, 'a', newline='') as f:

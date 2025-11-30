@@ -300,7 +300,7 @@ class PromptedOpioidConversion:
                 to_opioid=self.to_opioid,
                 include_nielson=self.include_nielson,
                 include_examples=self.include_examples,
-                scenario_text=self.scenario_text if hasattr(self, "scenario_text") else None,
+                vignette_text=self.vignette_text if hasattr(self, "vignette_text") else None,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units
             )
@@ -312,7 +312,7 @@ class PromptedOpioidConversion:
                 from_dose=self.from_dose,
                 include_nielson=self.include_nielson,
                 include_examples=self.include_examples,
-                scenario_text=self.scenario_text if hasattr(self, "scenario_text") else None,
+                vignette_text=self.vignette_text if hasattr(self, "vignette_text") else None,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units
             )
@@ -354,7 +354,7 @@ class PromptService:
         from_opioids_doses: List[Tuple[Opioid, float]] = None,
         include_nielson: bool = True,
         include_examples: bool = True,
-        scenario_text: str = None,
+        vignette_text: str = None,
         ask_for_units: bool = False,
         explain_units: bool = False
     ) -> str:
@@ -368,13 +368,13 @@ class PromptService:
             from_opioids_doses (List[Tuple[Opioid, float]], optional): List of (Opioid, dose) pairs for multi-opioid scenario.
             include_nielson (bool): Whether to include Nielson conversion information in the prompt.
             include_examples (bool): Whether to include example conversions in the prompt.
-            scenario_text (str, optional): Scenario description.
+            vignette_text (str, optional): Vignette.
 
         Returns:
             str: The generated prompt.
         """
-        if scenario_text:
-            prompt = scenario_text + "\n\n"
+        if vignette_text:
+            prompt = vignette_text + "\n\n"
         else:
             prompt = ""
 
@@ -439,7 +439,7 @@ class PromptService:
                 for opioid, _ in from_opioids_doses:
                     from_conversion = NIELSON_CONVERSIONS.get(f"{opioid.administration_method}_{opioid.substance}", None)
                     prompt += (
-                        f"{from_conversion['conversion_factor']} OME for {opioid.substance} ({opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to "
+                        f"\n{from_conversion['conversion_factor']} OME for {opioid.substance} ({opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to "
                         f"{self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), opioid):.2f} {opioid.unit} of {opioid.substance} ({opioid.administration_method}).\n"
                         f"And 120 mg/day of morphine (oral) is equivalent to "
                         f"{self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), opioid):.2f} {opioid.unit} of {opioid.substance} ({opioid.administration_method}).\n"
@@ -447,7 +447,7 @@ class PromptService:
             else:
                 from_conversion = NIELSON_CONVERSIONS.get(f"{from_opioid.administration_method}_{from_opioid.substance}", None)
                 prompt += (
-                    f"{from_conversion['conversion_factor']} OME for {from_opioid.substance} ({from_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to "
+                    f"\n{from_conversion['conversion_factor']} OME for {from_opioid.substance} ({from_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to "
                     f"{self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), from_opioid):.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}).\n"
                     f"And 120 mg/day of morphine (oral) is equivalent to "
                     f"{self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), from_opioid):.2f} {from_opioid.unit} of {from_opioid.substance} ({from_opioid.administration_method}).\n"
@@ -459,13 +459,13 @@ class PromptService:
                 and to_opioid.substance == "morphine"
             ):
                 prompt += (
-                    f"{to_conversion['conversion_factor']} OME for {to_opioid.substance} ({to_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to "
+                    f"\n{to_conversion['conversion_factor']} OME for {to_opioid.substance} ({to_opioid.administration_method}) means 10 mg/day of morphine (oral) is equivalent to "
                     f"{self.conversion_service.calculate_expected_dose(10, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method}).\n"
                     f"And 120 mg/day of morphine (oral) is equivalent to "
                     f"{self.conversion_service.calculate_expected_dose(120, Opioid(administration_method='oral', substance='morphine'), to_opioid):.2f} {to_opioid.unit} of {to_opioid.substance} ({to_opioid.administration_method})."
                 )
         if explain_units and (to_opioid.unit == 'mg/4 hours' or to_opioid.unit == 'mg/4hr'):
-            prompt += "\nNotice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. \nThe equivalent dose over 4 hours should be 1/6 the total dose for 1 day."
+            prompt += "\n\nNotice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. \nThe equivalent dose over 4 hours should be 1/6 the total dose for 1 day."
         
         if ask_for_units and to_opioid is not None:
             prompt += f"\nExpress the response in the format {{'calculated dose': value, 'units': '{to_opioid.unit}'}}. Do not include any additional text in your response, only the dictionary."

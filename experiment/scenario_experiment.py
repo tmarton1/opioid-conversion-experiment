@@ -4,6 +4,7 @@ from common.conversion_service import ConversionService
 from resources.nielson_data import NIELSON_CONVERSIONS
 from experiment.prompt_service import PromptService
 import csv
+import json
 
 class CSVWriteError(Exception):
     """Custom exception for errors when writing to the CSV file."""
@@ -25,6 +26,8 @@ class ScenarioExperiment(Experiment):
             for model in self.models
         ]
         self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
+        with open("resources/vignettes.json", "r") as f:
+            self.vignettes_dict = json.load(f)
 
     def run(self):
         for scenario_conversion, condition, model in self.combinations:
@@ -32,6 +35,8 @@ class ScenarioExperiment(Experiment):
                 scenario_conversion.model = model
                 scenario_conversion.include_nielson = condition["include_nielson"]
                 scenario_conversion.include_examples = condition["include_examples"]
+                scenario_conversion.ask_for_units = condition.get("ask_for_units", False)
+                scenario_conversion.explain_units = condition.get("explain_units", False)
                 scenario_conversion.generate_prompt(self.prompt_service)
 
                 from_opioids_doses = getattr(scenario_conversion, "from_opioids_doses", None)
@@ -51,10 +56,13 @@ class ScenarioExperiment(Experiment):
 
                 try:
                     scenario_conversion.ask_model()
+                    vignette_id = scenario_conversion.vignette_id
+                    scenario_key = self.vignettes_dict.get(vignette_id, {}).get("scenario_key", "")
                     result = {
                         "experiment_id": self.experiment_id,
                         "datetime": datetime.now().isoformat(),
-                        "vignette_id": scenario_conversion.vignette_id,
+                        "vignette_id": vignette_id,
+                        "scenario_key": scenario_key, 
                         "from_opioid": ",".join(from_opioid_names),
                         "from_opioid_unit": ",".join(from_opioid_units),
                         "to_opioid": f"{scenario_conversion.to_opioid.administration_method}_{scenario_conversion.to_opioid.substance}",
@@ -65,6 +73,8 @@ class ScenarioExperiment(Experiment):
                         "prompt": scenario_conversion.prompt,
                         "include_nielson": condition["include_nielson"],
                         "include_examples": condition["include_examples"],
+                        "ask_for_units": scenario_conversion.ask_for_units,
+                        "explain_units": scenario_conversion.explain_units,
                         "observed_to_dose": scenario_conversion.observed_to_dose,
                         "ratio_observed_expected": scenario_conversion.ratio_observed_expected,
                         "response": scenario_conversion.response,
@@ -76,10 +86,10 @@ class ScenarioExperiment(Experiment):
                 
     def add_result_to_csv(self, result, filename="scenario_experiment_results.csv"):
         fieldnames = [
-            "experiment_id", "datetime", "vignette_id", "from_opioid", "from_opioid_unit",
+            "experiment_id", "datetime", "vignette_id", "scenario_key", "from_opioid", "from_opioid_unit",
             "to_opioid", "to_opioid_unit", "from_dose", "expected_to_dose", "model", "prompt",
-            "include_nielson", "include_examples", "observed_to_dose", "ratio_observed_expected",
-            "response", "multiple_from_opioids"
+            "include_nielson", "include_examples", "ask_for_units", "explain_units",
+            "observed_to_dose", "ratio_observed_expected", "response", "multiple_from_opioids"
         ]
         if filename is None:
             filename = self.filename

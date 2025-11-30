@@ -9,7 +9,7 @@
 },
   "v2": {
     "vignette_id": "v2",
-    "vignette_key": "middle-aged-woman-cancer-surgery",
+    "scenario_key": "middle-aged-woman-cancer-surgery",
     "text": "A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone {{pre_dose_6hr}} mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone {{post_oral_dose_4hr}} mg PO every 4 hours and additional hydromorphone {{post_iv_dose_4hr}} mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?",
     "from_opioid": [
       {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_oral_dose}}"},
@@ -31,7 +31,7 @@
   },
   "v3": {
     "vignette_id": "v3",
-    "vignette_key": "middle-aged-woman-cancer-surgery",
+    "scenario_key": "middle-aged-woman-cancer-surgery",
     "text": "Before her recent accident, a 53-year-old woman living with metastatic pancreatic cancer relied on hydromorphone {{pre_dose_6hr}} mg taken every six hours for chronic pain. After a traumatic break of the right humerus and subsequent ORIF, her analgesic needs changed significantly. By the second day after surgery, her pain management consisted of two overlapping schedules: oral hydromorphone {{post_oral_dose_4hr}} mg every four hours and an additional intravenous dose of {{post_iv_dose_4hr}} mg at the same frequency. To design a tapering strategy, translate the entirety of her current hydromorphone intake on postoperative day two into an equivalent all-oral regimen. What oral hydromorphone dose every four hours would match her total present usage?",
     "from_opioid": [
       {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_oral_dose}}"},
@@ -53,7 +53,7 @@
   },
   "v4": {
     "vignette_id": "v4",
-    "vignette_key": "middle-aged-woman-cancer-surgery",
+    "scenario_key": "middle-aged-woman-cancer-surgery",
     "text": "A 61-year-old woman with advanced ovarian carcinoma had been maintained on hydromorphone {{pre_dose_6hr}} mg every six hours for chronic pain. She later developed a severe left femoral injury that required operative repair. On the second day after surgery, her analgesic regimen consisted of hydromorphone {{post_oral_dose_4hr}} mg taken orally every four hours, supplemented by {{post_iv_dose_4hr}} mg of intravenous hydromorphone at the same interval. To prepare for a structured dose-reduction plan, convert the total hydromorphone she is receiving on postoperative day two into an entirely oral schedule. What oral hydromorphone dose should she receive every four hours?",
     "from_opioid": [
       {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_oral_dose}}"},
@@ -75,7 +75,7 @@
   },
   "v5": {
     "vignette_id": "v5",
-    "vignette_key": "middle-aged-woman-cancer-surgery",
+    "scenario_key": "middle-aged-woman-cancer-surgery",
     "text": "A 41-year-old patient with advanced colon cancer had been using hydromorphone {{pre_dose_6hr}} mg every six hours as part of her chronic pain regimen. After she later sustained a severe pelvic injury that ultimately required surgical stabilization, her analgesic needs escalated. On the second day after the procedure, her pain control consisted of hydromorphone {{post_oral_dose_4hr}} mg taken orally every four hours, supplemented with {{post_iv_dose_4hr}} mg administered intravenously at the same interval. To initiate a structured taper, convert the full amount of hydromorphone she is receiving on postoperative day two into an equivalent all-oral schedule. How many milligrams of hydromorphone should she receive by mouth every four hours?",
     "from_opioid": [
       {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_oral_dose}}"},
@@ -97,7 +97,7 @@
   },
   "v6": {
     "vignette_id": "v6",
-    "vignette_key": "pediatric-burn-patient",
+    "scenario_key": "pediatric-burn-patient",
     "text": "A 9 year old child with 30% body surface area burns has been receiving hydromorphone via a PCA pump. The patient used {{dose_4hr}} mg of intravenous hydromorphone over the past 4 hours. The primary burn service would like to switch the patient to oral morphine. Convert the hydromorphone usage into oral morphine in mg/4hr.",
     "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
     "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
@@ -111,7 +111,7 @@
   },
   "v7": {
     "vignette_id": "v7",
-    "vignette_key": "pediatric-burn-patient",
+    "scenario_key": "pediatric-burn-patient",
     "text": "A 7-year-old with extensive partial- and full-thickness burns involving about 28% of total body surface area has been managing pain through a hydromorphone PCA device. In the past 4 hours, the child self-delivered {{dose_4hr}} mg of intravenous hydromorphone. The burn team now plans to convert analgesia to oral morphine. Determine the equivalent oral morphine dose in mg per 4-hour period.",
     "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
     "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
@@ -125,7 +125,7 @@
   },
   "v8": {
     "vignette_id": "v8",
-    "vignette_key": "pediatric-burn-patient",
+    "scenario_key": "pediatric-burn-patient",
     "text": "Pain control for a 10-year-old patient recovering from mixed-depth burns covering roughly one quarter of the body has relied on IV hydromorphone administered via PCA. The most recent 4-hour usage totaled {{dose_4hr}} mg. Because the burn specialists want to move to an oral morphine regimen, calculate the morphine dose—mg every 4 hours—that corresponds to this hydromorphone exposure.",
     "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
     "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
@@ -139,7 +139,7 @@
   },
   "v9": {
     "vignette_id": "v9",
-    "vignette_key": "pediatric-burn-patient",
+    "scenario_key": "pediatric-burn-patient",
     "text": "A child aged 8 with approximately 32% TBSA thermal injury has been using a PCA pump for hydromorphone, receiving {{dose_4hr}} mg IV over the last four hours. As the burn team transitions the patient toward oral analgesics, they request conversion to oral morphine. What is the equivalent morphine dose per 4-hour interval?",
     "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
     "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
