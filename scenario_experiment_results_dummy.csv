@@ -1,0 +1,61 @@
+experiment_id,datetime,vignette_id,from_opioid,from_opioid_unit,to_opioid,to_opioid_unit,from_dose,expected_to_dose,model,prompt,include_nielson,include_examples,observed_to_dose,ratio_observed_expected,response,multiple_from_opioids
+11,2025-11-29T14:08:23.762425,v2,"oral_hydromorphone,iv_hydromorphone","mg/day,mg/day",oral_hydromorphone,mg/4hr,"12,6",5.5,openai/gpt-4.1,"A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone 2.0 mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone 2.0 mg PO every 4 hours and additional hydromorphone 1.0 mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?
+
+Convert the following opioid regimen to an equivalent dose of mg/4hr of hydromorphone (oral):
+- 12.00 mg/day of hydromorphone (oral)
+- 6.00 mg/day of hydromorphone (iv)
+
+How many mg/4hr of hydromorphone (oral) is equivalent?
+
+
+Express the response in the format {'calculated dose': value}. Do not include any additional text in your response, only the dictionary.",False,False,2.5,0.45454545454545453,{'calculated dose': 2.5},True
+11,2025-11-29T14:08:26.006527,v2,"oral_hydromorphone,iv_hydromorphone","mg/day,mg/day",oral_hydromorphone,mg/4hr,"12,6",5.5,openai/gpt-4.1-mini,"A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone 2.0 mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone 2.0 mg PO every 4 hours and additional hydromorphone 1.0 mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?
+
+Convert the following opioid regimen to an equivalent dose of mg/4hr of hydromorphone (oral):
+- 12.00 mg/day of hydromorphone (oral)
+- 6.00 mg/day of hydromorphone (iv)
+
+How many mg/4hr of hydromorphone (oral) is equivalent?
+
+
+Express the response in the format {'calculated dose': value}. Do not include any additional text in your response, only the dictionary.",False,False,3.0,0.5454545454545454,"{""calculated dose"": 3}",True
+11,2025-11-29T14:08:26.393365,v2,"oral_hydromorphone,iv_hydromorphone","mg/day,mg/day",oral_hydromorphone,mg/4hr,"12,6",5.5,openai/gpt-3.5-turbo,"A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone 2.0 mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone 2.0 mg PO every 4 hours and additional hydromorphone 1.0 mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?
+
+Convert the following opioid regimen to an equivalent dose of mg/4hr of hydromorphone (oral):
+- 12.00 mg/day of hydromorphone (oral)
+- 6.00 mg/day of hydromorphone (iv)
+
+How many mg/4hr of hydromorphone (oral) is equivalent?
+
+
+Express the response in the format {'calculated dose': value}. Do not include any additional text in your response, only the dictionary.",False,False,3.0,0.5454545454545454,{'calculated dose': 3.0 mg/4hr},True
+11,2025-11-29T14:08:27.797904,v2,"oral_hydromorphone,iv_hydromorphone","mg/day,mg/day",oral_hydromorphone,mg/4hr,"12,6",5.5,anthropic/claude-3.5-sonnet:20241022,"A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone 2.0 mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone 2.0 mg PO every 4 hours and additional hydromorphone 1.0 mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?
+
+Convert the following opioid regimen to an equivalent dose of mg/4hr of hydromorphone (oral):
+- 12.00 mg/day of hydromorphone (oral)
+- 6.00 mg/day of hydromorphone (iv)
+
+How many mg/4hr of hydromorphone (oral) is equivalent?
+
+
+Express the response in the format {'calculated dose': value}. Do not include any additional text in your response, only the dictionary.",False,False,4.0,0.7272727272727273,{'calculated dose': 4.0},True
+11,2025-11-29T14:08:28.261322,v2,"oral_hydromorphone,iv_hydromorphone","mg/day,mg/day",oral_hydromorphone,mg/4hr,"12,6",5.5,mistralai/mistral-large-2407,"A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone 2.0 mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone 2.0 mg PO every 4 hours and additional hydromorphone 1.0 mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?
+
+Convert the following opioid regimen to an equivalent dose of mg/4hr of hydromorphone (oral):
+- 12.00 mg/day of hydromorphone (oral)
+- 6.00 mg/day of hydromorphone (iv)
+
+How many mg/4hr of hydromorphone (oral) is equivalent?
+
+
+Express the response in the format {'calculated dose': value}. Do not include any additional text in your response, only the dictionary.",False,False,3.0,0.5454545454545454,{'calculated dose': 3.0},True
+11,2025-11-29T14:08:28.736479,v2,"oral_hydromorphone,iv_hydromorphone","mg/day,mg/day",oral_hydromorphone,mg/4hr,"12,6",5.5,mistralai/mixtral-8x22b-instruct,"A 53 year old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone 2.0 mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone 2.0 mg PO every 4 hours and additional hydromorphone 1.0 mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?
+
+Convert the following opioid regimen to an equivalent dose of mg/4hr of hydromorphone (oral):
+- 12.00 mg/day of hydromorphone (oral)
+- 6.00 mg/day of hydromorphone (iv)
+
+How many mg/4hr of hydromorphone (oral) is equivalent?
+
+
+Express the response in the format {'calculated dose': value}. Do not include any additional text in your response, only the dictionary.",False,False,4.5,0.8181818181818182,{'calculated dose': 4.5},True

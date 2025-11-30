@@ -17,6 +17,7 @@ class OpioidPairVisualizer(Visualizer):
     MAX_WEIGHT = 1.0 / EPSILON_FOR_WEIGHT
 
     def __init__(self,
+                 *,
                  experiment_results_csv: str,
                  pair_model_csv: str,
                  consensus_csv: str,

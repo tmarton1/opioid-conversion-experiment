@@ -4,12 +4,16 @@ class ModelBatchMeansBuilder:
     def __init__(self, pair_model_csv="pair_model_analysis.csv"):
         self.df = pd.read_csv(pair_model_csv)
 
-    def filter_df(self, ome, include_nielson):
+    def filter_df(self, ome, include_nielson=None, include_examples=None, explain_units=None):
         df = self.df.copy()
         if ome is not None:
             df = df[df["ome"] == ome]
         if include_nielson is not None:
             df = df[df["include_nielson"] == include_nielson]
+        if include_examples is not None and "include_examples" in df.columns:
+            df = df[df["include_examples"] == include_examples]
+        if explain_units is not None and "explain_units" in df.columns:
+            df = df[df["explain_units"] == explain_units]
         return df
 
     def get_range_col(self, prefix):
@@ -26,7 +30,9 @@ class ModelBatchMeansBuilder:
             batch_name = combo["batch_name"]
             ome = combo.get("ome", None)
             include_nielson = combo.get("include_nielson", None)
-            filtered = self.filter_df(ome, include_nielson)
+            include_examples = combo.get("include_examples", None)
+            explain_units = combo.get("explain_units", None)
+            filtered = self.filter_df(ome, include_nielson, include_examples, explain_units)
             for model in filtered["model"].unique():
                 model_df = filtered[filtered["model"] == model]
                 mean_weight = model_df["weight"].mean()
@@ -37,6 +43,8 @@ class ModelBatchMeansBuilder:
                     "batch_name": batch_name,
                     "ome": ome,
                     "include_nielson": include_nielson,
+                    "include_examples": include_examples,
+                    "explain_units": explain_units,
                     "mean_weight": mean_weight,
                     "mean_in_tight": mean_in_tight,
                     "mean_in_broad": mean_in_broad

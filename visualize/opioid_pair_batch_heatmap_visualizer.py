@@ -6,7 +6,7 @@ from bokeh.models import LinearColorMapper, ColorBar, BasicTicker, PrintfTickFor
 from bokeh.models import ColumnDataSource, HoverTool, Legend, LegendItem
 from bokeh.transform import transform
 from bokeh.palettes import Greys256
-from opioid_pair_batch import OpioidPairBatch
+from analysis.batch import OpioidPairBatch
 from visualize.visualization_config import get_model_order, assign_model_colors, normalize_model_name
 
 
