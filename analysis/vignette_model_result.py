@@ -339,7 +339,7 @@ class VignetteModelConsensus(OpioidPairConsensus):
                 writer.writerow(consensus_dict)
             results_list.append(consensus_dict)
             processed += 1
-            if verbose and processed % 10 == 0:
+            if verbose and processed % 50 == 0:
                 print(f"Processed {processed}/{total} consensus groups...")
         if verbose:
             print(f"Completed! Processed {processed}/{total} consensus groups.")
