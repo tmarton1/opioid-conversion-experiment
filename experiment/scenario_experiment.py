@@ -26,7 +26,7 @@ class ScenarioExperiment(Experiment):
             for model in self.models
         ]
         self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
-        with open("resources/vignettes.json", "r") as f:
+        with open("resources/reworded_vignettes.json", "r") as f:
             self.vignettes_dict = json.load(f)
 
     def run(self):

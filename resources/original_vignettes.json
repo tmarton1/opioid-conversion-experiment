@@ -1,0 +1,282 @@
+{
+  "v2": {
+    "vignette_id": "v2",
+    "scenario_key": "middle-aged-woman-cancer-surgery",
+    "text": "A 53-year-old woman with metastatic pancreatic cancer sustained a traumatic fracture of her right humerus. Prior to the injury, she was taking hydromorphone {{pre_dose_6hr}} mg every 6 hours. She underwent ORIF of her right humerus, and by postoperative day 2, she was taking hydromorphone {{post_oral_dose_4hr}} mg PO every 4 hours and additional hydromorphone {{post_iv_dose_4hr}} mg IV every 4 hours. Convert her total current hydromorphone administration as of postoperative day 2 to entirely PO dosing in order to begin an opioid taper plan.  How many mg/4hr of hydromorphone should she receive orally?",
+    "from_opioid": [
+      {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_oral_dose}}"},
+      {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{post_iv_dose}}"}
+    ],
+    "to_opioid": {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day"},
+    "dose_distribution": {
+      "pre_oral_dose": [8],
+      "post_oral_dose": [12],
+      "post_iv_dose": [6]
+    },
+    "derived_values": {
+        "pre_dose_6hr": "pre_oral_dose/4",
+        "post_oral_dose_4hr": "post_oral_dose/6",
+        "post_iv_dose_4hr": "post_iv_dose/6"
+    },
+    "output_unit": "mg/4hr",
+    "output_conversion": "expected_to_dose/6"
+  },
+  "v6": {
+    "vignette_id": "v6",
+    "scenario_key": "pediatric-burn-patient",
+    "text": "A 9-year-old child with 30% body surface area burns has been receiving hydromorphone via a PCA pump. The patient used {{dose_4hr}} mg of intravenous hydromorphone over the past 4 hours. The primary burn service would like to switch the patient to oral morphine. Convert the hydromorphone usage into oral morphine in mg/4hr.",
+    "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": [12],
+    "dose_placeholder": "{{dose}}",
+    "derived_values": {
+        "dose_4hr": "dose/6"
+    },
+    "output_unit": "mg/4hr",
+    "output_conversion": "expected_to_dose/6"
+  },
+  "v10": {
+    "vignette_id": "v10",
+    "scenario_key": "middle-aged-man-knee-amputation",
+    "text": "A 43-year-old male who is 2 days post a below knee amputation has used {{dose_24hr}} mg hydromorphone via PCA pump over the last 24 hours. Convert this to hydromorphone PO total daily dosing.",
+    "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day"},
+    "dose_distribution": [14.5],
+    "dose_placeholder": "{{dose_24hr}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v14": {
+    "vignette_id": "v14",
+    "scenario_key": "middle-aged-carpenter-amputation",
+    "text": "A 46-year-old carpenter who had a traumatic amputation of left lower extremity has been receiving intravenous fentanyl via PCA pump. Over 24 hours, he has used {{dose_24hr_mg}} mg. Convert this to oral hydromorphone (daily dose) and reduce by 25% for incomplete cross-tolerance.",
+    "from_opioid": {"administration_method": "iv", "substance": "fentanyl", "unit": "mcg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day"},
+    "dose_distribution": [2000],
+    "dose_placeholder": "{{dose_mcg}}",
+    "derived_values": {
+        "dose_24hr_mg": "dose_mcg / 1000"
+    },
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose * 0.75"
+  },
+  "v18": {
+    "vignette_id": "v18",
+    "scenario_key": "middle-aged-ankle-replacement",
+    "text": "A 43-year-old man underwent a total ankle replacement. On postoperative day 2, he used a morphine PCA with {{demand_dose_15min}} mg demand doses every 15 min, for a 24 hour total of {{dose_24hr}} mg. The primary team plans to transition to oxycodone. Convert the 24 hour IV morphine dose to an equivalent 24 hour total oxycodone dose.",
+    "from_opioid": {"administration_method": "iv", "substance": "morphine", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "oxycodone", "unit": "mg/day"},
+    "dose_distribution": {
+      "dose_24hr": [25],
+      "demand_dose_15min": [1]
+    },
+    "dose_placeholder": "{{dose_24hr}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v22": {
+    "vignette_id": "v22",
+    "scenario_key": "teen-pelvic-fracture",
+    "text": "An 18-year-old man with a pelvic fracture underwent closed reduction and percutaneous fixation and used a hydromorphone intravenous PCA and nursing boluses for breakthrough pain. His total 24-hour amount was {{dose_24hr}} hydromorphone IV. Convert this to a 24-hour PO hydrocodone equivalent.",
+    "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "hydrocodone", "unit": "mg/day"},
+    "dose_distribution": [12],
+    "dose_placeholder": "{{dose_24hr}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v26": {
+    "vignette_id": "v26",
+    "scenario_key": "elderly-hip-replacement",
+    "text": "A 57-year-old female with a history of persistent spinal pain syndrome after a lumbar fusion has been using oral morphine up to {{dose}} daily. Her pharmacy will no longer carry this medication. Convert her daily dose to oxycodone and reduce by 20% for incomplete cross-tolerance.",
+    "from_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "oxycodone", "unit": "mg/day"},
+    "dose_distribution": [150],
+    "dose_placeholder": "{{dose}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose * 0.8"
+  },
+  "v30": {
+    "vignette_id": "v30",
+    "scenario_key": "middle-aged-female-shoulder-pain",
+    "text": "A 53-year-old female with chronic bilateral shoulder pain takes tramadol {{dose_12hr}} mg twice daily and is admitted for atrial fibrillation ablation. Tramadol is not on the hospital formulary. Convert her oral tramadol daily dose to oral oxycodone.",
+    "from_opioid": {"administration_method": "oral", "substance": "tramadol", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "oxycodone", "unit": "mg/day"},
+    "dose_distribution": [200],
+    "dose_placeholder": "{{dose}}",
+    "derived_values": {
+        "dose_12hr": "dose / 2"
+    },
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v34": {
+    "vignette_id": "v34",
+    "scenario_key": "middle-aged-ankle-surgery",
+    "text": "A 47-year-old female with a history of persistent postsurgical pain after an ankle surgery has been using oral morphine up to {{dose}} mg daily. Her pharmacy will no longer carry this medication. Convert her daily dose to hydrocodone and reduce by 50% for incomplete cross-tolerance.",
+    "from_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "hydrocodone", "unit": "mg/day"},
+    "dose_distribution": [180],
+    "dose_placeholder": "{{dose}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose * 0.5"
+  },
+  "v38": {
+    "vignette_id": "v38",
+    "scenario_key": "elderly-hip-fracture",
+    "text": "A 32-year-old male with multiple rib fractures following a scooter accident is taking {{dose_4hr}} mg oxycodone every 4 hours (for a total of {{dose_24hr}} mg daily). Considering incomplete cross tolerance and accounting for a 25% dose reduction, convert the total daily dose of oxycodone to a daily dose of oral hydromorphone.",
+    "from_opioid": {"administration_method": "oral", "substance": "oxycodone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day"},
+    "dose_distribution": {
+      "dose_24hr": [120]
+    },
+    "dose_placeholder": "{{dose_24hr}}",
+    "derived_values": {
+        "dose_4hr": "dose_24hr/6"
+    },
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose * 0.75"
+    },
+  "v42": {
+    "vignette_id": "v42",
+    "scenario_key": "elderly-female-pancreatic-carcinoma",
+    "text": "A 73-year-old female with metastatic pancreatic carcinoma has been receiving oral morphine in the hospice setting, requiring about {{dose}} mg orally, daily. She has begun having difficulty with oral medications. How much intravenous morphine would have to administered over the course of the day?",
+    "from_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "iv", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": [300],
+    "dose_placeholder": "{{dose}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v46": {
+    "vignette_id": "v46",
+    "scenario_key": "elderly-female-chronic-bowel-obstruction",
+    "text": "A 62-year-old female with chronic small bowel obstructions also takes {{dose}} mg methadone PO daily for opioid use disorder and develops a recurrent small bowel obstruction initially managed conservatively with a nasogastric tube for decompression. Convert her oral methadone dose to equivalent intravenous methadone dosing (total daily dose).",
+    "from_opioid": {"administration_method": "oral", "substance": "methadone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "iv", "substance": "methadone", "unit": "mg/day"},
+    "dose_distribution": [130],
+    "dose_placeholder": "{{dose}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v50": {
+    "vignette_id": "v50",
+    "scenario_key": "elderly-male-abdominal-surgery",
+    "text": "After a major abdominal surgery, a 58-year-old male has been noted to have QT prolongation on electrocardiogram. He takes a total dose of {{dose}} mg of methadone daily, in divided doses for pain. How much oral morphine would this patient require daily to cover the methadone use?",
+    "from_opioid": {"administration_method": "oral", "substance": "methadone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": [30],
+    "dose_placeholder": "{{dose}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v54": {
+    "vignette_id": "v54",
+    "scenario_key": "middle-aged-man-chronic-back-pain",
+    "text": "A 62-year-old man with severe osteoarthritis takes hydrocodone-acetaminophen {{hydrocodoe_dose_4hr}}/{{acetaminophen_dose}} mg six times daily. He is admitted following a ground level fall and sustaining a right hip fracture. How much oral morphine would be needed to account for his normal daily opioid intake?",
+    "from_opioid": {"administration_method": "oral", "substance": "hydrocodone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": {
+      "hydrocodoe_dose": [60],
+      "acetaminophen_dose": [325]
+    },
+    "dose_placeholder": "{{hydrocodoe_dose}}",
+    "derived_values": {
+        "hydrocodoe_dose_4hr": "hydrocodoe_dose/6"
+    },
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v58": {
+    "vignette_id": "v58",
+    "scenario_key": "elderly-female-renal-colic",
+    "text": "A 60-year-old female presented with renal colic and has required {{dose_iv_morphine}} mg of IV morphine, followed by {{dose_iv_hydromorphone}} mg IV hydromorphone, which demonstrated better analgesic effect, in total over a 24-hour period. Calculate her 24 total oral morphine equivalent.",
+    "from_opioid": [
+      {"administration_method": "iv", "substance": "morphine", "unit": "mg/day", "dose_placeholder": "{{dose_iv_morphine}}"},
+      {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day", "dose_placeholder": "{{dose_iv_hydromorphone}}"}
+    ],
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": {
+      "dose_iv_morphine": [6],
+      "dose_iv_hydromorphone": [8]
+    },
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v62": {
+    "vignette_id": "v62",
+    "scenario_key": "elderly-female-bunionectomy",
+    "text": "Following bunionectomy, a 63-year-old female has taken tramadol {{dose_4hr}} mg every 4 hours (assume {{dose_24hr}} mg total) during the first postoperative day. What amount of daily oral morphine would be needed to account for her total opioid use?",
+    "from_opioid": {"administration_method": "oral", "substance": "tramadol", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": {
+      "dose_24hr": [300]
+    },
+    "dose_placeholder": "{{dose_24hr}}",
+    "derived_values": {
+        "dose_4hr": "dose_24hr/6"
+    },
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose" 
+  },
+  "v66": {
+    "vignette_id": "v66",
+    "scenario_key": "young-man-car-accident",
+    "text": "A 20-year-old male in a motor vehicle accident has been brought to the trauma ward. Pain was previously controlled with a fentanyl intravenous PCA pump, {{individual_dose_mcg}} mcg (micrograms) per dose. He has been using an average of {{total_dose_mg}} mg of fentanyl a day, intravenously. Convert this to oral morphine equivalents for the 24-hour period.",
+    "from_opioid": {"administration_method": "iv", "substance": "fentanyl", "unit": "mcg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": {
+      "individual_dose_mcg": [20],
+      "total_dose_mcg": [1000]
+    },
+    "derived_values": {
+        "total_dose_mg": "total_dose_mcg / 1000"
+    },
+    "dose_placeholder": "{{total_dose_mcg}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v70": {
+    "vignette_id": "v70",
+    "scenario_key": "young-adult-sickle-cell-crisis",
+    "text": "A 29-year-old female with acute sickle cell crisis has used a total of {{dose}} mg of IV hydromorphone total over the last 24 hours between PCA dosing and nursing administered boluses. The primary team intends to transition to oral opioids. Convert the total hydromorphone dose to oral morphine.",
+    "from_opioid": {"administration_method": "iv", "substance": "hydromorphone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": [16],
+    "dose_placeholder": "{{dose}}",
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v74": {
+    "vignette_id": "v74",
+    "scenario_key": "adult-male-dog-bite",
+    "text": "A 35-year-old male with a dog bite to his left forearm has received {{dose_16hr}} mg morphine IV over the last 16 hours. Convert the total IV morphine dose to a daily oral morphine dose.",
+    "from_opioid": {"administration_method": "iv", "substance": "morphine", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "oral", "substance": "morphine", "unit": "mg/day"},
+    "dose_distribution": {
+      "dose_24hr": [30]
+    },
+    "dose_placeholder": "{{dose_24hr}}",
+    "derived_values": {
+        "dose_16hr": "dose_24hr / 24 * 16"
+    },
+    "output_unit": "mg/day",
+    "output_conversion": "expected_to_dose"
+  },
+  "v78": {
+    "vignette_id": "v78",
+    "scenario_key": "middle-aged-female-cancer",
+    "text": "A 56-year-old female with metastatic breast cancer and chronic pain is taking {{dose_4hr}} mg PO hydromorphone 6 times per day (assume {{dose_24hr}} mg over the day). Convert her total daily dose to transdermal fentanyl patch dosing.",
+    "from_opioid": {"administration_method": "oral", "substance": "hydromorphone", "unit": "mg/day"},
+    "to_opioid": {"administration_method": "transdermal", "substance": "fentanyl", "unit": "mcg/hr"},
+    "dose_distribution": {
+      "dose_24hr": [24]
+    },
+    "dose_placeholder": "{{dose_24hr}}",
+    "derived_values": {
+        "dose_4hr": "dose_24hr / 6"
+    },
+    "output_unit": "mcg/hr",
+    "output_conversion": "expected_to_dose"
+  }
+}

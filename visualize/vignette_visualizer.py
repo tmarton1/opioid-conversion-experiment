@@ -36,7 +36,7 @@ class VignetteVisualizer(Visualizer):
     
     def _get_vignette_text(self, vignette_id, num_chars=70):
         # Load vignettes.json once (consider caching if called repeatedly)
-        with open("vignettes.json", "r") as f:
+        with open("resources/reworded_vignettes.json", "r") as f:
             vignettes = json.load(f)
         text = vignettes[vignette_id]["text"]
         title = text[:num_chars]
@@ -162,7 +162,7 @@ class VignetteVisualizer(Visualizer):
         """
         Create a CDF plot for model-level doses.
         """
-        with open("vignettes.json", "r") as f:
+        with open("resources/reworded_vignettes.json", "r") as f:
             vignettes = json.load(f)
         vignette_info = vignettes[self.vignette_id]
         scenario_key = vignette_info.get("scenario_key", self.vignette_id)
