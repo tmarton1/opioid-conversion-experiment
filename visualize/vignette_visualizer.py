@@ -47,10 +47,17 @@ class VignetteVisualizer(Visualizer):
     def _prompt_conditions_label(self) -> str:
         inc_n = self.prompt_conditions.get("include_nielson", False)
         inc_ex = self.prompt_conditions.get("include_examples", False)
-        return (
-            f"(Nielson: {'yes' if inc_n else 'no'}, "
-            f"Examples: {'yes' if inc_ex else 'no'})"
-        )
+        ask_units = self.prompt_conditions.get("ask_for_units", False)
+        explain_units = self.prompt_conditions.get("explain_units", False)
+        
+        parts = [
+            f"Nielson: {'yes' if inc_n else 'no'}",
+            f"Examples: {'yes' if inc_ex else 'no'}",
+            f"Ask for units: {'yes' if ask_units else 'no'}",
+            f"Explain units: {'yes' if explain_units else 'no'}"
+        ]
+        
+        return f"({', '.join(parts)})"
     
     def _create_beeswarm_subplot(self, width, height):
         """
@@ -183,8 +190,8 @@ class VignetteVisualizer(Visualizer):
         to_opioid_str = to_opioid.to_str()
         prompt_label = self._prompt_conditions_label()
 
-        # Three-line title
-        title = f"{scenario_key}\n{from_opioid_str} → {to_opioid_str}\n{vignette_text}\n{prompt_label}"
+        # Four-line title with vignette_id
+        title = f"{self.vignette_id} - {scenario_key}\n{from_opioid_str} → {to_opioid_str}\n{vignette_text}\n{prompt_label}"
         x_axis_label = f"Dose ({self.to_unit})" if self.to_unit else "Dose"
         p = figure(
             width=width,

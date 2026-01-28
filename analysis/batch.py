@@ -16,6 +16,8 @@ class PairPromptKey:
     include_nielson: bool
     include_examples: bool
     ome: Optional[bool] = None
+    ask_for_units: Optional[bool] = None
+    explain_units: Optional[bool] = None
 
     @property
     def pair_name(self) -> str:
@@ -27,6 +29,8 @@ class VignettePromptKey:
     include_nielson: bool
     include_examples: bool
     ome: Optional[bool] = None
+    ask_for_units: Optional[bool] = None
+    explain_units: Optional[bool] = None
 
 # ------------------- Base Batch class -------------------
 
@@ -260,7 +264,7 @@ class Batch:
 # ------------------- OpioidPairBatch -------------------
 
 class OpioidPairBatch(Batch):
-    group_cols = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "ome"]
+    group_cols = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "ome", "ask_for_units", "explain_units"]
     key_type = PairPromptKey
     item_id_col = "pair_name"
     default_model_csv_attr = "pair_model_csv"
@@ -405,7 +409,7 @@ class OpioidPairBatch(Batch):
 # ------------------- VignetteBatch -------------------
 
 class VignetteBatch(Batch):
-    group_cols = ["vignette_id", "include_nielson", "include_examples", "ome"]
+    group_cols = ["vignette_id", "include_nielson", "include_examples", "ome", "ask_for_units", "explain_units"]
     key_type = VignettePromptKey
     item_id_col = "vignette_id"
     default_model_csv_attr = "vignette_model_csv"  # <-- Add this line

@@ -25,7 +25,7 @@ class ScenarioModelResult:
         weights = group_df["weight"].astype(float)
         log_means = group_df["observed_log_dose_mean"].astype(float)
         log_stds = group_df["observed_log_dose_std"].astype(float)
-        n_obs = group_df["n_observations"].astype(float)
+        n_obs_unfiltered = group_df["n_observations"].astype(float)
 
         valid = np.isfinite(weights) & np.isfinite(log_means)
         if not valid.any() or weights[valid].sum() <= 0:
@@ -44,7 +44,7 @@ class ScenarioModelResult:
         weights = weights[valid]
         log_means = log_means[valid]
         log_stds = log_stds[valid]
-        n_obs = n_obs[valid]
+        n_obs = n_obs_unfiltered[valid]
 
         expected_to_dose = (
             group_df["expected_to_dose"].iloc[0]
@@ -97,13 +97,13 @@ class ScenarioModelResult:
 
         if tight_col is not None:
             tight_vals = group_df[tight_col].astype(float).values
-            tight_mean = np.average(tight_vals, weights=n_obs)
+            tight_mean = np.average(tight_vals, weights=n_obs_unfiltered)
         else:
             tight_mean = np.nan
 
         if broad_col is not None:
             broad_vals = group_df[broad_col].astype(float).values
-            broad_mean = np.average(broad_vals, weights=n_obs)
+            broad_mean = np.average(broad_vals, weights=n_obs_unfiltered)
         else:
             broad_mean = np.nan
 
