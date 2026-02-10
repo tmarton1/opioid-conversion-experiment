@@ -114,6 +114,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
             self.output_dose = self.expected_to_dose
 
     def generate_prompt(self, prompt_service: PromptService):
+        vignette_text = self.vignette_text or None
         if hasattr(self, "from_opioids_doses") and self.from_opioids_doses:
             self.prompt = prompt_service.generate_prompt(
                 from_opioids_doses=self.from_opioids_doses,
@@ -122,7 +123,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 include_examples=self.include_examples,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units,
-                vignette_text=self.vignette_text
+                vignette_text=vignette_text
             )
         else:
             self.prompt = prompt_service.generate_prompt(
@@ -133,6 +134,6 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 include_examples=self.include_examples,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units,
-                vignette_text=self.vignette_text
+                vignette_text=vignette_text
             )
         return self.prompt

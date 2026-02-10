@@ -31,6 +31,7 @@ class ScenarioExperiment(Experiment):
 
     def run(self):
         for scenario_conversion, condition, model in self.combinations:
+
             for _ in range(self.repetitions):
                 scenario_conversion.model = model
                 scenario_conversion.include_nielson = condition["include_nielson"]
@@ -75,6 +76,7 @@ class ScenarioExperiment(Experiment):
                         "include_examples": condition["include_examples"],
                         "ask_for_units": scenario_conversion.ask_for_units,
                         "explain_units": scenario_conversion.explain_units,
+                        "has_vignette_text": self.vignettes_dict.get(vignette_id, {}).get("has_vignette_text", True),
                         "observed_to_dose": scenario_conversion.observed_to_dose,
                         "ratio_observed_expected": scenario_conversion.ratio_observed_expected,
                         "response": scenario_conversion.response,
@@ -88,7 +90,7 @@ class ScenarioExperiment(Experiment):
         fieldnames = [
             "experiment_id", "datetime", "vignette_id", "scenario_key", "from_opioid", "from_opioid_unit",
             "to_opioid", "to_opioid_unit", "from_dose", "expected_to_dose", "model", "prompt",
-            "include_nielson", "include_examples", "ask_for_units", "explain_units",
+            "include_nielson", "include_examples", "ask_for_units", "explain_units", "has_vignette_text",
             "observed_to_dose", "ratio_observed_expected", "response", "multiple_from_opioids"
         ]
         if filename is None:
