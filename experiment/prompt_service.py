@@ -39,6 +39,7 @@ class PromptedOpioidConversion:
     @classmethod
     def initialize_client(cls):
         """Initialize all API clients once at the class level."""
+        load_dotenv()
         # OpenAI direct client
         openai_key = os.getenv("OPENAI_API_KEY")
         if openai_key:
