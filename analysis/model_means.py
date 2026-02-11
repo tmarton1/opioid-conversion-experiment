@@ -4,7 +4,7 @@ class ModelBatchMeansBuilder:
     def __init__(self, pair_model_csv="pair_model_analysis.csv"):
         self.df = pd.read_csv(pair_model_csv)
 
-    def filter_df(self, ome, include_nielson=None, include_examples=None, explain_units=None):
+    def filter_df(self, ome, include_nielson=None, include_examples=None, explain_units=None, has_vignette_text=None):
         df = self.df.copy()
         if ome is not None:
             df = df[df["ome"] == ome]
@@ -14,6 +14,8 @@ class ModelBatchMeansBuilder:
             df = df[df["include_examples"] == include_examples]
         if explain_units is not None and "explain_units" in df.columns:
             df = df[df["explain_units"] == explain_units]
+        if has_vignette_text is not None and "has_vignette_text" in df.columns:
+            df = df[df["has_vignette_text"] == has_vignette_text]
         return df
 
     def get_range_col(self, prefix):
@@ -32,7 +34,8 @@ class ModelBatchMeansBuilder:
             include_nielson = combo.get("include_nielson", None)
             include_examples = combo.get("include_examples", None)
             explain_units = combo.get("explain_units", None)
-            filtered = self.filter_df(ome, include_nielson, include_examples, explain_units)
+            has_vignette_text = combo.get("has_vignette_text", None)
+            filtered = self.filter_df(ome, include_nielson, include_examples, explain_units, has_vignette_text)
             for model in filtered["model"].unique():
                 model_df = filtered[filtered["model"] == model]
                 mean_weight = model_df["weight"].mean()
@@ -45,6 +48,7 @@ class ModelBatchMeansBuilder:
                     "include_nielson": include_nielson,
                     "include_examples": include_examples,
                     "explain_units": explain_units,
+                    "has_vignette_text": has_vignette_text,
                     "mean_weight": mean_weight,
                     "mean_in_tight": mean_in_tight,
                     "mean_in_broad": mean_in_broad

@@ -23,7 +23,8 @@ class VignetteModelResult:
                  ome: bool,
                  model: str,
                  prompt_conditions: Dict[str, bool],
-                 results_df: pd.DataFrame):
+                 results_df: pd.DataFrame,
+                 has_vignette_text: bool = True):
         self.vignette_id = vignette_id
         self.scenario_key = scenario_key
         self.from_opioid = from_opioid
@@ -32,6 +33,7 @@ class VignetteModelResult:
         self.to_opioid_unit = to_opioid_unit
         self.multiple_from_opioids = multiple_from_opioids
         self.ome = ome
+        self.has_vignette_text = has_vignette_text
         self.model = model
         self.prompt_conditions = prompt_conditions
         self.results_df = results_df
@@ -92,6 +94,7 @@ class VignetteModelResult:
             'to_opioid_unit': self.to_opioid_unit,
             'multiple_from_opioids': self.multiple_from_opioids,
             'ome': self.ome,
+            'has_vignette_text': self.has_vignette_text,
             'model': self.model,
             'include_nielson': self.prompt_conditions.get('include_nielson', False),
             'include_examples': self.prompt_conditions.get('include_examples', False),
@@ -192,7 +195,7 @@ class VignetteModelResult:
     def process_all_combinations(cls, csv_file: str, output_file: str, verbose: bool = True):
         df = pd.read_csv(csv_file)
         groups = df.groupby([
-            'vignette_id', 'scenario_key', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit','multiple_from_opioids', 'ome',
+            'vignette_id', 'scenario_key', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit','multiple_from_opioids', 'ome', 'has_vignette_text',
             'model', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
         ])
         total = len(groups)
@@ -201,7 +204,7 @@ class VignetteModelResult:
         output_path = Path(output_file)
         if output_path.exists():
             output_path.unlink()
-        for (vignette_id, scenario_key, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, multiple_from_opioids, ome,
+        for (vignette_id, scenario_key, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, multiple_from_opioids, ome, has_vignette_text,
              model, include_nielson, include_examples, ask_for_units, explain_units), group_df in groups:
             prompt_conditions = {
                 'include_nielson': include_nielson,
@@ -218,6 +221,7 @@ class VignetteModelResult:
                 to_opioid_unit=to_opioid_unit,
                 multiple_from_opioids=multiple_from_opioids,
                 ome=ome,
+                has_vignette_text=has_vignette_text,
                 model=model,
                 prompt_conditions=prompt_conditions,
                 results_df=group_df
@@ -302,7 +306,7 @@ class VignetteModelConsensus(OpioidPairConsensus):
         df = pd.read_csv(csv_file)
         groups = df.groupby([
             'vignette_id', 'scenario_key', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit',
-            'multiple_from_opioids', 'ome', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
+            'multiple_from_opioids', 'ome', 'has_vignette_text', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
         ])
         total = len(groups)
         processed = 0
@@ -312,7 +316,7 @@ class VignetteModelConsensus(OpioidPairConsensus):
             output_path.unlink()
         for keys, group_df in groups:
             (vignette_id, scenario_key, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit,
-             multiple_from_opioids, ome, include_nielson, include_examples, ask_for_units, explain_units) = keys
+             multiple_from_opioids, ome, has_vignette_text, include_nielson, include_examples, ask_for_units, explain_units) = keys
 
             stats_dict = cls.calculate_consensus_stats(group_df)
 
@@ -325,6 +329,7 @@ class VignetteModelConsensus(OpioidPairConsensus):
                 'to_opioid_unit': to_opioid_unit,
                 'multiple_from_opioids': multiple_from_opioids,
                 'ome': ome,
+                'has_vignette_text': has_vignette_text,
                 'include_nielson': include_nielson,
                 'include_examples': include_examples,
                 'ask_for_units': ask_for_units,

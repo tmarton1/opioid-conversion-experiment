@@ -164,6 +164,114 @@ class OpioidModelComparisonBarVisualizer:
 
         return p
 
+    def plot_paired(self, pair_specs, title="Model Comparison", width=900, height=400, bar_width_ratio=0.7):
+        """
+        Plot with paired bars (e.g. empty vs text) grouped by condition with spacing between pairs.
+
+        pair_specs: list of (group_label, bar1_label, bar2_label, batch_name_1, batch_name_2)
+            Each tuple defines a pair of bars per model.
+        """
+        batch_map = dict(zip(self.batch_names, self.data))
+        models = self.data[0]["model"].tolist()
+        ordered_models = get_model_order(models)
+        model_colors = {m: MODEL_COLOR_DICT.get(m, "#1f77b4") for m in ordered_models}
+        clean_map = {m: m.split('/')[-1] if '/' in m else m for m in ordered_models}
+        clean_names = [clean_map[m] for m in ordered_models]
+
+        # Build 3-level factors: (model, group, bar_label)
+        x_factors = []
+        for clean_name in clean_names:
+            for group_label, bar1_label, bar2_label, _, _ in pair_specs:
+                x_factors.append((clean_name, group_label, bar1_label))
+                x_factors.append((clean_name, group_label, bar2_label))
+
+        p = figure(
+            width=width, height=height,
+            x_range=FactorRange(*x_factors),
+            y_range=(0, 1.05),
+            toolbar_location=None,
+            title=title,
+        )
+
+        bar_data = {
+            "x": [], "top": [], "bottom": [], "broad": [],
+            "broad_top": [], "model": [], "batch": [], "color": [],
+        }
+        for group_label, bar1_label, bar2_label, batch1, batch2 in pair_specs:
+            for batch_name, bar_label in [(batch1, bar1_label), (batch2, bar2_label)]:
+                batch_df = batch_map[batch_name].set_index("model").reindex(ordered_models).reset_index()
+                for _, row in batch_df.iterrows():
+                    model_full = row["model"]
+                    clean_name = clean_map[model_full]
+                    tight = row["mean_in_tight"]
+                    broad = row["mean_in_broad"]
+                    bar_data["x"].append((clean_name, group_label, bar_label))
+                    bar_data["top"].append(tight)
+                    bar_data["bottom"].append(0)
+                    bar_data["broad"].append(broad - tight)
+                    bar_data["broad_top"].append(broad)
+                    bar_data["model"].append(clean_name)
+                    bar_data["batch"].append(bar_label)
+                    bar_data["color"].append(model_colors.get(model_full, "#1f77b4"))
+
+        source = ColumnDataSource(bar_data)
+        n_bars = len(pair_specs) * 2
+        bar_width = bar_width_ratio / n_bars
+
+        tight_bars = p.vbar(x='x', top='top', width=bar_width, color='color', alpha=0.9, source=source)
+        broad_bars = p.vbar(x='x', top='broad_top', bottom='top', width=bar_width, color='color', alpha=0.3, source=source)
+
+        hover_tight = HoverTool(
+            tooltips=[('Model', '@model'), ('Condition', '@batch'),
+                      (f'Tight ({TIGHT_RANGE_LOWER:.0%}–{TIGHT_RANGE_UPPER:.0%})', '@top{0.0%}')],
+            renderers=[tight_bars],
+        )
+        hover_broad = HoverTool(
+            tooltips=[('Model', '@model'), ('Condition', '@batch'),
+                      (f'Broad ({BROAD_RANGE_LOWER:.0%}–{BROAD_RANGE_UPPER:.0%})', '@broad_top{0.0%}')],
+            renderers=[broad_bars],
+        )
+        p.add_tools(hover_tight, hover_broad)
+
+        # Hide group / subgroup text labels; show only innermost bar labels
+        p.xaxis.group_text_font_size = "0pt"
+        p.xaxis.subgroup_text_font_size = "0pt"
+        p.xaxis.major_label_orientation = 1.0
+        p.xaxis.major_label_text_font_size = "7pt"
+        p.xaxis.major_tick_line_color = None
+        p.xaxis.minor_tick_line_color = None
+        p.xaxis.separator_line_color = None
+        p.xgrid.visible = False
+        p.yaxis.axis_label = "Mean Proportion within Range"
+
+        # Legend
+        first_factor = x_factors[0]
+        legend_source = ColumnDataSource(dict(x=[first_factor], top=[0]))
+        tight_dummy = p.vbar(x='x', top='top', width=0.2, color='black', alpha=0.9, source=legend_source, visible=True)
+        broad_dummy = p.vbar(x='x', top='top', width=0.2, color='black', alpha=0.3, source=legend_source, visible=True)
+        legend = Legend(items=[
+            LegendItem(label=f"Tight ({TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)", renderers=[tight_dummy]),
+            LegendItem(label=f"Broad ({BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)", renderers=[broad_dummy]),
+        ])
+        p.add_layout(legend, 'right')
+        p.legend.label_text_font_size = "7pt"
+
+        # Model name labels (rotated, above the first pair for each model)
+        first_group = pair_specs[0]
+        label_source = ColumnDataSource(dict(
+            x=[(name, first_group[0], first_group[1]) for name in clean_names],
+            y=[0.6] * len(clean_names),
+            text=clean_names,
+        ))
+        model_labels = LabelSet(
+            x='x', y='y', text='text', source=label_source,
+            text_font_size="7pt", text_align="left", text_baseline="bottom",
+            angle=np.pi / 2, x_offset=5,
+        )
+        p.add_layout(model_labels)
+
+        return p
+
 
 class ModelComparisonFigureBuilder:
     def __init__(self, batch_means_csv="model_batch_means.csv", batch_label_dict=None):

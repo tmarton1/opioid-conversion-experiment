@@ -38,7 +38,7 @@ class ScenarioModelResult:
                 "observed_log_dose_between_cv": np.nan,
                 "effective_n_vignettes": np.nan,
                 "n_vignettes": len(group_df),
-                "total_observations": n_obs.sum(),
+                "total_observations": n_obs_unfiltered.sum(),
             }
 
         weights = weights[valid]
@@ -146,6 +146,7 @@ class ScenarioModelResult:
             "to_opioid_unit",
             "multiple_from_opioids",
             "ome",
+            "has_vignette_text",
             "model",
             "include_nielson",
             "include_examples",
@@ -170,6 +171,7 @@ class ScenarioModelResult:
                 to_opioid_unit,
                 multiple_from_opioids,
                 ome,
+                has_vignette_text,
                 model,
                 include_nielson,
                 include_examples,
@@ -187,6 +189,7 @@ class ScenarioModelResult:
                 "to_opioid_unit": to_opioid_unit,
                 "multiple_from_opioids": multiple_from_opioids,
                 "ome": ome,
+                "has_vignette_text": has_vignette_text,
                 "model": model,
                 "include_nielson": include_nielson,
                 "include_examples": include_examples,

@@ -4,6 +4,13 @@ from visualize.visualization_config import get_model_order, normalize_model_name
 import numpy as np
 import pandas as pd
 import warnings
+import re
+
+def _natural_sort_key(s):
+    """Convert a string to a tuple of str/int parts for natural sorting.
+    E.g. 'v10' -> ('v', 10), so 'v2' < 'v10'."""
+    return tuple(int(part) if part.isdigit() else part.lower()
+                 for part in re.split(r'(\d+)', str(s)))
 
 # ------------------- Key dataclasses -------------------
 
@@ -31,6 +38,8 @@ class VignettePromptKey:
     ome: Optional[bool] = None
     ask_for_units: Optional[bool] = None
     explain_units: Optional[bool] = None
+    scenario_key: Optional[str] = None
+    has_vignette_text: Optional[bool] = None
 
 # ------------------- Base Batch class -------------------
 
@@ -237,12 +246,23 @@ class Batch:
                         mask &= combos[col] == val
                 mask_total |= mask
             combos = combos[mask_total]
-        if order_by and order_by in combos.columns:
-            combos = combos.sort_values(order_by)
-        elif order_by and order_by == "opioid_pair" and "from_opioid" in combos.columns and "to_opioid" in combos.columns:
-            combos = combos.assign(
-                opioid_pair=lambda d: d["from_opioid"] + " -> " + d["to_opioid"]
-            ).sort_values("opioid_pair")
+        if order_by:
+            if isinstance(order_by, (list, tuple)):
+                sort_cols = [c for c in order_by if c in combos.columns]
+                if sort_cols:
+                    sort_key_cols = []
+                    for col in sort_cols:
+                        key_col = f"_sort_{col}"
+                        combos[key_col] = combos[col].map(lambda x: _natural_sort_key(x) if isinstance(x, str) else (x,))
+                        sort_key_cols.append(key_col)
+                    combos = combos.sort_values(sort_key_cols).drop(columns=sort_key_cols)
+            elif order_by in combos.columns:
+                combos["_sort_key"] = combos[order_by].map(lambda x: _natural_sort_key(x) if isinstance(x, str) else (x,))
+                combos = combos.sort_values("_sort_key").drop(columns=["_sort_key"])
+            elif order_by == "opioid_pair" and "from_opioid" in combos.columns and "to_opioid" in combos.columns:
+                combos = combos.assign(
+                    opioid_pair=lambda d: d["from_opioid"] + " -> " + d["to_opioid"]
+                ).sort_values("opioid_pair")
         if len(combos) == 0:
             raise ValueError(f"No combinations found for filter_specs={filter_specs}")
         keys = []
@@ -250,6 +270,10 @@ class Batch:
             key_args = {col: row[col] for col in group_cols if col in row.index}
             if 'ome' in row.index:
                 key_args['ome'] = row['ome'] if pd.notna(row['ome']) else None
+            if 'scenario_key' in row.index:
+                key_args['scenario_key'] = row['scenario_key'] if pd.notna(row['scenario_key']) else None
+            if 'has_vignette_text' in row.index:
+                key_args['has_vignette_text'] = bool(row['has_vignette_text']) if pd.notna(row['has_vignette_text']) else None
             keys.append(cls.key_type(**key_args))
         batch = cls(
             experiment_results_csv=experiment_results_csv,
@@ -382,12 +406,23 @@ class OpioidPairBatch(Batch):
         # Exclude self-pairs if requested
         if exclude_self_pairs_flag:
             combos = combos[combos["from_opioid"] != combos["to_opioid"]]
-        if order_by and order_by in combos.columns:
-            combos = combos.sort_values(order_by)
-        elif order_by and order_by == "opioid_pair" and "from_opioid" in combos.columns and "to_opioid" in combos.columns:
-            combos = combos.assign(
-                opioid_pair=lambda d: d["from_opioid"] + " -> " + d["to_opioid"]
-            ).sort_values("opioid_pair")
+        if order_by:
+            if isinstance(order_by, (list, tuple)):
+                sort_cols = [c for c in order_by if c in combos.columns]
+                if sort_cols:
+                    sort_key_cols = []
+                    for col in sort_cols:
+                        key_col = f"_sort_{col}"
+                        combos[key_col] = combos[col].map(lambda x: _natural_sort_key(x) if isinstance(x, str) else (x,))
+                        sort_key_cols.append(key_col)
+                    combos = combos.sort_values(sort_key_cols).drop(columns=sort_key_cols)
+            elif order_by in combos.columns:
+                combos["_sort_key"] = combos[order_by].map(lambda x: _natural_sort_key(x) if isinstance(x, str) else (x,))
+                combos = combos.sort_values("_sort_key").drop(columns=["_sort_key"])
+            elif order_by == "opioid_pair" and "from_opioid" in combos.columns and "to_opioid" in combos.columns:
+                combos = combos.assign(
+                    opioid_pair=lambda d: d["from_opioid"] + " -> " + d["to_opioid"]
+                ).sort_values("opioid_pair")
         if len(combos) == 0:
             raise ValueError(f"No combinations found for filter_specs={filter_specs}")
         keys = []
@@ -409,7 +444,7 @@ class OpioidPairBatch(Batch):
 # ------------------- VignetteBatch -------------------
 
 class VignetteBatch(Batch):
-    group_cols = ["vignette_id", "include_nielson", "include_examples", "ome", "ask_for_units", "explain_units"]
+    group_cols = ["vignette_id", "scenario_key", "has_vignette_text", "include_nielson", "include_examples", "ome", "ask_for_units", "explain_units"]
     key_type = VignettePromptKey
     item_id_col = "vignette_id"
     default_model_csv_attr = "vignette_model_csv"  # <-- Add this line
