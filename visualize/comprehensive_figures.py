@@ -25,16 +25,19 @@ from bokeh.plotting import figure, output_file, save
 from bokeh.layouts import column, row as bk_row
 from bokeh.models import (
     ColumnDataSource, LabelSet, HoverTool, Legend, LegendItem,
-    FactorRange, Span, Div, Label,
+    FactorRange, Span, Div, Label, FixedTicker,
 )
 from bokeh.palettes import Greys256
 
+from common.models import CONSISTENT_MODELS
 from visualize.visualization_config import (
     MODEL_COLOR_DICT, get_ranked_model_order, get_model_order,
     normalize_model_name, convert_to_pdf_auto_size, convert_to_png_auto_size,
     TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
     BROAD_RANGE_LOWER, BROAD_RANGE_UPPER,
 )
+
+_CONSISTENT_SET = set(CONSISTENT_MODELS)
 
 
 # ── helpers ──────────────────────────────────────────────────────────
@@ -138,6 +141,7 @@ def naive_performance_bars(
     Adjacent-model significance brackets from CMH pairwise tests are shown.
     """
     df = pd.read_csv(ranking_csv).sort_values("adjusted_rank")
+    df = df[df["model"].isin(_CONSISTENT_SET)]
     models = df["model"].tolist()
     ranks = df["adjusted_rank"].tolist()
     clean_names = [f"({int(r)}) {_clean(m)}" for m, r in zip(models, ranks)]
@@ -162,8 +166,9 @@ def naive_performance_bars(
         color=colors,
     ))
 
-    # Extra right margin for brackets
-    x_max = 1.25
+    # Dynamic x_max based on actual bar values, with room for brackets
+    bar_max = max(max(broads), max(tights)) if broads else 1.0
+    x_max = bar_max + 0.18
     p = figure(
         width=width, height=height,
         y_range=clean_names,
@@ -185,18 +190,19 @@ def naive_performance_bars(
     ))
 
     p.xaxis.axis_label = "Mean Proportion within Range"
+    p.xaxis.ticker = FixedTicker(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1.0])
     p.yaxis.major_label_text_font_size = "8pt"
     p.ygrid.visible = False
 
     # ── Adjacent-model significance brackets ─────────────────────────
     pairwise = _get_pairwise_significance(ranking_csv)
     n = len(models_rev)
-    bracket_x = 1.05   # x position where brackets are drawn
-    x_step = 0.04      # offset for each bracket column to avoid overlap
+    bracket_base = bar_max + 0.02  # just right of the longest bar
+    x_step = 0.03
 
     for i in range(n - 1):
-        model_top = models_rev[i + 1]   # higher bar (best at top)
-        model_bot = models_rev[i]       # lower bar
+        model_top = models_rev[i + 1]
+        model_bot = models_rev[i]
         p_val = pairwise.get((model_top, model_bot), np.nan)
 
         if np.isnan(p_val):
@@ -206,21 +212,22 @@ def naive_performance_bars(
         if not stars:
             continue
 
-        # y positions: categorical index i corresponds to clean_names[i]
-        # bracket goes from model i to model i+1
-        bx = bracket_x + (i % 3) * x_step  # stagger to reduce overlap
+        # Position bracket near the longer bar of the pair
+        pair_max = max(broads[i], broads[i + 1]) if i + 1 < len(broads) else broads[i]
+        bx = max(pair_max + 0.02, bracket_base) + (i % 3) * x_step
 
-        # Draw bracket: vertical line + two horizontal caps + star label
         y_bot = i
         y_top = i + 1
+        # Vertical line spanning the two bars
         p.line(x=[bx, bx], y=[y_bot + 0.3, y_top - 0.3],
                line_color="#333", line_width=1.0)
-        p.line(x=[bx - 0.008, bx], y=[y_bot + 0.3, y_bot + 0.3],
+        # Horizontal caps touching the bar area
+        cap_len = 0.01
+        p.line(x=[bx - cap_len, bx], y=[y_bot + 0.3, y_bot + 0.3],
                line_color="#333", line_width=1.0)
-        p.line(x=[bx - 0.008, bx], y=[y_top - 0.3, y_top - 0.3],
+        p.line(x=[bx - cap_len, bx], y=[y_top - 0.3, y_top - 0.3],
                line_color="#333", line_width=1.0)
 
-        # Star label at midpoint
         mid_y = (y_bot + y_top) / 2
         p.add_layout(Label(
             x=bx + 0.005, y=mid_y,
@@ -254,27 +261,31 @@ def cv_strip_with_ratio(
     naive_filter: Optional[dict] = None,
     title: str = "CV by Model",
     width: int = 800,
-    height: int = 800,
+    height: int = 1000,
     slope_col: str = "regression_slope",
     slope_p_col: str = "regression_slope_pvalue",
     slope_alpha: float = 0.05,
+    tight_col: str = "tight(0.85,1.15)",
+    broad_col: str = "broad(0.6,1.7)",
 ):
     """
-    Two-panel figure:
+    Three-panel figure:
     Top: strip chart of CV (same as cv_strip_chart).
-    Bottom: scatter of CV (x-axis) vs mean observed/expected ratio (y-axis),
-            one dot per (model, opioid-pair).
+    Middle: scatter of CV (x) vs mean observed/expected ratio (y) on log scale.
+    Bottom: stacked bar mosaic — accuracy bands × CV bins.
     """
+    panel_h = height // 3
+
     # -- top panel: the existing strip chart --
     top = cv_strip_chart(
         model_csv=model_csv, cv_col=cv_col, pair_col=pair_col,
         naive_filter=naive_filter, title=title,
-        width=width, height=height // 2,
+        width=width, height=panel_h,
         slope_col=slope_col, slope_p_col=slope_p_col,
         slope_alpha=slope_alpha,
     )
 
-    # -- bottom panel: scatter CV vs mean ratio --
+    # -- load and filter data for middle and bottom panels --
     if naive_filter is None:
         naive_filter = {"include_nielsen": False, "include_examples": False}
 
@@ -282,48 +293,153 @@ def cv_strip_with_ratio(
     for col, val in naive_filter.items():
         if col in df.columns:
             df = df[df[col] == val]
+    df = df[df["model"].isin(_CONSISTENT_SET)]
 
-    if cv_col not in df.columns or ratio_num_col not in df.columns or ratio_den_col not in df.columns:
-        return column(top, figure(width=width, height=height // 2,
-                                   title="Mean Ratio vs CV (missing columns)"))
+    # -- middle panel: scatter CV vs mean ratio (log y-axis) --
+    has_ratio = (cv_col in df.columns and ratio_num_col in df.columns
+                 and ratio_den_col in df.columns)
+    if has_ratio:
+        rdf = df.dropna(subset=[cv_col, ratio_num_col, ratio_den_col]).copy()
+        rdf["_ratio"] = rdf[ratio_num_col] / rdf[ratio_den_col]
+        rdf = rdf[rdf["_ratio"].between(0.05, 20)]  # filter extreme outliers
 
-    df = df.dropna(subset=[cv_col, ratio_num_col, ratio_den_col])
-    df["_ratio"] = df[ratio_num_col] / df[ratio_den_col]
-    df = df[df["_ratio"].between(0, 10)]  # filter extreme outliers
+        ranked = get_ranked_model_order()
+        models = [m for m in ranked if m in rdf["model"].unique()]
+        if not models:
+            models = sorted(rdf["model"].unique())
 
-    ranked = get_ranked_model_order()
-    models = [m for m in ranked if m in df["model"].unique()]
-    if not models:
-        models = sorted(df["model"].unique())
+        xs, ys, colors, pair_labels, model_labels = [], [], [], [], []
+        for m in models:
+            mdf = rdf[rdf["model"] == m]
+            for _, row in mdf.iterrows():
+                xs.append(row[cv_col])
+                ys.append(row["_ratio"])
+                colors.append(MODEL_COLOR_DICT.get(m, "#888888"))
+                pair_labels.append(str(row[pair_col]))
+                model_labels.append(_clean(m))
 
-    xs, ys, colors, pair_labels, model_labels = [], [], [], [], []
-    for m in models:
-        mdf = df[df["model"] == m]
-        for _, row in mdf.iterrows():
-            xs.append(row[cv_col])
-            ys.append(row["_ratio"])
-            colors.append(MODEL_COLOR_DICT.get(m, "#888888"))
-            pair_labels.append(str(row[pair_col]))
-            model_labels.append(_clean(m))
+        mid = figure(
+            width=width, height=panel_h,
+            toolbar_location=None,
+            title="Mean Observed / Expected Ratio vs CV",
+            y_axis_type="log",
+        )
+        src = ColumnDataSource(dict(x=xs, y=ys, color=colors,
+                                    pair=pair_labels, model=model_labels))
+        mid.scatter("x", "y", color="color", alpha=0.5, size=6, source=src)
+        mid.add_tools(HoverTool(tooltips=[("Model", "@model"), ("Pair", "@pair"),
+                                          ("CV", "@x{0.00}"), ("Ratio", "@y{0.00}")]))
 
-    bot = figure(
-        width=width, height=height // 2,
-        toolbar_location=None,
-        title="Mean Observed/Expected Ratio vs CV",
+        # Custom log ticks and labels
+        mid.yaxis.ticker = FixedTicker(ticks=[0.1, 0.2, 0.5, 1, 2, 5])
+        mid.y_range.start = 0.08
+        mid.y_range.end = 7
+
+        # Threshold dotted lines at accuracy boundaries
+        for thresh, c in [(BROAD_RANGE_LOWER, "#d62728"),
+                          (TIGHT_RANGE_LOWER, "#2ca02c"),
+                          (TIGHT_RANGE_UPPER, "#2ca02c"),
+                          (BROAD_RANGE_UPPER, "#d62728")]:
+            mid.add_layout(Span(location=thresh, dimension="width",
+                                line_dash="dotted", line_color=c, line_alpha=0.6))
+
+        # Solid reference line at 1.0
+        mid.add_layout(Span(location=1.0, dimension="width",
+                            line_dash="dashed", line_color="black", line_alpha=0.4))
+
+        mid.xaxis.axis_label = "Coefficient of Variation"
+        mid.yaxis.axis_label = "Mean Observed / Expected"
+    else:
+        mid = figure(width=width, height=panel_h, toolbar_location=None,
+                     title="Mean Ratio vs CV (missing columns)")
+
+    # -- bottom panel: accuracy mosaic by CV bin --
+    bot = _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
+                              width=width, height=panel_h)
+
+    return column(top, mid, bot)
+
+
+def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
+                        width=800, height=280):
+    """Stacked bar chart: accuracy category proportions by CV bin."""
+    cols_needed = [c for c in [cv_col, tight_col, broad_col] if c in df.columns]
+    if len(cols_needed) < 3:
+        return figure(width=width, height=height, toolbar_location=None,
+                      title="Accuracy by CV Bin (missing columns)")
+
+    sub = df.dropna(subset=cols_needed).copy()
+    if sub.empty:
+        return figure(width=width, height=height, toolbar_location=None,
+                      title="Accuracy by CV Bin (no data)")
+
+    bins = [0, 0.1, 0.5, float("inf")]
+    bin_labels = ["CV < 0.1", "CV 0.1–0.5", "CV ≥ 0.5"]
+    sub["_cv_bin"] = pd.cut(sub[cv_col], bins=bins, labels=bin_labels, right=False)
+
+    results = []
+    for lbl in bin_labels:
+        bdf = sub[sub["_cv_bin"] == lbl]
+        n = len(bdf)
+        if n == 0:
+            results.append({"label": lbl, "n": 0, "tight": 0,
+                            "broad_only": 0, "neither": 0})
+            continue
+        t = bdf[tight_col].mean()
+        b = bdf[broad_col].mean()
+        bo = max(0, b - t)
+        ne = max(0, 1 - b)
+        results.append({"label": lbl, "n": n, "tight": t,
+                        "broad_only": bo, "neither": ne})
+
+    cats = [f"{r['label']}  (n={r['n']})" for r in results]
+    tights = [r["tight"] for r in results]
+    broads = [r["broad_only"] for r in results]
+    neithers = [r["neither"] for r in results]
+
+    p = figure(
+        x_range=cats, y_range=(0, 1.05), width=width, height=height,
+        toolbar_location=None, title="Accuracy Distribution by CV Bin",
     )
-    src = ColumnDataSource(dict(x=xs, y=ys, color=colors, pair=pair_labels, model=model_labels))
-    bot.scatter("x", "y", color="color", alpha=0.5, size=6, source=src)
-    bot.add_tools(HoverTool(tooltips=[("Model", "@model"), ("Pair", "@pair"),
-                                       ("CV", "@x{0.00}"), ("Ratio", "@y{0.00}")]))
 
-    # Reference line at ratio = 1.0
-    bot.line(x=[0, df[cv_col].max() * 1.1], y=[1, 1],
-             line_color="black", line_dash="dashed", line_alpha=0.5)
+    src = ColumnDataSource(dict(
+        cats=cats, tight=tights, broad_only=broads, neither=neithers,
+    ))
+    p.vbar_stack(
+        ["tight", "broad_only", "neither"],
+        x="cats", width=0.6, source=src,
+        color=["#2ca02c", "#ff7f0e", "#d62728"],
+        alpha=[0.8, 0.7, 0.7],
+        legend_label=[
+            f"Tight ({TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)",
+            f"Broad only ({BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)",
+            "Neither",
+        ],
+    )
 
-    bot.xaxis.axis_label = "Coefficient of Variation"
-    bot.yaxis.axis_label = "Mean Observed / Expected"
+    # Proportion labels on each segment
+    for i, r in enumerate(results):
+        y_pos = 0
+        for cat_name, val in [("tight", r["tight"]),
+                               ("broad_only", r["broad_only"]),
+                               ("neither", r["neither"])]:
+            if val > 0.04:
+                p.add_layout(Label(
+                    x=i, y=y_pos + val / 2,
+                    text=f"{val:.0%}", text_font_size="9pt",
+                    text_align="center", text_baseline="middle",
+                    text_color="white",
+                ))
+            y_pos += val
 
-    return column(top, bot)
+    p.yaxis.axis_label = "Proportion"
+    p.yaxis.ticker = FixedTicker(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    p.xaxis.major_label_text_font_size = "9pt"
+    p.legend.location = "top_right"
+    p.legend.label_text_font_size = "8pt"
+    p.xgrid.visible = False
+
+    return p
 
 def cv_strip_chart(
     model_csv: str,
@@ -363,6 +479,7 @@ def cv_strip_chart(
     for col, val in naive_filter.items():
         if col in df.columns:
             df = df[df[col] == val]
+    df = df[df["model"].isin(_CONSISTENT_SET)]
 
     if cv_col not in df.columns or pair_col not in df.columns:
         return figure(width=width, height=height, title=f"{title} (missing columns)")
@@ -489,6 +606,7 @@ def nielsen_effect_bars(
     significance stars above each model's bars.
     """
     df = pd.read_csv(batch_means_csv)
+    df = df[df["model"].isin(_CONSISTENT_SET)]
     naive = df[df["batch_name"] == naive_batch].set_index("model")
     nielsen = df[df["batch_name"] == nielsen_batch].set_index("model")
 
@@ -521,7 +639,7 @@ def nielsen_effect_bars(
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.15),
+        y_range=(0, 1.08),
         toolbar_location=None,
         title=title,
     )
@@ -569,15 +687,18 @@ def explain_units_bars(
     height: int = 400,
 ):
     """
-    Three-condition bar chart: mg/day + Nielsen, mg/4h + Nielsen, mg/4h + Nielsen + explain.
-    With Wilcoxon significance stars for the explain_units effect.
+    Three-condition bar chart: mg/day + Nielsen, non-daily + Nielsen,
+    non-daily + Nielsen + explain units.
+    Wilcoxon significance stars for the explain_units effect.
     """
     df_main = pd.read_csv(batch_means_csv)
+    df_main = df_main[df_main["model"].isin(_CONSISTENT_SET)]
     df_units = pd.read_csv(batch_means_explain_csv)
+    df_units = df_units[df_units["model"].isin(_CONSISTENT_SET)]
 
     ome_n1 = df_main[df_main["batch_name"] == "ome_n1"].set_index("model")
-    units = df_units[df_units["batch_name"] == "4hours_units"].set_index("model")
-    units_exp = df_units[df_units["batch_name"] == "4hours_units_explained"].set_index("model")
+    units = df_units[df_units["batch_name"] == "nielsen_only"].set_index("model")
+    units_exp = df_units[df_units["batch_name"] == "nielsen_units_explained"].set_index("model")
 
     ranked_models = get_ranked_model_order()
     models = [m for m in ranked_models
@@ -606,7 +727,7 @@ def explain_units_bars(
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.15),
+        y_range=(0, 1.08),
         toolbar_location=None,
         title=title,
     )
@@ -659,6 +780,7 @@ def full_treatment_bars(
     Bar chart: naive vs nielsen vs Nielsen + explain units per model with significance.
     """
     df = pd.read_csv(batch_means_csv)
+    df = df[df["model"].isin(_CONSISTENT_SET)]
     naive_df = df[df["batch_name"] == naive_batch].set_index("model")
     nielsen_df = df[df["batch_name"] == nielsen_batch].set_index("model")
 
@@ -704,7 +826,7 @@ def full_treatment_bars(
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.15),
+        y_range=(0, 1.08),
         toolbar_location=None,
         title=title,
     )
@@ -753,16 +875,11 @@ def cross_experiment_bars(
     Each bar shows tight (solid) + broad (translucent).
     """
     rd_df = pd.read_csv(random_dose_batch_means_csv)
+    rd_df = rd_df[rd_df["model"].isin(_CONSISTENT_SET)]
     vt_df = pd.read_csv(vignette_batch_means_csv)
+    vt_df = vt_df[vt_df["model"].isin(_CONSISTENT_SET)]
 
     rd_naive = rd_df[rd_df["batch_name"] == "all_n0"].set_index("model")
-
-    # Vignette: text and empty use different batch means CSVs
-    # text_all_naive and empty_all_naive are in the text_vs_empty batch means
-    # But they may also be in the vignette batch means if that file has them.
-    # More reliably, use the vignette batch means all_n0 for text vignettes.
-    # And filter the reworded_vignettes CSV directly for text vs empty.
-    # Actually, text_vs_empty batch means is the cleanest source.
     vt_text = vt_df[vt_df["batch_name"] == "text_all_naive"].set_index("model")
     vt_empty = vt_df[vt_df["batch_name"] == "empty_all_naive"].set_index("model")
 
@@ -797,13 +914,43 @@ def cross_experiment_bars(
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.15),
+        y_range=(0, 1.08),
         toolbar_location=None,
         title=title,
     )
     p.vbar(x="x", top="tight", width=0.7, color="color", alpha=0.9, source=source)
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.7, color="color",
            alpha=0.25, source=source)
+
+    # ── Pairwise significance tests (model-level paired Wilcoxon) ──
+    cond_pairs = [("random dose", "empty vignette", rd_naive, vt_empty),
+                  ("empty vignette", "text vignette", vt_empty, vt_text),
+                  ("random dose", "text vignette", rd_naive, vt_text)]
+    sig_lines = []
+    for label_a, label_b, df_a, df_b in cond_pairs:
+        common = sorted(set(df_a.index) & set(df_b.index) & set(models))
+        if len(common) < 4:
+            continue
+        diffs_t = [df_b.loc[m, "mean_in_tight"] - df_a.loc[m, "mean_in_tight"]
+                   for m in common]
+        nonzero = [d for d in diffs_t if d != 0]
+        if len(nonzero) < 2:
+            continue
+        _, p_val = wilcoxon(nonzero, alternative="two-sided")
+        stars = _significance_star(p_val)
+        if stars:
+            sig_lines.append((label_a, label_b, stars, p_val))
+
+    if sig_lines:
+        # Add overall title annotation with significance results
+        sig_parts = []
+        for la, lb, stars, pv in sig_lines:
+            sig_parts.append(f"{la} vs {lb}: {stars} (p={pv:.1e})")
+        sig_text = "  |  ".join(sig_parts)
+        p.add_layout(Label(
+            x=5, y=5, x_units="screen", y_units="screen",
+            text=sig_text, text_font_size="8pt", text_color="#555",
+        ))
 
     _style_grouped_bar(p, clean_names, cond_labels)
     return p
@@ -821,6 +968,7 @@ def _style_grouped_bar(p, clean_names, bar_labels):
     p.xaxis.separator_line_color = None
     p.xgrid.visible = False
     p.yaxis.axis_label = "Mean Proportion within Range"
+    p.yaxis.ticker = FixedTicker(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1.0])
 
     # Rotated model name labels
     label_source = ColumnDataSource(dict(
@@ -1016,96 +1164,92 @@ class ComprehensiveFigureBuilder:
 
     FIGURE_METADATA = [
         ("naive_vignette_bars", "build_naive_vignette_bars",
-         "Naive Vignette Performance",
+         "Naive performance is dangerous",
          "Horizontal bar chart showing the proportion of model responses falling within"
-         " the tight (±15%) and broad (0.6–1.7×) accuracy ranges for vignette-based"
+         " the tight (0.85–1.15×) and broad (0.6–1.7×) accuracy ranges for vignette-based"
          " opioid conversion prompts, without any reference information. Models are"
-         " ordered by global rank. Wilcoxon signed-rank significance stars compare"
-         " text-based vignettes to empty prompts."),
+         " ordered by global rank. Significance brackets compare adjacent-ranked models"
+         " using Cochran–Mantel–Haenszel tests."),
 
         ("naive_random_dose_bars", "build_naive_random_dose_bars",
-         "Naive Random Dose Performance",
+         "Naive performance is dangerous",
          "Horizontal bar chart of model accuracy on random-dose opioid pair"
          " conversion prompts without reference information. Dark bars represent"
-         " tight-range accuracy; translucent extensions show additional broad-range"
-         " accuracy. Models are ranked by global performance."),
+         " tight-range accuracy; translucent extensions show broad-range accuracy."
+         " Models are ranked by global performance. Adjacent-model significance"
+         " brackets are from CMH pairwise tests."),
 
         ("cv_strip_vignettes", "build_cv_strip_vignettes",
-         "Coefficient of Variation — Vignettes",
-         "Two-panel figure. Top: strip chart of per-scenario CVs under naive"
-         " vignette conditions; black-outlined models have a significant negative"
-         " Nielsen regression slope. Bottom: scatter of CV vs mean observed/"
-         " expected dose ratio, revealing whether high variability correlates"
-         " with systematic over- or under-estimation."),
+         "Naive performance reflects a consistent ratio, even when inaccurate",
+         "Three-panel figure (vignettes). Top: strip chart of per-scenario CVs under"
+         " naive conditions; black-outlined dots indicate significant negative"
+         " Nielsen regression slopes. Middle: scatter of CV vs mean observed/expected"
+         " dose ratio on a log scale, with dotted threshold lines at the tight and"
+         " broad accuracy boundaries. Bottom: stacked bar mosaic showing how accuracy"
+         " (tight / broad-only / neither) varies across CV bins."),
 
         ("cv_strip_random_doses", "build_cv_strip_random_doses",
-         "Coefficient of Variation — Random Doses",
-         "Two-panel figure. Top: strip chart of per-pair CVs for random-dose"
-         " conversions under naive conditions; black-outlined models show"
-         " significant negative Nielsen slopes. Bottom: scatter of CV vs mean"
-         " observed/expected coefficient ratio."),
+         "Naive performance reflects a consistent ratio, even when inaccurate",
+         "Three-panel figure (random doses). Top: strip chart of per-pair CVs under"
+         " naive conditions. Middle: scatter of CV vs mean observed/expected"
+         " coefficient ratio on a log scale. Bottom: accuracy distribution by CV bin."),
 
         ("nielsen_effect_vignettes", "build_nielsen_effect_vignettes",
-         "Nielsen Effect — Vignettes",
+         "Including Nielsen reference improves accuracy",
          "Grouped bar chart comparing naive versus Nielsen-augmented accuracy"
          " for all vignette conversions. Each model has paired bars showing"
          " performance with and without Nielsen reference data. Wilcoxon"
-         " signed-rank significance annotations indicate whether the difference"
-         " is statistically meaningful per model."),
+         " signed-rank significance stars indicate per-model improvement."),
 
         ("nielsen_effect_random_doses", "build_nielsen_effect_random_doses",
-         "Nielsen Effect — Random Doses",
+         "Including Nielsen reference improves accuracy",
          "Grouped bar chart comparing naive versus Nielsen-augmented accuracy"
-         " for all random-dose pair conversions. Significance stars from"
-         " Wilcoxon signed-rank tests are shown per model, with an overall"
-         " test result displayed in the title area."),
+         " for all random-dose pair conversions. Wilcoxon signed-rank"
+         " significance stars are shown per model."),
 
         ("nielsen_by_ome_vignettes", "build_nielsen_by_ome_vignettes",
-         "Nielsen Effect by Conversion Type — Vignettes",
+         "The Nielsen reference selectively improves oral morphine conversions",
          "Two-panel figure splitting the Nielsen effect for vignettes into"
          " oral-morphine-equivalent (OME) conversions (top) and non-OME"
-         " conversions (bottom). This reveals whether Nielsen reference data"
-         " differentially benefits conversions involving oral morphine versus"
-         " other opioid pairs."),
+         " conversions (bottom). The differential improvement reveals whether"
+         " Nielsen reference data primarily benefits oral morphine conversions."),
 
         ("nielsen_by_ome_random_doses", "build_nielsen_by_ome_random_doses",
-         "Nielsen Effect by Conversion Type — Random Doses",
+         "The Nielsen reference selectively improves oral morphine conversions",
          "Two-panel figure splitting the Nielsen effect for random-dose"
          " conversions into OME (top) and non-OME (bottom) subsets."
          " Significance annotations are computed independently for each subset."),
 
         ("explain_units", "build_explain_units",
-         "Explain Units Effect",
+         "Models struggle with non-daily dosing",
          "Three-condition bar chart comparing model accuracy on oral-morphine"
-         " conversions under three unit-handling strategies: standard mg/day"
-         " units, mg/4-hour units, and explicitly explained units. Wilcoxon"
-         " signed-rank tests assess whether explaining units significantly"
-         " improves accuracy relative to the baseline."),
+         " conversions: standard daily dosing with Nielsen, non-daily dosing with"
+         " Nielsen, and non-daily dosing with Nielsen plus explicit unit explanation."
+         " The drop from daily to non-daily reveals sensitivity to dosing intervals."),
 
         ("full_treatment", "build_full_treatment",
-         "Nielsen + Explain Units Performance",
-         "Bar chart comparing three prompting conditions: naive (no reference),"
+         "Explaining units improves non-daily dosing",
+         "Bar chart comparing prompting conditions: naive (no reference),"
          " Nielsen-augmented, and Nielsen + explain units. Shows the cumulative"
          " benefit of adding reference data and explicit unit clarification to"
          " opioid conversion prompts."),
 
         ("cross_experiment_bars", "build_cross_experiment",
-         "Cross-Experiment Comparison",
+         "Performance structure is consistent across task formats",
          "Grouped bar chart comparing each model's tight- and broad-range"
          " accuracy across three experimental paradigms: random-dose pair"
          " conversions, empty vignettes, and text-based vignettes. All"
-         " conditions are naive (no reference data). Models are ordered"
-         " by global rank."),
+         " conditions are naive (no reference data). Wilcoxon signed-rank"
+         " tests compare conditions across models."),
 
         ("nielsen_ranked_random_doses", "build_nielsen_ranked_random_doses",
-         "Nielsen Ranked — Random Doses",
+         "Including Nielsen reference improves accuracy",
          "Horizontal bar chart showing model accuracy after providing"
          " Nielsen reference data for random-dose conversions. Models are"
-         " ranked by the best of 3 conditions (naive, OME-only, all-pairs)"
-         " within the Nielsen augmentation."),
+         " ranked by adjusted performance across conditions."),
 
         ("nielsen_units_ranked", "build_nielsen_units_ranked",
-         "Nielsen + Explain Units Ranked",
+         "Prompt improvements enable safe accuracy",
          "Two-panel ranked bar chart. Top: random-dose OME conversions with"
          " Nielsen + explain units. Bottom: vignette conversions with"
          " Nielsen + explain units. Shows final best-achievable accuracy"
