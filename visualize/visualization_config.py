@@ -6,8 +6,10 @@ Ensures consistent model ordering and coloring across all visualizations.
 from typing import List, Dict
 import colorsys
 import os
+import pandas as pd
 from bokeh.palettes import Spectral11
 from playwright.async_api import async_playwright
+from common.models import CONSISTENT_MODELS
 
 
 # Model name aliases (maps non-prefixed names to canonical names)
@@ -41,24 +43,68 @@ MODEL_ORDER = [
     'deepseek/deepseek-chat'
 ]
 
-MODEL_COLOR_DICT = {
-    'openai/gpt-4.1': '#e54444',
-    'openai/gpt-4.1-mini': '#e58144',
-    'openai/gpt-3.5-turbo': '#e5bd44',
-    'anthropic/claude-3.5-sonnet:20241022': '#d1e544',
-    'anthropic/claude-3-5-haiku-20241022': '#95e544',
-    'mistralai/mistral-large-2407': '#58e544',
-    'mistralai/mixtral-8x22b-instruct': '#44e56d',
-    'google/gemini-2.5-pro': '#44e5a9',
-    'google/gemini-2.5-flash': '#44e5e5',
-    'cohere/command-r-plus-08-2024': '#44a9e5',
-    'ai21/jamba-large-1.7': '#446de5',
-    'ai21/jamba-mini-1.7': '#5844e5',
-    'qwen/qwen-2.5-72b-instruct': '#9544e5',
-    'meta-llama/llama-3.3-70b-instruct': '#d144e5',
-    'meta-llama/llama-3.3-70b-versatile': '#e544bd',
-    'deepseek/deepseek-chat': '#e54481'
-}
+# Ranking CSVs used to determine global model order and colours.
+_RANKING_CSV_NAMES = [
+    "ranking_vignettes_nielsen_units.csv",
+    "ranking_random_doses_nielsen.csv",
+    "ranking_random_doses_nielsen_units.csv",
+]
+
+
+def _collect_ranking_ranks() -> Dict[str, List[float]]:
+    """Read adjusted_rank from the canonical ranking CSVs and return per-model lists."""
+    results_dir = os.path.join(os.path.dirname(__file__), "..", "results")
+    ranks: Dict[str, List[float]] = {}
+    for name in _RANKING_CSV_NAMES:
+        path = os.path.join(results_dir, name)
+        if not os.path.exists(path):
+            continue
+        df = pd.read_csv(path)
+        for _, row in df.iterrows():
+            m = str(row["model"])
+            ranks.setdefault(m, []).append(float(row["adjusted_rank"]))
+    return ranks
+
+
+def _build_ranked_color_dict() -> Dict[str, str]:
+    """
+    Assign rainbow colours based on the average of each model's adjusted
+    rank across three conditions:
+      1. Vignettes + Nielsen + explain-units
+      2. Random doses + Nielsen
+      3. Random doses + Nielsen + explain-units
+
+    Models that appear in only a subset of rankings use those ranks.
+    The best-performing model gets the first hue (red-ish), the worst
+    gets the last hue.  Falls back to a static rainbow if the ranking
+    CSVs are not yet available.
+    """
+    ranks = _collect_ranking_ranks()
+
+    if not ranks:
+        # Fallback: return colours in MODEL_ORDER
+        consistent = [m for m in MODEL_ORDER if m in CONSISTENT_MODELS]
+        n = len(consistent)
+        return {m: _hue_color(i, n) for i, m in enumerate(consistent)}
+
+    # Average rank per model, then sort (lower = better = earlier hue)
+    avg_ranks = {m: sum(rs) / len(rs) for m, rs in ranks.items()}
+    # Filter to consistent models only
+    consistent_set = set(CONSISTENT_MODELS)
+    avg_ranks = {m: r for m, r in avg_ranks.items() if m in consistent_set}
+    sorted_models = sorted(avg_ranks, key=lambda m: avg_ranks[m])
+    n = len(sorted_models)
+    return {m: _hue_color(i, n) for i, m in enumerate(sorted_models)}
+
+
+def _hue_color(index: int, total: int) -> str:
+    """Return an evenly-spaced rainbow hex colour."""
+    hue = index / max(total, 1)
+    r, g, b = colorsys.hsv_to_rgb(hue, 0.72, 0.90)
+    return f"#{int(r*255):02x}{int(g*255):02x}{int(b*255):02x}"
+
+
+MODEL_COLOR_DICT = _build_ranked_color_dict()
 
 # Range thresholds for opioid conversion visualizations
 TIGHT_RANGE_LOWER = 0.85
@@ -67,6 +113,24 @@ BROAD_RANGE_LOWER = 0.6
 BROAD_RANGE_UPPER = 1.7
 
 EPSILON_FOR_WEIGHT = 5e-2
+
+def get_ranked_model_order() -> List[str]:
+    """
+    Return models sorted by average adjusted rank (best first).
+    Averages across vignettes+nielsen+units, random_doses+nielsen,
+    and random_doses+nielsen+units.
+    Falls back to MODEL_ORDER if ranking CSVs are absent.
+    """
+    ranks = _collect_ranking_ranks()
+
+    if not ranks:
+        return [m for m in MODEL_ORDER if m in CONSISTENT_MODELS]
+
+    avg_ranks = {m: sum(rs) / len(rs) for m, rs in ranks.items()}
+    consistent_set = set(CONSISTENT_MODELS)
+    avg_ranks = {m: r for m, r in avg_ranks.items() if m in consistent_set}
+    return sorted(avg_ranks, key=lambda m: avg_ranks[m])
+
 
 def normalize_model_name(model: str) -> str:
     """
@@ -183,3 +247,33 @@ async def convert_to_pdf_auto_size(html_file: str, pdf_file: str,
         await browser.close()
         
         print(f"✓ Generated PDF: {total_width}px x {total_height}px")
+
+
+async def convert_to_png_auto_size(html_file: str, png_file: str,
+                                   scale: float = 2.0,
+                                   max_width: int = 2400):
+    """
+    Convert HTML to PNG with automatic sizing via full-page screenshot.
+    """
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page(device_scale_factor=scale)
+        await page.goto(f"file://{os.path.abspath(html_file)}")
+        await page.wait_for_load_state("networkidle")
+        await page.wait_for_timeout(6000)
+
+        dimensions = await page.evaluate("""
+            () => ({
+                width: document.documentElement.scrollWidth,
+                height: document.documentElement.scrollHeight
+            })
+        """)
+
+        content_width = min(dimensions['width'], max_width)
+        await page.set_viewport_size({"width": content_width + 20,
+                                       "height": dimensions['height'] + 20})
+        await page.wait_for_timeout(1000)
+
+        await page.screenshot(path=png_file, full_page=True)
+        await browser.close()
+        print(f"✓ Generated PNG: {png_file}")

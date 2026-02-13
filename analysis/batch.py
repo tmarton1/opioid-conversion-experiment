@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, List, Dict, Any, Sequence, Type
 from visualize.visualization_config import get_model_order, normalize_model_name
+from common.models import CONSISTENT_MODELS
 import numpy as np
 import pandas as pd
 import warnings
@@ -20,7 +21,7 @@ class PairPromptKey:
     from_opioid_unit: str
     to_opioid: str
     to_opioid_unit: str
-    include_nielson: bool
+    include_nielsen: bool
     include_examples: bool
     ome: Optional[bool] = None
     ask_for_units: Optional[bool] = None
@@ -33,7 +34,7 @@ class PairPromptKey:
 @dataclass(frozen=True)
 class VignettePromptKey:
     vignette_id: str
-    include_nielson: bool
+    include_nielsen: bool
     include_examples: bool
     ome: Optional[bool] = None
     ask_for_units: Optional[bool] = None
@@ -120,6 +121,9 @@ class Batch:
     def get_models(self) -> List[str]:
         raw_models = list(self.model_data['model'].unique())
         normalized_models = [normalize_model_name(m) for m in raw_models]
+        # Filter to only consistent models
+        consistent_set = set(normalize_model_name(m) for m in CONSISTENT_MODELS)
+        normalized_models = [m for m in normalized_models if m in consistent_set]
         ordered_models = get_model_order(normalized_models)
         return ordered_models
 
@@ -170,6 +174,24 @@ class Batch:
                     if pd.notna(value):
                         matrix[model_idx, item_idx] = value
         return matrix
+
+    def compute_cv_matrix(self) -> np.ndarray:
+        """Compute a coefficient-of-variation matrix (models × items)."""
+        models = self.get_models()
+        items = self.get_items()
+        matrix = np.full((len(models), len(items)), np.nan)
+        for item_idx, item_name in enumerate(items):
+            for model_idx, model in enumerate(models):
+                row = self._get_model_row(item_name, model)
+                if len(row) > 0 and 'observed_coefficient_cv' in row.columns:
+                    value = row['observed_coefficient_cv'].iloc[0]
+                    if pd.notna(value):
+                        matrix[model_idx, item_idx] = value
+        return matrix
+
+    def get_cv_matrix_with_summary(self) -> np.ndarray:
+        matrix = self.compute_cv_matrix()
+        return self.add_mean_row_and_col(matrix)
 
     def get_weight_matrix_with_summary(self) -> np.ndarray:
         matrix = self.compute_weight_matrix()
@@ -288,7 +310,7 @@ class Batch:
 # ------------------- OpioidPairBatch -------------------
 
 class OpioidPairBatch(Batch):
-    group_cols = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "ome", "ask_for_units", "explain_units"]
+    group_cols = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielsen", "include_examples", "ome", "ask_for_units", "explain_units"]
     key_type = PairPromptKey
     item_id_col = "pair_name"
     default_model_csv_attr = "pair_model_csv"
@@ -320,40 +342,68 @@ class OpioidPairBatch(Batch):
         return pairs
 
     def _get_model_row(self, pair_name: str, model: str) -> pd.DataFrame:
-        from_opioid, to_opioid = pair_name.split(' -> ')
-        return self.model_data[
+        from_part, to_part = pair_name.split(' -> ')
+        # Strip unit suffix like " (mg/day)" if present
+        if ' (' in from_part:
+            from_opioid = from_part.split(' (')[0]
+            from_unit = from_part.split('(')[1].rstrip(')')
+        else:
+            from_opioid = from_part
+            from_unit = None
+        if ' (' in to_part:
+            to_opioid = to_part.split(' (')[0]
+            to_unit = to_part.split('(')[1].rstrip(')')
+        else:
+            to_opioid = to_part
+            to_unit = None
+
+        mask = (
             (self.model_data['from_opioid'] == from_opioid) &
             (self.model_data['to_opioid'] == to_opioid) &
             (self.model_data['model'] == model)
-        ]
+        )
+        if from_unit and 'from_opioid_unit' in self.model_data.columns:
+            mask &= (self.model_data['from_opioid_unit'] == from_unit)
+        if to_unit and 'to_opioid_unit' in self.model_data.columns:
+            mask &= (self.model_data['to_opioid_unit'] == to_unit)
+        return self.model_data[mask]
 
     def get_data_for_pair_model(self, pair_name: str, model: str) -> Dict[str, Any]:
-        from_opioid, to_opioid = pair_name.split(' -> ')
+        from_part, to_part = pair_name.split(' -> ')
+        from_opioid = from_part.split(' (')[0] if ' (' in from_part else from_part
+        to_opioid = to_part.split(' (')[0] if ' (' in to_part else to_part
+
         matching_key = None
         for key in self._keys:
             if key.from_opioid == from_opioid and key.to_opioid == to_opioid:
                 matching_key = key
                 break
         if matching_key is None:
+            # Fall back: try matching with units included
+            for key in self._keys:
+                if key.pair_name == pair_name:
+                    matching_key = key
+                    break
+        if matching_key is None:
             return {}
         pair_model_row = self.model_data[
             (self.model_data['from_opioid'] == from_opioid) &
             (self.model_data['to_opioid'] == to_opioid) &
             (self.model_data['model'] == model) &
-            (self.model_data['include_nielson'] == matching_key.include_nielson) &
+            (self.model_data['include_nielsen'] == matching_key.include_nielsen) &
             (self.model_data['include_examples'] == matching_key.include_examples)
         ]
         exp_rows = self.experiment_data[
             (self.experiment_data['from_opioid'] == from_opioid) &
             (self.experiment_data['to_opioid'] == to_opioid) &
             (self.experiment_data['model'] == model) &
-            (self.experiment_data['include_nielson'] == matching_key.include_nielson) &
+            (self.experiment_data['include_nielsen'] == matching_key.include_nielsen) &
             (self.experiment_data['include_examples'] == matching_key.include_examples)
         ]
         consensus_row = self.consensus_data[
             (self.consensus_data['from_opioid'] == from_opioid) &
             (self.consensus_data['to_opioid'] == to_opioid) &
-            (self.consensus_data['include_nielson'] == matching_key.include_nielson) &
+            (self.consensus_data['include_nielsen'] == matching_key.include_nielsen) &
             (self.consensus_data['include_examples'] == matching_key.include_examples)
         ]
         result = {}
@@ -444,7 +494,7 @@ class OpioidPairBatch(Batch):
 # ------------------- VignetteBatch -------------------
 
 class VignetteBatch(Batch):
-    group_cols = ["vignette_id", "scenario_key", "has_vignette_text", "include_nielson", "include_examples", "ome", "ask_for_units", "explain_units"]
+    group_cols = ["vignette_id", "scenario_key", "has_vignette_text", "include_nielsen", "include_examples", "ome", "ask_for_units", "explain_units"]
     key_type = VignettePromptKey
     item_id_col = "vignette_id"
     default_model_csv_attr = "vignette_model_csv"  # <-- Add this line

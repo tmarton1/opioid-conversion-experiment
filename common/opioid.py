@@ -1,7 +1,7 @@
 from typing import List, Tuple, Union
 from dataclasses import dataclass
 from itertools import permutations, combinations
-from resources.nielson_data import NIELSON_CONVERSIONS
+from resources.nielsen_data import NIELSEN_CONVERSIONS
 
 @dataclass
 class Opioid:
@@ -12,10 +12,10 @@ class Opioid:
     def __post_init__(self):
         key = f"{self.administration_method}_{self.substance}"
         if self.unit is None:
-            if key in NIELSON_CONVERSIONS:
-                self.unit = NIELSON_CONVERSIONS[key]["unit"]
+            if key in NIELSEN_CONVERSIONS:
+                self.unit = NIELSEN_CONVERSIONS[key]["unit"]
             else:
-                raise KeyError(f"Opioid key '{key}' not found in Nielson conversions.")
+                raise KeyError(f"Opioid key '{key}' not found in Nielsen conversions.")
         
     def to_str(self):
         return f"{self.administration_method}_{self.substance}"
@@ -39,7 +39,7 @@ class OpioidPairGenerator:
         """
         # Filter opioids based on the priority logic
         filtered_opioids = [
-            key for key, data in NIELSON_CONVERSIONS.items()
+            key for key, data in NIELSEN_CONVERSIONS.items()
             if "priority" in data and self.priority_logic(data["priority"])
         ]
 

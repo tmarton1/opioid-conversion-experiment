@@ -25,7 +25,7 @@ class BatchVisualizer:
         for key in self.batch.keys:
             try:
                 prompt_conditions = {
-                    "include_nielson": getattr(key, "include_nielson", None),
+                    "include_nielsen": getattr(key, "include_nielsen", None),
                     "include_examples": getattr(key, "include_examples", None),
                     "explain_units": getattr(key, "explain_units", None),
                 }

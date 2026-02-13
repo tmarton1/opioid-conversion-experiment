@@ -9,7 +9,6 @@ CONSISTENT_MODELS = [
         "google/gemini-2.5-flash",
         "cohere/command-r-plus-08-2024",
         "ai21/jamba-large-1.7",
-        "ai21/jamba-mini-1.7",
         "qwen/qwen-2.5-72b-instruct",
         "meta-llama/llama-3.3-70b-instruct",
         "deepseek/deepseek-chat"

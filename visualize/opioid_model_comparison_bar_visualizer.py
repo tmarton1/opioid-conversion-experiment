@@ -278,11 +278,11 @@ class ModelComparisonFigureBuilder:
         self.batch_means_csv = batch_means_csv
         self.batch_label_dict = batch_label_dict or {
             'ome_n0': 'naive',
-            'ome_n1': 'with Nielson',
+            'ome_n1': 'with Nielsen',
             'pairs_n0': 'naive',
-            'pairs_n1': 'with Nielson',
+            'pairs_n1': 'with Nielsen',
             'all_n0': 'naive',
-            'all_n1': 'with Nielson'
+            'all_n1': 'with Nielsen'
         }
 
     def matplotlib_scatter_to_bokeh(self, fig):
@@ -398,25 +398,25 @@ class ModelComparisonFigureBuilder:
         adjust_text(texts, ax=ax1, arrowprops=dict(arrowstyle='-', color='gray'))
         plt.tight_layout()
 
-        # Scatter 2: Nielson Effect
-        all_nielson = df[df["batch_name"] == "all_n1"].sort_values("model")
-        colors2 = [MODEL_COLOR_DICT.get(m, "#1f77b4") for m in all_nielson["model"]]
-        clean_names2 = [m.split('/')[-1] if '/' in m else m for m in all_nielson["model"]]
+        # Scatter 2: Nielsen Effect
+        all_nielsen = df[df["batch_name"] == "all_n1"].sort_values("model")
+        colors2 = [MODEL_COLOR_DICT.get(m, "#1f77b4") for m in all_nielsen["model"]]
+        clean_names2 = [m.split('/')[-1] if '/' in m else m for m in all_nielsen["model"]]
 
 
         fig2, ax2 = plt.subplots(figsize=(6, 4))
         ax2.scatter(
-            ome_naive["mean_in_broad"], all_nielson["mean_in_tight"],
+            ome_naive["mean_in_broad"], all_nielsen["mean_in_tight"],
             c=colors2, alpha=0.9, s=60
         )
         ax2.plot([0, 1.05], [0, 1.05], color="black", linestyle="dashed", linewidth=1)
         ax2.set_xlim(0, 1.05)
         ax2.set_ylim(0, 1.05)
-        ax2.set_title("Nielson Effect")
+        ax2.set_title("Nielsen Effect")
         ax2.set_xlabel(f"Oral Morphine Conversions (Proportion {BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)", fontsize=8, fontstyle='italic')
-        ax2.set_ylabel(f"All Opioid Pair Conversions with Nielson (Proportion {TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)", fontsize=8, fontstyle='italic')
+        ax2.set_ylabel(f"All Opioid Pair Conversions with Nielsen (Proportion {TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)", fontsize=8, fontstyle='italic')
         texts2 = []
-        for x, y, label in zip(ome_naive["mean_in_broad"], all_nielson["mean_in_tight"], clean_names2):
+        for x, y, label in zip(ome_naive["mean_in_broad"], all_nielsen["mean_in_tight"], clean_names2):
             texts2.append(ax2.text(x, y, label, fontsize=6, ha='left', va='bottom'))
         adjust_text(texts2, ax=ax2, arrowprops=dict(arrowstyle='-', color='gray'))
         plt.tight_layout()

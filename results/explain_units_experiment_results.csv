@@ -1,4 +1,4 @@
-experiment_id,datetime,from_opioid,from_opioid_unit,to_opioid,to_opioid_unit,from_dose,expected_to_dose,model,prompt,include_nielson,include_examples,ask_for_units,explain_units,observed_to_dose,ratio_observed_expected,response
+experiment_id,datetime,from_opioid,from_opioid_unit,to_opioid,to_opioid_unit,from_dose,expected_to_dose,model,prompt,include_nielsen,include_examples,ask_for_units,explain_units,observed_to_dose,ratio_observed_expected,response
 1540,2025-11-26T20:23:23.701294,oral_codeine,mg/day,oral_morphine,mg/4 hours,174.69835210199395,2.911639201699899,openai/gpt-4.1,"Convert 174.70 mg/day of codeine (oral) to mg/4 hours of morphine (oral).
 How many mg/4 hours of morphine (oral) is equivalent to 174.70 mg/day of codeine (oral)?
 

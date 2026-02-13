@@ -1,4 +1,4 @@
-from_opioid,from_opioid_unit,to_opioid,to_opioid_unit,ome,model,include_nielson,include_examples,ask_for_units,explain_units,weight,n_vignettes,"tight(0.85,1.15)","broad(0.6,1.7)",opioid_pair
+from_opioid,from_opioid_unit,to_opioid,to_opioid_unit,ome,model,include_nielsen,include_examples,ask_for_units,explain_units,weight,n_vignettes,"tight(0.85,1.15)","broad(0.6,1.7)",opioid_pair
 iv_fentanyl,mcg/day,oral_hydromorphone,mg/day,False,ai21/jamba-large-1.7,False,False,False,False,19.455167827274515,4,0.0,0.0,iv_fentanyl -> oral_hydromorphone
 iv_fentanyl,mcg/day,oral_hydromorphone,mg/day,False,ai21/jamba-large-1.7,True,False,False,False,20.0,4,0.0,0.0,iv_fentanyl -> oral_hydromorphone
 iv_fentanyl,mcg/day,oral_hydromorphone,mg/day,False,ai21/jamba-large-1.7,True,False,True,True,20.0,4,0.0,1.0,iv_fentanyl -> oral_hydromorphone

@@ -175,7 +175,7 @@ class OpioidPairConsensus:
             "to_opioid": self.to_opioid,
             "to_opioid_unit": self.to_opioid_unit,
             "opioid_pair": f"{self.from_opioid} -> {self.to_opioid}",
-            "include_nielson": self.prompt_conditions.get("include_nielson", False),
+            "include_nielsen": self.prompt_conditions.get("include_nielsen", False),
             "include_examples": self.prompt_conditions.get("include_examples", False),
             "ask_for_units": self.prompt_conditions.get("ask_for_units", False),
             "explain_units": self.prompt_conditions.get("explain_units", False),
@@ -235,7 +235,7 @@ class OpioidPairConsensus:
         mask = (
             (df["from_opioid"] == from_opioid)
             & (df["to_opioid"] == to_opioid)
-            & (df["include_nielson"] == prompt_conditions.get("include_nielson", False))
+            & (df["include_nielsen"] == prompt_conditions.get("include_nielsen", False))
             & (df["include_examples"] == prompt_conditions.get("include_examples", False))
         )
         subset = df[mask].copy()
@@ -271,7 +271,7 @@ class OpioidPairConsensus:
         """
         df = pd.read_csv(csv_file)
         if groupby_fields is None:
-            groupby_fields = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "ask_for_units", "explain_units"],
+            groupby_fields = ["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielsen", "include_examples", "ask_for_units", "explain_units"],
 
         groups = df.groupby(groupby_fields)
 
@@ -283,7 +283,7 @@ class OpioidPairConsensus:
         skipped = 0
 
         for (from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, inc_n, inc_ex, explain_units), group_df in groups:
-            prompt = {"include_nielson": inc_n, "include_examples": inc_ex, "explain_units": explain_units}
+            prompt = {"include_nielsen": inc_n, "include_examples": inc_ex, "explain_units": explain_units}
 
             # If there is literally no row, just skip
             if len(group_df) == 0:
@@ -365,7 +365,7 @@ class OpioidPairConsensus:
                     "from_opioid_unit",
                     "to_opioid",
                     "to_opioid_unit",
-                    "include_nielson",
+                    "include_nielsen",
                     "include_examples",
                     "ask_for_units",
                     "explain_units",
@@ -379,7 +379,7 @@ class OpioidPairConsensus:
                     "p_value_log",
                 ]
             ],
-            on=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples","ask_for_units", "explain_units"],
+            on=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielsen", "include_examples","ask_for_units", "explain_units"],
             how="left",
             suffixes=("", "_consensus"),
         )
@@ -387,7 +387,7 @@ class OpioidPairConsensus:
         # ---- NEW: compute normalized_weight v_j within each pair/prompt group ----
         merged["normalized_weight"] = 0.0  # default
 
-        group_cols = ["from_opioid", "from_opioid_unit","to_opioid", "to_opioid_unit", "include_nielson", "include_examples"]
+        group_cols = ["from_opioid", "from_opioid_unit","to_opioid", "to_opioid_unit", "include_nielsen", "include_examples"]
 
         for _, idx in merged.groupby(group_cols).groups.items():
             idx = list(idx)

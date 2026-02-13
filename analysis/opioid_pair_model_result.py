@@ -29,9 +29,9 @@ class OpioidPairModelResult:
             from_opioid: Source opioid (e.g., "iv_fentanyl")
             to_opioid: Target opioid (e.g., "oral_morphine")
             model: Model name (e.g., "gpt-4.1-mini")
-            prompt_conditions: Dict with 'include_nielson' and 'include_examples' keys
+            prompt_conditions: Dict with 'include_nielsen' and 'include_examples' keys
             results_df: DataFrame containing individual conversion results
-            expected_coefficient: Expected coefficient from Nielson data (if available)
+            expected_coefficient: Expected coefficient from Nielsen data (if available)
         """
         self.from_opioid = from_opioid
         self.from_opioid_unit = from_opioid_unit
@@ -125,6 +125,8 @@ class OpioidPairModelResult:
         # M1: Linear regression
         # Use scipy.stats.linregress for simple linear regression
         slope, intercept, r_value, p_value, std_err = stats.linregress(dose_to, log_coefficients)
+        self.regression_slope = float(slope)
+        self.regression_slope_pvalue = float(p_value)
         
         # Calculate residuals and residual variance
         predictions = slope * dose_to + intercept
@@ -200,7 +202,7 @@ class OpioidPairModelResult:
             'to_opioid_unit': self.to_opioid_unit,
             'opioid_pair': f"{self.from_opioid} -> {self.to_opioid}",
             'model': self.model,
-            'include_nielson': self.prompt_conditions.get('include_nielson', False),
+            'include_nielsen': self.prompt_conditions.get('include_nielsen', False),
             'include_examples': self.prompt_conditions.get('include_examples', False),
             'ask_for_units': self.prompt_conditions.get('ask_for_units', False),
             'explain_units': self.prompt_conditions.get('explain_units', False),
@@ -212,6 +214,8 @@ class OpioidPairModelResult:
             'observed_log_coefficient_mean': self.observed_log_coefficient_mean,
             'observed_log_coefficient_std': self.observed_log_coefficient_std,
             'r_squared': self.r_squared,
+            'regression_slope': getattr(self, 'regression_slope', np.nan),
+            'regression_slope_pvalue': getattr(self, 'regression_slope_pvalue', np.nan),
             'f': self.f,
             'weight': self.weight,
             'n_observations': len(self.results_df),
@@ -259,7 +263,7 @@ class OpioidPairModelResult:
             from_opioid: Source opioid (e.g., "iv_fentanyl")
             to_opioid: Target opioid (e.g., "oral_morphine")
             model: Model name (e.g., "gpt-4.1-mini")
-            prompt_conditions: Dict with 'include_nielson' and 'include_examples' keys
+            prompt_conditions: Dict with 'include_nielsen' and 'include_examples' keys
             conversion_service: Optional ConversionService to calculate expected coefficient
             
         Returns:
@@ -273,7 +277,7 @@ class OpioidPairModelResult:
             (df['from_opioid'] == from_opioid) &
             (df['to_opioid'] == to_opioid) &
             (df['model'] == model) &
-            (df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
+            (df['include_nielsen'] == prompt_conditions.get('include_nielsen', False)) &
             (df['include_examples'] == prompt_conditions.get('include_examples', False)) &
             (df.get('ask_for_units', False) == prompt_conditions.get('ask_for_units', False)) &
             (df.get('explain_units', False) == prompt_conditions.get('explain_units', False))
@@ -293,7 +297,7 @@ class OpioidPairModelResult:
         to_opioid_unit = filtered_df['to_opioid_unit'].iloc[0] if 'to_opioid_unit' in filtered_df.columns else None
 
         
-        # Calculate expected coefficient from Nielson data
+        # Calculate expected coefficient from Nielsen data
         expected_coeff = None
         if conversion_service:
             try:                
@@ -360,8 +364,11 @@ class OpioidPairModelResult:
             groupby_fields = [
                 'from_opioid', 'from_opioid_unit',
                 'to_opioid', 'to_opioid_unit',
-                'model', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
+                'model', 'include_nielsen', 'include_examples', 'ask_for_units', 'explain_units'
             ]
+        
+        # Filter to columns that actually exist in the data
+        groupby_fields = [f for f in groupby_fields if f in df.columns]
         
         # Group by the key dimensions
         groups = df.groupby(groupby_fields)
@@ -378,13 +385,13 @@ class OpioidPairModelResult:
             # Unpack keys according to groupby_fields
             key_dict = dict(zip(groupby_fields, group_keys))
             prompt_conditions = {
-                'include_nielson': key_dict.get('include_nielson', False),
+                'include_nielsen': key_dict.get('include_nielsen', False),
                 'include_examples': key_dict.get('include_examples', False),
                 'ask_for_units': key_dict.get('ask_for_units', False),
                 'explain_units': key_dict.get('explain_units', False)
             }
             
-            # Calculate expected coefficient from Nielson data
+            # Calculate expected coefficient from Nielsen data
             expected_coeff = None
             if conversion_service:
                 try:

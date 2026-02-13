@@ -54,6 +54,10 @@ class VignetteModelResult:
             raise ValueError(f"No positive doses for vignette {self.vignette_id}, model {self.model}")
         self.observed_dose_mean = np.mean(doses)
         self.observed_dose_std = np.std(doses, ddof=1)
+        if self.observed_dose_mean != 0:
+            self.observed_dose_cv = self.observed_dose_std / abs(self.observed_dose_mean)
+        else:
+            self.observed_dose_cv = np.nan
         log_doses = np.log(doses)
         self.observed_log_dose_mean = float(np.mean(log_doses))
         self.observed_log_dose_std = float(np.std(log_doses, ddof=1))
@@ -96,7 +100,7 @@ class VignetteModelResult:
             'ome': self.ome,
             'has_vignette_text': self.has_vignette_text,
             'model': self.model,
-            'include_nielson': self.prompt_conditions.get('include_nielson', False),
+            'include_nielsen': self.prompt_conditions.get('include_nielsen', False),
             'include_examples': self.prompt_conditions.get('include_examples', False),
             'ask_for_units': self.prompt_conditions.get('ask_for_units', False),
             'explain_units': self.prompt_conditions.get('explain_units', False),
@@ -146,7 +150,7 @@ class VignetteModelResult:
             multiple_from_opioids: Multiple opioids flag
             ome: OME flag
             model: Model name
-            prompt_conditions: Dict with 'include_nielson' and 'include_examples' keys
+            prompt_conditions: Dict with 'include_nielsen' and 'include_examples' keys
 
         Returns:
             VignetteModelResult instance with filtered data
@@ -160,7 +164,7 @@ class VignetteModelResult:
             (df['multiple_from_opioids'] == multiple_from_opioids) &
             (df['ome'] == ome) &
             (df['model'] == model) &
-            (df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
+            (df['include_nielsen'] == prompt_conditions.get('include_nielsen', False)) &
             (df['include_examples'] == prompt_conditions.get('include_examples', False)) &
             (df.get('ask_for_units', False) == prompt_conditions.get('ask_for_units', False)) &
             (df.get('explain_units', False) == prompt_conditions.get('explain_units', False))
@@ -196,7 +200,7 @@ class VignetteModelResult:
         df = pd.read_csv(csv_file)
         groups = df.groupby([
             'vignette_id', 'scenario_key', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit','multiple_from_opioids', 'ome', 'has_vignette_text',
-            'model', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
+            'model', 'include_nielsen', 'include_examples', 'ask_for_units', 'explain_units'
         ])
         total = len(groups)
         processed = 0
@@ -205,9 +209,9 @@ class VignetteModelResult:
         if output_path.exists():
             output_path.unlink()
         for (vignette_id, scenario_key, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit, multiple_from_opioids, ome, has_vignette_text,
-             model, include_nielson, include_examples, ask_for_units, explain_units), group_df in groups:
+             model, include_nielsen, include_examples, ask_for_units, explain_units), group_df in groups:
             prompt_conditions = {
-                'include_nielson': include_nielson,
+                'include_nielsen': include_nielsen,
                 'include_examples': include_examples,
                 'ask_for_units': ask_for_units,
                 'explain_units': explain_units
@@ -306,7 +310,7 @@ class VignetteModelConsensus(OpioidPairConsensus):
         df = pd.read_csv(csv_file)
         groups = df.groupby([
             'vignette_id', 'scenario_key', 'from_opioid', 'from_opioid_unit', 'to_opioid', 'to_opioid_unit',
-            'multiple_from_opioids', 'ome', 'has_vignette_text', 'include_nielson', 'include_examples', 'ask_for_units', 'explain_units'
+            'multiple_from_opioids', 'ome', 'has_vignette_text', 'include_nielsen', 'include_examples', 'ask_for_units', 'explain_units'
         ])
         total = len(groups)
         processed = 0
@@ -316,7 +320,7 @@ class VignetteModelConsensus(OpioidPairConsensus):
             output_path.unlink()
         for keys, group_df in groups:
             (vignette_id, scenario_key, from_opioid, from_opioid_unit, to_opioid, to_opioid_unit,
-             multiple_from_opioids, ome, has_vignette_text, include_nielson, include_examples, ask_for_units, explain_units) = keys
+             multiple_from_opioids, ome, has_vignette_text, include_nielsen, include_examples, ask_for_units, explain_units) = keys
 
             stats_dict = cls.calculate_consensus_stats(group_df)
 
@@ -330,7 +334,7 @@ class VignetteModelConsensus(OpioidPairConsensus):
                 'multiple_from_opioids': multiple_from_opioids,
                 'ome': ome,
                 'has_vignette_text': has_vignette_text,
-                'include_nielson': include_nielson,
+                'include_nielsen': include_nielsen,
                 'include_examples': include_examples,
                 'ask_for_units': ask_for_units,
                 'explain_units': explain_units,

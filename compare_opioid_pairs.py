@@ -55,7 +55,7 @@ print("VIGNETTE COUNT PER OPIOID PAIR (from reworded_vignettes_model_analysis):"
 print("="*70)
 # Use a single prompt condition to count distinct vignettes per pair
 sample = vignettes_df[
-    (vignettes_df['include_nielson'] == False)
+    (vignettes_df['include_nielsen'] == False)
 ]
 pair_vignette_counts = sample.groupby(['from_opioid', 'to_opioid'])['vignette_id'].nunique().reset_index()
 pair_vignette_counts.columns = ['from_opioid', 'to_opioid', 'n_vignettes']

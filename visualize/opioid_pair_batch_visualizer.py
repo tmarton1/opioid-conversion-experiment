@@ -48,7 +48,7 @@ class OpioidPairBatchVisualizer:
 
         for key in self.batch.keys:
             prompt_conditions = {
-                "include_nielson": key.include_nielson,
+                "include_nielsen": key.include_nielsen,
                 "include_examples": key.include_examples,
             }
 
@@ -74,7 +74,7 @@ class OpioidPairBatchVisualizer:
                 # e.g. if there is some mismatch across CSVs for this key
                 print(
                     f"Skipping {key.from_opioid} ({key.from_opioid_unit}) -> {key.to_opioid} ({key.to_opioid_unit}) "
-                    f"(Nielson={key.include_nielson}, Examples={key.include_examples}): {e}"
+                    f"(Nielsen={key.include_nielsen}, Examples={key.include_examples}): {e}"
                 )
 
         if not rows:

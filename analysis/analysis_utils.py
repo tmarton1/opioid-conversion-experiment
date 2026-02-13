@@ -1,7 +1,7 @@
 import pandas as pd
 from analysis.prefix import harmonize_model_names
 from common.conversion_service import ConversionService
-from resources.nielson_data import NIELSON_CONVERSIONS
+from resources.nielsen_data import NIELSEN_CONVERSIONS
 from analysis.opioid_pair_model_result import OpioidPairModelResult
 from analysis.opioid_pair_consensus import OpioidPairConsensus
 
@@ -43,20 +43,20 @@ def processing_pipeline(
 
     if mode == "pair":
 
-        conversion_service = ConversionService(NIELSON_CONVERSIONS)
+        conversion_service = ConversionService(NIELSEN_CONVERSIONS)
 
         OpioidPairModelResult.process_all_combinations(
             csv_file=output_csv,
             output_file=variable_model_csv,
             conversion_service=conversion_service,
-            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "model", "include_nielson", "include_examples", "explain_units"],
+            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "model", "include_nielsen", "include_examples", "explain_units"],
             verbose=verbose
         )
         OpioidPairConsensus.process_all_combinations(
             csv_file=variable_model_csv,
             output_file=consensus_csv,
             conversion_service=conversion_service,
-            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielson", "include_examples", "explain_units"],
+            groupby_fields=["from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit", "include_nielsen", "include_examples", "explain_units"],
             verbose=verbose
         )
         OpioidPairConsensus.update_pair_model_analysis(

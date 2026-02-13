@@ -10,7 +10,7 @@ print("PROMPT CONDITIONS ANALYSIS")
 print("="*80)
 
 # Define prompt condition columns
-condition_cols = ['include_nielson', 'include_examples', 'ask_for_units', 'explain_units']
+condition_cols = ['include_nielsen', 'include_examples', 'ask_for_units', 'explain_units']
 
 def analyze_prompt_conditions(df, name):
     print(f"\n{name}")

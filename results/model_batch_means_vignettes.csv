@@ -1,4 +1,4 @@
-model,batch_name,ome,include_nielson,include_examples,explain_units,mean_weight,mean_in_tight,mean_in_broad
+model,batch_name,ome,include_nielsen,include_examples,explain_units,mean_weight,mean_in_tight,mean_in_broad
 ai21/jamba-large-1.7,all_n0,,False,,False,19.462782696332294,0.2875,0.5607142857142857
 ai21/jamba-mini-1.7,all_n0,,False,,False,19.955993084393025,0.05,0.325
 anthropic/claude-3.5-sonnet:20241022,all_n0,,False,,False,19.929546964081208,0.32857142857142857,0.8339285714285716

@@ -4,12 +4,12 @@ class ModelBatchMeansBuilder:
     def __init__(self, pair_model_csv="pair_model_analysis.csv"):
         self.df = pd.read_csv(pair_model_csv)
 
-    def filter_df(self, ome, include_nielson=None, include_examples=None, explain_units=None, has_vignette_text=None):
+    def filter_df(self, ome, include_nielsen=None, include_examples=None, explain_units=None, has_vignette_text=None):
         df = self.df.copy()
         if ome is not None:
             df = df[df["ome"] == ome]
-        if include_nielson is not None:
-            df = df[df["include_nielson"] == include_nielson]
+        if include_nielsen is not None:
+            df = df[df["include_nielsen"] == include_nielsen]
         if include_examples is not None and "include_examples" in df.columns:
             df = df[df["include_examples"] == include_examples]
         if explain_units is not None and "explain_units" in df.columns:
@@ -31,11 +31,12 @@ class ModelBatchMeansBuilder:
         for combo in combinations:
             batch_name = combo["batch_name"]
             ome = combo.get("ome", None)
-            include_nielson = combo.get("include_nielson", None)
+            # Accept both spellings: "include_nielsen" and "include_nielson"
+            include_nielsen = combo.get("include_nielsen", combo.get("include_nielson", None))
             include_examples = combo.get("include_examples", None)
             explain_units = combo.get("explain_units", None)
             has_vignette_text = combo.get("has_vignette_text", None)
-            filtered = self.filter_df(ome, include_nielson, include_examples, explain_units, has_vignette_text)
+            filtered = self.filter_df(ome, include_nielsen, include_examples, explain_units, has_vignette_text)
             for model in filtered["model"].unique():
                 model_df = filtered[filtered["model"] == model]
                 mean_weight = model_df["weight"].mean()
@@ -45,7 +46,7 @@ class ModelBatchMeansBuilder:
                     "model": model,
                     "batch_name": batch_name,
                     "ome": ome,
-                    "include_nielson": include_nielson,
+                    "include_nielsen": include_nielsen,
                     "include_examples": include_examples,
                     "explain_units": explain_units,
                     "has_vignette_text": has_vignette_text,

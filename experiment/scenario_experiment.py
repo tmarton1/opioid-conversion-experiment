@@ -1,7 +1,7 @@
 from experiment.experiment import Experiment
 from datetime import datetime
 from common.conversion_service import ConversionService
-from resources.nielson_data import NIELSON_CONVERSIONS
+from resources.nielsen_data import NIELSEN_CONVERSIONS
 from experiment.prompt_service import PromptService
 import csv
 import json
@@ -25,7 +25,7 @@ class ScenarioExperiment(Experiment):
             for condition in self.prompt_conditions
             for model in self.models
         ]
-        self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
+        self.prompt_service = PromptService(ConversionService(NIELSEN_CONVERSIONS))
         with open("resources/reworded_vignettes.json", "r") as f:
             self.vignettes_dict = json.load(f)
 
@@ -34,7 +34,7 @@ class ScenarioExperiment(Experiment):
 
             for _ in range(self.repetitions):
                 scenario_conversion.model = model
-                scenario_conversion.include_nielson = condition["include_nielson"]
+                scenario_conversion.include_nielsen = condition["include_nielsen"]
                 scenario_conversion.include_examples = condition["include_examples"]
                 scenario_conversion.ask_for_units = condition.get("ask_for_units", False)
                 scenario_conversion.explain_units = condition.get("explain_units", False)
@@ -72,7 +72,7 @@ class ScenarioExperiment(Experiment):
                         "expected_to_dose": scenario_conversion.expected_to_dose,
                         "model": model,
                         "prompt": scenario_conversion.prompt,
-                        "include_nielson": condition["include_nielson"],
+                        "include_nielsen": condition["include_nielsen"],
                         "include_examples": condition["include_examples"],
                         "ask_for_units": scenario_conversion.ask_for_units,
                         "explain_units": scenario_conversion.explain_units,
@@ -90,7 +90,7 @@ class ScenarioExperiment(Experiment):
         fieldnames = [
             "experiment_id", "datetime", "vignette_id", "scenario_key", "from_opioid", "from_opioid_unit",
             "to_opioid", "to_opioid_unit", "from_dose", "expected_to_dose", "model", "prompt",
-            "include_nielson", "include_examples", "ask_for_units", "explain_units", "has_vignette_text",
+            "include_nielsen", "include_examples", "ask_for_units", "explain_units", "has_vignette_text",
             "observed_to_dose", "ratio_observed_expected", "response", "multiple_from_opioids"
         ]
         if filename is None:

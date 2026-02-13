@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Accuracy Summary Tables</title>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            margin: 30px;
+            color: #1a1a2e;
+            background: #fff;
+        }
+        h1 { font-size: 22px; margin-top: 40px; border-bottom: 2px solid #333; padding-bottom: 6px; }
+        h2 { font-size: 17px; margin-top: 30px; color: #444; }
+        h3 { font-size: 14px; margin-top: 20px; color: #555; }
+        table {
+            border-collapse: collapse;
+            margin: 10px 0 20px 0;
+            font-size: 12px;
+            min-width: 500px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            text-align: right;
+        }
+        th {
+            background-color: #f0f0f0;
+            font-weight: 600;
+            text-align: center;
+        }
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+        tr:nth-child(even) { background-color: #fafafa; }
+        .sig-better { background-color: #d4edda; font-weight: 600; }
+        .sig-worse { background-color: #f8d7da; }
+        .ns { color: #888; }
+        .step-sig td { border-top: 3px solid #28a745 !important; }
+        .summary-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+        .verdict-box {
+            border-radius: 6px;
+            padding: 10px 16px;
+            margin: 8px 0 14px 0;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .verdict-helps {
+            background: #d4edda; border: 1px solid #b1dfbb; color: #155724;
+        }
+        .verdict-hurts {
+            background: #f8d7da; border: 1px solid #f1aeb5; color: #58151c;
+        }
+        .verdict-mixed {
+            background: #fff3cd; border: 1px solid #ffe69c; color: #664d03;
+        }
+        .verdict-none {
+            background: #f8f9fa; border: 1px solid #dee2e6; color: #495057;
+        }
+        .rank-cell { font-weight: 700; font-size: 14px; }
+        .page-break { page-break-before: always; }
+    </style>
+    
+</head>
+<body>
+    <h1>Accuracy Comparison Summaries</h1><h2>Vignette Text vs Empty (no clinical context)</h2><div class='verdict-box verdict-mixed'>Mixed effect of text (Wilcoxon signed-rank). tight: median Δ = +0.000, mean Δ = +0.061, p = 1.44e-06 * (n = 780); broad: median Δ = +0.000, mean Δ = +0.042, p = 0.0014 * (n = 780)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = text more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>text sig. better</th>
+                <th>empty sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>780</td>
+                        <td class='sig-better'>49 (6.3%)</td>
+                        <td class='sig-worse'>16 (2.1%)</td>
+                        <td class='ns'>715 (91.7%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>780</td>
+                        <td class='sig-better'>96 (12.3%)</td>
+                        <td class='sig-worse'>43 (5.5%)</td>
+                        <td class='ns'>641 (82.2%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>780</td>
+                        <td class='sig-better'>47 (6.0%)</td>
+                        <td class='sig-worse'>25 (3.2%)</td>
+                        <td class='ns'>708 (90.8%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>780</td>
+                        <td class='sig-better'>96 (12.3%)</td>
+                        <td class='sig-worse'>64 (8.2%)</td>
+                        <td class='ns'>620 (79.5%)</td>
+                    </tr>
+        </table>
+        <h3>By include_nielsen, explain_units</h3>
+        <table>
+            <tr>
+                <th>include_nielsen, explain_units</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>text ↑</th><th>empty ↑</th>
+                <th>text ↑</th><th>empty ↑</th>
+            </tr><tr><td>include_nielsen=False, explain_units=False</td><td>260</td><td>7</td><td>9</td><td>14</td><td>9</td></tr>
+<tr><td>include_nielsen=True, explain_units=False</td><td>260</td><td>23</td><td>3</td><td>21</td><td>7</td></tr>
+<tr><td>include_nielsen=True, explain_units=True</td><td>260</td><td>19</td><td>4</td><td>12</td><td>9</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>text↑</th><th>empty↑</th><th>n.s.</th>
+                <th>text↑</th><th>empty↑</th><th>n.s.</th>
+                <th>text↑</th><th>empty↑</th><th>n.s.</th>
+                <th>text↑</th><th>empty↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>55</td><td class='sig-better'>6</td><td class='sig-worse'>2</td><td>52</td><td class='sig-better'>4</td><td class='sig-worse'>4</td><td>52</td><td class='sig-better'>8</td><td class='sig-worse'>6</td><td>46</td><td class='ns'>n.s. (p=0.483)</td><td class='ns'>n.s. (p=0.819)</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td class='sig-better'>6</td><td class='sig-worse'>1</td><td>53</td><td class='sig-better'>10</td><td class='sig-worse'>3</td><td>47</td><td class='sig-better'>6</td><td>0</td><td>54</td><td class='sig-better'>8</td><td class='sig-worse'>3</td><td>49</td><td class='sig-better'>↑ p=0.049</td><td class='sig-better'>↑ p=0.036</td></tr>
+<tr><td>command-r-plus-08-2024</td><td>0</td><td class='sig-worse'>1</td><td>59</td><td class='sig-better'>2</td><td class='sig-worse'>8</td><td>50</td><td>0</td><td class='sig-worse'>1</td><td>59</td><td class='sig-better'>6</td><td class='sig-worse'>6</td><td>48</td><td class='ns'>n.s. (p=0.159)</td><td class='ns'>n.s. (p=0.353)</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>3</td><td>0</td><td>57</td><td class='sig-better'>8</td><td class='sig-worse'>1</td><td>51</td><td class='sig-better'>1</td><td>0</td><td>59</td><td class='sig-better'>7</td><td>0</td><td>53</td><td class='sig-better'>↑ p=0.003</td><td class='sig-better'>↑ p=0.002</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>4</td><td class='sig-worse'>3</td><td>53</td><td class='sig-better'>8</td><td class='sig-worse'>4</td><td>48</td><td class='sig-better'>3</td><td class='sig-worse'>7</td><td>50</td><td class='sig-better'>5</td><td class='sig-worse'>11</td><td>44</td><td class='ns'>n.s. (p=0.367)</td><td class='ns'>n.s. (p=0.236)</td></tr>
+<tr><td>gemini-2.5-pro</td><td class='sig-better'>9</td><td class='sig-worse'>1</td><td>50</td><td class='sig-better'>9</td><td class='sig-worse'>2</td><td>49</td><td class='sig-better'>3</td><td>0</td><td>57</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>55</td><td class='sig-better'>↑ p=0.006</td><td class='ns'>n.s. (p=0.124)</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>3</td><td>0</td><td>57</td><td class='sig-better'>7</td><td class='sig-worse'>2</td><td>51</td><td class='sig-better'>5</td><td class='sig-worse'>4</td><td>51</td><td class='sig-better'>12</td><td class='sig-worse'>6</td><td>42</td><td class='sig-better'>↑ p=0.013</td><td class='ns'>n.s. (p=0.394)</td></tr>
+<tr><td>mistral-large-2407</td><td class='sig-better'>5</td><td>0</td><td>55</td><td class='sig-better'>9</td><td class='sig-worse'>1</td><td>50</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>55</td><td class='sig-better'>7</td><td class='sig-worse'>4</td><td>49</td><td class='sig-better'>↑ p=0.016</td><td class='ns'>n.s. (p=0.300)</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>55</td><td class='sig-better'>7</td><td class='sig-worse'>7</td><td>46</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>55</td><td class='sig-better'>9</td><td class='sig-worse'>8</td><td>43</td><td class='ns'>n.s. (p=0.563)</td><td class='ns'>n.s. (p=0.368)</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>1</td><td class='sig-worse'>2</td><td>57</td><td class='sig-better'>6</td><td class='sig-worse'>6</td><td>48</td><td class='sig-better'>6</td><td class='sig-worse'>3</td><td>51</td><td class='sig-better'>7</td><td class='sig-worse'>8</td><td>45</td><td class='ns'>n.s. (p=0.711)</td><td class='ns'>n.s. (p=0.809)</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>7</td><td>0</td><td>53</td><td class='sig-better'>8</td><td class='sig-worse'>2</td><td>50</td><td class='sig-better'>4</td><td>0</td><td>56</td><td class='sig-better'>5</td><td class='sig-worse'>3</td><td>52</td><td class='sig-better'>↑ p=0.039</td><td class='ns'>n.s. (p=0.355)</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>55</td><td class='sig-better'>10</td><td class='sig-worse'>2</td><td>48</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>55</td><td class='sig-better'>9</td><td class='sig-worse'>4</td><td>47</td><td class='ns'>n.s. (p=0.262)</td><td class='ns'>n.s. (p=0.459)</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td class='sig-better'>1</td><td class='sig-worse'>3</td><td>56</td><td class='sig-better'>6</td><td class='sig-worse'>3</td><td>51</td><td class='sig-better'>4</td><td class='sig-worse'>2</td><td>54</td><td class='sig-better'>9</td><td class='sig-worse'>4</td><td>47</td><td class='ns'>n.s. (p=0.706)</td><td class='ns'>n.s. (p=0.190)</td></tr></table><h2>Effect of Nielsen Reference — Vignettes (All)</h2><div class='verdict-box verdict-helps'>nielsen significantly improves accuracy (Wilcoxon signed-rank). tight: median Δ = +0.143, mean Δ = +0.345, p = 1.71e-30 * (n = 540); broad: median Δ = +0.000, mean Δ = +0.125, p = 9.60e-08 * (n = 540)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = nielsen more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>nielsen sig. better</th>
+                <th>naive sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>128 (23.7%)</td>
+                        <td class='sig-worse'>17 (3.1%)</td>
+                        <td class='ns'>395 (73.1%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>260 (48.1%)</td>
+                        <td class='sig-worse'>54 (10.0%)</td>
+                        <td class='ns'>226 (41.9%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>73 (13.5%)</td>
+                        <td class='sig-worse'>25 (4.6%)</td>
+                        <td class='ns'>442 (81.9%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>165 (30.6%)</td>
+                        <td class='sig-worse'>78 (14.4%)</td>
+                        <td class='ns'>297 (55.0%)</td>
+                    </tr>
+        </table>
+        <h3>By has_vignette_text, explain_units</h3>
+        <table>
+            <tr>
+                <th>has_vignette_text, explain_units</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+            </tr><tr><td>has_vignette_text=False, explain_units=False</td><td>260</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>has_vignette_text=True, explain_units=False</td><td>280</td><td>128</td><td>17</td><td>73</td><td>25</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td class='sig-better'>7</td><td class='sig-worse'>2</td><td>31</td><td class='sig-better'>14</td><td class='sig-worse'>6</td><td>20</td><td class='sig-better'>5</td><td class='sig-worse'>2</td><td>33</td><td class='sig-better'>11</td><td class='sig-worse'>10</td><td>19</td><td class='ns'>n.s. (p=0.206)</td><td class='ns'>n.s. (p=0.921)</td></tr>
+<tr><td>jamba-mini-1.7</td><td class='sig-better'>4</td><td>0</td><td>16</td><td class='sig-better'>6</td><td>0</td><td>14</td><td class='sig-better'>8</td><td class='sig-worse'>2</td><td>10</td><td class='sig-better'>10</td><td class='sig-worse'>5</td><td>5</td><td class='sig-better'>↑ p=0.031</td><td class='ns'>n.s. (p=0.122)</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td class='sig-better'>12</td><td>0</td><td>28</td><td class='sig-better'>25</td><td class='sig-worse'>2</td><td>13</td><td class='sig-better'>4</td><td>0</td><td>36</td><td class='sig-better'>9</td><td class='sig-worse'>1</td><td>30</td><td class='sig-better'>↑ p=2.12e-05</td><td class='sig-better'>↑ p=0.016</td></tr>
+<tr><td>command-r-plus-08-2024</td><td class='sig-better'>6</td><td class='sig-worse'>1</td><td>33</td><td class='sig-better'>15</td><td class='sig-worse'>5</td><td>20</td><td class='sig-better'>5</td><td class='sig-worse'>3</td><td>32</td><td class='sig-better'>13</td><td class='sig-worse'>10</td><td>17</td><td class='sig-better'>↑ p=0.007</td><td class='ns'>n.s. (p=0.520)</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>14</td><td>0</td><td>26</td><td class='sig-better'>25</td><td class='sig-worse'>1</td><td>14</td><td class='sig-better'>7</td><td>0</td><td>33</td><td class='sig-better'>18</td><td>0</td><td>22</td><td class='sig-better'>↑ p=1.63e-05</td><td class='sig-better'>↑ p=2.58e-05</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>9</td><td>0</td><td>31</td><td class='sig-better'>21</td><td class='sig-worse'>2</td><td>17</td><td class='sig-better'>4</td><td>0</td><td>36</td><td class='sig-better'>12</td><td class='sig-worse'>5</td><td>23</td><td class='sig-better'>↑ p=8.36e-05</td><td class='ns'>n.s. (p=0.073)</td></tr>
+<tr><td>gemini-2.5-pro</td><td class='sig-better'>12</td><td>0</td><td>28</td><td class='sig-better'>25</td><td class='sig-worse'>1</td><td>14</td><td class='sig-better'>4</td><td>0</td><td>36</td><td class='sig-better'>12</td><td>0</td><td>28</td><td class='sig-better'>↑ p=6.83e-06</td><td class='sig-better'>↑ p=1.91e-04</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>7</td><td class='sig-worse'>3</td><td>30</td><td class='sig-better'>16</td><td class='sig-worse'>6</td><td>18</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>35</td><td class='sig-better'>7</td><td class='sig-worse'>9</td><td>24</td><td class='sig-better'>↑ p=0.041</td><td class='ns'>n.s. (p=0.491)</td></tr>
+<tr><td>mistral-large-2407</td><td class='sig-better'>10</td><td class='sig-worse'>1</td><td>29</td><td class='sig-better'>19</td><td class='sig-worse'>2</td><td>19</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>36</td><td class='sig-better'>8</td><td class='sig-worse'>3</td><td>29</td><td class='sig-better'>↑ p=0.002</td><td class='ns'>n.s. (p=0.237)</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td class='sig-better'>11</td><td class='sig-worse'>3</td><td>26</td><td class='sig-better'>22</td><td class='sig-worse'>6</td><td>12</td><td class='sig-better'>6</td><td class='sig-worse'>2</td><td>32</td><td class='sig-better'>17</td><td class='sig-worse'>6</td><td>17</td><td class='sig-better'>↑ p=4.93e-04</td><td class='sig-better'>↑ p=0.021</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>7</td><td class='sig-worse'>3</td><td>30</td><td class='sig-better'>12</td><td class='sig-worse'>9</td><td>19</td><td class='sig-better'>9</td><td class='sig-worse'>6</td><td>25</td><td class='sig-better'>13</td><td class='sig-worse'>12</td><td>15</td><td class='ns'>n.s. (p=0.305)</td><td class='ns'>n.s. (p=0.588)</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>10</td><td class='sig-worse'>1</td><td>29</td><td class='sig-better'>21</td><td class='sig-worse'>5</td><td>14</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>35</td><td class='sig-better'>8</td><td class='sig-worse'>3</td><td>29</td><td class='sig-better'>↑ p=6.15e-04</td><td class='ns'>n.s. (p=0.081)</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>8</td><td>0</td><td>32</td><td class='sig-better'>16</td><td class='sig-worse'>3</td><td>21</td><td class='sig-better'>3</td><td class='sig-worse'>3</td><td>34</td><td class='sig-better'>8</td><td class='sig-worse'>9</td><td>23</td><td class='sig-better'>↑ p=5.21e-04</td><td class='ns'>n.s. (p=0.721)</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td class='sig-better'>11</td><td class='sig-worse'>3</td><td>26</td><td class='sig-better'>23</td><td class='sig-worse'>6</td><td>11</td><td class='sig-better'>9</td><td class='sig-worse'>2</td><td>29</td><td class='sig-better'>19</td><td class='sig-worse'>5</td><td>16</td><td class='sig-better'>↑ p=0.002</td><td class='sig-better'>↑ p=0.008</td></tr></table><h2>Effect of Nielsen Reference — Vignettes (Oral Morphine Only)</h2><div class='verdict-box verdict-helps'>nielsen significantly improves accuracy (Wilcoxon signed-rank). tight: median Δ = +0.500, mean Δ = +0.464, p = 7.20e-29 * (n = 297); broad: median Δ = +0.000, mean Δ = +0.186, p = 4.19e-09 * (n = 297)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = nielsen more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>nielsen sig. better</th>
+                <th>naive sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>297</td>
+                        <td class='sig-better'>86 (29.0%)</td>
+                        <td class='sig-worse'>7 (2.4%)</td>
+                        <td class='ns'>204 (68.7%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>297</td>
+                        <td class='sig-better'>165 (55.6%)</td>
+                        <td class='sig-worse'>15 (5.1%)</td>
+                        <td class='ns'>117 (39.4%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>297</td>
+                        <td class='sig-better'>51 (17.2%)</td>
+                        <td class='sig-worse'>9 (3.0%)</td>
+                        <td class='ns'>237 (79.8%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>297</td>
+                        <td class='sig-better'>100 (33.7%)</td>
+                        <td class='sig-worse'>31 (10.4%)</td>
+                        <td class='ns'>166 (55.9%)</td>
+                    </tr>
+        </table>
+        <h3>By has_vignette_text, explain_units</h3>
+        <table>
+            <tr>
+                <th>has_vignette_text, explain_units</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+            </tr><tr><td>has_vignette_text=False, explain_units=False</td><td>143</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>has_vignette_text=True, explain_units=False</td><td>154</td><td>86</td><td>7</td><td>51</td><td>9</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td class='sig-better'>5</td><td>0</td><td>17</td><td class='sig-better'>11</td><td>0</td><td>11</td><td class='sig-better'>3</td><td>0</td><td>19</td><td class='sig-better'>6</td><td class='sig-worse'>2</td><td>14</td><td class='sig-better'>↑ p=9.77e-04</td><td class='ns'>n.s. (p=0.189)</td></tr>
+<tr><td>jamba-mini-1.7</td><td class='sig-better'>4</td><td>0</td><td>7</td><td class='sig-better'>4</td><td>0</td><td>7</td><td class='sig-better'>6</td><td>0</td><td>5</td><td class='sig-better'>7</td><td class='sig-worse'>2</td><td>2</td><td class='ns'>n.s. (p=0.125)</td><td class='sig-better'>↑ p=0.027</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td class='sig-better'>6</td><td>0</td><td>16</td><td class='sig-better'>13</td><td class='sig-worse'>1</td><td>8</td><td class='sig-better'>3</td><td>0</td><td>19</td><td class='sig-better'>7</td><td class='sig-worse'>1</td><td>14</td><td class='sig-better'>↑ p=9.95e-04</td><td class='ns'>n.s. (p=0.068)</td></tr>
+<tr><td>command-r-plus-08-2024</td><td class='sig-better'>6</td><td>0</td><td>16</td><td class='sig-better'>14</td><td>0</td><td>8</td><td class='sig-better'>5</td><td class='sig-worse'>1</td><td>16</td><td class='sig-better'>11</td><td class='sig-worse'>2</td><td>9</td><td class='sig-better'>↑ p=4.45e-04</td><td class='sig-better'>↑ p=0.026</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>8</td><td>0</td><td>14</td><td class='sig-better'>13</td><td>0</td><td>9</td><td class='sig-better'>4</td><td>0</td><td>18</td><td class='sig-better'>10</td><td>0</td><td>12</td><td class='sig-better'>↑ p=6.87e-04</td><td class='sig-better'>↑ p=0.002</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>6</td><td>0</td><td>16</td><td class='sig-better'>14</td><td class='sig-worse'>1</td><td>7</td><td class='sig-better'>3</td><td>0</td><td>19</td><td class='sig-better'>8</td><td class='sig-worse'>2</td><td>12</td><td class='sig-better'>↑ p=0.002</td><td class='ns'>n.s. (p=0.102)</td></tr>
+<tr><td>gemini-2.5-pro</td><td class='sig-better'>6</td><td>0</td><td>16</td><td class='sig-better'>12</td><td>0</td><td>10</td><td class='sig-better'>3</td><td>0</td><td>19</td><td class='sig-better'>6</td><td>0</td><td>16</td><td class='sig-better'>↑ p=3.85e-04</td><td class='sig-better'>↑ p=0.002</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>5</td><td class='sig-worse'>1</td><td>16</td><td class='sig-better'>10</td><td class='sig-worse'>1</td><td>11</td><td class='sig-better'>3</td><td>0</td><td>19</td><td class='sig-better'>5</td><td class='sig-worse'>3</td><td>14</td><td class='sig-better'>↑ p=0.002</td><td class='ns'>n.s. (p=0.309)</td></tr>
+<tr><td>mistral-large-2407</td><td class='sig-better'>7</td><td>0</td><td>15</td><td class='sig-better'>12</td><td>0</td><td>10</td><td class='sig-better'>2</td><td>0</td><td>20</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>17</td><td class='sig-better'>↑ p=2.44e-04</td><td class='ns'>n.s. (p=0.375)</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td class='sig-better'>7</td><td class='sig-worse'>2</td><td>13</td><td class='sig-better'>13</td><td class='sig-worse'>4</td><td>5</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>18</td><td class='sig-better'>4</td><td class='sig-worse'>5</td><td>13</td><td class='sig-better'>↑ p=0.008</td><td class='ns'>n.s. (p=0.688)</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>6</td><td class='sig-worse'>1</td><td>15</td><td class='sig-better'>10</td><td class='sig-worse'>3</td><td>9</td><td class='sig-better'>7</td><td class='sig-worse'>3</td><td>12</td><td class='sig-better'>10</td><td class='sig-worse'>6</td><td>6</td><td class='sig-better'>↑ p=0.022</td><td class='ns'>n.s. (p=0.375)</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>6</td><td class='sig-worse'>1</td><td>15</td><td class='sig-better'>12</td><td class='sig-worse'>2</td><td>8</td><td class='sig-better'>3</td><td class='sig-worse'>1</td><td>18</td><td class='sig-better'>5</td><td class='sig-worse'>1</td><td>16</td><td class='sig-better'>↑ p=0.004</td><td class='ns'>n.s. (p=0.078)</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>6</td><td>0</td><td>16</td><td class='sig-better'>12</td><td>0</td><td>10</td><td class='sig-better'>2</td><td>0</td><td>20</td><td class='sig-better'>7</td><td class='sig-worse'>2</td><td>13</td><td class='sig-better'>↑ p=5.67e-04</td><td class='sig-better'>↑ p=0.044</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td class='sig-better'>8</td><td class='sig-worse'>2</td><td>12</td><td class='sig-better'>15</td><td class='sig-worse'>3</td><td>4</td><td class='sig-better'>5</td><td class='sig-worse'>2</td><td>15</td><td class='sig-better'>10</td><td class='sig-worse'>4</td><td>8</td><td class='sig-better'>↑ p=0.003</td><td class='ns'>n.s. (p=0.116)</td></tr></table><h2>Effect of Nielsen Reference — Vignettes (Non–Oral Morphine)</h2><div class='verdict-box verdict-mixed'>Mixed effect of nielsen (Wilcoxon signed-rank). tight: median Δ = +0.000, mean Δ = +0.199, p = 5.99e-06 * (n = 243); broad: median Δ = +0.000, mean Δ = +0.050, p = 0.1417 (n = 243)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = nielsen more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>nielsen sig. better</th>
+                <th>naive sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>243</td>
+                        <td class='sig-better'>44 (18.1%)</td>
+                        <td class='sig-worse'>12 (4.9%)</td>
+                        <td class='ns'>187 (77.0%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>243</td>
+                        <td class='sig-better'>95 (39.1%)</td>
+                        <td class='sig-worse'>39 (16.0%)</td>
+                        <td class='ns'>109 (44.9%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>243</td>
+                        <td class='sig-better'>23 (9.5%)</td>
+                        <td class='sig-worse'>18 (7.4%)</td>
+                        <td class='ns'>202 (83.1%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>243</td>
+                        <td class='sig-better'>65 (26.7%)</td>
+                        <td class='sig-worse'>47 (19.3%)</td>
+                        <td class='ns'>131 (53.9%)</td>
+                    </tr>
+        </table>
+        <h3>By has_vignette_text, explain_units</h3>
+        <table>
+            <tr>
+                <th>has_vignette_text, explain_units</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+            </tr><tr><td>has_vignette_text=False, explain_units=False</td><td>117</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>has_vignette_text=True, explain_units=False</td><td>126</td><td>44</td><td>12</td><td>23</td><td>18</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>14</td><td class='sig-better'>3</td><td class='sig-worse'>6</td><td>9</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>14</td><td class='sig-better'>5</td><td class='sig-worse'>8</td><td>5</td><td class='ns'>n.s. (p=0.125)</td><td class='ns'>n.s. (p=0.294)</td></tr>
+<tr><td>jamba-mini-1.7</td><td>0</td><td>0</td><td class='ns'>9</td><td class='sig-better'>2</td><td>0</td><td>7</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>5</td><td class='sig-better'>3</td><td class='sig-worse'>3</td><td>3</td><td class='ns'>n.s. (p=0.500)</td><td class='ns'>n.s. (p=0.906)</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td class='sig-better'>6</td><td>0</td><td>12</td><td class='sig-better'>12</td><td class='sig-worse'>1</td><td>5</td><td class='sig-better'>1</td><td>0</td><td>17</td><td class='sig-better'>2</td><td>0</td><td>16</td><td class='sig-better'>↑ p=0.007</td><td class='ns'>n.s. (p=0.250)</td></tr>
+<tr><td>command-r-plus-08-2024</td><td>0</td><td class='sig-worse'>1</td><td>17</td><td class='sig-better'>1</td><td class='sig-worse'>5</td><td>12</td><td>0</td><td class='sig-worse'>2</td><td>16</td><td class='sig-better'>2</td><td class='sig-worse'>8</td><td>8</td><td class='ns'>n.s. (p=0.094)</td><td class='sig-worse'>↓ p=0.043</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>6</td><td>0</td><td>12</td><td class='sig-better'>12</td><td class='sig-worse'>1</td><td>5</td><td class='sig-better'>3</td><td>0</td><td>15</td><td class='sig-better'>8</td><td>0</td><td>10</td><td class='sig-better'>↑ p=0.007</td><td class='sig-better'>↑ p=0.001</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>3</td><td>0</td><td>15</td><td class='sig-better'>7</td><td class='sig-worse'>1</td><td>10</td><td class='sig-better'>1</td><td>0</td><td>17</td><td class='sig-better'>4</td><td class='sig-worse'>3</td><td>11</td><td class='sig-better'>↑ p=0.023</td><td class='ns'>n.s. (p=0.539)</td></tr>
+<tr><td>gemini-2.5-pro</td><td class='sig-better'>6</td><td>0</td><td>12</td><td class='sig-better'>13</td><td class='sig-worse'>1</td><td>4</td><td class='sig-better'>1</td><td>0</td><td>17</td><td class='sig-better'>6</td><td>0</td><td>12</td><td class='sig-better'>↑ p=0.004</td><td class='sig-better'>↑ p=0.008</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>13</td><td class='sig-better'>6</td><td class='sig-worse'>5</td><td>7</td><td class='sig-better'>1</td><td class='sig-worse'>2</td><td>15</td><td class='sig-better'>2</td><td class='sig-worse'>6</td><td>10</td><td class='ns'>n.s. (p=0.940)</td><td class='ns'>n.s. (p=0.061)</td></tr>
+<tr><td>mistral-large-2407</td><td class='sig-better'>3</td><td class='sig-worse'>1</td><td>14</td><td class='sig-better'>7</td><td class='sig-worse'>2</td><td>9</td><td>0</td><td class='sig-worse'>2</td><td>16</td><td class='sig-better'>4</td><td class='sig-worse'>2</td><td>12</td><td class='ns'>n.s. (p=0.355)</td><td class='ns'>n.s. (p=0.781)</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>13</td><td class='sig-better'>9</td><td class='sig-worse'>2</td><td>7</td><td class='sig-better'>4</td><td>0</td><td>14</td><td class='sig-better'>13</td><td class='sig-worse'>1</td><td>4</td><td class='sig-better'>↑ p=0.009</td><td class='sig-better'>↑ p=0.001</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>1</td><td class='sig-worse'>2</td><td>15</td><td class='sig-better'>2</td><td class='sig-worse'>6</td><td>10</td><td class='sig-better'>2</td><td class='sig-worse'>3</td><td>13</td><td class='sig-better'>3</td><td class='sig-worse'>6</td><td>9</td><td class='ns'>n.s. (p=0.219)</td><td class='ns'>n.s. (p=0.066)</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>13</td><td class='sig-better'>9</td><td class='sig-worse'>3</td><td>6</td><td class='sig-better'>1</td><td class='sig-worse'>1</td><td>16</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>13</td><td class='sig-better'>↑ p=0.047</td><td class='ns'>n.s. (p=0.648)</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>2</td><td class='sig-worse'>1</td><td>15</td><td class='sig-better'>4</td><td class='sig-worse'>3</td><td>11</td><td class='sig-better'>1</td><td class='sig-worse'>4</td><td>13</td><td class='sig-better'>1</td><td class='sig-worse'>7</td><td>10</td><td class='ns'>n.s. (p=0.313)</td><td class='ns'>n.s. (p=0.131)</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>13</td><td class='sig-better'>8</td><td class='sig-worse'>3</td><td>7</td><td class='sig-better'>4</td><td>0</td><td>14</td><td class='sig-better'>9</td><td class='sig-worse'>1</td><td>8</td><td class='ns'>n.s. (p=0.227)</td><td class='sig-better'>↑ p=0.029</td></tr></table><h2>Effect of Explaining Units — Vignettes</h2><div class='verdict-box verdict-mixed'>Mixed effect of explain_units (Wilcoxon signed-rank). tight: median Δ = +0.000, mean Δ = +0.021, p = 0.0068 * (n = 540); broad: median Δ = +0.000, mean Δ = +0.009, p = 0.4068 (n = 540)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = explain_units more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>explain_units sig. better</th>
+                <th>no_units sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>5 (0.9%)</td>
+                        <td class='sig-worse'>4 (0.7%)</td>
+                        <td class='ns'>531 (98.3%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>28 (5.2%)</td>
+                        <td class='sig-worse'>17 (3.1%)</td>
+                        <td class='ns'>495 (91.7%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>6 (1.1%)</td>
+                        <td class='sig-worse'>7 (1.3%)</td>
+                        <td class='ns'>527 (97.6%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>540</td>
+                        <td class='sig-better'>29 (5.4%)</td>
+                        <td class='sig-worse'>28 (5.2%)</td>
+                        <td class='ns'>483 (89.4%)</td>
+                    </tr>
+        </table>
+        <h3>By has_vignette_text, include_nielsen</h3>
+        <table>
+            <tr>
+                <th>has_vignette_text, include_nielsen</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>explain_units ↑</th><th>no_units ↑</th>
+                <th>explain_units ↑</th><th>no_units ↑</th>
+            </tr><tr><td>has_vignette_text=False, include_nielsen=True</td><td>260</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>has_vignette_text=True, include_nielsen=True</td><td>280</td><td>5</td><td>4</td><td>6</td><td>7</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td>0</td><td>0</td><td class='ns'>40</td><td class='sig-better'>3</td><td class='sig-worse'>4</td><td>33</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='sig-better'>4</td><td class='sig-worse'>5</td><td>31</td><td class='ns'>n.s. (p=0.844)</td><td class='ns'>n.s. (p=0.844)</td></tr>
+<tr><td>jamba-mini-1.7</td><td>0</td><td>0</td><td class='ns'>20</td><td class='sig-better'>2</td><td class='sig-worse'>1</td><td>17</td><td>0</td><td class='sig-worse'>1</td><td>19</td><td class='sig-better'>3</td><td class='sig-worse'>3</td><td>14</td><td class='ns'>n.s. (p=1.000)</td><td class='ns'>n.s. (p=0.719)</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td>0</td><td>0</td><td class='ns'>40</td><td class='sig-better'>2</td><td>0</td><td>38</td><td>0</td><td>0</td><td class='ns'>40</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='ns'>n.s. (p=0.062)</td><td class='ns'>n.s. (p=0.500)</td></tr>
+<tr><td>command-r-plus-08-2024</td><td>0</td><td>0</td><td class='ns'>40</td><td class='sig-better'>1</td><td>0</td><td>39</td><td>0</td><td>0</td><td class='ns'>40</td><td class='sig-better'>1</td><td class='sig-worse'>2</td><td>37</td><td class='ns'>n.s. (p=0.781)</td><td class='ns'>n.s. (p=0.344)</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='sig-better'>2</td><td>0</td><td>38</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='sig-better'>2</td><td>0</td><td>38</td><td class='ns'>n.s. (p=0.531)</td><td class='ns'>n.s. (p=0.578)</td></tr>
+<tr><td>gemini-2.5-flash</td><td>0</td><td>0</td><td class='ns'>40</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td>0</td><td class='sig-worse'>4</td><td>36</td><td class='ns'>n.s. (p=1.000)</td><td class='ns'>n.s. (p=0.094)</td></tr>
+<tr><td>gemini-2.5-pro</td><td>0</td><td>0</td><td class='ns'>40</td><td class='sig-better'>1</td><td>0</td><td>39</td><td>0</td><td>0</td><td class='ns'>40</td><td>0</td><td>0</td><td class='ns'>40</td><td class='ns'>n.s. (p=0.250)</td><td class='ns'>n.s. (p=0.500)</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>2</td><td class='sig-worse'>1</td><td>37</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>35</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>35</td><td class='ns'>n.s. (p=0.461)</td><td class='ns'>n.s. (p=0.594)</td></tr>
+<tr><td>mistral-large-2407</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td>0</td><td class='sig-worse'>4</td><td>36</td><td class='sig-better'>1</td><td class='sig-worse'>1</td><td>38</td><td class='sig-better'>1</td><td class='sig-worse'>4</td><td>35</td><td class='ns'>n.s. (p=0.125)</td><td class='ns'>n.s. (p=0.094)</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td>0</td><td>0</td><td class='ns'>40</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>36</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td>0</td><td class='sig-worse'>3</td><td>37</td><td class='ns'>n.s. (p=0.411)</td><td class='ns'>n.s. (p=0.773)</td></tr>
+<tr><td>gpt-3.5-turbo</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td class='sig-better'>1</td><td class='sig-worse'>1</td><td>38</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>36</td><td class='ns'>n.s. (p=0.875)</td><td class='ns'>n.s. (p=0.812)</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='sig-better'>4</td><td>0</td><td>36</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='sig-better'>4</td><td>0</td><td>36</td><td class='sig-better'>↑ p=0.047</td><td class='ns'>n.s. (p=0.086)</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='sig-better'>5</td><td class='sig-worse'>1</td><td>34</td><td class='sig-better'>1</td><td>0</td><td>39</td><td class='sig-better'>5</td><td class='sig-worse'>2</td><td>33</td><td class='sig-better'>↑ p=0.009</td><td class='sig-better'>↑ p=0.031</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td>0</td><td class='sig-worse'>1</td><td>39</td><td class='sig-better'>2</td><td class='sig-worse'>1</td><td>37</td><td class='sig-better'>1</td><td class='sig-worse'>1</td><td>38</td><td class='sig-better'>3</td><td class='sig-worse'>1</td><td>36</td><td class='ns'>n.s. (p=0.438)</td><td class='ns'>n.s. (p=0.312)</td></tr></table><h2>Effect of Nielsen Reference — Random Doses (All)</h2><div class='verdict-box verdict-helps'>nielsen significantly improves accuracy (Wilcoxon signed-rank). tight: median Δ = +0.791, mean Δ = +0.612, p = 1.27e-104 * (n = 752); broad: median Δ = +0.286, mean Δ = +0.315, p = 3.68e-59 * (n = 752)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = nielsen more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>nielsen sig. better</th>
+                <th>naive sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>752</td>
+                        <td class='sig-better'>264 (35.1%)</td>
+                        <td class='sig-worse'>2 (0.3%)</td>
+                        <td class='ns'>486 (64.6%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>752</td>
+                        <td class='sig-better'>525 (69.8%)</td>
+                        <td class='sig-worse'>13 (1.7%)</td>
+                        <td class='ns'>214 (28.5%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>752</td>
+                        <td class='sig-better'>144 (19.1%)</td>
+                        <td class='sig-worse'>7 (0.9%)</td>
+                        <td class='ns'>601 (79.9%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>752</td>
+                        <td class='sig-better'>336 (44.7%)</td>
+                        <td class='sig-worse'>38 (5.1%)</td>
+                        <td class='ns'>378 (50.3%)</td>
+                    </tr>
+        </table>
+        <h3>By include_examples</h3>
+        <table>
+            <tr>
+                <th>include_examples</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+            </tr><tr><td>include_examples=False</td><td>752</td><td>264</td><td>2</td><td>144</td><td>7</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td class='sig-better'>14</td><td>0</td><td>35</td><td class='sig-better'>24</td><td class='sig-worse'>1</td><td>24</td><td class='sig-better'>7</td><td>0</td><td>42</td><td class='sig-better'>19</td><td class='sig-worse'>8</td><td>22</td><td class='sig-better'>↑ p=5.92e-06</td><td class='ns'>n.s. (p=0.109)</td></tr>
+<tr><td>jamba-mini-1.7</td><td class='sig-better'>7</td><td>0</td><td>42</td><td class='sig-better'>16</td><td class='sig-worse'>2</td><td>31</td><td class='sig-better'>7</td><td>0</td><td>42</td><td class='sig-better'>16</td><td class='sig-worse'>3</td><td>30</td><td class='sig-better'>↑ p=0.002</td><td class='sig-better'>↑ p=8.92e-04</td></tr>
+<tr><td>claude-3-5-haiku-20241022</td><td class='sig-better'>25</td><td>0</td><td>19</td><td class='sig-better'>30</td><td>0</td><td>14</td><td class='sig-better'>20</td><td>0</td><td>24</td><td class='sig-better'>27</td><td class='sig-worse'>4</td><td>13</td><td class='sig-better'>↑ p=2.41e-08</td><td class='sig-better'>↑ p=1.30e-05</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td class='sig-better'>11</td><td>0</td><td>38</td><td class='sig-better'>39</td><td>0</td><td>10</td><td class='sig-better'>5</td><td>0</td><td>44</td><td class='sig-better'>16</td><td>0</td><td>33</td><td class='sig-better'>↑ p=2.41e-09</td><td class='sig-better'>↑ p=5.33e-06</td></tr>
+<tr><td>command-r-plus-08-2024</td><td class='sig-better'>16</td><td>0</td><td>33</td><td class='sig-better'>20</td><td>0</td><td>29</td><td class='sig-better'>12</td><td>0</td><td>37</td><td class='sig-better'>20</td><td class='sig-worse'>1</td><td>28</td><td class='sig-better'>↑ p=7.69e-07</td><td class='sig-better'>↑ p=2.26e-05</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>12</td><td>0</td><td>37</td><td class='sig-better'>43</td><td>0</td><td>6</td><td class='sig-better'>5</td><td>0</td><td>44</td><td class='sig-better'>23</td><td>0</td><td>26</td><td class='sig-better'>↑ p=3.62e-10</td><td class='sig-better'>↑ p=5.21e-07</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>32</td><td>0</td><td>17</td><td class='sig-better'>41</td><td>0</td><td>8</td><td class='sig-better'>12</td><td>0</td><td>37</td><td class='sig-better'>23</td><td>0</td><td>26</td><td class='sig-better'>↑ p=2.44e-09</td><td class='sig-better'>↑ p=7.85e-07</td></tr>
+<tr><td>gemini-2.5-pro</td><td class='sig-better'>8</td><td>0</td><td>41</td><td class='sig-better'>34</td><td>0</td><td>15</td><td class='sig-better'>1</td><td>0</td><td>48</td><td class='sig-better'>9</td><td>0</td><td>40</td><td class='sig-better'>↑ p=2.50e-08</td><td class='sig-better'>↑ p=1.26e-04</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>14</td><td>0</td><td>35</td><td class='sig-better'>35</td><td>0</td><td>14</td><td class='sig-better'>4</td><td>0</td><td>45</td><td class='sig-better'>25</td><td class='sig-worse'>2</td><td>22</td><td class='sig-better'>↑ p=8.55e-09</td><td class='sig-better'>↑ p=2.70e-05</td></tr>
+<tr><td>llama-3.3-70b-versatile</td><td class='sig-better'>13</td><td class='sig-worse'>2</td><td>5</td><td class='sig-better'>15</td><td class='sig-worse'>2</td><td>3</td><td class='sig-better'>9</td><td class='sig-worse'>2</td><td>9</td><td class='sig-better'>14</td><td class='sig-worse'>3</td><td>3</td><td class='sig-better'>↑ p=3.01e-04</td><td class='sig-better'>↑ p=0.018</td></tr>
+<tr><td>mistral-large-2407</td><td class='sig-better'>11</td><td>0</td><td>38</td><td class='sig-better'>39</td><td>0</td><td>10</td><td class='sig-better'>4</td><td>0</td><td>45</td><td class='sig-better'>23</td><td class='sig-worse'>1</td><td>25</td><td class='sig-better'>↑ p=2.90e-09</td><td class='sig-better'>↑ p=4.17e-06</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td class='sig-better'>15</td><td>0</td><td>34</td><td class='sig-better'>36</td><td>0</td><td>13</td><td class='sig-better'>12</td><td>0</td><td>37</td><td class='sig-better'>32</td><td class='sig-worse'>1</td><td>16</td><td class='sig-better'>↑ p=2.93e-09</td><td class='sig-better'>↑ p=9.33e-08</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>21</td><td>0</td><td>29</td><td class='sig-better'>29</td><td class='sig-worse'>6</td><td>15</td><td class='sig-better'>16</td><td class='sig-worse'>4</td><td>30</td><td class='sig-better'>24</td><td class='sig-worse'>12</td><td>14</td><td class='sig-better'>↑ p=1.90e-05</td><td class='sig-better'>↑ p=0.014</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>11</td><td>0</td><td>38</td><td class='sig-better'>38</td><td class='sig-worse'>1</td><td>10</td><td class='sig-better'>4</td><td>0</td><td>45</td><td class='sig-better'>15</td><td class='sig-worse'>1</td><td>33</td><td class='sig-better'>↑ p=7.88e-09</td><td class='sig-better'>↑ p=9.65e-05</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>43</td><td>0</td><td>7</td><td class='sig-better'>45</td><td class='sig-worse'>1</td><td>4</td><td class='sig-better'>19</td><td class='sig-worse'>1</td><td>30</td><td class='sig-better'>33</td><td class='sig-worse'>1</td><td>16</td><td class='sig-better'>↑ p=1.71e-09</td><td class='sig-better'>↑ p=1.59e-07</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td class='sig-better'>11</td><td>0</td><td>38</td><td class='sig-better'>41</td><td>0</td><td>8</td><td class='sig-better'>7</td><td>0</td><td>42</td><td class='sig-better'>17</td><td class='sig-worse'>1</td><td>31</td><td class='sig-better'>↑ p=1.29e-09</td><td class='sig-better'>↑ p=8.75e-07</td></tr></table><h2>Effect of Nielsen Reference — Random Doses (Oral Morphine Only)</h2><div class='verdict-box verdict-helps'>nielsen significantly improves accuracy (Wilcoxon signed-rank). tight: median Δ = +0.889, mean Δ = +0.722, p = 7.30e-48 * (n = 296); broad: median Δ = +0.476, mean Δ = +0.456, p = 1.38e-40 * (n = 296)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = nielsen more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>nielsen sig. better</th>
+                <th>naive sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>296</td>
+                        <td class='sig-better'>200 (67.6%)</td>
+                        <td class='sig-worse'>0 (0.0%)</td>
+                        <td class='ns'>96 (32.4%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>296</td>
+                        <td class='sig-better'>243 (82.1%)</td>
+                        <td class='sig-worse'>0 (0.0%)</td>
+                        <td class='ns'>53 (17.9%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>296</td>
+                        <td class='sig-better'>108 (36.5%)</td>
+                        <td class='sig-worse'>1 (0.3%)</td>
+                        <td class='ns'>187 (63.2%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>296</td>
+                        <td class='sig-better'>182 (61.5%)</td>
+                        <td class='sig-worse'>2 (0.7%)</td>
+                        <td class='ns'>112 (37.8%)</td>
+                    </tr>
+        </table>
+        <h3>By include_examples</h3>
+        <table>
+            <tr>
+                <th>include_examples</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+            </tr><tr><td>include_examples=False</td><td>296</td><td>200</td><td>0</td><td>108</td><td>1</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td class='sig-better'>15</td><td>0</td><td>4</td><td class='sig-better'>16</td><td>0</td><td>3</td><td class='sig-better'>7</td><td>0</td><td>12</td><td class='sig-better'>14</td><td>0</td><td>5</td><td class='sig-better'>↑ p=1.58e-04</td><td class='sig-better'>↑ p=2.91e-04</td></tr>
+<tr><td>jamba-mini-1.7</td><td class='sig-better'>7</td><td>0</td><td>12</td><td class='sig-better'>14</td><td>0</td><td>5</td><td class='sig-better'>7</td><td class='sig-worse'>1</td><td>11</td><td class='sig-better'>12</td><td class='sig-worse'>2</td><td>5</td><td class='sig-better'>↑ p=1.27e-04</td><td class='sig-better'>↑ p=0.002</td></tr>
+<tr><td>claude-3-5-haiku-20241022</td><td class='sig-better'>11</td><td>0</td><td>3</td><td class='sig-better'>13</td><td>0</td><td>1</td><td class='sig-better'>9</td><td>0</td><td>5</td><td class='sig-better'>11</td><td>0</td><td>3</td><td class='sig-better'>↑ p=2.44e-04</td><td class='sig-better'>↑ p=9.77e-04</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td class='sig-better'>11</td><td>0</td><td>8</td><td class='sig-better'>15</td><td>0</td><td>4</td><td class='sig-better'>5</td><td>0</td><td>14</td><td class='sig-better'>11</td><td>0</td><td>8</td><td class='sig-better'>↑ p=2.62e-04</td><td class='sig-better'>↑ p=2.44e-04</td></tr>
+<tr><td>command-r-plus-08-2024</td><td class='sig-better'>16</td><td>0</td><td>3</td><td class='sig-better'>18</td><td>0</td><td>1</td><td class='sig-better'>12</td><td>0</td><td>7</td><td class='sig-better'>15</td><td>0</td><td>4</td><td class='sig-better'>↑ p=8.18e-05</td><td class='sig-better'>↑ p=1.15e-04</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>13</td><td>0</td><td>6</td><td class='sig-better'>15</td><td>0</td><td>4</td><td class='sig-better'>5</td><td>0</td><td>14</td><td class='sig-better'>9</td><td>0</td><td>10</td><td class='sig-better'>↑ p=1.21e-04</td><td class='sig-better'>↑ p=6.53e-04</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>8</td><td>0</td><td>11</td><td class='sig-better'>12</td><td>0</td><td>7</td><td class='sig-better'>2</td><td>0</td><td>17</td><td class='sig-better'>6</td><td>0</td><td>13</td><td class='sig-better'>↑ p=3.85e-04</td><td class='sig-better'>↑ p=0.004</td></tr>
+<tr><td>gemini-2.5-pro</td><td class='sig-better'>8</td><td>0</td><td>11</td><td class='sig-better'>11</td><td>0</td><td>8</td><td class='sig-better'>1</td><td>0</td><td>18</td><td class='sig-better'>2</td><td>0</td><td>17</td><td class='sig-better'>↑ p=6.37e-04</td><td class='sig-better'>↑ p=9.77e-04</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>16</td><td>0</td><td>3</td><td class='sig-better'>19</td><td>0</td><td>0</td><td class='sig-better'>5</td><td>0</td><td>14</td><td class='sig-better'>15</td><td>0</td><td>4</td><td class='sig-better'>↑ p=1.31e-04</td><td class='sig-better'>↑ p=1.32e-04</td></tr>
+<tr><td>llama-3.3-70b-versatile</td><td class='sig-better'>11</td><td>0</td><td>3</td><td class='sig-better'>12</td><td>0</td><td>2</td><td class='sig-better'>8</td><td>0</td><td>6</td><td class='sig-better'>11</td><td>0</td><td>3</td><td class='sig-better'>↑ p=8.83e-04</td><td class='sig-better'>↑ p=2.44e-04</td></tr>
+<tr><td>mistral-large-2407</td><td class='sig-better'>13</td><td>0</td><td>6</td><td class='sig-better'>16</td><td>0</td><td>3</td><td class='sig-better'>5</td><td>0</td><td>14</td><td class='sig-better'>13</td><td>0</td><td>6</td><td class='sig-better'>↑ p=1.84e-04</td><td class='sig-better'>↑ p=4.36e-04</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td class='sig-better'>15</td><td>0</td><td>4</td><td class='sig-better'>17</td><td>0</td><td>2</td><td class='sig-better'>12</td><td>0</td><td>7</td><td class='sig-better'>15</td><td>0</td><td>4</td><td class='sig-better'>↑ p=9.80e-05</td><td class='sig-better'>↑ p=3.32e-04</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>17</td><td>0</td><td>3</td><td class='sig-better'>18</td><td>0</td><td>2</td><td class='sig-better'>11</td><td>0</td><td>9</td><td class='sig-better'>16</td><td>0</td><td>4</td><td class='sig-better'>↑ p=1.27e-04</td><td class='sig-better'>↑ p=1.30e-04</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>11</td><td>0</td><td>8</td><td class='sig-better'>13</td><td>0</td><td>6</td><td class='sig-better'>4</td><td>0</td><td>15</td><td class='sig-better'>7</td><td>0</td><td>12</td><td class='sig-better'>↑ p=2.87e-04</td><td class='sig-better'>↑ p=6.48e-04</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>16</td><td>0</td><td>4</td><td class='sig-better'>17</td><td>0</td><td>3</td><td class='sig-better'>8</td><td>0</td><td>12</td><td class='sig-better'>15</td><td>0</td><td>5</td><td class='sig-better'>↑ p=1.89e-04</td><td class='sig-better'>↑ p=6.52e-04</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td class='sig-better'>12</td><td>0</td><td>7</td><td class='sig-better'>17</td><td>0</td><td>2</td><td class='sig-better'>7</td><td>0</td><td>12</td><td class='sig-better'>10</td><td>0</td><td>9</td><td class='sig-better'>↑ p=1.27e-04</td><td class='sig-better'>↑ p=2.92e-04</td></tr></table><h2>Effect of Nielsen Reference — Random Doses (Non–Oral Morphine)</h2><div class='verdict-box verdict-helps'>nielsen significantly improves accuracy (Wilcoxon signed-rank). tight: median Δ = +0.714, mean Δ = +0.540, p = 6.10e-58 * (n = 456); broad: median Δ = +0.143, mean Δ = +0.224, p = 3.51e-22 * (n = 456)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = nielsen more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>nielsen sig. better</th>
+                <th>naive sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>456</td>
+                        <td class='sig-better'>71 (15.6%)</td>
+                        <td class='sig-worse'>3 (0.7%)</td>
+                        <td class='ns'>382 (83.8%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>456</td>
+                        <td class='sig-better'>282 (61.8%)</td>
+                        <td class='sig-worse'>13 (2.9%)</td>
+                        <td class='ns'>161 (35.3%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>456</td>
+                        <td class='sig-better'>43 (9.4%)</td>
+                        <td class='sig-worse'>9 (2.0%)</td>
+                        <td class='ns'>404 (88.6%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>456</td>
+                        <td class='sig-better'>154 (33.8%)</td>
+                        <td class='sig-worse'>36 (7.9%)</td>
+                        <td class='ns'>266 (58.3%)</td>
+                    </tr>
+        </table>
+        <h3>By include_examples</h3>
+        <table>
+            <tr>
+                <th>include_examples</th><th># Pairs</th>
+                <th colspan='2'>Tight</th>
+                <th colspan='2'>Broad</th>
+            </tr>
+            <tr>
+                <th></th><th></th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+                <th>nielsen ↑</th><th>naive ↑</th>
+            </tr><tr><td>include_examples=False</td><td>456</td><td>71</td><td>3</td><td>43</td><td>9</td></tr></table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>nielsen↑</th><th>naive↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>8</td><td class='sig-worse'>1</td><td>21</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>5</td><td class='sig-worse'>8</td><td>17</td><td class='sig-better'>↑ p=0.023</td><td class='ns'>n.s. (p=0.215)</td></tr>
+<tr><td>jamba-mini-1.7</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>26</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>25</td><td class='ns'>n.s. (p=0.752)</td><td class='ns'>n.s. (p=0.183)</td></tr>
+<tr><td>claude-3-5-haiku-20241022</td><td class='sig-better'>14</td><td>0</td><td>16</td><td class='sig-better'>17</td><td>0</td><td>13</td><td class='sig-better'>12</td><td class='sig-worse'>1</td><td>17</td><td class='sig-better'>16</td><td class='sig-worse'>4</td><td>10</td><td class='sig-better'>↑ p=3.77e-06</td><td class='sig-better'>↑ p=0.002</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>24</td><td>0</td><td>6</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>5</td><td>0</td><td>25</td><td class='sig-better'>↑ p=1.76e-06</td><td class='sig-better'>↑ p=9.10e-04</td></tr>
+<tr><td>command-r-plus-08-2024</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>2</td><td>0</td><td>28</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>5</td><td class='sig-worse'>1</td><td>24</td><td class='sig-better'>↑ p=0.004</td><td class='ns'>n.s. (p=0.076)</td></tr>
+<tr><td>deepseek-chat</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>28</td><td>0</td><td>2</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>14</td><td>0</td><td>16</td><td class='sig-better'>↑ p=4.17e-07</td><td class='sig-better'>↑ p=1.79e-04</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>24</td><td>0</td><td>6</td><td class='sig-better'>29</td><td>0</td><td>1</td><td class='sig-better'>10</td><td>0</td><td>20</td><td class='sig-better'>17</td><td>0</td><td>13</td><td class='sig-better'>↑ p=1.35e-06</td><td class='sig-better'>↑ p=2.65e-05</td></tr>
+<tr><td>gemini-2.5-pro</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>23</td><td>0</td><td>7</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>7</td><td>0</td><td>23</td><td class='sig-better'>↑ p=7.89e-06</td><td class='sig-better'>↑ p=0.002</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>16</td><td>0</td><td>14</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>10</td><td class='sig-worse'>2</td><td>18</td><td class='sig-better'>↑ p=3.06e-05</td><td class='sig-better'>↑ p=0.017</td></tr>
+<tr><td>llama-3.3-70b-versatile</td><td class='sig-better'>2</td><td class='sig-worse'>2</td><td>2</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>1</td><td class='sig-better'>3</td><td class='sig-worse'>2</td><td>1</td><td class='sig-better'>3</td><td class='sig-worse'>3</td><td>0</td><td class='ns'>n.s. (p=0.719)</td><td class='ns'>n.s. (p=0.844)</td></tr>
+<tr><td>mistral-large-2407</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>23</td><td>0</td><td>7</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>10</td><td class='sig-worse'>1</td><td>19</td><td class='sig-better'>↑ p=2.87e-06</td><td class='sig-better'>↑ p=0.002</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>19</td><td>0</td><td>11</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>17</td><td class='sig-worse'>1</td><td>12</td><td class='sig-better'>↑ p=3.51e-06</td><td class='sig-better'>↑ p=8.26e-05</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>4</td><td class='sig-worse'>1</td><td>25</td><td class='sig-better'>11</td><td class='sig-worse'>6</td><td>13</td><td class='sig-better'>5</td><td class='sig-worse'>5</td><td>20</td><td class='sig-better'>8</td><td class='sig-worse'>12</td><td>10</td><td class='ns'>n.s. (p=0.210)</td><td class='ns'>n.s. (p=0.594)</td></tr>
+<tr><td>gpt-4.1</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>25</td><td class='sig-worse'>1</td><td>4</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>8</td><td class='sig-worse'>1</td><td>21</td><td class='sig-better'>↑ p=4.28e-06</td><td class='sig-better'>↑ p=0.021</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>27</td><td>0</td><td>3</td><td class='sig-better'>28</td><td class='sig-worse'>1</td><td>1</td><td class='sig-better'>13</td><td class='sig-worse'>1</td><td>16</td><td class='sig-better'>18</td><td class='sig-worse'>1</td><td>11</td><td class='sig-better'>↑ p=1.91e-06</td><td class='sig-better'>↑ p=7.03e-05</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>24</td><td>0</td><td>6</td><td>0</td><td>0</td><td class='ns'>30</td><td class='sig-better'>7</td><td class='sig-worse'>1</td><td>22</td><td class='sig-better'>↑ p=2.12e-06</td><td class='sig-better'>↑ p=7.36e-04</td></tr></table><h2>Effect of Explaining Units — Random Doses</h2><div class='verdict-box verdict-helps'>explain_units significantly improves accuracy (Wilcoxon signed-rank). tight: median Δ = +0.400, mean Δ = +0.446, p = 1.08e-24 * (n = 210); broad: median Δ = +0.280, mean Δ = +0.326, p = 1.92e-18 * (n = 210)</div><div class='summary-box' style='font-size:11px; color:#555;'><b>Wilcoxon signed-rank test</b>: Tests whether the distribution of accuracy-proportion differences (A − B) across all model × unit pairs is symmetric around zero. Positive Δ = explain_units more accurate. * = p &lt; 0.05.</div>
+        <table>
+            <tr>
+                <th>Range</th><th>Correction</th><th># Tests</th>
+                <th>explain_units sig. better</th>
+                <th>no_units sig. better</th>
+                <th>n.s.</th>
+            </tr>
+            
+                    <tr>
+                        <td>tight</td>
+                        <td>Corrected</td>
+                        <td>210</td>
+                        <td class='sig-better'>102 (48.6%)</td>
+                        <td class='sig-worse'>0 (0.0%)</td>
+                        <td class='ns'>108 (51.4%)</td>
+                    </tr>
+                    <tr>
+                        <td>tight</td>
+                        <td>Uncorrected</td>
+                        <td>210</td>
+                        <td class='sig-better'>117 (55.7%)</td>
+                        <td class='sig-worse'>3 (1.4%)</td>
+                        <td class='ns'>90 (42.9%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Corrected</td>
+                        <td>210</td>
+                        <td class='sig-better'>82 (39.0%)</td>
+                        <td class='sig-worse'>4 (1.9%)</td>
+                        <td class='ns'>124 (59.0%)</td>
+                    </tr>
+                    <tr>
+                        <td>broad</td>
+                        <td>Uncorrected</td>
+                        <td>210</td>
+                        <td class='sig-better'>109 (51.9%)</td>
+                        <td class='sig-worse'>16 (7.6%)</td>
+                        <td class='ns'>85 (40.5%)</td>
+                    </tr>
+        </table><h3>By Model</h3>
+        <table>
+            <tr>
+                <th rowspan='2'>Model</th>
+                <th colspan='3'>Tight (corrected)</th>
+                <th colspan='3'>Tight (uncorr.)</th>
+                <th colspan='3'>Broad (corrected)</th>
+                <th colspan='3'>Broad (uncorr.)</th>
+                <th colspan='2'>Wilcoxon</th>
+            </tr>
+            <tr>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>explain_units↑</th><th>no_units↑</th><th>n.s.</th>
+                <th>Tight</th><th>Broad</th>
+            </tr><tr><td>jamba-large-1.7</td><td class='sig-better'>6</td><td>0</td><td>9</td><td class='sig-better'>6</td><td>0</td><td>9</td><td class='sig-better'>6</td><td>0</td><td>9</td><td class='sig-better'>6</td><td class='sig-worse'>1</td><td>8</td><td class='sig-better'>↑ p=0.039</td><td class='ns'>n.s. (p=0.055)</td></tr>
+<tr><td>jamba-mini-1.7</td><td class='sig-better'>1</td><td>0</td><td>14</td><td class='sig-better'>2</td><td class='sig-worse'>1</td><td>12</td><td class='sig-better'>1</td><td class='sig-worse'>1</td><td>13</td><td class='sig-better'>2</td><td class='sig-worse'>5</td><td>8</td><td class='ns'>n.s. (p=0.781)</td><td class='ns'>n.s. (p=0.490)</td></tr>
+<tr><td>claude-3.5-sonnet:20241022</td><td class='sig-better'>3</td><td>0</td><td>12</td><td class='sig-better'>5</td><td>0</td><td>10</td><td class='sig-better'>3</td><td>0</td><td>12</td><td class='sig-better'>5</td><td>0</td><td>10</td><td class='sig-better'>↑ p=0.008</td><td class='sig-better'>↑ p=0.008</td></tr>
+<tr><td>command-r-plus-08-2024</td><td class='sig-better'>7</td><td>0</td><td>8</td><td class='sig-better'>9</td><td>0</td><td>6</td><td class='sig-better'>3</td><td class='sig-worse'>1</td><td>11</td><td class='sig-better'>5</td><td class='sig-worse'>3</td><td>7</td><td class='sig-better'>↑ p=9.77e-04</td><td class='ns'>n.s. (p=0.432)</td></tr>
+<tr><td>deepseek-chat</td><td class='sig-better'>13</td><td>0</td><td>2</td><td class='sig-better'>13</td><td class='sig-worse'>1</td><td>1</td><td class='sig-better'>13</td><td>0</td><td>2</td><td class='sig-better'>13</td><td class='sig-worse'>1</td><td>1</td><td class='sig-better'>↑ p=0.001</td><td class='sig-better'>↑ p=0.001</td></tr>
+<tr><td>gemini-2.5-flash</td><td class='sig-better'>4</td><td>0</td><td>11</td><td class='sig-better'>12</td><td class='sig-worse'>1</td><td>2</td><td class='sig-better'>3</td><td>0</td><td>12</td><td class='sig-better'>8</td><td>0</td><td>7</td><td class='sig-better'>↑ p=0.004</td><td class='sig-better'>↑ p=0.003</td></tr>
+<tr><td>gemini-2.5-pro</td><td>0</td><td>0</td><td class='ns'>15</td><td>0</td><td>0</td><td class='ns'>15</td><td>0</td><td>0</td><td class='ns'>15</td><td>0</td><td>0</td><td class='ns'>15</td><td class='ns'>n.s. (p=0.219)</td><td class='ns'>n.s. (p=0.062)</td></tr>
+<tr><td>llama-3.3-70b-instruct</td><td class='sig-better'>1</td><td>0</td><td>14</td><td class='sig-better'>1</td><td>0</td><td>14</td><td class='sig-better'>2</td><td class='sig-worse'>1</td><td>12</td><td class='sig-better'>2</td><td class='sig-worse'>3</td><td>10</td><td class='ns'>n.s. (p=0.055)</td><td class='ns'>n.s. (p=0.220)</td></tr>
+<tr><td>mistral-large-2407</td><td class='sig-better'>14</td><td>0</td><td>1</td><td class='sig-better'>15</td><td>0</td><td>0</td><td class='sig-better'>11</td><td>0</td><td>4</td><td class='sig-better'>13</td><td>0</td><td>2</td><td class='sig-better'>↑ p=5.90e-04</td><td class='sig-better'>↑ p=6.47e-04</td></tr>
+<tr><td>mixtral-8x22b-instruct</td><td class='sig-better'>13</td><td>0</td><td>2</td><td class='sig-better'>14</td><td>0</td><td>1</td><td class='sig-better'>7</td><td>0</td><td>8</td><td class='sig-better'>14</td><td>0</td><td>1</td><td class='sig-better'>↑ p=6.43e-04</td><td class='sig-better'>↑ p=6.45e-04</td></tr>
+<tr><td>gpt-3.5-turbo</td><td class='sig-better'>1</td><td>0</td><td>14</td><td class='sig-better'>1</td><td>0</td><td>14</td><td class='sig-better'>3</td><td class='sig-worse'>1</td><td>11</td><td class='sig-better'>3</td><td class='sig-worse'>3</td><td>9</td><td class='ns'>n.s. (p=0.156)</td><td class='ns'>n.s. (p=0.812)</td></tr>
+<tr><td>gpt-4.1</td><td class='sig-better'>13</td><td>0</td><td>2</td><td class='sig-better'>13</td><td>0</td><td>2</td><td class='sig-better'>7</td><td>0</td><td>8</td><td class='sig-better'>12</td><td>0</td><td>3</td><td class='sig-better'>↑ p=7.62e-04</td><td class='sig-better'>↑ p=4.88e-04</td></tr>
+<tr><td>gpt-4.1-mini</td><td class='sig-better'>14</td><td>0</td><td>1</td><td class='sig-better'>14</td><td>0</td><td>1</td><td class='sig-better'>12</td><td>0</td><td>3</td><td class='sig-better'>14</td><td>0</td><td>1</td><td class='sig-better'>↑ p=7.50e-04</td><td class='sig-better'>↑ p=8.29e-04</td></tr>
+<tr><td>qwen-2.5-72b-instruct</td><td class='sig-better'>12</td><td>0</td><td>3</td><td class='sig-better'>12</td><td>0</td><td>3</td><td class='sig-better'>11</td><td>0</td><td>4</td><td class='sig-better'>12</td><td>0</td><td>3</td><td class='sig-better'>↑ p=2.44e-04</td><td class='sig-better'>↑ p=9.65e-04</td></tr></table><div class='page-break'></div><h1>Model Rankings by Experimental Condition</h1>
+        <h2>Model Ranking: Naive Vignettes</h2>
+        <div class='summary-box'>
+            14 models, 91 model pairs,
+            182 Cochran–Mantel–Haenszel tests (tight + broad),
+            Bonferroni α = 2.75e-04<br>
+            76 significant superiority relationships detected
+        </div>
+        <table>
+            <tr>
+                <th>Rank</th><th>Model</th>
+                <th>Tight %</th><th>Broad %</th>
+                <th>Units</th><th>n</th>
+            </tr>
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>mistral-large-2407</td>
+                    <td>41.1%</td><td>82.9%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>2</td>
+                    <td>gpt-4.1</td>
+                    <td>39.9%</td><td>76.1%</td>
+                    <td>20</td><td>707</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>2</td>
+                    <td>gemini-2.5-pro</td>
+                    <td>35.7%</td><td>76.3%</td>
+                    <td>20</td><td>696</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>3</td>
+                    <td>gpt-4.1-mini</td>
+                    <td>33.6%</td><td>69.7%</td>
+                    <td>20</td><td>707</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>3</td>
+                    <td>claude-3.5-sonnet:20241022</td>
+                    <td>32.7%</td><td>81.4%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>3</td>
+                    <td>llama-3.3-70b-instruct</td>
+                    <td>31.0%</td><td>76.0%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>4</td>
+                    <td>jamba-large-1.7</td>
+                    <td>31.0%</td><td>59.7%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>4</td>
+                    <td>gpt-3.5-turbo</td>
+                    <td>25.9%</td><td>53.4%</td>
+                    <td>20</td><td>703</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>5</td>
+                    <td>gemini-2.5-flash</td>
+                    <td>24.9%</td><td>62.7%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>6</td>
+                    <td>qwen-2.5-72b-instruct</td>
+                    <td>22.6%</td><td>55.8%</td>
+                    <td>20</td><td>646</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>5</td>
+                    <td>deepseek-chat</td>
+                    <td>22.6%</td><td>60.0%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>6</td>
+                    <td>mixtral-8x22b-instruct</td>
+                    <td>18.1%</td><td>59.1%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>7</td>
+                    <td>command-r-plus-08-2024</td>
+                    <td>16.3%</td><td>49.4%</td>
+                    <td>20</td><td>694</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>8</td>
+                    <td>jamba-mini-1.7</td>
+                    <td>5.0%</td><td>32.5%</td>
+                    <td>20</td><td>560</td>
+                </tr></table>
+        <h2>Model Ranking: Vignettes + Nielsen + Explain Units</h2>
+        <div class='summary-box'>
+            14 models, 91 model pairs,
+            182 Cochran–Mantel–Haenszel tests (tight + broad),
+            Bonferroni α = 2.75e-04<br>
+            86 significant superiority relationships detected
+        </div>
+        <table>
+            <tr>
+                <th>Rank</th><th>Model</th>
+                <th>Tight %</th><th>Broad %</th>
+                <th>Units</th><th>n</th>
+            </tr>
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>gemini-2.5-pro</td>
+                    <td>95.7%</td><td>99.0%</td>
+                    <td>20</td><td>695</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>2</td>
+                    <td>claude-3.5-sonnet:20241022</td>
+                    <td>90.7%</td><td>99.0%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>3</td>
+                    <td>gpt-4.1</td>
+                    <td>85.7%</td><td>92.7%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>3</td>
+                    <td>deepseek-chat</td>
+                    <td>83.7%</td><td>93.9%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>4</td>
+                    <td>gpt-4.1-mini</td>
+                    <td>76.6%</td><td>81.4%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>4</td>
+                    <td>mistral-large-2407</td>
+                    <td>75.6%</td><td>86.6%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>5</td>
+                    <td>gemini-2.5-flash</td>
+                    <td>70.0%</td><td>73.0%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>5</td>
+                    <td>qwen-2.5-72b-instruct</td>
+                    <td>64.7%</td><td>91.0%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>6</td>
+                    <td>mixtral-8x22b-instruct</td>
+                    <td>64.1%</td><td>78.4%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>7</td>
+                    <td>llama-3.3-70b-instruct</td>
+                    <td>58.4%</td><td>76.4%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>7</td>
+                    <td>jamba-large-1.7</td>
+                    <td>51.9%</td><td>69.9%</td>
+                    <td>20</td><td>663</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>8</td>
+                    <td>command-r-plus-08-2024</td>
+                    <td>39.6%</td><td>51.5%</td>
+                    <td>20</td><td>685</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>8</td>
+                    <td>gpt-3.5-turbo</td>
+                    <td>37.0%</td><td>50.9%</td>
+                    <td>20</td><td>700</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>9</td>
+                    <td>jamba-mini-1.7</td>
+                    <td>26.2%</td><td>47.5%</td>
+                    <td>20</td><td>528</td>
+                </tr></table>
+        <h2>Model Ranking: Naive Random Doses</h2>
+        <div class='summary-box'>
+            16 models, 120 model pairs,
+            240 Cochran–Mantel–Haenszel tests (tight + broad),
+            Bonferroni α = 2.08e-04<br>
+            95 significant superiority relationships detected
+        </div>
+        <table>
+            <tr>
+                <th>Rank</th><th>Model</th>
+                <th>Tight %</th><th>Broad %</th>
+                <th>Units</th><th>n</th>
+            </tr>
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>gemini-2.5-pro</td>
+                    <td>35.3%</td><td>82.1%</td>
+                    <td>49</td><td>763</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>2</td>
+                    <td>gemini-2.5-flash</td>
+                    <td>29.4%</td><td>71.5%</td>
+                    <td>49</td><td>940</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>3</td>
+                    <td>gpt-4.1</td>
+                    <td>25.6%</td><td>71.0%</td>
+                    <td>49</td><td>796</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>3</td>
+                    <td>claude-3.5-sonnet:20241022</td>
+                    <td>25.1%</td><td>71.4%</td>
+                    <td>49</td><td>796</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>4</td>
+                    <td>gpt-4.1-mini</td>
+                    <td>22.8%</td><td>60.6%</td>
+                    <td>50</td><td>1590</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>4</td>
+                    <td>mistral-large-2407</td>
+                    <td>17.8%</td><td>58.3%</td>
+                    <td>49</td><td>796</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>5</td>
+                    <td>gpt-3.5-turbo</td>
+                    <td>17.5%</td><td>48.7%</td>
+                    <td>50</td><td>1341</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>5</td>
+                    <td>llama-3.3-70b-versatile</td>
+                    <td>16.3%</td><td>49.8%</td>
+                    <td>20</td><td>493</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>5</td>
+                    <td>jamba-large-1.7</td>
+                    <td>16.2%</td><td>54.3%</td>
+                    <td>49</td><td>753</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>4</td>
+                    <td>deepseek-chat</td>
+                    <td>15.6%</td><td>56.6%</td>
+                    <td>49</td><td>753</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>5</td>
+                    <td>qwen-2.5-72b-instruct</td>
+                    <td>15.5%</td><td>59.3%</td>
+                    <td>49</td><td>731</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>6</td>
+                    <td>claude-3-5-haiku-20241022</td>
+                    <td>13.8%</td><td>45.4%</td>
+                    <td>44</td><td>1140</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>7</td>
+                    <td>mixtral-8x22b-instruct</td>
+                    <td>12.8%</td><td>29.1%</td>
+                    <td>49</td><td>793</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>7</td>
+                    <td>llama-3.3-70b-instruct</td>
+                    <td>12.3%</td><td>49.0%</td>
+                    <td>49</td><td>753</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>8</td>
+                    <td>jamba-mini-1.7</td>
+                    <td>12.0%</td><td>29.9%</td>
+                    <td>49</td><td>753</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>8</td>
+                    <td>command-r-plus-08-2024</td>
+                    <td>10.8%</td><td>27.8%</td>
+                    <td>49</td><td>753</td>
+                </tr></table>
+        <h2>Model Ranking: Random Doses + Nielsen</h2>
+        <div class='summary-box'>
+            16 models, 120 model pairs,
+            240 Cochran–Mantel–Haenszel tests (tight + broad),
+            Bonferroni α = 2.08e-04<br>
+            103 significant superiority relationships detected
+        </div>
+        <table>
+            <tr>
+                <th>Rank</th><th>Model</th>
+                <th>Tight %</th><th>Broad %</th>
+                <th>Units</th><th>n</th>
+            </tr>
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>claude-3.5-sonnet:20241022</td>
+                    <td>100.0%</td><td>100.0%</td>
+                    <td>49</td><td>422</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>gemini-2.5-flash</td>
+                    <td>99.8%</td><td>99.8%</td>
+                    <td>49</td><td>1240</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>deepseek-chat</td>
+                    <td>99.1%</td><td>99.1%</td>
+                    <td>49</td><td>422</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>gemini-2.5-pro</td>
+                    <td>98.7%</td><td>99.6%</td>
+                    <td>49</td><td>416</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>2</td>
+                    <td>gpt-4.1-mini</td>
+                    <td>96.5%</td><td>97.0%</td>
+                    <td>50</td><td>1799</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>2</td>
+                    <td>gpt-4.1</td>
+                    <td>94.8%</td><td>94.8%</td>
+                    <td>49</td><td>422</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>2</td>
+                    <td>qwen-2.5-72b-instruct</td>
+                    <td>94.1%</td><td>95.3%</td>
+                    <td>49</td><td>400</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>3</td>
+                    <td>mistral-large-2407</td>
+                    <td>91.8%</td><td>95.0%</td>
+                    <td>49</td><td>422</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>4</td>
+                    <td>mixtral-8x22b-instruct</td>
+                    <td>83.4%</td><td>88.9%</td>
+                    <td>49</td><td>422</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>4</td>
+                    <td>llama-3.3-70b-instruct</td>
+                    <td>77.2%</td><td>84.8%</td>
+                    <td>49</td><td>422</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>5</td>
+                    <td>llama-3.3-70b-versatile</td>
+                    <td>70.2%</td><td>81.2%</td>
+                    <td>44</td><td>1176</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>5</td>
+                    <td>claude-3-5-haiku-20241022</td>
+                    <td>64.8%</td><td>80.2%</td>
+                    <td>44</td><td>1387</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>6</td>
+                    <td>jamba-large-1.7</td>
+                    <td>57.7%</td><td>68.9%</td>
+                    <td>49</td><td>402</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>6</td>
+                    <td>command-r-plus-08-2024</td>
+                    <td>53.6%</td><td>63.0%</td>
+                    <td>49</td><td>422</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>6</td>
+                    <td>gpt-3.5-turbo</td>
+                    <td>53.0%</td><td>65.4%</td>
+                    <td>50</td><td>1533</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>7</td>
+                    <td>jamba-mini-1.7</td>
+                    <td>34.2%</td><td>55.2%</td>
+                    <td>49</td><td>422</td>
+                </tr></table>
+        <h2>Model Ranking: Random Doses + Nielsen + Explain Units</h2>
+        <div class='summary-box'>
+            14 models, 91 model pairs,
+            182 Cochran–Mantel–Haenszel tests (tight + broad),
+            Bonferroni α = 2.75e-04<br>
+            81 significant superiority relationships detected
+        </div>
+        <table>
+            <tr>
+                <th>Rank</th><th>Model</th>
+                <th>Tight %</th><th>Broad %</th>
+                <th>Units</th><th>n</th>
+            </tr>
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>claude-3.5-sonnet:20241022</td>
+                    <td>100.0%</td><td>100.0%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>gpt-4.1</td>
+                    <td>98.7%</td><td>98.7%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>1</td>
+                    <td>gemini-2.5-pro</td>
+                    <td>98.7%</td><td>98.7%</td>
+                    <td>15</td><td>373</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>2</td>
+                    <td>mistral-large-2407</td>
+                    <td>95.5%</td><td>95.7%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>2</td>
+                    <td>gpt-4.1-mini</td>
+                    <td>91.5%</td><td>91.5%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>2</td>
+                    <td>deepseek-chat</td>
+                    <td>90.7%</td><td>90.7%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>3</td>
+                    <td>qwen-2.5-72b-instruct</td>
+                    <td>73.2%</td><td>76.6%</td>
+                    <td>15</td><td>372</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>3</td>
+                    <td>mixtral-8x22b-instruct</td>
+                    <td>71.2%</td><td>87.5%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>4</td>
+                    <td>gemini-2.5-flash</td>
+                    <td>58.7%</td><td>61.6%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>5</td>
+                    <td>command-r-plus-08-2024</td>
+                    <td>42.7%</td><td>48.3%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>6</td>
+                    <td>jamba-large-1.7</td>
+                    <td>32.0%</td><td>32.0%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>7</td>
+                    <td>gpt-3.5-turbo</td>
+                    <td>9.3%</td><td>24.0%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=''>
+                    <td class='rank-cell'>7</td>
+                    <td>llama-3.3-70b-instruct</td>
+                    <td>9.1%</td><td>22.4%</td>
+                    <td>15</td><td>375</td>
+                </tr>
+
+                <tr class=' step-sig'>
+                    <td class='rank-cell'>8</td>
+                    <td>jamba-mini-1.7</td>
+                    <td>8.8%</td><td>12.0%</td>
+                    <td>15</td><td>375</td>
+                </tr></table>
+</body>
+</html>

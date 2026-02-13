@@ -61,7 +61,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
         self,
         scenario: Scenario,
         model="gpt-4.1-mini",
-        include_nielson=False,
+        include_nielsen=False,
         include_examples=False,
         ask_for_units=False,
         explain_units=False,
@@ -69,7 +69,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
     ):
         self.scenario = scenario
         self.model = model
-        self.include_nielson = include_nielson
+        self.include_nielsen = include_nielsen
         self.include_examples = include_examples
         self.ask_for_units = ask_for_units
         self.explain_units = explain_units
@@ -84,7 +84,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 from_opioids_doses=self.from_opioids_doses,
                 to_opioid=to_opioid,
                 model=model,
-                include_nielson=include_nielson,
+                include_nielsen=include_nielsen,
                 include_examples=include_examples,
                 ask_for_units=ask_for_units,
                 explain_units=explain_units,
@@ -96,7 +96,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 to_opioid=to_opioid,
                 from_dose=self.from_opioids_doses[0][1],
                 model=model,
-                include_nielson=include_nielson,
+                include_nielsen=include_nielsen,
                 include_examples=include_examples,
                 ask_for_units=ask_for_units,
                 explain_units=explain_units,
@@ -119,7 +119,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
             self.prompt = prompt_service.generate_prompt(
                 from_opioids_doses=self.from_opioids_doses,
                 to_opioid=self.to_opioid,
-                include_nielson=self.include_nielson,
+                include_nielsen=self.include_nielsen,
                 include_examples=self.include_examples,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units,
@@ -130,7 +130,7 @@ class ScenarioPromptedConversion(PromptedOpioidConversion):
                 from_opioid=self.from_opioid,
                 to_opioid=self.to_opioid,
                 from_dose=self.from_dose,
-                include_nielson=self.include_nielson,
+                include_nielsen=self.include_nielsen,
                 include_examples=self.include_examples,
                 ask_for_units=self.ask_for_units,
                 explain_units=self.explain_units,

@@ -12,13 +12,13 @@ class VignetteScatterVisualizer:
         self.scenario_keys = scenario_keys or self.df['scenario_key'].unique().tolist()
         self.tight_col = tight_col or [c for c in self.df.columns if c.startswith("tight(")][0]
         self.cond_base = (
-            (self.df['include_nielson'] == True) &
+            (self.df['include_nielsen'] == True) &
             (self.df['include_examples'] == False) &
             (self.df['ask_for_units'] == False) &
             (self.df['explain_units'] == False)
         )
         self.cond_units = (
-            (self.df['include_nielson'] == True) &
+            (self.df['include_nielsen'] == True) &
             (self.df['include_examples'] == False) &
             (self.df['ask_for_units'] == True) &
             (self.df['explain_units'] == True)

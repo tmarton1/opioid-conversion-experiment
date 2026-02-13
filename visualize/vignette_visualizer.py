@@ -45,13 +45,13 @@ class VignetteVisualizer(Visualizer):
         return title
     
     def _prompt_conditions_label(self) -> str:
-        inc_n = self.prompt_conditions.get("include_nielson", False)
+        inc_n = self.prompt_conditions.get("include_nielsen", False)
         inc_ex = self.prompt_conditions.get("include_examples", False)
         ask_units = self.prompt_conditions.get("ask_for_units", False)
         explain_units = self.prompt_conditions.get("explain_units", False)
         
         parts = [
-            f"Nielson: {'yes' if inc_n else 'no'}",
+            f"Nielsen: {'yes' if inc_n else 'no'}",
             f"Examples: {'yes' if inc_ex else 'no'}",
             f"Ask for units: {'yes' if ask_units else 'no'}",
             f"Explain units: {'yes' if explain_units else 'no'}"

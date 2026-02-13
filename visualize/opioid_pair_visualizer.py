@@ -40,7 +40,7 @@ class OpioidPairVisualizer(Visualizer):
             (experiment_df['from_opioid_unit'] == from_opioid_unit) &
             (experiment_df['to_opioid'] == to_opioid) &
             (experiment_df['to_opioid_unit'] == to_opioid_unit) &
-            (experiment_df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
+            (experiment_df['include_nielsen'] == prompt_conditions.get('include_nielsen', False)) &
             (experiment_df['include_examples'] == prompt_conditions.get('include_examples', False))
         ].copy()
 
@@ -58,7 +58,7 @@ class OpioidPairVisualizer(Visualizer):
             (pair_model_df['from_opioid_unit'] == from_opioid_unit) &
             (pair_model_df['to_opioid'] == to_opioid) &
             (pair_model_df['to_opioid_unit'] == to_opioid_unit) &
-            (pair_model_df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
+            (pair_model_df['include_nielsen'] == prompt_conditions.get('include_nielsen', False)) &
             (pair_model_df['include_examples'] == prompt_conditions.get('include_examples', False))
         ].copy()
 
@@ -69,7 +69,7 @@ class OpioidPairVisualizer(Visualizer):
             (consensus_df['from_opioid_unit'] == from_opioid_unit) &
             (consensus_df['to_opioid'] == to_opioid) &
             (consensus_df['to_opioid_unit'] == to_opioid_unit) &
-            (consensus_df['include_nielson'] == prompt_conditions.get('include_nielson', False)) &
+            (consensus_df['include_nielsen'] == prompt_conditions.get('include_nielsen', False)) &
             (consensus_df['include_examples'] == prompt_conditions.get('include_examples', False))
         ]
         self.consensus_data = consensus_filtered.iloc[0] if len(consensus_filtered) > 0 else None
@@ -107,10 +107,10 @@ class OpioidPairVisualizer(Visualizer):
         p.y_range.end = 25.0 * L
 
     def _prompt_conditions_label(self) -> str:
-        inc_n = self.prompt_conditions.get("include_nielson", False)
+        inc_n = self.prompt_conditions.get("include_nielsen", False)
         inc_ex = self.prompt_conditions.get("include_examples", False)
         return (
-            f"(Nielson: {'yes' if inc_n else 'no'}, "
+            f"(Nielsen: {'yes' if inc_n else 'no'}, "
             f"Examples: {'yes' if inc_ex else 'no'})"
         )
 
