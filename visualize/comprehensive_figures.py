@@ -22,7 +22,7 @@ from typing import Optional
 from scipy.stats import wilcoxon
 
 from bokeh.plotting import figure, output_file, save
-from bokeh.layouts import column, row as bk_row
+from bokeh.layouts import column, row as bk_row, gridplot
 from bokeh.models import (
     ColumnDataSource, LabelSet, HoverTool, Legend, LegendItem,
     FactorRange, Span, Div, Label, FixedTicker,
@@ -84,7 +84,7 @@ def _overall_wilcoxon(comparison_csv: str, range_type: str = "tight"):
 
 
 def _significance_star(p):
-    """Return Unicode star string for p-value."""
+    """Return significance annotation: ***, **, *, or ns."""
     if p is None:
         return ""
     if p < 0.001:
@@ -93,7 +93,7 @@ def _significance_star(p):
         return "**"
     elif p < 0.05:
         return "*"
-    return ""
+    return "ns"
 
 
 def _star_label(p):
@@ -216,19 +216,24 @@ def naive_performance_bars(
         pair_max = max(broads[i], broads[i + 1]) if i + 1 < len(broads) else broads[i]
         bx = max(pair_max + 0.02, bracket_base) + (i % 3) * x_step
 
-        y_bot = i
-        y_top = i + 1
-        # Vertical line spanning the two bars
-        p.line(x=[bx, bx], y=[y_bot + 0.3, y_top - 0.3],
-               line_color="#333", line_width=1.0)
-        # Horizontal caps touching the bar area
+        # Use categorical y-axis names for proper positioning
+        y_bot_name = clean_names[i]
+        y_top_name = clean_names[i + 1]
+
+        # Draw bracket as annotations connected to categorical positions
+        # Horizontal cap at bottom bar
         cap_len = 0.01
-        p.line(x=[bx - cap_len, bx], y=[y_bot + 0.3, y_bot + 0.3],
+        p.line(x=[bx - cap_len, bx], y=[y_bot_name, y_bot_name],
                line_color="#333", line_width=1.0)
-        p.line(x=[bx - cap_len, bx], y=[y_top - 0.3, y_top - 0.3],
+        # Horizontal cap at top bar
+        p.line(x=[bx - cap_len, bx], y=[y_top_name, y_top_name],
+               line_color="#333", line_width=1.0)
+        # Vertical line connecting them
+        p.line(x=[bx, bx], y=[y_bot_name, y_top_name],
                line_color="#333", line_width=1.0)
 
-        mid_y = (y_bot + y_top) / 2
+        # Star label at midpoint between the two bars
+        mid_y = (i + i + 1) / 2
         p.add_layout(Label(
             x=bx + 0.005, y=mid_y,
             text=stars, text_font_size="9pt",
@@ -361,85 +366,117 @@ def cv_strip_with_ratio(
 
 
 def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
-                        width=800, height=280):
-    """Stacked bar chart: accuracy category proportions by CV bin."""
+                        width=800, height=500):
+    """
+    Per-model 3×3 circle grid: rows = accuracy categories (tight, broad,
+    neither), columns = CV bins (< 0.1, 0.1–0.5, ≥ 0.5).  Circle size ∝
+    proportion of that model's observations in each cell.  Models are
+    laid out in a 5-4-4 grid (3 rows of sub-plots).
+    """
     cols_needed = [c for c in [cv_col, tight_col, broad_col] if c in df.columns]
     if len(cols_needed) < 3:
-        return figure(width=width, height=height, toolbar_location=None,
+        return figure(width=width, height=height // 3, toolbar_location=None,
                       title="Accuracy by CV Bin (missing columns)")
 
     sub = df.dropna(subset=cols_needed).copy()
+    sub = sub[sub["model"].isin(_CONSISTENT_SET)]
     if sub.empty:
-        return figure(width=width, height=height, toolbar_location=None,
+        return figure(width=width, height=height // 3, toolbar_location=None,
                       title="Accuracy by CV Bin (no data)")
 
     bins = [0, 0.1, 0.5, float("inf")]
-    bin_labels = ["CV < 0.1", "CV 0.1–0.5", "CV ≥ 0.5"]
+    bin_labels = ["<0.1", "0.1–0.5", "≥0.5"]
     sub["_cv_bin"] = pd.cut(sub[cv_col], bins=bins, labels=bin_labels, right=False)
 
-    results = []
-    for lbl in bin_labels:
-        bdf = sub[sub["_cv_bin"] == lbl]
-        n = len(bdf)
-        if n == 0:
-            results.append({"label": lbl, "n": 0, "tight": 0,
-                            "broad_only": 0, "neither": 0})
-            continue
-        t = bdf[tight_col].mean()
-        b = bdf[broad_col].mean()
-        bo = max(0, b - t)
-        ne = max(0, 1 - b)
-        results.append({"label": lbl, "n": n, "tight": t,
-                        "broad_only": bo, "neither": ne})
+    sub["_acc"] = "neither"
+    sub.loc[sub[broad_col] >= 0.5, "_acc"] = "broad"
+    sub.loc[sub[tight_col] >= 0.5, "_acc"] = "tight"
 
-    cats = [f"{r['label']}  (n={r['n']})" for r in results]
-    tights = [r["tight"] for r in results]
-    broads = [r["broad_only"] for r in results]
-    neithers = [r["neither"] for r in results]
+    acc_labels = ["tight", "broad", "neither"]
 
-    p = figure(
-        x_range=cats, y_range=(0, 1.05), width=width, height=height,
-        toolbar_location=None, title="Accuracy Distribution by CV Bin",
-    )
+    ranked = get_ranked_model_order()
+    models = [m for m in ranked if m in sub["model"].unique()]
+    if not models:
+        models = sorted(sub["model"].unique())
 
-    src = ColumnDataSource(dict(
-        cats=cats, tight=tights, broad_only=broads, neither=neithers,
-    ))
-    p.vbar_stack(
-        ["tight", "broad_only", "neither"],
-        x="cats", width=0.6, source=src,
-        color=["#2ca02c", "#ff7f0e", "#d62728"],
-        alpha=[0.8, 0.7, 0.7],
-        legend_label=[
-            f"Tight ({TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)",
-            f"Broad only ({BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)",
-            "Neither",
-        ],
-    )
+    # Layout: rows of [5, 4, 4] (or adapt to actual count)
+    n = len(models)
+    if n <= 5:
+        row_sizes = [n]
+    elif n <= 9:
+        row_sizes = [5, n - 5]
+    else:
+        row_sizes = [5, 4, n - 9] if n <= 13 else [5, 5, n - 10]
 
-    # Proportion labels on each segment
-    for i, r in enumerate(results):
-        y_pos = 0
-        for cat_name, val in [("tight", r["tight"]),
-                               ("broad_only", r["broad_only"]),
-                               ("neither", r["neither"])]:
-            if val > 0.04:
-                p.add_layout(Label(
-                    x=i, y=y_pos + val / 2,
-                    text=f"{val:.0%}", text_font_size="9pt",
-                    text_align="center", text_baseline="middle",
-                    text_color="white",
-                ))
-            y_pos += val
+    max_circle = 28
+    cell_w = width // 5
+    cell_h = height // len(row_sizes)
 
-    p.yaxis.axis_label = "Proportion"
-    p.yaxis.ticker = FixedTicker(ticks=[0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    p.xaxis.major_label_text_font_size = "9pt"
-    p.legend.location = "top_right"
-    p.legend.label_text_font_size = "8pt"
-    p.xgrid.visible = False
+    all_rows = []
+    idx = 0
+    for row_sz in row_sizes:
+        row_figs = []
+        for _ in range(row_sz):
+            if idx >= n:
+                break
+            m = models[idx]
+            idx += 1
+            cn = _clean(m)
+            color = MODEL_COLOR_DICT.get(m, "#888888")
 
-    return p
+            mdf = sub[sub["model"] == m]
+            n_total = len(mdf)
+
+            xs, ys, sizes, alphas, pcts = [], [], [], [], []
+            for bl in bin_labels:
+                bdf = mdf[mdf["_cv_bin"] == bl]
+                for al in acc_labels:
+                    count = len(bdf[bdf["_acc"] == al])
+                    prop = count / n_total if n_total else 0
+                    xs.append(bl)
+                    ys.append(al)
+                    sizes.append(max(3, prop ** 0.5 * max_circle))
+                    alphas.append(0.8 if prop > 0 else 0.05)
+                    pcts.append(f"{prop:.0%}")
+
+            p = figure(
+                width=cell_w, height=cell_h,
+                x_range=bin_labels, y_range=list(reversed(acc_labels)),
+                toolbar_location=None,
+                title=cn,
+            )
+            src = ColumnDataSource(dict(
+                x=xs, y=ys, size=sizes, alpha=alphas, pct=pcts,
+            ))
+            p.scatter("x", "y", size="size", color=color, alpha="alpha",
+                      source=src)
+            p.add_tools(HoverTool(tooltips=[
+                ("CV Bin", "@x"), ("Accuracy", "@y"), ("Proportion", "@pct"),
+            ]))
+
+            p.title.text_font_size = "8pt"
+            p.xaxis.major_label_text_font_size = "6pt"
+            p.yaxis.major_label_text_font_size = "6pt"
+            p.xaxis.axis_label = None
+            p.yaxis.axis_label = None
+            p.xgrid.visible = False
+            p.ygrid.visible = False
+            p.min_border_left = 40
+            p.min_border_right = 5
+            p.min_border_top = 20
+            p.min_border_bottom = 20
+
+            row_figs.append(p)
+
+        # Pad with None to fill to max row width for gridplot
+        while len(row_figs) < row_sizes[0]:
+            row_figs.append(None)
+        all_rows.append(row_figs)
+
+    grid = gridplot(all_rows, merge_tools=False)
+    title_div = Div(text="<b>Accuracy Distribution by CV Bin</b>",
+                    styles={"font-size": "12pt", "margin-left": "10px"})
+    return column(title_div, grid)
 
 def cv_strip_chart(
     model_csv: str,
@@ -576,13 +613,10 @@ def cv_strip_chart(
         p.scatter(**kwargs)
 
     if idx_out:
-        # Add a note about black outlines
-        note = Label(
-            x=5, y=5, x_units="screen", y_units="screen",
-            text=f"Black outline = sig. negative slope (p<{slope_alpha})",
-            text_font_size="8pt", text_color="#555",
+        p.below[0].axis_label = (
+            f"Coefficient of Variation    "
+            f"(black outline = sig. negative slope, p<{slope_alpha})"
         )
-        p.add_layout(note)
 
     p.legend.label_text_font_size = "8pt"
     p.legend.location = "bottom_right"
@@ -646,13 +680,12 @@ def nielsen_effect_bars(
     p.vbar(x="x", top="tight", width=0.7, color="color", alpha=0.9, source=source)
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.7, color="color", alpha=0.25, source=source)
 
-    # Significance annotations
+    # Significance annotations (always show stars or ns)
     if os.path.exists(comparison_csv):
         star_x, star_y, star_text = [], [], []
         for m, cn in zip(models, clean_names):
             p_t, _, _ = _per_model_wilcoxon(comparison_csv, m, "tight")
             p_b, _, _ = _per_model_wilcoxon(comparison_csv, m, "broad")
-            # Use the most significant (lowest) p-value across tight and broad
             p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
             s = _significance_star(p_min)
             if s:
@@ -676,36 +709,34 @@ def nielsen_effect_bars(
     return p
 
 
-# ── Explain units effect bars with significance ─────────────────────
+# ── OME vs Non-OME comparison bars ──────────────────────────────────
 
-def explain_units_bars(
+def ome_comparison_bars(
     batch_means_csv: str,
-    batch_means_explain_csv: str,
-    comparison_csv: str,
-    title: str = "Explain Units Effect",
-    width: int = 1000,
+    ome_batch: str = "ome_n0",
+    non_ome_batch: str = "pairs_n0",
+    comparison_csv: str | None = None,
+    title: str = "OME vs Non-OME",
+    width: int = 900,
     height: int = 400,
 ):
     """
-    Three-condition bar chart: mg/day + Nielsen, non-daily + Nielsen,
-    non-daily + Nielsen + explain units.
-    Wilcoxon significance stars for the explain_units effect.
+    Grouped bar chart: OME vs non-OME per model for a given condition.
+    If *comparison_csv* is provided (BatchComparison output), overall
+    Wilcoxon significance annotations are added for tight and broad.
     """
-    df_main = pd.read_csv(batch_means_csv)
-    df_main = df_main[df_main["model"].isin(_CONSISTENT_SET)]
-    df_units = pd.read_csv(batch_means_explain_csv)
-    df_units = df_units[df_units["model"].isin(_CONSISTENT_SET)]
-
-    ome_n1 = df_main[df_main["batch_name"] == "ome_n1"].set_index("model")
-    units = df_units[df_units["batch_name"] == "nielsen_only"].set_index("model")
-    units_exp = df_units[df_units["batch_name"] == "nielsen_units_explained"].set_index("model")
+    df = pd.read_csv(batch_means_csv)
+    df = df[df["model"].isin(_CONSISTENT_SET)]
+    ome_df = df[df["batch_name"] == ome_batch].set_index("model")
+    non_ome_df = df[df["batch_name"] == non_ome_batch].set_index("model")
 
     ranked_models = get_ranked_model_order()
-    models = [m for m in ranked_models
-              if m in ome_n1.index and m in units.index and m in units_exp.index]
+    models = [m for m in ranked_models if m in ome_df.index and m in non_ome_df.index]
+    if not models:
+        models = sorted(set(ome_df.index) & set(non_ome_df.index))
 
     clean_names = [_clean(m) for m in models]
-    cond_labels = ["mg/day", "mg/4h", "explained"]
+    cond_labels = ["OME", "non-OME"]
 
     x_factors = [(cn, cl) for cn in clean_names for cl in cond_labels]
     bar_data = {"x": [], "tight": [], "broad_top": [], "color": [], "model": [], "batch": []}
@@ -713,9 +744,123 @@ def explain_units_bars(
     for m in models:
         cn = _clean(m)
         color = MODEL_COLOR_DICT.get(m, "#888888")
-        for label, batch_df in [("mg/day", ome_n1), ("mg/4h", units), ("explained", units_exp)]:
-            t = batch_df.loc[m, "mean_in_tight"]
-            b = batch_df.loc[m, "mean_in_broad"]
+        for label, bdf in [("OME", ome_df), ("non-OME", non_ome_df)]:
+            t = bdf.loc[m, "mean_in_tight"]
+            b = bdf.loc[m, "mean_in_broad"]
+            bar_data["x"].append((cn, label))
+            bar_data["tight"].append(t)
+            bar_data["broad_top"].append(b)
+            bar_data["color"].append(color)
+            bar_data["model"].append(cn)
+            bar_data["batch"].append(label)
+
+    source = ColumnDataSource(bar_data)
+    p = figure(
+        width=width, height=height,
+        x_range=FactorRange(*x_factors),
+        y_range=(0, 1.15),
+        toolbar_location=None,
+        title=title,
+    )
+    p.vbar(x="x", top="tight", width=0.7, color="color", alpha=0.9, source=source)
+    p.vbar(x="x", top="broad_top", bottom="tight", width=0.7, color="color", alpha=0.25, source=source)
+
+    # Per-model significance annotation from comparison CSV
+    if comparison_csv and os.path.exists(comparison_csv):
+        cdf = pd.read_csv(comparison_csv)
+        star_x, star_y, star_text = [], [], []
+        for m, cn in zip(models, clean_names):
+            mrow = cdf[cdf["model"] == m]
+            if mrow.empty:
+                continue
+            p_t = mrow.iloc[0].get("tight_mannwhitney_p", np.nan)
+            p_b = mrow.iloc[0].get("broad_mannwhitney_p", np.nan)
+            ps = [p for p in [p_t, p_b] if not np.isnan(p)]
+            p_min = min(ps) if ps else None
+            s = _significance_star(p_min)
+            if s:
+                ome_key = (cn, "OME")
+                nonome_key = (cn, "non-OME")
+                tops = []
+                for key in (ome_key, nonome_key):
+                    if key in bar_data["x"]:
+                        pos = bar_data["x"].index(key)
+                        tops.append(bar_data["broad_top"][pos])
+                top = max(tops) if tops else 0.5
+                star_x.append((cn, "OME"))
+                star_y.append(top + 0.03)
+                star_text.append(s)
+        if star_x:
+            star_src = ColumnDataSource(dict(x=star_x, y=star_y, text=star_text))
+            p.add_layout(LabelSet(
+                x="x", y="y", text="text", source=star_src,
+                text_font_size="9pt", text_align="center",
+                text_baseline="bottom",
+            ))
+
+    _style_grouped_bar(p, clean_names, cond_labels)
+    return p
+
+
+# ── Explain units effect bars with significance ─────────────────────
+
+def explain_units_bars(
+    pair_model_csv: str,
+    explain_units_pair_csv: str,
+    comparison_csv: str,
+    title: str = "Explain Units Effect",
+    width: int = 1000,
+    height: int = 400,
+):
+    """
+    Three-condition bar chart computed directly from per-pair CSVs:
+      1. mg/day + Nielsen   (pair_model_csv, OME + Nielsen, mg/day)
+      2. mg/4h + Nielsen    (explain_units_pair_csv, explain_units=False)
+      3. mg/4h + Nielsen + explained  (explain_units_pair_csv, explain_units=True)
+    Wilcoxon significance stars for the explain-units effect (condition 2 vs 3).
+    """
+    tight_col = "tight(0.85,1.15)"
+    broad_col = "broad(0.6,1.7)"
+
+    # Condition 1: mg/day + Nielsen from main pair model analysis
+    df1 = pd.read_csv(pair_model_csv)
+    df1 = df1[(df1["ome"] == True) & (df1["include_nielsen"] == True)]
+    df1 = df1[df1["model"].isin(_CONSISTENT_SET)]
+    c1 = df1.groupby("model").agg(
+        mean_in_tight=(tight_col, "mean"),
+        mean_in_broad=(broad_col, "mean"),
+    )
+
+    # Conditions 2 & 3: mg/4h from explain_units CSV
+    df2 = pd.read_csv(explain_units_pair_csv)
+    df2 = df2[df2["model"].isin(_CONSISTENT_SET)]
+    c2_raw = df2[df2["explain_units"] == False]
+    c3_raw = df2[df2["explain_units"] == True]
+    c2 = c2_raw.groupby("model").agg(
+        mean_in_tight=(tight_col, "mean"),
+        mean_in_broad=(broad_col, "mean"),
+    )
+    c3 = c3_raw.groupby("model").agg(
+        mean_in_tight=(tight_col, "mean"),
+        mean_in_broad=(broad_col, "mean"),
+    )
+
+    ranked_models = get_ranked_model_order()
+    models = [m for m in ranked_models
+              if m in c1.index and m in c2.index and m in c3.index]
+
+    clean_names = [_clean(m) for m in models]
+    cond_labels = ["mg/day", "mg/4h", "mg/4h explained"]
+
+    x_factors = [(cn, cl) for cn in clean_names for cl in cond_labels]
+    bar_data = {"x": [], "tight": [], "broad_top": [], "color": [], "model": [], "batch": []}
+
+    for m in models:
+        cn = _clean(m)
+        color = MODEL_COLOR_DICT.get(m, "#888888")
+        for label, src_df in [("mg/day", c1), ("mg/4h", c2), ("mg/4h explained", c3)]:
+            t = src_df.loc[m, "mean_in_tight"]
+            b = src_df.loc[m, "mean_in_broad"]
             bar_data["x"].append((cn, label))
             bar_data["tight"].append(t)
             bar_data["broad_top"].append(b)
@@ -734,7 +879,7 @@ def explain_units_bars(
     p.vbar(x="x", top="tight", width=0.6, color="color", alpha=0.9, source=source)
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.6, color="color", alpha=0.25, source=source)
 
-    # Significance annotations for explain_units effect
+    # Significance annotations for explain_units effect (cond 2 vs 3)
     if os.path.exists(comparison_csv):
         star_x, star_y, star_text = [], [], []
         for m, cn in zip(models, clean_names):
@@ -744,9 +889,9 @@ def explain_units_bars(
             s = _significance_star(p_min)
             if s:
                 broad_max = max(
-                    ome_n1.loc[m, "mean_in_broad"] if m in ome_n1.index else 0,
-                    units.loc[m, "mean_in_broad"] if m in units.index else 0,
-                    units_exp.loc[m, "mean_in_broad"] if m in units_exp.index else 0,
+                    c1.loc[m, "mean_in_broad"] if m in c1.index else 0,
+                    c2.loc[m, "mean_in_broad"] if m in c2.index else 0,
+                    c3.loc[m, "mean_in_broad"] if m in c3.index else 0,
                 )
                 star_x.append((cn, "mg/4h"))
                 star_y.append(broad_max + 0.03)
@@ -766,45 +911,67 @@ def explain_units_bars(
 # ── Full treatment (Nielsen + explain units) ────────────────────────
 
 def full_treatment_bars(
+    pair_model_csv: str,
+    explain_units_pair_csv: str,
     batch_means_csv: str,
     comparison_nielsen_csv: str,
-    comparison_units_csv: Optional[str] = None,
-    naive_batch: str = "all_n0",
-    nielsen_batch: str = "all_n1",
-    full_batch: Optional[str] = None,
-    title: str = "Nielsen + Explain Units Performance",
-    width: int = 900,
-    height: int = 400,
+    comparison_units_csv: str,
+    title: str = "Explaining Units Improves Non-Daily Dosing",
+    width: int = 1100,
+    height: int = 420,
 ):
     """
-    Bar chart: naive vs nielsen vs Nielsen + explain units per model with significance.
+    Four-condition bar chart showing the full treatment pipeline for mg/4hr:
+      1. naive OME (no reference, mg/day)
+      2. mg/day + Nielsen
+      3. mg/4h + Nielsen
+      4. mg/4h + Nielsen + explained
+    Significance stars: Nielsen effect (1→2) and explain units effect (3→4).
     """
-    df = pd.read_csv(batch_means_csv)
-    df = df[df["model"].isin(_CONSISTENT_SET)]
-    naive_df = df[df["batch_name"] == naive_batch].set_index("model")
-    nielsen_df = df[df["batch_name"] == nielsen_batch].set_index("model")
+    tight_col = "tight(0.85,1.15)"
+    broad_col = "broad(0.6,1.7)"
 
-    # Full treatment batch is optional
-    full_df = None
-    if full_batch and full_batch in df["batch_name"].values:
-        full_df = df[df["batch_name"] == full_batch].set_index("model")
+    # Condition 1: naive OME from batch means
+    bm = pd.read_csv(batch_means_csv)
+    bm = bm[bm["model"].isin(_CONSISTENT_SET)]
+    naive_df = bm[bm["batch_name"] == "ome_n0"].set_index("model")
+
+    # Condition 2: mg/day + Nielsen from pair model analysis
+    df1 = pd.read_csv(pair_model_csv)
+    df1 = df1[(df1["ome"] == True) & (df1["include_nielsen"] == True)]
+    df1 = df1[df1["model"].isin(_CONSISTENT_SET)]
+    daily_nielsen = df1.groupby("model").agg(
+        mean_in_tight=(tight_col, "mean"),
+        mean_in_broad=(broad_col, "mean"),
+    )
+
+    # Conditions 3 & 4: mg/4h from explain_units CSV
+    df2 = pd.read_csv(explain_units_pair_csv)
+    df2 = df2[df2["model"].isin(_CONSISTENT_SET)]
+    fourh_nielsen = df2[df2["explain_units"] == False].groupby("model").agg(
+        mean_in_tight=(tight_col, "mean"),
+        mean_in_broad=(broad_col, "mean"),
+    )
+    fourh_explained = df2[df2["explain_units"] == True].groupby("model").agg(
+        mean_in_tight=(tight_col, "mean"),
+        mean_in_broad=(broad_col, "mean"),
+    )
 
     ranked_models = get_ranked_model_order()
-    available = set(naive_df.index) & set(nielsen_df.index)
-    if full_df is not None:
-        available &= set(full_df.index)
+    available = set(naive_df.index) & set(daily_nielsen.index) & set(fourh_nielsen.index) & set(fourh_explained.index)
     models = [m for m in ranked_models if m in available]
     if not models:
         models = sorted(available)
 
     clean_names = [_clean(m) for m in models]
+    cond_labels = ["naive", "mg/day+N", "mg/4h+N", "mg/4h+N+E"]
 
-    if full_df is not None:
-        cond_labels = ["naive", "Nielsen", "Nielsen + explain units"]
-        batches_data = [("naive", naive_df), ("Nielsen", nielsen_df), ("Nielsen + explain units", full_df)]
-    else:
-        cond_labels = ["naive", "Nielsen"]
-        batches_data = [("naive", naive_df), ("Nielsen", nielsen_df)]
+    conditions = [
+        ("naive", naive_df),
+        ("mg/day+N", daily_nielsen),
+        ("mg/4h+N", fourh_nielsen),
+        ("mg/4h+N+E", fourh_explained),
+    ]
 
     x_factors = [(cn, cl) for cn in clean_names for cl in cond_labels]
     bar_data = {"x": [], "tight": [], "broad_top": [], "color": [], "model": [], "batch": []}
@@ -812,9 +979,9 @@ def full_treatment_bars(
     for m in models:
         cn = _clean(m)
         color = MODEL_COLOR_DICT.get(m, "#888888")
-        for label, bdf in batches_data:
-            t = bdf.loc[m, "mean_in_tight"]
-            b = bdf.loc[m, "mean_in_broad"]
+        for label, src_df in conditions:
+            t = src_df.loc[m, "mean_in_tight"]
+            b = src_df.loc[m, "mean_in_broad"]
             bar_data["x"].append((cn, label))
             bar_data["tight"].append(t)
             bar_data["broad_top"].append(b)
@@ -833,7 +1000,7 @@ def full_treatment_bars(
     p.vbar(x="x", top="tight", width=0.6, color="color", alpha=0.9, source=source)
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.6, color="color", alpha=0.25, source=source)
 
-    # Significance annotations for Nielsen effect
+    # Significance: Nielsen effect (naive → mg/day+N)
     if os.path.exists(comparison_nielsen_csv):
         star_x, star_y, star_text = [], [], []
         for m, cn in zip(models, clean_names):
@@ -842,18 +1009,37 @@ def full_treatment_bars(
             p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
             s = _significance_star(p_min)
             if s:
-                broad_vals = [naive_df.loc[m, "mean_in_broad"], nielsen_df.loc[m, "mean_in_broad"]]
-                if full_df is not None and m in full_df.index:
-                    broad_vals.append(full_df.loc[m, "mean_in_broad"])
                 star_x.append((cn, "naive"))
-                star_y.append(max(broad_vals) + 0.03)
+                star_y.append(max(naive_df.loc[m, "mean_in_broad"],
+                                  daily_nielsen.loc[m, "mean_in_broad"]) + 0.03)
                 star_text.append(s)
         if star_x:
             star_src = ColumnDataSource(dict(x=star_x, y=star_y, text=star_text))
             p.add_layout(LabelSet(
                 x="x", y="y", text="text", source=star_src,
                 text_font_size="9pt", text_align="center",
-                text_baseline="bottom", x_offset=15,
+                text_baseline="bottom",
+            ))
+
+    # Significance: Explain units effect (mg/4h+N → mg/4h+N+E)
+    if os.path.exists(comparison_units_csv):
+        star_x2, star_y2, star_text2 = [], [], []
+        for m, cn in zip(models, clean_names):
+            p_t, _, _ = _per_model_wilcoxon(comparison_units_csv, m, "tight")
+            p_b, _, _ = _per_model_wilcoxon(comparison_units_csv, m, "broad")
+            p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
+            s = _significance_star(p_min)
+            if s:
+                star_x2.append((cn, "mg/4h+N"))
+                star_y2.append(max(fourh_nielsen.loc[m, "mean_in_broad"],
+                                   fourh_explained.loc[m, "mean_in_broad"]) + 0.03)
+                star_text2.append(s)
+        if star_x2:
+            star_src2 = ColumnDataSource(dict(x=star_x2, y=star_y2, text=star_text2))
+            p.add_layout(LabelSet(
+                x="x", y="y", text="text", source=star_src2,
+                text_font_size="9pt", text_align="center",
+                text_baseline="bottom",
             ))
 
     _style_grouped_bar(p, clean_names, cond_labels)
@@ -865,6 +1051,9 @@ def full_treatment_bars(
 def cross_experiment_bars(
     random_dose_batch_means_csv: str,
     vignette_batch_means_csv: str,
+    comparison_rd_vs_empty_csv: str | None = None,
+    comparison_rd_vs_text_csv: str | None = None,
+    comparison_empty_vs_text_csv: str | None = None,
     title: str = "Cross-Experiment Comparison",
     width: int = 1000,
     height: int = 450,
@@ -922,34 +1111,47 @@ def cross_experiment_bars(
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.7, color="color",
            alpha=0.25, source=source)
 
-    # ── Pairwise significance tests (model-level paired Wilcoxon) ──
-    cond_pairs = [("random dose", "empty vignette", rd_naive, vt_empty),
-                  ("empty vignette", "text vignette", vt_empty, vt_text),
-                  ("random dose", "text vignette", rd_naive, vt_text)]
-    sig_lines = []
-    for label_a, label_b, df_a, df_b in cond_pairs:
-        common = sorted(set(df_a.index) & set(df_b.index) & set(models))
-        if len(common) < 4:
+    # ── Per-model significance from pre-computed comparison CSVs ──
+    comparison_specs = [
+        (comparison_rd_vs_text_csv, "random dose", "text vignette"),
+    ]
+    star_x, star_y, star_text = [], [], []
+    for comp_csv, cond_a, cond_b in comparison_specs:
+        if not comp_csv or not os.path.exists(comp_csv):
             continue
-        diffs_t = [df_b.loc[m, "mean_in_tight"] - df_a.loc[m, "mean_in_tight"]
-                   for m in common]
-        nonzero = [d for d in diffs_t if d != 0]
-        if len(nonzero) < 2:
-            continue
-        _, p_val = wilcoxon(nonzero, alternative="two-sided")
-        stars = _significance_star(p_val)
-        if stars:
-            sig_lines.append((label_a, label_b, stars, p_val))
+        comp_df = pd.read_csv(comp_csv)
+        for m, cn in zip(models, clean_names):
+            mrow = comp_df[comp_df["model"] == m]
+            if mrow.empty:
+                continue
+            p_t = mrow.iloc[0].get("tight_mannwhitney_p", np.nan)
+            p_b = mrow.iloc[0].get("broad_mannwhitney_p", np.nan)
+            ps = [p for p in [p_t, p_b] if not np.isnan(p)]
+            p_min = min(ps) if ps else None
+            s = _significance_star(p_min)
+            if s:
+                # Place star above the taller of the two compared bars
+                idx_a = cond_labels.index(cond_a) if cond_a in cond_labels else 0
+                idx_b = cond_labels.index(cond_b) if cond_b in cond_labels else 0
+                bar_tops = []
+                for idx in (idx_a, idx_b):
+                    key = (cn, cond_labels[idx])
+                    if key in bar_data["x"]:
+                        pos = bar_data["x"].index(key)
+                        bar_tops.append(bar_data["broad_top"][pos])
+                top = max(bar_tops) if bar_tops else 0.5
+                # Place between the two compared bars
+                mid_label = cond_labels[(idx_a + idx_b) // 2]
+                star_x.append((cn, mid_label))
+                star_y.append(top + 0.03)
+                star_text.append(s)
 
-    if sig_lines:
-        # Add overall title annotation with significance results
-        sig_parts = []
-        for la, lb, stars, pv in sig_lines:
-            sig_parts.append(f"{la} vs {lb}: {stars} (p={pv:.1e})")
-        sig_text = "  |  ".join(sig_parts)
-        p.add_layout(Label(
-            x=5, y=5, x_units="screen", y_units="screen",
-            text=sig_text, text_font_size="8pt", text_color="#555",
+    if star_x:
+        star_src = ColumnDataSource(dict(x=star_x, y=star_y, text=star_text))
+        p.add_layout(LabelSet(
+            x="x", y="y", text="text", source=star_src,
+            text_font_size="9pt", text_align="center",
+            text_baseline="bottom",
         ))
 
     _style_grouped_bar(p, clean_names, cond_labels)
@@ -1104,40 +1306,51 @@ class ComprehensiveFigureBuilder:
         )
         return column(ome, non_ome)
 
+    def build_ome_vs_nonome(self):
+        """OME vs non-OME comparison: naive and Nielsen side by side."""
+        naive = ome_comparison_bars(
+            batch_means_csv=self._p("model_batch_means.csv"),
+            ome_batch="ome_n0",
+            non_ome_batch="pairs_n0",
+            comparison_csv=self._p("comparison_ome_vs_nonome_naive_permodel.csv"),
+            title="Naive — OME vs Non-OME (Random Doses)",
+            width=900, height=350,
+        )
+        nielsen = ome_comparison_bars(
+            batch_means_csv=self._p("model_batch_means.csv"),
+            ome_batch="ome_n1",
+            non_ome_batch="pairs_n1",
+            comparison_csv=self._p("comparison_ome_vs_nonome_nielsen_permodel.csv"),
+            title="Nielsen — OME vs Non-OME (Random Doses)",
+            width=900, height=350,
+        )
+        return column(naive, nielsen)
+
     def build_explain_units(self):
         """Explain units effect."""
         return explain_units_bars(
-            batch_means_csv=self._p("model_batch_means.csv"),
-            batch_means_explain_csv=self._p("model_batch_means_explain_units.csv"),
+            pair_model_csv=self._p("pair_model_analysis.csv"),
+            explain_units_pair_csv=self._p("explain_units_pair_model_analysis.csv"),
             comparison_csv=self._p("comparison_units_effect_random_dose.csv"),
-            title="Explain Units Effect (Oral Morphine)",
+            title="Explain Units Effect — Random Doses (Oral Morphine)",
         )
 
     def build_full_treatment(self):
-        """Full treatment: naive vs Nielsen vs Nielsen + explain units."""
-        # Try vignette batch means first (has ome_n1_units)
-        csv = self._p("model_batch_means_vignettes.csv")
-        if os.path.exists(csv):
-            df = pd.read_csv(csv)
-            full_batch = "ome_n1_units" if "ome_n1_units" in df["batch_name"].values else None
-        else:
-            csv = self._p("model_batch_means.csv")
-            full_batch = None
-
+        """Full treatment: naive → mg/day+N → mg/4h+N → mg/4h+N+E."""
         return full_treatment_bars(
-            batch_means_csv=csv,
-            comparison_nielsen_csv=self._p("comparison_nielsen_effect_vignettes.csv"),
-            naive_batch="all_n0",
-            nielsen_batch="all_n1",
-            full_batch=full_batch,
-            title="Nielsen + Explain Units Performance",
+            pair_model_csv=self._p("pair_model_analysis.csv"),
+            explain_units_pair_csv=self._p("explain_units_pair_model_analysis.csv"),
+            batch_means_csv=self._p("model_batch_means.csv"),
+            comparison_nielsen_csv=self._p("comparison_nielsen_effect_random_dose_ome.csv"),
+            comparison_units_csv=self._p("comparison_units_effect_random_dose.csv"),
+            title="Full Treatment Pipeline — Random Doses (Oral Morphine)",
         )
 
     def build_nielsen_ranked_random_doses(self):
         """Ranked model performance with Nielsen — random doses."""
         return naive_performance_bars(
             ranking_csv=self._p("ranking_random_doses_nielsen.csv"),
-            title="Nielsen Random Dose Performance by Model",
+            title="Nielsen Performance by Model — Random Doses",
         )
 
     def build_nielsen_units_ranked(self):
@@ -1157,6 +1370,9 @@ class ComprehensiveFigureBuilder:
         return cross_experiment_bars(
             random_dose_batch_means_csv=self._p("model_batch_means.csv"),
             vignette_batch_means_csv=self._p("model_batch_means_text_vs_empty.csv"),
+            comparison_rd_vs_empty_csv=self._p("comparison_cross_rd_vs_empty.csv"),
+            comparison_rd_vs_text_csv=self._p("comparison_cross_rd_vs_text.csv"),
+            comparison_empty_vs_text_csv=self._p("comparison_cross_empty_vs_text.csv"),
             title="Cross-Experiment: Random Dose vs Empty Vignette vs Text Vignette",
         )
 
@@ -1208,31 +1424,41 @@ class ComprehensiveFigureBuilder:
          " significance stars are shown per model."),
 
         ("nielsen_by_ome_vignettes", "build_nielsen_by_ome_vignettes",
-         "The Nielsen reference selectively improves oral morphine conversions",
+         "The Nielsen reference selectively perfects oral morphine conversions",
          "Two-panel figure splitting the Nielsen effect for vignettes into"
          " oral-morphine-equivalent (OME) conversions (top) and non-OME"
          " conversions (bottom). The differential improvement reveals whether"
          " Nielsen reference data primarily benefits oral morphine conversions."),
 
         ("nielsen_by_ome_random_doses", "build_nielsen_by_ome_random_doses",
-         "The Nielsen reference selectively improves oral morphine conversions",
+         "The Nielsen reference selectively perfects oral morphine conversions",
          "Two-panel figure splitting the Nielsen effect for random-dose"
          " conversions into OME (top) and non-OME (bottom) subsets."
          " Significance annotations are computed independently for each subset."),
 
+        ("ome_vs_nonome", "build_ome_vs_nonome",
+         "Oral morphine conversions are inherently more accurate",
+         "Two-panel figure from the random-dose experiment directly comparing"
+         " OME vs non-OME accuracy within the same condition. Top panel: naive."
+         " Bottom panel: Nielsen. Reveals that oral morphine conversions are"
+         " systematically easier across all models."),
+
         ("explain_units", "build_explain_units",
          "Models struggle with non-daily dosing",
-         "Three-condition bar chart comparing model accuracy on oral-morphine"
-         " conversions: standard daily dosing with Nielsen, non-daily dosing with"
-         " Nielsen, and non-daily dosing with Nielsen plus explicit unit explanation."
+         "Three-condition bar chart from the random-dose experiment comparing"
+         " model accuracy on oral-morphine conversions: standard daily dosing"
+         " (mg/day) with Nielsen, non-daily dosing (mg/4h) with Nielsen, and"
+         " non-daily dosing with Nielsen plus explicit unit explanation."
          " The drop from daily to non-daily reveals sensitivity to dosing intervals."),
 
         ("full_treatment", "build_full_treatment",
          "Explaining units improves non-daily dosing",
-         "Bar chart comparing prompting conditions: naive (no reference),"
-         " Nielsen-augmented, and Nielsen + explain units. Shows the cumulative"
-         " benefit of adding reference data and explicit unit clarification to"
-         " opioid conversion prompts."),
+         "Four-condition bar chart from the random-dose experiment showing"
+         " the full treatment pipeline for oral-morphine conversions:"
+         " naive (no reference), mg/day + Nielsen, mg/4h + Nielsen, and"
+         " mg/4h + Nielsen + explicit unit explanation. Demonstrates both"
+         " the Nielsen benefit and the dramatic drop and rescue with"
+         " non-daily dosing."),
 
         ("cross_experiment_bars", "build_cross_experiment",
          "Performance structure is consistent across task formats",
