@@ -351,7 +351,7 @@ class OpioidPairBatchHeatmapVisualizer:
         legend_fig2 = legend_column(clean_names[half:], colors[half:], width, height)
 
         return row(legend_fig1, legend_fig2)
-    
+
     def create_heatmaps(self, output_html: Optional[str] = None) -> column:
         """
         Create all three heatmaps, each sorted independently by mean raw weight.
@@ -416,7 +416,15 @@ class OpioidPairBatchHeatmapVisualizer:
 
         bar_and_legend = row(mean_accuracy_bar, model_legend)
         layout = column(heatmap1, heatmap2, heatmap3, bar_and_legend)
-        
+
+        # Store individual subplots for per-subplot export
+        self._subplots = {
+            "weight_cv": heatmap1,
+            "broad_range": heatmap2,
+            "tight_range": heatmap3,
+            "bar_and_legend": bar_and_legend,
+        }
+
         if output_html:
             output_file(output_html)
             save(layout)
@@ -424,3 +432,24 @@ class OpioidPairBatchHeatmapVisualizer:
             print(f"Heatmaps saved to {output_html}")
         
         return layout
+
+    def save_subplot_pngs(self, prefix: str):
+        """
+        Save each heatmap subplot as an individual HTML + PNG.
+        Must be called after create_heatmaps().
+
+        Args:
+            prefix: File path prefix, e.g. 'figures/all_n0' →
+                    figures/all_n0_weight_cv.html / .png, etc.
+        """
+        if not hasattr(self, '_subplots') or not self._subplots:
+            raise RuntimeError("Call create_heatmaps() before save_subplot_pngs()")
+
+        html_paths = {}
+        for name, fig in self._subplots.items():
+            html_path = f"{prefix}_{name}.html"
+            output_file(html_path)
+            save(fig)
+            html_paths[name] = html_path
+
+        return html_paths

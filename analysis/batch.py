@@ -180,11 +180,19 @@ class Batch:
         models = self.get_models()
         items = self.get_items()
         matrix = np.full((len(models), len(items)), np.nan)
+        # Support both random-dose and vignette column names
+        cv_col = None
+        for candidate in ('observed_coefficient_cv', 'observed_dose_cv'):
+            if candidate in self.model_data.columns:
+                cv_col = candidate
+                break
+        if cv_col is None:
+            return matrix
         for item_idx, item_name in enumerate(items):
             for model_idx, model in enumerate(models):
                 row = self._get_model_row(item_name, model)
-                if len(row) > 0 and 'observed_coefficient_cv' in row.columns:
-                    value = row['observed_coefficient_cv'].iloc[0]
+                if len(row) > 0:
+                    value = row[cv_col].iloc[0]
                     if pd.notna(value):
                         matrix[model_idx, item_idx] = value
         return matrix
