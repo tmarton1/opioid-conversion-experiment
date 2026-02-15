@@ -40,7 +40,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v3": {
     "vignette_id": "v3",
@@ -83,7 +84,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v4": {
     "vignette_id": "v4",
@@ -126,7 +128,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v5": {
     "vignette_id": "v5",
@@ -169,7 +172,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v6": {
     "vignette_id": "v6",
@@ -194,7 +198,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v7": {
     "vignette_id": "v7",
@@ -219,7 +224,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v8": {
     "vignette_id": "v8",
@@ -244,7 +250,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v9": {
     "vignette_id": "v9",
@@ -269,7 +276,8 @@
     },
     "output_unit": "mg/4hr",
     "output_conversion": "expected_to_dose/6",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v10": {
     "vignette_id": "v10",
@@ -291,7 +299,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v11": {
     "vignette_id": "v11",
@@ -313,7 +322,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v12": {
     "vignette_id": "v12",
@@ -335,7 +345,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v13": {
     "vignette_id": "v13",
@@ -357,7 +368,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v14": {
     "vignette_id": "v14",
@@ -382,7 +394,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v15": {
     "vignette_id": "v15",
@@ -407,7 +420,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v16": {
     "vignette_id": "v16",
@@ -432,7 +446,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v17": {
     "vignette_id": "v17",
@@ -457,7 +472,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v18": {
     "vignette_id": "v18",
@@ -484,7 +500,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v19": {
     "vignette_id": "v19",
@@ -511,7 +528,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v20": {
     "vignette_id": "v20",
@@ -538,7 +556,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v21": {
     "vignette_id": "v21",
@@ -565,7 +584,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v22": {
     "vignette_id": "v22",
@@ -587,7 +607,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v23": {
     "vignette_id": "v23",
@@ -609,7 +630,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v24": {
     "vignette_id": "v24",
@@ -631,7 +653,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v25": {
     "vignette_id": "v25",
@@ -653,7 +676,8 @@
     "dose_placeholder": "{{dose_24hr}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v26": {
     "vignette_id": "v26",
@@ -675,7 +699,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.8",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v27": {
     "vignette_id": "v27",
@@ -697,7 +722,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.8",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v28": {
     "vignette_id": "v28",
@@ -719,7 +745,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.8",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v29": {
     "vignette_id": "v29",
@@ -741,7 +768,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.8",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v30": {
     "vignette_id": "v30",
@@ -766,7 +794,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v31": {
     "vignette_id": "v31",
@@ -791,7 +820,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v32": {
     "vignette_id": "v32",
@@ -816,7 +846,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v33": {
     "vignette_id": "v33",
@@ -841,7 +872,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v34": {
     "vignette_id": "v34",
@@ -863,7 +895,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.5",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v35": {
     "vignette_id": "v35",
@@ -885,7 +918,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.5",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v36": {
     "vignette_id": "v36",
@@ -907,7 +941,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.5",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v37": {
     "vignette_id": "v37",
@@ -929,7 +964,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.5",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v38": {
     "vignette_id": "v38",
@@ -956,7 +992,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v39": {
     "vignette_id": "v39",
@@ -983,7 +1020,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v40": {
     "vignette_id": "v40",
@@ -1010,7 +1048,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v41": {
     "vignette_id": "v41",
@@ -1037,7 +1076,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose * 0.75",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v42": {
     "vignette_id": "v42",
@@ -1059,7 +1099,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v43": {
     "vignette_id": "v43",
@@ -1081,7 +1122,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v44": {
     "vignette_id": "v44",
@@ -1103,7 +1145,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v45": {
     "vignette_id": "v45",
@@ -1125,7 +1168,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v46": {
     "vignette_id": "v46",
@@ -1147,7 +1191,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v47": {
     "vignette_id": "v47",
@@ -1169,7 +1214,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v48": {
     "vignette_id": "v48",
@@ -1191,7 +1237,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v49": {
     "vignette_id": "v49",
@@ -1213,7 +1260,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v50": {
     "vignette_id": "v50",
@@ -1235,7 +1283,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v51": {
     "vignette_id": "v51",
@@ -1257,7 +1306,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v52": {
     "vignette_id": "v52",
@@ -1279,7 +1329,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v53": {
     "vignette_id": "v53",
@@ -1301,7 +1352,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v54": {
     "vignette_id": "v54",
@@ -1331,7 +1383,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v55": {
     "vignette_id": "v55",
@@ -1361,7 +1414,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v56": {
     "vignette_id": "v56",
@@ -1391,7 +1445,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v57": {
     "vignette_id": "v57",
@@ -1421,7 +1476,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v58": {
     "vignette_id": "v58",
@@ -1456,7 +1512,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v59": {
     "vignette_id": "v59",
@@ -1491,7 +1548,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v60": {
     "vignette_id": "v60",
@@ -1526,7 +1584,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v61": {
     "vignette_id": "v61",
@@ -1561,7 +1620,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v62": {
     "vignette_id": "v62",
@@ -1588,7 +1648,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v63": {
     "vignette_id": "v63",
@@ -1615,7 +1676,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v64": {
     "vignette_id": "v64",
@@ -1642,7 +1704,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v65": {
     "vignette_id": "v65",
@@ -1669,7 +1732,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v66": {
     "vignette_id": "v66",
@@ -1699,7 +1763,8 @@
     "dose_placeholder": "{{total_dose_mcg}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v67": {
     "vignette_id": "v67",
@@ -1729,7 +1794,8 @@
     "dose_placeholder": "{{total_dose_mcg}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v68": {
     "vignette_id": "v68",
@@ -1759,7 +1825,8 @@
     "dose_placeholder": "{{total_dose_mcg}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v69": {
     "vignette_id": "v69",
@@ -1789,7 +1856,8 @@
     "dose_placeholder": "{{total_dose_mcg}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v70": {
     "vignette_id": "v70",
@@ -1811,7 +1879,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v71": {
     "vignette_id": "v71",
@@ -1833,7 +1902,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v72": {
     "vignette_id": "v72",
@@ -1855,7 +1925,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v73": {
     "vignette_id": "v73",
@@ -1877,7 +1948,8 @@
     "dose_placeholder": "{{dose}}",
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v74": {
     "vignette_id": "v74",
@@ -1904,7 +1976,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v75": {
     "vignette_id": "v75",
@@ -1931,7 +2004,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v76": {
     "vignette_id": "v76",
@@ -1958,7 +2032,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v77": {
     "vignette_id": "v77",
@@ -1985,7 +2060,8 @@
     },
     "output_unit": "mg/day",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v78": {
     "vignette_id": "v78",
@@ -2012,7 +2088,8 @@
     },
     "output_unit": "mcg/hr",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#2d5f8a"
   },
   "v79": {
     "vignette_id": "v79",
@@ -2039,7 +2116,8 @@
     },
     "output_unit": "mcg/hr",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a5c2d"
   },
   "v80": {
     "vignette_id": "v80",
@@ -2066,7 +2144,8 @@
     },
     "output_unit": "mcg/hr",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#5a8a2d"
   },
   "v81": {
     "vignette_id": "v81",
@@ -2093,7 +2172,8 @@
     },
     "output_unit": "mcg/hr",
     "output_conversion": "expected_to_dose",
-    "has_vignette_text": true
+    "has_vignette_text": true,
+    "vignette_color": "#8a2d5a"
   },
   "v82": {
     "scenario_key": "adult-male-dog-bite",
@@ -2120,7 +2200,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v82",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v83": {
     "scenario_key": "elderly-female-bunionectomy",
@@ -2147,7 +2228,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v83",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v84": {
     "scenario_key": "elderly-female-chronic-bowel-obstruction",
@@ -2169,7 +2251,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v84",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v85": {
     "scenario_key": "elderly-female-pancreatic-carcinoma",
@@ -2191,7 +2274,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v85",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v86": {
     "scenario_key": "elderly-female-renal-colic",
@@ -2226,7 +2310,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v86",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v87": {
     "scenario_key": "elderly-hip-fracture",
@@ -2253,7 +2338,8 @@
     "output_conversion": "expected_to_dose * 0.75",
     "vignette_id": "v87",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v88": {
     "scenario_key": "elderly-hip-replacement",
@@ -2275,7 +2361,8 @@
     "output_conversion": "expected_to_dose * 0.8",
     "vignette_id": "v88",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v89": {
     "scenario_key": "elderly-male-abdominal-surgery",
@@ -2297,7 +2384,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v89",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v90": {
     "scenario_key": "middle-aged-ankle-replacement",
@@ -2324,7 +2412,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v90",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v91": {
     "scenario_key": "middle-aged-ankle-surgery",
@@ -2346,7 +2435,8 @@
     "output_conversion": "expected_to_dose * 0.5",
     "vignette_id": "v91",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v92": {
     "scenario_key": "middle-aged-carpenter-amputation",
@@ -2371,7 +2461,8 @@
     "output_conversion": "expected_to_dose * 0.75",
     "vignette_id": "v92",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v93": {
     "scenario_key": "middle-aged-female-cancer",
@@ -2398,7 +2489,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v93",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v94": {
     "scenario_key": "middle-aged-female-shoulder-pain",
@@ -2423,7 +2515,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v94",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v95": {
     "scenario_key": "middle-aged-man-chronic-back-pain",
@@ -2453,7 +2546,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v95",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v96": {
     "scenario_key": "middle-aged-man-knee-amputation",
@@ -2475,7 +2569,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v96",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v97": {
     "scenario_key": "middle-aged-woman-cancer-surgery",
@@ -2518,7 +2613,8 @@
     "output_conversion": "expected_to_dose/6",
     "vignette_id": "v97",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v98": {
     "scenario_key": "pediatric-burn-patient",
@@ -2543,7 +2639,8 @@
     "output_conversion": "expected_to_dose/6",
     "vignette_id": "v98",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v99": {
     "scenario_key": "teen-pelvic-fracture",
@@ -2565,7 +2662,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v99",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v100": {
     "scenario_key": "young-adult-sickle-cell-crisis",
@@ -2587,7 +2685,8 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v100",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   },
   "v101": {
     "scenario_key": "young-man-car-accident",
@@ -2617,6 +2716,7 @@
     "output_conversion": "expected_to_dose",
     "vignette_id": "v101",
     "text": "",
-    "has_vignette_text": false
+    "has_vignette_text": false,
+    "vignette_color": "#888888"
   }
 }

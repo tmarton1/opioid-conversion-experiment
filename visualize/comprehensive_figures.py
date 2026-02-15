@@ -106,6 +106,51 @@ def _star_label(p):
     return f"{stars} (p={p:.1e})"
 
 
+def _draw_bracket(p, cn, left_label, right_label, bracket_y, stars,
+                  mid_label=None, cap_h=0.015):
+    """Draw a U-shaped significance bracket between two bars.
+
+    Parameters
+    ----------
+    p : figure
+        Bokeh figure with FactorRange x-axis.
+    cn : str
+        Clean model name (first element of the factor tuple).
+    left_label, right_label : str
+        Second-element factor labels for the left and right bars.
+    bracket_y : float
+        Y position of the horizontal bracket line.
+    stars : str
+        Significance text (e.g. "***", "ns").
+    mid_label : str | None
+        Factor label at the midpoint for the text label.  If None,
+        defaults to left_label (offset used for centering).
+    cap_h : float
+        Height of the vertical cap lines.
+    """
+    x_left = (cn, left_label)
+    x_right = (cn, right_label)
+    # Horizontal line
+    p.line(x=[x_left, x_right], y=[bracket_y, bracket_y],
+           line_color="#555", line_width=0.8)
+    # Vertical caps
+    p.line(x=[x_left, x_left], y=[bracket_y - cap_h, bracket_y],
+           line_color="#555", line_width=0.8)
+    p.line(x=[x_right, x_right], y=[bracket_y - cap_h, bracket_y],
+           line_color="#555", line_width=0.8)
+    # Label
+    if mid_label is None:
+        mid_label = left_label
+    star_color = "#555" if stars == "ns" else "#333"
+    star_size = "6pt" if stars == "ns" else "7pt"
+    p.add_layout(Label(
+        x=(cn, mid_label), y=bracket_y + 0.005,
+        text=stars, text_font_size=star_size,
+        text_align="center", text_baseline="bottom",
+        text_color=star_color,
+    ))
+
+
 # ── Naive performance horizontal bars ────────────────────────────────
 
 def _get_pairwise_significance(ranking_csv: str):
@@ -693,7 +738,7 @@ def nielsen_effect_bars(
                     naive.loc[m, "mean_in_broad"],
                     nielsen.loc[m, "mean_in_broad"],
                 )
-                star_x.append((cn, "naive"))
+                star_x.append((cn, "Nielsen"))
                 star_y.append(broad_max + 0.03)
                 star_text.append(s)
 
@@ -702,7 +747,7 @@ def nielsen_effect_bars(
             p.add_layout(LabelSet(
                 x="x", y="y", text="text", source=star_src,
                 text_font_size="9pt", text_align="center",
-                text_baseline="bottom", x_offset=15,
+                text_baseline="bottom",
             ))
 
     _style_grouped_bar(p, clean_names, bar_labels)
@@ -787,7 +832,7 @@ def ome_comparison_bars(
                         pos = bar_data["x"].index(key)
                         tops.append(bar_data["broad_top"][pos])
                 top = max(tops) if tops else 0.5
-                star_x.append((cn, "OME"))
+                star_x.append((cn, "non-OME"))
                 star_y.append(top + 0.03)
                 star_text.append(s)
         if star_x:
@@ -808,16 +853,20 @@ def explain_units_bars(
     pair_model_csv: str,
     explain_units_pair_csv: str,
     comparison_csv: str,
+    dosing_comparison_csv: str | None = None,
     title: str = "Explain Units Effect",
     width: int = 1000,
-    height: int = 400,
+    height: int = 450,
 ):
     """
     Three-condition bar chart computed directly from per-pair CSVs:
       1. mg/day + Nielsen   (pair_model_csv, OME + Nielsen, mg/day)
       2. mg/4h + Nielsen    (explain_units_pair_csv, explain_units=False)
       3. mg/4h + Nielsen + explained  (explain_units_pair_csv, explain_units=True)
-    Wilcoxon significance stars for the explain-units effect (condition 2 vs 3).
+
+    Two significance brackets per model (paired Wilcoxon on broad):
+      - mg/day ↔ mg/4h  (dosing_comparison_csv)
+      - mg/4h ↔ mg/4h explained  (comparison_csv)
     """
     tight_col = "tight(0.85,1.15)"
     broad_col = "broad(0.6,1.7)"
@@ -872,37 +921,41 @@ def explain_units_bars(
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.08),
+        y_range=(0, 1.22),
         toolbar_location=None,
         title=title,
     )
     p.vbar(x="x", top="tight", width=0.6, color="color", alpha=0.9, source=source)
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.6, color="color", alpha=0.25, source=source)
 
-    # Significance annotations for explain_units effect (cond 2 vs 3)
+    # Helper: get broad_top for a bar
+    def _bar_top(cn, lbl):
+        key = (cn, lbl)
+        if key in bar_data["x"]:
+            return bar_data["broad_top"][bar_data["x"].index(key)]
+        return 0
+
+    BRACKET_PAD = 0.025
+    BRACKET_STEP = 0.055
+
+    # Bracket definitions: (csv, left_label, right_label, mid_label, level)
+    bracket_defs = []
+    if dosing_comparison_csv and os.path.exists(dosing_comparison_csv):
+        bracket_defs.append((dosing_comparison_csv, "mg/day", "mg/4h", "mg/day", 1))
     if os.path.exists(comparison_csv):
-        star_x, star_y, star_text = [], [], []
-        for m, cn in zip(models, clean_names):
-            p_t, _, _ = _per_model_wilcoxon(comparison_csv, m, "tight")
-            p_b, _, _ = _per_model_wilcoxon(comparison_csv, m, "broad")
+        bracket_defs.append((comparison_csv, "mg/4h", "mg/4h explained", "mg/4h", 1))
+
+    for m, cn in zip(models, clean_names):
+        model_max = max(_bar_top(cn, cl) for cl in cond_labels)
+        for csv_path, left_lbl, right_lbl, mid_lbl, level in bracket_defs:
+            p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
+            p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
             p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
-            s = _significance_star(p_min)
-            if s:
-                broad_max = max(
-                    c1.loc[m, "mean_in_broad"] if m in c1.index else 0,
-                    c2.loc[m, "mean_in_broad"] if m in c2.index else 0,
-                    c3.loc[m, "mean_in_broad"] if m in c3.index else 0,
-                )
-                star_x.append((cn, "mg/4h"))
-                star_y.append(broad_max + 0.03)
-                star_text.append(s)
-        if star_x:
-            star_src = ColumnDataSource(dict(x=star_x, y=star_y, text=star_text))
-            p.add_layout(LabelSet(
-                x="x", y="y", text="text", source=star_src,
-                text_font_size="9pt", text_align="center",
-                text_baseline="bottom",
-            ))
+            stars = _significance_star(p_min)
+            if stars:
+                bracket_y = model_max + BRACKET_PAD + (level - 1) * BRACKET_STEP
+                _draw_bracket(p, cn, left_lbl, right_lbl, bracket_y, stars,
+                              mid_label=mid_lbl)
 
     _style_grouped_bar(p, clean_names, cond_labels)
     return p
@@ -918,7 +971,7 @@ def full_treatment_bars(
     comparison_units_csv: str,
     title: str = "Explaining Units Improves Non-Daily Dosing",
     width: int = 1100,
-    height: int = 420,
+    height: int = 470,
 ):
     """
     Four-condition bar chart showing the full treatment pipeline for mg/4hr:
@@ -926,7 +979,10 @@ def full_treatment_bars(
       2. mg/day + Nielsen
       3. mg/4h + Nielsen
       4. mg/4h + Nielsen + explained
-    Significance stars: Nielsen effect (1→2) and explain units effect (3→4).
+
+    Two significance brackets per model (paired Wilcoxon on broad):
+      - naive ↔ mg/day+N  (comparison_nielsen_csv)
+      - mg/4h+N ↔ mg/4h+N+E  (comparison_units_csv)
     """
     tight_col = "tight(0.85,1.15)"
     broad_col = "broad(0.6,1.7)"
@@ -993,54 +1049,40 @@ def full_treatment_bars(
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.08),
+        y_range=(0, 1.22),
         toolbar_location=None,
         title=title,
     )
     p.vbar(x="x", top="tight", width=0.6, color="color", alpha=0.9, source=source)
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.6, color="color", alpha=0.25, source=source)
 
-    # Significance: Nielsen effect (naive → mg/day+N)
-    if os.path.exists(comparison_nielsen_csv):
-        star_x, star_y, star_text = [], [], []
-        for m, cn in zip(models, clean_names):
-            p_t, _, _ = _per_model_wilcoxon(comparison_nielsen_csv, m, "tight")
-            p_b, _, _ = _per_model_wilcoxon(comparison_nielsen_csv, m, "broad")
-            p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
-            s = _significance_star(p_min)
-            if s:
-                star_x.append((cn, "naive"))
-                star_y.append(max(naive_df.loc[m, "mean_in_broad"],
-                                  daily_nielsen.loc[m, "mean_in_broad"]) + 0.03)
-                star_text.append(s)
-        if star_x:
-            star_src = ColumnDataSource(dict(x=star_x, y=star_y, text=star_text))
-            p.add_layout(LabelSet(
-                x="x", y="y", text="text", source=star_src,
-                text_font_size="9pt", text_align="center",
-                text_baseline="bottom",
-            ))
+    # Helper: get broad_top for a bar
+    def _bar_top(cn, lbl):
+        key = (cn, lbl)
+        if key in bar_data["x"]:
+            return bar_data["broad_top"][bar_data["x"].index(key)]
+        return 0
 
-    # Significance: Explain units effect (mg/4h+N → mg/4h+N+E)
+    BRACKET_PAD = 0.025
+
+    # Bracket definitions: (csv, left_label, right_label, mid_label)
+    bracket_defs = []
+    if os.path.exists(comparison_nielsen_csv):
+        bracket_defs.append((comparison_nielsen_csv, "naive", "mg/day+N", "naive"))
     if os.path.exists(comparison_units_csv):
-        star_x2, star_y2, star_text2 = [], [], []
-        for m, cn in zip(models, clean_names):
-            p_t, _, _ = _per_model_wilcoxon(comparison_units_csv, m, "tight")
-            p_b, _, _ = _per_model_wilcoxon(comparison_units_csv, m, "broad")
+        bracket_defs.append((comparison_units_csv, "mg/4h+N", "mg/4h+N+E", "mg/4h+N"))
+
+    for m, cn in zip(models, clean_names):
+        model_max = max(_bar_top(cn, cl) for cl in cond_labels)
+        for csv_path, left_lbl, right_lbl, mid_lbl in bracket_defs:
+            p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
+            p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
             p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
-            s = _significance_star(p_min)
-            if s:
-                star_x2.append((cn, "mg/4h+N"))
-                star_y2.append(max(fourh_nielsen.loc[m, "mean_in_broad"],
-                                   fourh_explained.loc[m, "mean_in_broad"]) + 0.03)
-                star_text2.append(s)
-        if star_x2:
-            star_src2 = ColumnDataSource(dict(x=star_x2, y=star_y2, text=star_text2))
-            p.add_layout(LabelSet(
-                x="x", y="y", text="text", source=star_src2,
-                text_font_size="9pt", text_align="center",
-                text_baseline="bottom",
-            ))
+            stars = _significance_star(p_min)
+            if stars:
+                bracket_y = model_max + BRACKET_PAD
+                _draw_bracket(p, cn, left_lbl, right_lbl, bracket_y, stars,
+                              mid_label=mid_lbl)
 
     _style_grouped_bar(p, clean_names, cond_labels)
     return p
@@ -1049,61 +1091,66 @@ def full_treatment_bars(
 # ── Cross-experiment: vignette vs random dose ───────────────────────
 
 def cross_experiment_bars(
-    random_dose_batch_means_csv: str,
-    vignette_batch_means_csv: str,
-    comparison_rd_vs_empty_csv: str | None = None,
-    comparison_rd_vs_text_csv: str | None = None,
-    comparison_empty_vs_text_csv: str | None = None,
-    title: str = "Cross-Experiment Comparison",
-    width: int = 1000,
-    height: int = 450,
+    matched_means_csv: str,
+    matched_wilcoxon_csv: str,
+    matched_spearman_csv: str | None = None,
+    title: str = "Cross-Experiment Comparison (Matched Pairs)",
+    width: int = 1100,
+    height: int = 500,
 ):
     """
     Grouped bar chart: three bars per model — random dose (naive),
     empty vignette (naive), text vignette (naive).
     Each bar shows tight (solid) + broad (translucent).
+
+    Three significance brackets per model (paired Wilcoxon on broad):
+        Level 1 (lower):  RD ↔ Empty,  Empty ↔ Text
+        Level 2 (higher): RD ↔ Text
+
+    Reads from pre-computed CSVs produced by
+    ``analysis.cross_experiment_matched.CrossExperimentMatched``.
+    Only opioid pair conversions present in both experiments are included.
     """
-    rd_df = pd.read_csv(random_dose_batch_means_csv)
-    rd_df = rd_df[rd_df["model"].isin(_CONSISTENT_SET)]
-    vt_df = pd.read_csv(vignette_batch_means_csv)
-    vt_df = vt_df[vt_df["model"].isin(_CONSISTENT_SET)]
+    means_df = pd.read_csv(matched_means_csv)
+    means_df = means_df[means_df["model"].isin(_CONSISTENT_SET)]
+    wilc_df = pd.read_csv(matched_wilcoxon_csv)
 
-    rd_naive = rd_df[rd_df["batch_name"] == "all_n0"].set_index("model")
-    vt_text = vt_df[vt_df["batch_name"] == "text_all_naive"].set_index("model")
-    vt_empty = vt_df[vt_df["batch_name"] == "empty_all_naive"].set_index("model")
-
-    ranked_models = get_ranked_model_order()
-    available = set(rd_naive.index) & set(vt_text.index) & set(vt_empty.index)
-    models = [m for m in ranked_models if m in available]
-    if not models:
-        models = sorted(available)
-
-    clean_names = [_clean(m) for m in models]
+    cond_map = {
+        "random_dose": "random dose",
+        "empty_vignette": "empty vignette",
+        "text_vignette": "text vignette",
+    }
     cond_labels = ["random dose", "empty vignette", "text vignette"]
 
+    ranked_models = get_ranked_model_order()
+    models = [m for m in ranked_models
+              if m in set(means_df["model"])]
+    clean_names = [_clean(m) for m in models]
+
     x_factors = [(cn, cl) for cn in clean_names for cl in cond_labels]
-    bar_data = {"x": [], "tight": [], "broad_top": [], "color": [], "model": [], "batch": []}
+    bar_data = {"x": [], "tight": [], "broad_top": [], "color": [],
+                "model": [], "batch": []}
 
     for m in models:
         cn = _clean(m)
         color = MODEL_COLOR_DICT.get(m, "#888888")
-        for label, bdf in [("random dose", rd_naive),
-                           ("empty vignette", vt_empty),
-                           ("text vignette", vt_text)]:
-            t = bdf.loc[m, "mean_in_tight"]
-            b = bdf.loc[m, "mean_in_broad"]
-            bar_data["x"].append((cn, label))
+        for cond_key, cond_label in cond_map.items():
+            row = means_df[(means_df["model"] == m)
+                           & (means_df["condition"] == cond_key)]
+            t = row["mean_tight"].iloc[0] if len(row) else 0
+            b = row["mean_broad"].iloc[0] if len(row) else 0
+            bar_data["x"].append((cn, cond_label))
             bar_data["tight"].append(t)
             bar_data["broad_top"].append(b)
             bar_data["color"].append(color)
             bar_data["model"].append(cn)
-            bar_data["batch"].append(label)
+            bar_data["batch"].append(cond_label)
 
     source = ColumnDataSource(bar_data)
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.08),
+        y_range=(0, 1.28),
         toolbar_location=None,
         title=title,
     )
@@ -1111,48 +1158,58 @@ def cross_experiment_bars(
     p.vbar(x="x", top="broad_top", bottom="tight", width=0.7, color="color",
            alpha=0.25, source=source)
 
-    # ── Per-model significance from pre-computed comparison CSVs ──
-    comparison_specs = [
-        (comparison_rd_vs_text_csv, "random dose", "text vignette"),
+    # ── Per-model significance brackets from pre-computed Wilcoxon CSV ──
+    # Helper: get broad_top for a (model_clean, cond_label) bar
+    def _bar_top(cn, cond_label):
+        key = (cn, cond_label)
+        if key in bar_data["x"]:
+            return bar_data["broad_top"][bar_data["x"].index(key)]
+        return 0
+
+    # Bracket definitions: (cond_a_key, cond_b_key, cond_a_label, cond_b_label, level)
+    # Level 1 brackets sit just above bars; level 2 sits above level 1
+    bracket_defs = [
+        ("random_dose", "empty_vignette", "random dose", "empty vignette", 1),
+        ("empty_vignette", "text_vignette", "empty vignette", "text vignette", 1),
+        ("random_dose", "text_vignette", "random dose", "text vignette", 2),
     ]
-    star_x, star_y, star_text = [], [], []
-    for comp_csv, cond_a, cond_b in comparison_specs:
-        if not comp_csv or not os.path.exists(comp_csv):
-            continue
-        comp_df = pd.read_csv(comp_csv)
-        for m, cn in zip(models, clean_names):
-            mrow = comp_df[comp_df["model"] == m]
+
+    BRACKET_STEP = 0.055  # vertical gap between bracket levels
+    BRACKET_PAD = 0.025   # gap above bar top to first bracket
+    CAP_FRAC = 0.15       # fractional length of horizontal caps (of bar width)
+
+    for m, cn in zip(models, clean_names):
+        # Get the max bar top across all 3 conditions for this model
+        model_max = max(_bar_top(cn, cl) for cl in cond_labels)
+
+        for cond_a_key, cond_b_key, cond_a_lbl, cond_b_lbl, level in bracket_defs:
+            # Look up p-value
+            mrow = wilc_df[
+                (wilc_df["model"] == m)
+                & (wilc_df["condition_a"] == cond_a_key)
+                & (wilc_df["condition_b"] == cond_b_key)
+            ]
             if mrow.empty:
                 continue
-            p_t = mrow.iloc[0].get("tight_mannwhitney_p", np.nan)
-            p_b = mrow.iloc[0].get("broad_mannwhitney_p", np.nan)
-            ps = [p for p in [p_t, p_b] if not np.isnan(p)]
-            p_min = min(ps) if ps else None
-            s = _significance_star(p_min)
-            if s:
-                # Place star above the taller of the two compared bars
-                idx_a = cond_labels.index(cond_a) if cond_a in cond_labels else 0
-                idx_b = cond_labels.index(cond_b) if cond_b in cond_labels else 0
-                bar_tops = []
-                for idx in (idx_a, idx_b):
-                    key = (cn, cond_labels[idx])
-                    if key in bar_data["x"]:
-                        pos = bar_data["x"].index(key)
-                        bar_tops.append(bar_data["broad_top"][pos])
-                top = max(bar_tops) if bar_tops else 0.5
-                # Place between the two compared bars
-                mid_label = cond_labels[(idx_a + idx_b) // 2]
-                star_x.append((cn, mid_label))
-                star_y.append(top + 0.03)
-                star_text.append(s)
+            p_val = mrow.iloc[0]["broad_wilcoxon_p"]
+            if pd.isna(p_val):
+                continue
 
-    if star_x:
-        star_src = ColumnDataSource(dict(x=star_x, y=star_y, text=star_text))
-        p.add_layout(LabelSet(
-            x="x", y="y", text="text", source=star_src,
-            text_font_size="9pt", text_align="center",
-            text_baseline="bottom",
-        ))
+            stars = _significance_star(p_val)
+            if not stars:
+                continue
+
+            # Bracket y position based on level
+            bracket_y = model_max + BRACKET_PAD + (level - 1) * BRACKET_STEP
+
+            # Midpoint label: for spanning bracket use the middle bar
+            if cond_a_lbl == "random dose" and cond_b_lbl == "text vignette":
+                mid_lbl = "empty vignette"
+            else:
+                mid_lbl = cond_a_lbl
+
+            _draw_bracket(p, cn, cond_a_lbl, cond_b_lbl, bracket_y, stars,
+                          mid_label=mid_lbl)
 
     _style_grouped_bar(p, clean_names, cond_labels)
     return p
@@ -1246,6 +1303,24 @@ class ComprehensiveFigureBuilder:
             title="Naive CV by Model — Random Doses",
         )
 
+    def build_icc_heatmap(self):
+        """ICC heatmap — model × scenario (naive condition)."""
+        from visualize.icc_visualizer import icc_heatmap
+        return icc_heatmap(self._p("icc_analysis.csv"))
+
+    def build_icc_bubble_grid(self):
+        """ICC bubble grid with pairwise sig counts (naive condition)."""
+        from visualize.icc_visualizer import icc_bubble_grid
+        return icc_bubble_grid(self._p("icc_analysis.csv"))
+
+    def build_kendall_w_summary(self):
+        """Kendall's W vs ICC summary bar chart (naive condition)."""
+        from visualize.icc_visualizer import kendall_w_summary
+        return kendall_w_summary(
+            self._p("kendall_w_vignettes.csv"),
+            icc_csv=self._p("icc_analysis.csv"),
+        )
+
     def build_nielsen_effect_vignettes(self):
         """Nielsen effect — vignettes (all)."""
         return nielsen_effect_bars(
@@ -1332,6 +1407,7 @@ class ComprehensiveFigureBuilder:
             pair_model_csv=self._p("pair_model_analysis.csv"),
             explain_units_pair_csv=self._p("explain_units_pair_model_analysis.csv"),
             comparison_csv=self._p("comparison_units_effect_random_dose.csv"),
+            dosing_comparison_csv=self._p("comparison_dosing_unit_effect.csv"),
             title="Explain Units Effect — Random Doses (Oral Morphine)",
         )
 
@@ -1366,14 +1442,11 @@ class ComprehensiveFigureBuilder:
         return column(rd, vig)
 
     def build_cross_experiment(self):
-        """Cross-experiment: random dose vs empty vignette vs text vignette."""
+        """Cross-experiment: random dose vs empty vignette vs text vignette (matched pairs only)."""
         return cross_experiment_bars(
-            random_dose_batch_means_csv=self._p("model_batch_means.csv"),
-            vignette_batch_means_csv=self._p("model_batch_means_text_vs_empty.csv"),
-            comparison_rd_vs_empty_csv=self._p("comparison_cross_rd_vs_empty.csv"),
-            comparison_rd_vs_text_csv=self._p("comparison_cross_rd_vs_text.csv"),
-            comparison_empty_vs_text_csv=self._p("comparison_cross_empty_vs_text.csv"),
-            title="Cross-Experiment: Random Dose vs Empty Vignette vs Text Vignette",
+            matched_means_csv=self._p("cross_experiment_matched_means.csv"),
+            matched_wilcoxon_csv=self._p("cross_experiment_matched_wilcoxon.csv"),
+            title="Cross-Experiment: Random Dose vs Empty Vignette vs Text Vignette (Matched Pairs)",
         )
 
     # ── save all ─────────────────────────────────────────────────
@@ -1409,6 +1482,27 @@ class ComprehensiveFigureBuilder:
          "Three-panel figure (random doses). Top: strip chart of per-pair CVs under"
          " naive conditions. Middle: scatter of CV vs mean observed/expected"
          " coefficient ratio on a log scale. Bottom: accuracy distribution by CV bin."),
+
+        ("icc_bubble_grid", "build_icc_bubble_grid",
+         "Vignette wording explains most response variability (naive condition)",
+         "Concentric-circle grid under the naive prompting condition. Each cell"
+         " shows total log-ratio variance (outer circle, high transparency) and"
+         " between-vignette variance (inner circle, low transparency). Circle"
+         " area is proportional to variance; circles inherit model colour."
+         " Text overlay shows X/6 pairwise vignette comparisons that are"
+         " statistically significant (Bonferroni-corrected Mann–Whitney U,"
+         " α = 0.05). Models sorted by lowest mean total variance at top;"
+         " scenarios sorted by lowest mean total variance at left."),
+
+        ("kendall_w_summary", "build_kendall_w_summary",
+         "Wording sensitivity is model-specific (naive condition)",
+         "Horizontal bar chart comparing two complementary metrics per scenario"
+         " under the naive prompting condition. Blue bars show mean ICC — the"
+         " proportion of response variance explained by vignette wording. Red bars"
+         " show Kendall's W — the degree to which all 13 models agree on which"
+         " wording produces higher or lower responses. High ICC with near-zero W"
+         " indicates that vignette wording strongly affects model output, but"
+         " each model is sensitive to different aspects of the phrasing."),
 
         ("nielsen_effect_vignettes", "build_nielsen_effect_vignettes",
          "Including Nielsen reference improves accuracy",
@@ -1464,9 +1558,11 @@ class ComprehensiveFigureBuilder:
          "Performance structure is consistent across task formats",
          "Grouped bar chart comparing each model's tight- and broad-range"
          " accuracy across three experimental paradigms: random-dose pair"
-         " conversions, empty vignettes, and text-based vignettes. All"
-         " conditions are naive (no reference data). Wilcoxon signed-rank"
-         " tests compare conditions across models."),
+         " conversions, empty vignettes, and text-based vignettes, restricted"
+         " to the 11 opioid pair conversions present in both experiments."
+         " All conditions are naive (no reference data). Three significance"
+         " brackets per model show paired Wilcoxon signed-rank tests on"
+         " broad-range accuracy: RD vs empty, empty vs text, and RD vs text."),
 
         ("nielsen_ranked_random_doses", "build_nielsen_ranked_random_doses",
          "Including Nielsen reference improves accuracy",
