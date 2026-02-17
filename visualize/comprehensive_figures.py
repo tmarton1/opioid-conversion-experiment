@@ -28,6 +28,7 @@ from bokeh.models import (
     FactorRange, Span, Div, Label, FixedTicker,
 )
 from bokeh.palettes import Greys256
+from bokeh.resources import INLINE
 
 from common.models import CONSISTENT_MODELS
 from visualize.visualization_config import (
@@ -107,7 +108,7 @@ def _star_label(p):
 
 
 def _draw_bracket(p, cn, left_label, right_label, bracket_y, stars,
-                  mid_label=None, cap_h=0.015):
+                  cond_labels=None, cap_h=0.015):
     """Draw a U-shaped significance bracket between two bars.
 
     Parameters
@@ -122,9 +123,9 @@ def _draw_bracket(p, cn, left_label, right_label, bracket_y, stars,
         Y position of the horizontal bracket line.
     stars : str
         Significance text (e.g. "***", "ns").
-    mid_label : str | None
-        Factor label at the midpoint for the text label.  If None,
-        defaults to left_label (offset used for centering).
+    cond_labels : list[str] | None
+        Full list of condition labels in order.  Used to compute the
+        true centre of the bracket for the significance text.
     cap_h : float
         Height of the vertical cap lines.
     """
@@ -138,17 +139,32 @@ def _draw_bracket(p, cn, left_label, right_label, bracket_y, stars,
            line_color="#555", line_width=0.8)
     p.line(x=[x_right, x_right], y=[bracket_y - cap_h, bracket_y],
            line_color="#555", line_width=0.8)
-    # Label
-    if mid_label is None:
-        mid_label = left_label
+    # Label — use p.text() glyph (not Label annotation) because
+    # Label.x does not accept FactorRange tuples in BokehJS.
+    # Centre the annotation over the midpoint of the bracket.
     star_color = "#555" if stars == "ns" else "#333"
     star_size = "6pt" if stars == "ns" else "7pt"
-    p.add_layout(Label(
-        x=(cn, mid_label), y=bracket_y + 0.005,
-        text=stars, text_font_size=star_size,
+    x_off = 0
+    if cond_labels:
+        li = cond_labels.index(left_label)
+        ri = cond_labels.index(right_label)
+        mid = (li + ri) / 2.0
+        base_idx = int(mid)
+        text_x = (cn, cond_labels[base_idx])
+        frac = mid - base_idx
+        if frac > 0.01:
+            n_total = len(p.x_range.factors)
+            px_per_factor = (p.width - 120) / max(n_total, 1)
+            x_off = int(frac * px_per_factor)
+    else:
+        text_x = (cn, left_label)
+    p.text(
+        x=[text_x], y=[bracket_y + 0.005],
+        text=[stars], text_font_size=star_size,
         text_align="center", text_baseline="bottom",
         text_color=star_color,
-    ))
+        x_offset=[x_off],
+    )
 
 
 # ── Naive performance horizontal bars ────────────────────────────────
@@ -300,6 +316,187 @@ def naive_performance_bars(
     return p
 
 
+# ── Error-profile stacked bars ──────────────────────────────────────
+
+def error_profile_bars(
+    model_csv: str,
+    cv_col: str = "observed_coefficient_cv",
+    ratio_num_col: str = "observed_coefficient_mean",
+    ratio_den_col: str = "expected_coefficient",
+    slope_col: str = "regression_slope",
+    slope_p_col: str = "regression_slope_pvalue",
+    slope_alpha: float = 0.05,
+    naive_filter: Optional[dict] = None,
+    width: int = 800,
+    height: int = 380,
+    cv_threshold: float = 0.2,
+    title: str = "Error Profile by Model",
+):
+    """
+    Stacked horizontal bar chart classifying each model's pair-level
+    results into four categories (left to right):
+
+      1. Correct  (tight accuracy, any CV)            — full opacity, model colour
+      2. Precise but wrong  (CV ≤ threshold, not tight, not dose-dep) — medium opacity
+      3. Other wrong  (not precise, not tight, not dose-dep) — low opacity
+      4. Dose-dependent  (sig. negative slope)         — hatched, right-most
+
+    Uses each model's own colour from MODEL_COLOR_DICT.
+    """
+    if naive_filter is None:
+        naive_filter = {"include_nielsen": False, "include_examples": False}
+
+    df = pd.read_csv(model_csv)
+    for col, val in naive_filter.items():
+        if col in df.columns:
+            df = df[df[col] == val]
+    df = df[df["model"].isin(_CONSISTENT_SET)].copy()
+
+    # Compute ratio & classify
+    df["_ratio"] = df[ratio_num_col] / df[ratio_den_col]
+    df["_tight"] = df["_ratio"].between(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER)
+    df["_precise"] = df[cv_col] <= cv_threshold
+    df["_dose_dep"] = (df[slope_col] < 0) & (df[slope_p_col] < slope_alpha)
+
+    def _cat(row):
+        if row["_dose_dep"]:
+            return "dose_dependent"
+        if row["_tight"]:
+            return "correct"
+        if row["_precise"]:
+            return "precise_wrong"
+        return "other_wrong"
+
+    df["_cat"] = df.apply(_cat, axis=1)
+
+    ranked = get_ranked_model_order()
+    models = [m for m in ranked if m in df["model"].unique()]
+    if not models:
+        models = sorted(df["model"].unique())
+
+    cat_order = ["correct", "precise_wrong", "other_wrong", "dose_dependent"]
+    cat_labels = {
+        "correct": "Correct",
+        "precise_wrong": "Precise but wrong",
+        "other_wrong": "Imprecise & wrong",
+        "dose_dependent": "Dose-dependent",
+    }
+
+    # Compute proportions per model
+    rows = []
+    for m in models:
+        mdf = df[df["model"] == m]
+        n = len(mdf)
+        props = {}
+        for c in cat_order:
+            props[c] = (mdf["_cat"] == c).sum() / n if n else 0
+        rows.append({"model": m, **props})
+    pf = pd.DataFrame(rows)
+
+    # Build figure — models on y-axis (best at top)
+    y_labels = [_clean(m) for m in models]
+    p = figure(
+        width=width, height=height,
+        y_range=list(reversed(y_labels)),
+        x_range=(0, 1),
+        toolbar_location=None,
+        title=title,
+    )
+
+    bar_h = 0.65
+    # Correct = full opacity, precise-wrong = low opacity, other-wrong = skip (white space), dose-dep = hatched
+    alpha_map = {
+        "correct": 0.9,
+        "precise_wrong": 0.35,
+        "dose_dependent": 0.7,
+    }
+    skip_cats = {"other_wrong"}
+
+    for i, m in enumerate(models):
+        cn = _clean(m)
+        color = MODEL_COLOR_DICT.get(m, "#888888")
+        row = pf[pf["model"] == m].iloc[0]
+
+        left = 0.0
+        for cat in cat_order:
+            w = row[cat]
+            if w < 0.001:
+                left += w
+                continue
+            right = left + w
+
+            if cat in skip_cats:
+                # Leave as white space — inferable from gap
+                left = right
+                continue
+
+            if cat == "dose_dependent":
+                # Stack dose-dependent at the RIGHT end (1 - w .. 1)
+                dd_left = 1.0 - w
+                p.hbar(
+                    y=[cn], left=[dd_left], right=[1.0], height=bar_h,
+                    fill_color=color, fill_alpha=alpha_map[cat],
+                    line_color=color, line_alpha=0.6,
+                    hatch_pattern="/", hatch_color="white",
+                    hatch_alpha=0.7, hatch_scale=8, hatch_weight=1.5,
+                )
+            else:
+                p.hbar(
+                    y=[cn], left=[left], right=[right], height=bar_h,
+                    fill_color=color, fill_alpha=alpha_map[cat],
+                    line_color=color, line_alpha=0.3,
+                )
+            left = right
+
+    # x-axis as percentage
+    from bokeh.models import NumeralTickFormatter
+    p.xaxis.axis_label = "Proportion of opioid pair conversions"
+    p.xaxis.formatter = NumeralTickFormatter(format="0%")
+    p.yaxis.axis_label = None
+
+    # Legend — manual items using invisible dummy glyphs
+    legend_items = []
+    dummy_src = ColumnDataSource(dict(x=[-10], y=[-10]))
+    legend_cats = [
+        ("correct", "Correct", 0.9, False),
+        ("precise_wrong", "Precise but wrong", 0.35, False),
+        ("other_wrong", "Imprecise & wrong (white space)", 0.0, False),
+        ("dose_dependent", "Dose-dependent", 0.7, True),
+    ]
+    for cat, label, alpha, hatched in legend_cats:
+        if cat == "other_wrong":
+            # White space legend swatch — just a white box with border
+            kw = dict(
+                x="x", y="y", width=0.001, height=0.001,
+                fill_color="white", fill_alpha=1.0,
+                line_color="#aaaaaa", line_alpha=0.6,
+            )
+        else:
+            kw = dict(
+                x="x", y="y", width=0.001, height=0.001,
+                fill_color="#666666", fill_alpha=alpha,
+                line_color="#666666", line_alpha=0.3,
+            )
+            if hatched:
+                kw["hatch_pattern"] = "/"
+                kw["hatch_color"] = "white"
+                kw["hatch_alpha"] = 0.7
+                kw["hatch_scale"] = 8
+                kw["hatch_weight"] = 1.5
+        r = p.rect(source=dummy_src, **kw)
+        legend_items.append(LegendItem(label=label, renderers=[r]))
+
+    legend = Legend(items=legend_items, location="bottom_center",
+                    orientation="horizontal", label_text_font_size="8pt")
+    p.add_layout(legend, "below")
+
+    p.title.text_font_size = "11pt"
+    p.xgrid.visible = False
+    p.ygrid.visible = False
+
+    return p
+
+
 # ── Coefficient of Variation with mean-ratio scatter ─────────────────
 
 def cv_strip_with_ratio(
@@ -317,6 +514,8 @@ def cv_strip_with_ratio(
     slope_alpha: float = 0.05,
     tight_col: str = "tight(0.85,1.15)",
     broad_col: str = "broad(0.6,1.7)",
+    cv_bins: list | None = None,
+    cv_bin_labels: list | None = None,
 ):
     """
     Three-panel figure:
@@ -405,19 +604,25 @@ def cv_strip_with_ratio(
 
     # -- bottom panel: accuracy mosaic by CV bin --
     bot = _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
-                              width=width, height=panel_h)
+                              width=width, height=panel_h,
+                              cv_bins=cv_bins, cv_bin_labels=cv_bin_labels)
 
     return column(top, mid, bot)
 
 
 def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
-                        width=800, height=500):
+                        width=800, height=500,
+                        cv_bins=None, cv_bin_labels=None):
     """
     Per-model 3×3 circle grid: rows = accuracy categories (tight, broad,
-    neither), columns = CV bins (< 0.1, 0.1–0.5, ≥ 0.5).  Circle size ∝
-    proportion of that model's observations in each cell.  Models are
-    laid out in a 5-4-4 grid (3 rows of sub-plots).
+    neither), columns = CV bins.  Circle size ∝ proportion of that model's
+    observations in each cell.  Models are laid out in a 5-4-4 grid.
+
+    Each sub-plot shows the χ² p-value in its title.
+    An x-axis label ("CV") is placed on the left-most figure of each row.
     """
+    from scipy.stats import chi2_contingency
+
     cols_needed = [c for c in [cv_col, tight_col, broad_col] if c in df.columns]
     if len(cols_needed) < 3:
         return figure(width=width, height=height // 3, toolbar_location=None,
@@ -429,9 +634,12 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
         return figure(width=width, height=height // 3, toolbar_location=None,
                       title="Accuracy by CV Bin (no data)")
 
-    bins = [0, 0.1, 0.5, float("inf")]
-    bin_labels = ["<0.1", "0.1–0.5", "≥0.5"]
-    sub["_cv_bin"] = pd.cut(sub[cv_col], bins=bins, labels=bin_labels, right=False)
+    if cv_bins is None:
+        cv_bins = [0, 0.1, 0.5, float("inf")]
+    if cv_bin_labels is None:
+        cv_bin_labels = ["<0.1", "0.1–0.5", "≥0.5"]
+
+    sub["_cv_bin"] = pd.cut(sub[cv_col], bins=cv_bins, labels=cv_bin_labels, right=False)
 
     sub["_acc"] = "neither"
     sub.loc[sub[broad_col] >= 0.5, "_acc"] = "broad"
@@ -457,11 +665,25 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
     cell_w = width // 5
     cell_h = height // len(row_sizes)
 
+    # Pre-compute chi-square p-values per model
+    model_pvals = {}
+    for m in models:
+        mdf = sub[sub["model"] == m]
+        table = np.zeros((len(acc_labels), len(cv_bin_labels)), dtype=int)
+        for i, al in enumerate(acc_labels):
+            for j, bl in enumerate(cv_bin_labels):
+                table[i, j] = int(((mdf["_acc"] == al) & (mdf["_cv_bin"] == bl)).sum())
+        try:
+            chi2, pval, dof, expected = chi2_contingency(table)
+            model_pvals[m] = pval
+        except ValueError:
+            model_pvals[m] = np.nan
+
     all_rows = []
     idx = 0
     for row_sz in row_sizes:
         row_figs = []
-        for _ in range(row_sz):
+        for fig_in_row in range(row_sz):
             if idx >= n:
                 break
             m = models[idx]
@@ -473,7 +695,7 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
             n_total = len(mdf)
 
             xs, ys, sizes, alphas, pcts = [], [], [], [], []
-            for bl in bin_labels:
+            for bl in cv_bin_labels:
                 bdf = mdf[mdf["_cv_bin"] == bl]
                 for al in acc_labels:
                     count = len(bdf[bdf["_acc"] == al])
@@ -484,11 +706,21 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
                     alphas.append(0.8 if prop > 0 else 0.05)
                     pcts.append(f"{prop:.0%}")
 
+            pval = model_pvals.get(m, np.nan)
+            if np.isnan(pval):
+                p_str = "χ²: N/A"
+            elif pval < 0.001:
+                p_str = f"χ² p<.001"
+            elif pval < 0.05:
+                p_str = f"χ² p={pval:.3f}"
+            else:
+                p_str = f"χ² p={pval:.2f}"
+
             p = figure(
                 width=cell_w, height=cell_h,
-                x_range=bin_labels, y_range=list(reversed(acc_labels)),
+                x_range=cv_bin_labels, y_range=list(reversed(acc_labels)),
                 toolbar_location=None,
-                title=cn,
+                title=f"{cn}  ({p_str})",
             )
             src = ColumnDataSource(dict(
                 x=xs, y=ys, size=sizes, alpha=alphas, pct=pcts,
@@ -499,7 +731,7 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
                 ("CV Bin", "@x"), ("Accuracy", "@y"), ("Proportion", "@pct"),
             ]))
 
-            p.title.text_font_size = "8pt"
+            p.title.text_font_size = "7pt"
             p.xaxis.major_label_text_font_size = "6pt"
             p.yaxis.major_label_text_font_size = "6pt"
             p.xaxis.axis_label = None
@@ -518,9 +750,12 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
             row_figs.append(None)
         all_rows.append(row_figs)
 
-    grid = gridplot(all_rows, merge_tools=False)
-    title_div = Div(text="<b>Accuracy Distribution by CV Bin</b>",
-                    styles={"font-size": "12pt", "margin-left": "10px"})
+    grid = gridplot(all_rows, merge_tools=False, toolbar_location=None)
+    title_div = Div(
+        text=("<b>Accuracy Distribution by CV Bin</b>"
+              "<br><span style='font-size:9pt; color:#666'>x-axis: coefficient of variation &nbsp;|&nbsp; "
+              "circle area ∝ proportion of model's observations in each cell</span>"),
+        styles={"font-size": "12pt", "margin-left": "10px"})
     return column(title_div, grid)
 
 def cv_strip_chart(
@@ -938,16 +1173,17 @@ def explain_units_bars(
     BRACKET_PAD = 0.025
     BRACKET_STEP = 0.055
 
-    # Bracket definitions: (csv, left_label, right_label, mid_label, level)
+    # Bracket definitions: (csv, left_label, right_label, level)
+    # Level 2 for the second bracket so they don't share the mg/4h cap.
     bracket_defs = []
     if dosing_comparison_csv and os.path.exists(dosing_comparison_csv):
-        bracket_defs.append((dosing_comparison_csv, "mg/day", "mg/4h", "mg/day", 1))
+        bracket_defs.append((dosing_comparison_csv, "mg/day", "mg/4h", 1))
     if os.path.exists(comparison_csv):
-        bracket_defs.append((comparison_csv, "mg/4h", "mg/4h explained", "mg/4h", 1))
+        bracket_defs.append((comparison_csv, "mg/4h", "mg/4h explained", 2))
 
     for m, cn in zip(models, clean_names):
         model_max = max(_bar_top(cn, cl) for cl in cond_labels)
-        for csv_path, left_lbl, right_lbl, mid_lbl, level in bracket_defs:
+        for csv_path, left_lbl, right_lbl, level in bracket_defs:
             p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
             p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
             p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
@@ -955,7 +1191,7 @@ def explain_units_bars(
             if stars:
                 bracket_y = model_max + BRACKET_PAD + (level - 1) * BRACKET_STEP
                 _draw_bracket(p, cn, left_lbl, right_lbl, bracket_y, stars,
-                              mid_label=mid_lbl)
+                              cond_labels=cond_labels)
 
     _style_grouped_bar(p, clean_names, cond_labels)
     return p
@@ -1064,25 +1300,26 @@ def full_treatment_bars(
         return 0
 
     BRACKET_PAD = 0.025
+    BRACKET_STEP = 0.055
 
-    # Bracket definitions: (csv, left_label, right_label, mid_label)
+    # Bracket definitions: (csv, left_label, right_label, level)
     bracket_defs = []
     if os.path.exists(comparison_nielsen_csv):
-        bracket_defs.append((comparison_nielsen_csv, "naive", "mg/day+N", "naive"))
+        bracket_defs.append((comparison_nielsen_csv, "naive", "mg/day+N", 1))
     if os.path.exists(comparison_units_csv):
-        bracket_defs.append((comparison_units_csv, "mg/4h+N", "mg/4h+N+E", "mg/4h+N"))
+        bracket_defs.append((comparison_units_csv, "mg/4h+N", "mg/4h+N+E", 2))
 
     for m, cn in zip(models, clean_names):
         model_max = max(_bar_top(cn, cl) for cl in cond_labels)
-        for csv_path, left_lbl, right_lbl, mid_lbl in bracket_defs:
+        for csv_path, left_lbl, right_lbl, level in bracket_defs:
             p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
             p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
             p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
             stars = _significance_star(p_min)
             if stars:
-                bracket_y = model_max + BRACKET_PAD
+                bracket_y = model_max + BRACKET_PAD + (level - 1) * BRACKET_STEP
                 _draw_bracket(p, cn, left_lbl, right_lbl, bracket_y, stars,
-                              mid_label=mid_lbl)
+                              cond_labels=cond_labels)
 
     _style_grouped_bar(p, clean_names, cond_labels)
     return p
@@ -1202,14 +1439,8 @@ def cross_experiment_bars(
             # Bracket y position based on level
             bracket_y = model_max + BRACKET_PAD + (level - 1) * BRACKET_STEP
 
-            # Midpoint label: for spanning bracket use the middle bar
-            if cond_a_lbl == "random dose" and cond_b_lbl == "text vignette":
-                mid_lbl = "empty vignette"
-            else:
-                mid_lbl = cond_a_lbl
-
             _draw_bracket(p, cn, cond_a_lbl, cond_b_lbl, bracket_y, stars,
-                          mid_label=mid_lbl)
+                          cond_labels=cond_labels)
 
     _style_grouped_bar(p, clean_names, cond_labels)
     return p
@@ -1289,29 +1520,116 @@ class ComprehensiveFigureBuilder:
             naive_filter={"include_nielsen": False, "explain_units": False,
                           "has_vignette_text": True},
             title="Naive CV by Model — Vignettes",
+            cv_bins=[0, 1e-9, 0.2, float("inf")],
+            cv_bin_labels=["CV=0", "0<CV≤0.2", "CV>0.2"],
         )
 
     def build_cv_strip_random_doses(self):
-        """CV strip chart + ratio scatter — random doses (naive)."""
-        return cv_strip_with_ratio(
-            model_csv=self._p("pair_model_analysis.csv"),
+        """CV strip chart + ratio scatter + error profile — random doses (naive)."""
+        naive_filter = {"include_nielsen": False, "include_examples": False}
+        csv = self._p("pair_model_analysis.csv")
+
+        # Top two panels from the existing three-panel builder
+        top = cv_strip_chart(
+            model_csv=csv,
             cv_col="observed_coefficient_cv",
-            ratio_num_col="observed_coefficient_mean",
-            ratio_den_col="expected_coefficient",
             pair_col="opioid_pair",
-            naive_filter={"include_nielsen": False, "include_examples": False},
+            naive_filter=naive_filter,
             title="Naive CV by Model — Random Doses",
+            width=800, height=333,
         )
+
+        # Middle: ratio scatter (re-use internals of cv_strip_with_ratio)
+        df = pd.read_csv(csv)
+        for col, val in naive_filter.items():
+            if col in df.columns:
+                df = df[df[col] == val]
+        df = df[df["model"].isin(_CONSISTENT_SET)]
+
+        rdf = df.dropna(subset=["observed_coefficient_cv",
+                                "observed_coefficient_mean",
+                                "expected_coefficient"]).copy()
+        rdf["_ratio"] = rdf["observed_coefficient_mean"] / rdf["expected_coefficient"]
+        rdf = rdf[rdf["_ratio"].between(0.05, 20)]
+
+        ranked = get_ranked_model_order()
+        models = [m for m in ranked if m in rdf["model"].unique()]
+        if not models:
+            models = sorted(rdf["model"].unique())
+
+        xs, ys, colors, pair_labels, model_labels = [], [], [], [], []
+        for m in models:
+            mdf = rdf[rdf["model"] == m]
+            for _, row in mdf.iterrows():
+                xs.append(row["observed_coefficient_cv"])
+                ys.append(row["_ratio"])
+                colors.append(MODEL_COLOR_DICT.get(m, "#888888"))
+                pair_labels.append(str(row["opioid_pair"]))
+                model_labels.append(_clean(m))
+
+        mid = figure(
+            width=800, height=333,
+            toolbar_location=None,
+            title="Mean Observed / Expected Ratio vs CV",
+            y_axis_type="log",
+        )
+        src = ColumnDataSource(dict(x=xs, y=ys, color=colors,
+                                    pair=pair_labels, model=model_labels))
+        mid.scatter("x", "y", color="color", alpha=0.5, size=6, source=src)
+        mid.add_tools(HoverTool(tooltips=[("Model", "@model"), ("Pair", "@pair"),
+                                          ("CV", "@x{0.00}"), ("Ratio", "@y{0.00}")]))
+        mid.yaxis.ticker = FixedTicker(ticks=[0.1, 0.2, 0.5, 1, 2, 5])
+        mid.y_range.start = 0.08
+        mid.y_range.end = 7
+        for thresh, c in [(BROAD_RANGE_LOWER, "#d62728"),
+                          (TIGHT_RANGE_LOWER, "#2ca02c"),
+                          (TIGHT_RANGE_UPPER, "#2ca02c"),
+                          (BROAD_RANGE_UPPER, "#d62728")]:
+            mid.add_layout(Span(location=thresh, dimension="width",
+                                line_dash="dotted", line_color=c, line_alpha=0.6))
+        mid.add_layout(Span(location=1.0, dimension="width",
+                            line_dash="dashed", line_color="black", line_alpha=0.4))
+        mid.xaxis.axis_label = "Coefficient of Variation"
+        mid.yaxis.axis_label = "Mean Observed / Expected"
+
+        # Bottom: error profile stacked bars
+        bot = error_profile_bars(
+            model_csv=csv,
+            naive_filter=naive_filter,
+            width=800, height=380,
+            title="Error Profile by Model — Random Doses",
+        )
+
+        return column(top, mid, bot)
 
     def build_icc_heatmap(self):
         """ICC heatmap — model × scenario (naive condition)."""
         from visualize.icc_visualizer import icc_heatmap
         return icc_heatmap(self._p("icc_analysis.csv"))
 
+    def build_variance_stacked(self):
+        """Stacked variance bars + overall scatter."""
+        from visualize.icc_visualizer import variance_stacked_figure
+        return variance_stacked_figure(
+            icc_csv=self._p("icc_analysis.csv"),
+            vignette_model_csv=self._p("reworded_vignettes_model_analysis.csv"),
+        )
+
     def build_icc_bubble_grid(self):
-        """ICC bubble grid with pairwise sig counts (naive condition)."""
-        from visualize.icc_visualizer import icc_bubble_grid
-        return icc_bubble_grid(self._p("icc_analysis.csv"))
+        """ICC bubble grid sorted by accuracy."""
+        from visualize.icc_visualizer import bubble_grid_figure
+        return bubble_grid_figure(
+            icc_csv=self._p("icc_analysis.csv"),
+            vignette_model_csv=self._p("reworded_vignettes_model_analysis.csv"),
+        )
+
+    def build_spearman_variance_icc(self):
+        """Per-model Spearman rho bar chart (variance vs ICC)."""
+        from visualize.icc_visualizer import spearman_bars_figure
+        return spearman_bars_figure(
+            icc_csv=self._p("icc_analysis.csv"),
+            vignette_model_csv=self._p("reworded_vignettes_model_analysis.csv"),
+        )
 
     def build_kendall_w_summary(self):
         """Kendall's W vs ICC summary bar chart (naive condition)."""
@@ -1449,133 +1767,221 @@ class ComprehensiveFigureBuilder:
             title="Cross-Experiment: Random Dose vs Empty Vignette vs Text Vignette (Matched Pairs)",
         )
 
+    # ── combined builders for 3-act narrative ────────────────────
+
+    def build_nielsen_effect_combined(self):
+        """Nielsen effect — vignettes + random doses on one page."""
+        vig = nielsen_effect_bars(
+            batch_means_csv=self._p("model_batch_means_vignettes.csv"),
+            comparison_csv=self._p("comparison_nielsen_effect_vignettes.csv"),
+            naive_batch="all_n0",
+            nielsen_batch="all_n1",
+            title="Nielsen Effect — Vignettes",
+            width=900, height=370,
+        )
+        rd = nielsen_effect_bars(
+            batch_means_csv=self._p("model_batch_means.csv"),
+            comparison_csv=self._p("comparison_nielsen_effect_random_dose.csv"),
+            naive_batch="all_n0",
+            nielsen_batch="all_n1",
+            title="Nielsen Effect — Random Doses",
+            width=900, height=370,
+        )
+        return column(vig, rd)
+
+    def build_nielsen_by_ome_combined(self):
+        """Nielsen by OME — vignettes + random doses on one page."""
+        vig_ome = nielsen_effect_bars(
+            batch_means_csv=self._p("model_batch_means_vignettes.csv"),
+            comparison_csv=self._p("comparison_nielsen_effect_vignettes_ome.csv"),
+            naive_batch="ome_n0",
+            nielsen_batch="ome_n1",
+            title="Vignettes — Oral Morphine",
+            width=900, height=300,
+        )
+        vig_nonome = nielsen_effect_bars(
+            batch_means_csv=self._p("model_batch_means_vignettes.csv"),
+            comparison_csv=self._p("comparison_nielsen_effect_vignettes_nonome.csv"),
+            naive_batch="pairs_n0",
+            nielsen_batch="pairs_n1",
+            title="Vignettes — Non-Oral-Morphine",
+            width=900, height=300,
+        )
+        rd_ome = nielsen_effect_bars(
+            batch_means_csv=self._p("model_batch_means.csv"),
+            comparison_csv=self._p("comparison_nielsen_effect_random_dose_ome.csv"),
+            naive_batch="ome_n0",
+            nielsen_batch="ome_n1",
+            title="Random Doses — Oral Morphine",
+            width=900, height=300,
+        )
+        rd_nonome = nielsen_effect_bars(
+            batch_means_csv=self._p("model_batch_means.csv"),
+            comparison_csv=self._p("comparison_nielsen_effect_random_dose_nonome.csv"),
+            naive_batch="pairs_n0",
+            nielsen_batch="pairs_n1",
+            title="Random Doses — Non-Oral-Morphine",
+            width=900, height=300,
+        )
+        sep = Div(text="<hr style='border:1px solid #ccc; margin:12px 0'>", width=900)
+        return column(vig_ome, vig_nonome, sep, rd_ome, rd_nonome)
+
+    def build_explain_units_full_treatment(self):
+        """Explain-units effect + full treatment pipeline on one page."""
+        eu = explain_units_bars(
+            pair_model_csv=self._p("pair_model_analysis.csv"),
+            explain_units_pair_csv=self._p("explain_units_pair_model_analysis.csv"),
+            comparison_csv=self._p("comparison_units_effect_random_dose.csv"),
+            dosing_comparison_csv=self._p("comparison_dosing_unit_effect.csv"),
+            title="Dosing-Unit Effect — OME Random Doses",
+            width=1000, height=400,
+        )
+        ft = full_treatment_bars(
+            pair_model_csv=self._p("pair_model_analysis.csv"),
+            explain_units_pair_csv=self._p("explain_units_pair_model_analysis.csv"),
+            batch_means_csv=self._p("model_batch_means.csv"),
+            comparison_nielsen_csv=self._p("comparison_nielsen_effect_random_dose_ome.csv"),
+            comparison_units_csv=self._p("comparison_units_effect_random_dose.csv"),
+            title="Full Treatment Pipeline — OME Random Doses",
+            width=1100, height=420,
+        )
+        return column(eu, ft)
+
     # ── save all ─────────────────────────────────────────────────
 
     FIGURE_METADATA = [
-        ("naive_vignette_bars", "build_naive_vignette_bars",
-         "Naive performance is dangerous",
-         "Horizontal bar chart showing the proportion of model responses falling within"
-         " the tight (0.85–1.15×) and broad (0.6–1.7×) accuracy ranges for vignette-based"
-         " opioid conversion prompts, without any reference information. Models are"
-         " ordered by global rank. Significance brackets compare adjacent-ranked models"
-         " using Cochran–Mantel–Haenszel tests."),
+        # ── Act I: Vignettes — The Clinical Hook ─────────────────
 
-        ("naive_random_dose_bars", "build_naive_random_dose_bars",
-         "Naive performance is dangerous",
-         "Horizontal bar chart of model accuracy on random-dose opioid pair"
-         " conversion prompts without reference information. Dark bars represent"
-         " tight-range accuracy; translucent extensions show broad-range accuracy."
-         " Models are ranked by global performance. Adjacent-model significance"
-         " brackets are from CMH pairwise tests."),
+        ("naive_vignette_bars", "build_naive_vignette_bars",
+         "LLMs are dangerously inaccurate at opioid dose conversion",
+         "Horizontal bar chart of each model's accuracy on 20 realistic"
+         " vignette-based opioid conversion prompts without any reference"
+         " information. Dark bars show tight-range (0.85–1.15×) accuracy;"
+         " translucent extensions show broad-range (0.6–1.7×) accuracy."
+         " Models are sorted by global rank. Significance brackets compare"
+         " adjacent-ranked models with Cochran–Mantel–Haenszel tests."),
 
         ("cv_strip_vignettes", "build_cv_strip_vignettes",
-         "Naive performance reflects a consistent ratio, even when inaccurate",
-         "Three-panel figure (vignettes). Top: strip chart of per-scenario CVs under"
-         " naive conditions; black-outlined dots indicate significant negative"
-         " Nielsen regression slopes. Middle: scatter of CV vs mean observed/expected"
-         " dose ratio on a log scale, with dotted threshold lines at the tight and"
-         " broad accuracy boundaries. Bottom: stacked bar mosaic showing how accuracy"
-         " (tight / broad-only / neither) varies across CV bins."),
+         "Models are precise: they give the same wrong answer consistently",
+         "Three-panel figure (vignettes). Top: strip chart of per-scenario"
+         " coefficient-of-variation (CV) under naive conditions — most dots"
+         " cluster near zero. Middle: scatter of CV vs mean observed/expected"
+         " dose ratio on a log scale, with threshold lines at the tight and"
+         " broad accuracy boundaries. Bottom: per-model grid where columns"
+         " are CV bins and rows are accuracy categories; circle size is"
+         " proportional to the share of observations in each cell."),
 
-        ("cv_strip_random_doses", "build_cv_strip_random_doses",
-         "Naive performance reflects a consistent ratio, even when inaccurate",
-         "Three-panel figure (random doses). Top: strip chart of per-pair CVs under"
-         " naive conditions. Middle: scatter of CV vs mean observed/expected"
-         " coefficient ratio on a log scale. Bottom: accuracy distribution by CV bin."),
+        ("variance_stacked", "build_variance_stacked",
+         "Most response variance comes from prompt wording, not stochastic noise",
+         "Stacked horizontal bar chart decomposing mean log-ratio variance"
+         " into within-vignette (stochastic noise, dark) and between-vignette"
+         " (wording effect, light) components per model, sorted by vignette"
+         " accuracy (best at top). Annotations show each model's mean tight"
+         " accuracy. Below: scatter of total variance vs ICC across all"
+         " 260 model × scenario cells."),
+
+        ("spearman_variance_icc", "build_spearman_variance_icc",
+         "Wording-driven variance tracks ICC across most models",
+         "Horizontal bar chart of per-model Spearman ρ between scenario"
+         " log-ratio variance and ICC (n = 20 scenarios per model), sorted"
+         " by vignette accuracy. Positive ρ means scenarios with more total"
+         " variance have a larger share attributable to wording. Significance"
+         " annotations and a sign-test summary are included."),
 
         ("icc_bubble_grid", "build_icc_bubble_grid",
-         "Vignette wording explains most response variability (naive condition)",
-         "Concentric-circle grid under the naive prompting condition. Each cell"
-         " shows total log-ratio variance (outer circle, high transparency) and"
-         " between-vignette variance (inner circle, low transparency). Circle"
-         " area is proportional to variance; circles inherit model colour."
-         " Text overlay shows X/6 pairwise vignette comparisons that are"
-         " statistically significant (Bonferroni-corrected Mann–Whitney U,"
-         " α = 0.05). Models sorted by lowest mean total variance at top;"
-         " scenarios sorted by lowest mean total variance at left."),
+         "Scenario-level decomposition: wording vs stochastic variance",
+         "Concentric-circle grid (model × scenario), sorted by vignette"
+         " accuracy (best at top). Outer circle (opaque) = total log-ratio"
+         " variance; inner circle (lighter) = between-vignette (wording)"
+         " variance. Where the inner nearly fills the outer, most variance"
+         " comes from wording differences (high ICC). Annotations show X/6"
+         " significant pairwise vignette comparisons (Bonferroni-corrected"
+         " Mann–Whitney U)."),
 
         ("kendall_w_summary", "build_kendall_w_summary",
-         "Wording sensitivity is model-specific (naive condition)",
-         "Horizontal bar chart comparing two complementary metrics per scenario"
-         " under the naive prompting condition. Blue bars show mean ICC — the"
-         " proportion of response variance explained by vignette wording. Red bars"
-         " show Kendall's W — the degree to which all 13 models agree on which"
-         " wording produces higher or lower responses. High ICC with near-zero W"
-         " indicates that vignette wording strongly affects model output, but"
+         "Wording effect sizes and directions are model-specific",
+         "Paired bar chart of two complementary metrics per scenario under"
+         " naive prompting, sorted by mean ICC. Blue bars: mean ICC — the"
+         " proportion of response variance attributable to wording within"
+         " each model. Red bars: Kendall's W — cross-model agreement on"
+         " which wording produces higher or lower responses. High ICC with"
+         " near-zero W indicates that wording strongly affects output, but"
          " each model is sensitive to different aspects of the phrasing."),
 
-        ("nielsen_effect_vignettes", "build_nielsen_effect_vignettes",
-         "Including Nielsen reference improves accuracy",
-         "Grouped bar chart comparing naive versus Nielsen-augmented accuracy"
-         " for all vignette conversions. Each model has paired bars showing"
-         " performance with and without Nielsen reference data. Wilcoxon"
-         " signed-rank significance stars indicate per-model improvement."),
+        # ── Act II: Random Doses — Controlled Follow-up ─────────
 
-        ("nielsen_effect_random_doses", "build_nielsen_effect_random_doses",
-         "Including Nielsen reference improves accuracy",
-         "Grouped bar chart comparing naive versus Nielsen-augmented accuracy"
-         " for all random-dose pair conversions. Wilcoxon signed-rank"
-         " significance stars are shown per model."),
+        ("naive_random_dose_bars", "build_naive_random_dose_bars",
+         "The same accuracy pattern holds on controlled random-dose prompts",
+         "Horizontal bar chart of model accuracy on 66 random-dose opioid"
+         " pair conversions without reference information. The model ranking"
+         " mirrors the vignette results. Significance brackets compare"
+         " adjacent-ranked models using Cochran–Mantel–Haenszel tests."),
 
-        ("nielsen_by_ome_vignettes", "build_nielsen_by_ome_vignettes",
-         "The Nielsen reference selectively perfects oral morphine conversions",
-         "Two-panel figure splitting the Nielsen effect for vignettes into"
-         " oral-morphine-equivalent (OME) conversions (top) and non-OME"
-         " conversions (bottom). The differential improvement reveals whether"
-         " Nielsen reference data primarily benefits oral morphine conversions."),
-
-        ("nielsen_by_ome_random_doses", "build_nielsen_by_ome_random_doses",
-         "The Nielsen reference selectively perfects oral morphine conversions",
-         "Two-panel figure splitting the Nielsen effect for random-dose"
-         " conversions into OME (top) and non-OME (bottom) subsets."
-         " Significance annotations are computed independently for each subset."),
-
-        ("ome_vs_nonome", "build_ome_vs_nonome",
-         "Oral morphine conversions are inherently more accurate",
-         "Two-panel figure from the random-dose experiment directly comparing"
-         " OME vs non-OME accuracy within the same condition. Top panel: naive."
-         " Bottom panel: Nielsen. Reveals that oral morphine conversions are"
-         " systematically easier across all models."),
-
-        ("explain_units", "build_explain_units",
-         "Models struggle with non-daily dosing",
-         "Three-condition bar chart from the random-dose experiment comparing"
-         " model accuracy on oral-morphine conversions: standard daily dosing"
-         " (mg/day) with Nielsen, non-daily dosing (mg/4h) with Nielsen, and"
-         " non-daily dosing with Nielsen plus explicit unit explanation."
-         " The drop from daily to non-daily reveals sensitivity to dosing intervals."),
-
-        ("full_treatment", "build_full_treatment",
-         "Explaining units improves non-daily dosing",
-         "Four-condition bar chart from the random-dose experiment showing"
-         " the full treatment pipeline for oral-morphine conversions:"
-         " naive (no reference), mg/day + Nielsen, mg/4h + Nielsen, and"
-         " mg/4h + Nielsen + explicit unit explanation. Demonstrates both"
-         " the Nielsen benefit and the dramatic drop and rescue with"
-         " non-daily dosing."),
+        ("cv_strip_random_doses", "build_cv_strip_random_doses",
+         "Precision replicates; dose-dependent bias emerges",
+         "Three-panel figure (random doses). Top: strip chart of per-pair"
+         " CV under naive conditions; black-outlined dots flag opioid"
+         " pairs with a statistically significant negative regression slope"
+         " of the conversion coefficient against dose (p < 0.05). Middle:"
+         " scatter of CV vs mean observed/expected coefficient ratio on"
+         " a log scale. Bottom: per-model accuracy × CV grid."),
 
         ("cross_experiment_bars", "build_cross_experiment",
-         "Performance structure is consistent across task formats",
+         "Performance structure is consistent across prompt formats",
          "Grouped bar chart comparing each model's tight- and broad-range"
-         " accuracy across three experimental paradigms: random-dose pair"
-         " conversions, empty vignettes, and text-based vignettes, restricted"
-         " to the 11 opioid pair conversions present in both experiments."
-         " All conditions are naive (no reference data). Three significance"
-         " brackets per model show paired Wilcoxon signed-rank tests on"
-         " broad-range accuracy: RD vs empty, empty vs text, and RD vs text."),
+         " accuracy across three experimental paradigms — random-dose pair"
+         " conversions, empty vignettes, and text-based vignettes — restricted"
+         " to the 11 opioid pairs present in both experiments. All conditions"
+         " are naive (no reference data). Three significance brackets per"
+         " model show paired Wilcoxon signed-rank tests on broad-range"
+         " accuracy: RD vs empty, empty vs text, and RD vs text."),
+
+        # ── Act III: Can We Fix It? ─────────────────────────────
+
+        ("nielsen_effect_combined", "build_nielsen_effect_combined",
+         "Adding a reference table improves accuracy on both task formats",
+         "Two-panel grouped bar chart. Top: vignette conversions; bottom:"
+         " random-dose conversions. Each panel compares naive vs Nielsen-"
+         " augmented accuracy per model, with Wilcoxon signed-rank"
+         " significance stars. The same pattern of improvement appears"
+         " regardless of prompt format."),
 
         ("nielsen_ranked_random_doses", "build_nielsen_ranked_random_doses",
-         "Including Nielsen reference improves accuracy",
-         "Horizontal bar chart showing model accuracy after providing"
-         " Nielsen reference data for random-dose conversions. Models are"
-         " ranked by adjusted performance across conditions."),
+         "Model ranking after adding the Nielsen reference table",
+         "Horizontal bar chart showing each model's accuracy on random-dose"
+         " conversions after providing the Nielsen reference table. Models"
+         " are re-ranked by adjusted performance, with significance brackets"
+         " from Cochran\u2013Mantel\u2013Haenszel pairwise tests. Comparison"
+         " with the naive ranking (page 7) reveals which models benefit"
+         " most from reference augmentation."),
+
+        ("nielsen_by_ome_combined", "build_nielsen_by_ome_combined",
+         "Nielsen improvement concentrates on oral morphine conversions",
+         "Four-panel figure splitting the Nielsen effect by conversion type"
+         " and experiment. Top two panels: vignettes (oral morphine, then"
+         " non-oral-morphine). Bottom two panels: random doses (oral morphine,"
+         " then non-oral-morphine). The differential improvement confirms"
+         " that the reference table primarily benefits conversions involving"
+         " oral morphine, which dominate its coverage."),
+
+        ("explain_units_full_treatment", "build_explain_units_full_treatment",
+         "Non-daily dosing confuses models; unit explanation rescues accuracy",
+         "Two stacked panels, both from the random-dose OME experiment."
+         " Top: three-condition comparison — mg/day + Nielsen, mg/4h + Nielsen,"
+         " and mg/4h + Nielsen + explicit unit explanation — isolating the"
+         " dosing-unit effect. Bottom: full four-step pipeline from naive"
+         " through Nielsen, non-daily dosing drop, and unit-explanation rescue."
+         " Together they show that switching from daily to non-daily units"
+         " degrades accuracy significantly, and that a brief unit explanation"
+         " recovers most of the lost performance."),
 
         ("nielsen_units_ranked", "build_nielsen_units_ranked",
-         "Prompt improvements enable safe accuracy",
+         "Best achievable accuracy after all prompt augmentations",
          "Two-panel ranked bar chart. Top: random-dose OME conversions with"
-         " Nielsen + explain units. Bottom: vignette conversions with"
-         " Nielsen + explain units. Shows final best-achievable accuracy"
-         " per model after all prompt augmentations."),
+         " Nielsen + explicit unit explanation. Bottom: vignette conversions"
+         " with Nielsen + explicit unit explanation. Shows the final best-"
+         " achievable accuracy per model after all prompt augmentations,"
+         " on both task formats."),
     ]
 
     async def save_all(self):
@@ -1587,7 +1993,7 @@ class ComprehensiveFigureBuilder:
                 pdf_path = self._f(f"{name}.pdf")
                 png_path = self._f(f"{name}.png")
                 output_file(html_path)
-                save(fig)
+                save(fig, resources=INLINE)
                 await convert_to_pdf_auto_size(html_path, pdf_path, scale=2.0)
                 await convert_to_png_auto_size(html_path, png_path, scale=2.0)
                 print(f"✓ {name}")

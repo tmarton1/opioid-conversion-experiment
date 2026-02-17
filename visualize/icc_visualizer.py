@@ -7,8 +7,8 @@ Two figures from results/icc_analysis.csv:
    sorted by mean ICC on both axes.
 
 2. **Bubble Grid** — model × scenario.  Each cell has two concentric circles:
-   - Outer (high transparency): area ∝ total variance  (σ²_total)
-   - Inner (low transparency): area ∝ between-vignette variance (σ²_between)
+   - Outer (opaque): area ∝ total variance  (σ²_total)
+   - Inner (lighter/transparent): area ∝ between-vignette variance (σ²_between)
    The inner/outer ratio *is* the ICC.
    Circles inherit the model colour. Models sorted by lowest mean total
    variance at top; scenarios sorted by lowest mean total variance at left.
@@ -23,7 +23,7 @@ from bokeh.plotting import figure, output_file, save
 from bokeh.layouts import column
 from bokeh.models import (
     ColumnDataSource, HoverTool, Div, BasicTicker, ColorBar,
-    LinearColorMapper, FixedTicker, LabelSet,
+    LinearColorMapper, FixedTicker, LabelSet, Label,
 )
 from bokeh.palettes import RdYlGn11
 from bokeh.transform import transform
@@ -43,6 +43,25 @@ def _short_scenario(s: str) -> str:
 def _short_model(m: str) -> str:
     """Shorten a model name for axis labels."""
     return m.split("/")[-1]
+
+
+def _get_vignette_accuracy_order(vignette_model_csv: str):
+    """Return models sorted by mean tight accuracy on naive vignettes (best first).
+
+    Uses the same CSV as the analysis, filtered identically to
+    ``_prepare_vignette_data``.  This gives an accuracy sort that
+    matches the ranking figure on page 1.
+    """
+    tight_col = "tight(0.85,1.15)"
+    vma = pd.read_csv(vignette_model_csv)
+    vma = vma[
+        (vma["include_nielsen"] == False) &
+        (vma["explain_units"] == False) &
+        (vma["has_vignette_text"] == True)
+    ]
+    vma = vma[vma["model"].isin(set(CONSISTENT_MODELS))]
+    model_acc = vma.groupby("model")[tight_col].mean().sort_values(ascending=False)
+    return list(model_acc.index)
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -90,10 +109,11 @@ def icc_heatmap(icc_csv: str, width: int = 1100, height: int = 600):
     p = figure(
         width=width, height=height,
         x_range=short_scenarios, y_range=list(reversed(short_models)),
-        toolbar_location="above",
-        tools="hover,save",
+        toolbar_location=None,
+        tools="hover",
         x_axis_location="above",
     )
+    p.toolbar.logo = None
 
     p.rect(
         x="scenario", y="model", width=1, height=1,
@@ -139,21 +159,27 @@ def icc_heatmap(icc_csv: str, width: int = 1100, height: int = 600):
 # 2. Bubble grid (concentric circles)
 # ═══════════════════════════════════════════════════════════════════
 
-def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650):
+def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650,
+                    model_order=None):
     """
     Model (y) × Scenario (x) bubble grid.
 
     Outer circle (high transparency): area ∝ total variance
     Inner circle (low transparency): area ∝ between-vignette variance (= ICC × total)
 
-    Models sorted by lowest mean total variance at top.
+    If *model_order* is provided, models are displayed in that order
+    (best at top).  Otherwise sorted by lowest mean total variance at top.
     Scenarios sorted by lowest mean total variance at left.
     """
     df = pd.read_csv(icc_csv)
 
-    # Sort by mean total variance — lowest at top / left
-    model_mean_var = df.groupby("model")["var_total"].mean().sort_values()
-    models = list(model_mean_var.index)
+    # Model order: use provided order or fall back to variance sort
+    # Reverse so index 0 = bottom of plot, best model = highest index = top
+    if model_order is not None:
+        models = list(reversed([m for m in model_order if m in df["model"].unique()]))
+    else:
+        model_mean_var = df.groupby("model")["var_total"].mean().sort_values()
+        models = list(model_mean_var.index)
 
     scenario_mean_var = df.groupby("scenario_key")["var_total"].mean().sort_values()
     scenarios = list(scenario_mean_var.index)
@@ -196,12 +222,12 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650):
         outer_rows.append({
             **base,
             "radius": _radius(r["var_total"]),
-            "alpha": 0.25,
+            "alpha": 0.85,
         })
         inner_rows.append({
             **base,
             "radius": _radius(r["var_between"]),
-            "alpha": 0.75,
+            "alpha": 0.3,
         })
 
     outer_src = ColumnDataSource(pd.DataFrame(outer_rows))
@@ -214,9 +240,9 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650):
         width=width, height=height,
         x_range=(-0.5, len(scenarios) - 0.5),
         y_range=(-0.5, len(models) - 0.5),
-        toolbar_location="above",
-        tools="save",
+        toolbar_location=None,
     )
+    p.toolbar.logo = None
 
     # Grid lines at cell boundaries
     for i in range(len(scenarios) + 1):
@@ -283,7 +309,10 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650):
     p.xaxis.major_label_text_font_size = "8pt"
     p.yaxis.major_label_text_font_size = "9pt"
     p.xaxis.axis_label = "Scenario (sorted by lowest mean total variance →)"
-    p.yaxis.axis_label = "Model (sorted by lowest mean total variance ↑)"
+    if model_order is not None:
+        p.yaxis.axis_label = "Model (sorted by accuracy ↑)"
+    else:
+        p.yaxis.axis_label = "Model (sorted by lowest mean total variance ↑)"
 
     p.background_fill_color = "#fafafa"
     p.grid.visible = False
@@ -303,6 +332,891 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650):
 
 
 # ═══════════════════════════════════════════════════════════════════
+# 2b. Vignette variance panels (4-panel combined figure)
+# ═══════════════════════════════════════════════════════════════════
+
+# ── Shared helpers ──────────────────────────────────────────────────
+
+_CV_LABELS_VIGNETTE = ["CV=0", "0<CV≤0.2", "CV>0.2"]
+_ACC_LABELS = ["tight", "broad", "neither"]
+
+
+def _cv_bin_vignette(cv):
+    """Assign a vignette CV value to one of three bins (zero / low / high)."""
+    if cv <= 0:
+        return _CV_LABELS_VIGNETTE[0]
+    elif cv <= 0.2:
+        return _CV_LABELS_VIGNETTE[1]
+    return _CV_LABELS_VIGNETTE[2]
+
+
+def _prepare_vignette_data(icc_csv, vignette_model_csv):
+    """Load and classify the filtered vignette data.
+
+    Returns (vma, icc_df, var_labels, t1, t2, ranked_models, icc_labels, icc_t1, icc_t2).
+    """
+    icc_df = pd.read_csv(icc_csv)
+    vma = pd.read_csv(vignette_model_csv)
+
+    # Filter to naive, text (include multi-from to keep all 20 scenarios)
+    vma = vma[
+        (vma["include_nielsen"] == False) &
+        (vma["explain_units"] == False) &
+        (vma["has_vignette_text"] == True)
+    ]
+    vma = vma[vma["model"].isin(set(CONSISTENT_MODELS))]
+
+    tight_col = "tight(0.85,1.15)"
+    broad_col = "broad(0.6,1.7)"
+
+    # Accuracy classification
+    vma["_acc"] = "neither"
+    vma.loc[vma[broad_col] >= 0.5, "_acc"] = "broad"
+    vma.loc[vma[tight_col] >= 0.5, "_acc"] = "tight"
+
+    # CV bins (vignette-specific: zero / low / high)
+    vma["_cv_bin"] = vma["observed_dose_cv"].apply(_cv_bin_vignette)
+
+    # Scenario variance terciles
+    scenario_var = icc_df.groupby("scenario_key")["var_total"].mean()
+    t1, t2 = np.percentile(scenario_var.values, [33.3, 66.7])
+    var_labels = [f"Low (<{t1:.2f})", f"Mid ({t1:.2f}–{t2:.2f})", f"High (≥{t2:.2f})"]
+
+    def _var_bin(scenario):
+        v = scenario_var.get(scenario, 0)
+        if v < t1:
+            return var_labels[0]
+        elif v < t2:
+            return var_labels[1]
+        return var_labels[2]
+
+    vma["_var_bin"] = vma["scenario_key"].apply(_var_bin)
+
+    # ICC terciles (per model×scenario from icc_df)
+    icc_vals = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))]["icc"]
+    icc_t1, icc_t2 = np.percentile(icc_vals.dropna().values, [33.3, 66.7])
+    icc_labels = [f"Low (<{icc_t1:.2f})", f"Mid ({icc_t1:.2f}–{icc_t2:.2f})", f"High (≥{icc_t2:.2f})"]
+
+    ranked = get_ranked_model_order()
+    models = [m for m in ranked if m in vma["model"].unique()]
+    if not models:
+        models = sorted(vma["model"].unique())
+
+    return vma, icc_df, var_labels, t1, t2, models, icc_labels, icc_t1, icc_t2
+
+
+def _build_circle_grid(
+    vma, models, x_col, y_col, x_labels, y_labels,
+    title_html, x_axis_note=None,
+    width=900, height=500,
+):
+    """Generic per-model circle-area grid with chi-square p-values.
+
+    Returns a Bokeh ``column`` with a title Div and a gridplot.
+    ``x_col`` and ``y_col`` are column names in *vma* containing
+    the categorical bin assignments.
+
+    Each sub-plot title includes the model name and the χ² p-value.
+    The title Div includes an x-axis annotation.
+    """
+    from bokeh.layouts import gridplot
+    from scipy.stats import chi2_contingency
+
+    n = len(models)
+    if n <= 5:
+        row_sizes = [n]
+    elif n <= 9:
+        row_sizes = [5, n - 5]
+    else:
+        row_sizes = [5, 4, n - 9] if n <= 13 else [5, 5, n - 10]
+
+    max_circle = 28
+    cell_w = width // 5
+    cell_h = height // len(row_sizes)
+
+    # Pre-compute chi-square p-values
+    model_pvals = {}
+    for m in models:
+        mdf = vma[vma["model"] == m]
+        table = np.zeros((len(y_labels), len(x_labels)), dtype=int)
+        for i, yl in enumerate(y_labels):
+            for j, xl in enumerate(x_labels):
+                table[i, j] = int(((mdf[y_col] == yl) & (mdf[x_col] == xl)).sum())
+        try:
+            chi2, pval, dof, expected = chi2_contingency(table)
+            model_pvals[m] = pval
+        except ValueError:
+            model_pvals[m] = np.nan
+
+    all_rows = []
+    idx = 0
+    for row_sz in row_sizes:
+        row_figs = []
+        for _ in range(row_sz):
+            if idx >= n:
+                break
+            m = models[idx]
+            idx += 1
+            cn = _short_model(m)
+            color = MODEL_COLOR_DICT.get(m, "#888888")
+
+            mdf = vma[vma["model"] == m]
+            n_total = len(mdf)
+
+            xs, ys, sizes, alphas, pcts = [], [], [], [], []
+            for xl in x_labels:
+                for yl in y_labels:
+                    count = len(mdf[(mdf[x_col] == xl) & (mdf[y_col] == yl)])
+                    prop = count / n_total if n_total else 0
+                    xs.append(xl)
+                    ys.append(yl)
+                    sizes.append(max(3, prop ** 0.5 * max_circle))
+                    alphas.append(0.8 if prop > 0 else 0.05)
+                    pcts.append(f"{prop:.0%}")
+
+            pval = model_pvals.get(m, np.nan)
+            if np.isnan(pval):
+                p_str = "χ²: N/A"
+            elif pval < 0.001:
+                p_str = "χ² p<.001"
+            elif pval < 0.05:
+                p_str = f"χ² p={pval:.3f}"
+            else:
+                p_str = f"χ² p={pval:.2f}"
+
+            p = figure(
+                width=cell_w, height=cell_h,
+                x_range=x_labels, y_range=list(reversed(y_labels)),
+                toolbar_location=None,
+                title=f"{cn}  ({p_str})",
+            )
+            src = ColumnDataSource(dict(
+                x=xs, y=ys, size=sizes, alpha=alphas, pct=pcts,
+            ))
+            p.scatter("x", "y", size="size", color=color, alpha="alpha",
+                      source=src)
+            p.add_tools(HoverTool(tooltips=[
+                ("Column", "@x"), ("Row", "@y"), ("Proportion", "@pct"),
+            ]))
+
+            p.title.text_font_size = "7pt"
+            p.xaxis.major_label_text_font_size = "6pt"
+            p.yaxis.major_label_text_font_size = "6pt"
+            p.xaxis.major_label_orientation = math.pi / 6
+            p.xaxis.axis_label = None
+            p.yaxis.axis_label = None
+            p.xgrid.visible = False
+            p.ygrid.visible = False
+            p.min_border_left = 50
+            p.min_border_right = 5
+            p.min_border_top = 20
+            p.min_border_bottom = 30
+
+            row_figs.append(p)
+
+        while len(row_figs) < row_sizes[0]:
+            row_figs.append(None)
+        all_rows.append(row_figs)
+
+    grid = gridplot(all_rows, merge_tools=False, toolbar_location=None)
+    x_ann = x_axis_note or ""
+    title_div = Div(
+        text=(title_html +
+              f"<br><span style='font-size:9pt; color:#666'>"
+              f"x-axis: {x_ann} &nbsp;|&nbsp; "
+              f"circle area ∝ proportion of model's observations (all 9 cells sum to 100%)</span>"),
+        styles={"font-size": "12pt", "margin-left": "10px"},
+    )
+    return column(title_div, grid)
+
+
+# ── Panel 1: Accuracy × Scenario Variance ──────────────────────────
+
+def _accuracy_by_variance_grid(vma, models, var_labels, width=900, height=500):
+    """Per-model grid: accuracy category (y) × scenario variance tercile (x)."""
+    return _build_circle_grid(
+        vma, models,
+        x_col="_var_bin", y_col="_acc",
+        x_labels=var_labels, y_labels=_ACC_LABELS,
+        title_html=(
+            "<b>Distribution of Accuracy × Scenario Log-ratio Variance</b>"
+            "<br><span style='font-size:10pt; color:#555'>"
+            "Columns = scenario variance terciles (mean total log-ratio variance "
+            "across models). Rows = accuracy categories.</span>"
+        ),
+        x_axis_note="scenario log-ratio variance tercile",
+        width=width, height=height,
+    )
+
+
+# ── Panel 3: Scenario Variance × within-Vignette CV ────────────────
+
+def _variance_by_cv_grid(vma, models, var_labels, width=900, height=500):
+    """Per-model grid: scenario variance tercile (y) × vignette CV bin (x)."""
+    return _build_circle_grid(
+        vma, models,
+        x_col="_cv_bin", y_col="_var_bin",
+        x_labels=_CV_LABELS_VIGNETTE, y_labels=var_labels,
+        title_html=(
+            "<b>Scenario Log-ratio Variance × within-Vignette CV</b>"
+            "<br><span style='font-size:10pt; color:#555'>"
+            "Columns = within-vignette CV bins. "
+            "Rows = scenario log-ratio variance terciles.</span>"
+        ),
+        x_axis_note="within-vignette CV",
+        width=width, height=height,
+    )
+
+
+# ── Panel 4: Total variance vs ICC scatter ──────────────────────────
+
+def _variance_vs_icc_scatter(icc_csv, width=900, height=400):
+    """Scatter of total log-ratio variance (x) vs ICC (y), coloured by model.
+
+    Computes Spearman correlation and annotates the plot.
+    """
+    from scipy.stats import spearmanr
+
+    df = pd.read_csv(icc_csv)
+    df = df[df["model"].isin(set(CONSISTENT_MODELS))]
+
+    ranked = get_ranked_model_order()
+    models = [m for m in ranked if m in df["model"].unique()]
+
+    xs, ys, colors, mlabels, slabels = [], [], [], [], []
+    for m in models:
+        mdf = df[df["model"] == m]
+        for _, r in mdf.iterrows():
+            xs.append(r["var_total"])
+            ys.append(r["icc"])
+            colors.append(MODEL_COLOR_DICT.get(m, "#888888"))
+            mlabels.append(_short_model(m))
+            slabels.append(_short_scenario(r["scenario_key"]))
+
+    # Spearman correlation
+    rho, sp_pval = spearmanr(xs, ys)
+
+    src = ColumnDataSource(dict(
+        x=xs, y=ys, color=colors, model=mlabels, scenario=slabels,
+    ))
+
+    p = figure(
+        width=width, height=height,
+        toolbar_location=None,
+        y_range=(-0.05, 1.05),
+    )
+    p.scatter("x", "y", color="color", alpha=0.55, size=7, source=src)
+    p.add_tools(HoverTool(tooltips=[
+        ("Model", "@model"),
+        ("Scenario", "@scenario"),
+        ("σ²_total", "@x{0.0000}"),
+        ("ICC", "@y{0.000}"),
+    ]))
+
+    p.xaxis.axis_label = "Total log-ratio variance (σ²_total)"
+    p.yaxis.axis_label = "ICC  (0 = no wording effect → 1 = all variance from wording)"
+    p.xaxis.axis_label_text_font_size = "10pt"
+    p.yaxis.axis_label_text_font_size = "10pt"
+
+    # Spearman annotation
+    sp_str = f"Spearman ρ = {rho:.3f}, p {'< 0.001' if sp_pval < 0.001 else f'= {sp_pval:.3f}'}"
+    p.add_layout(Label(
+        x=5, y=5, text=sp_str,
+        text_font_size="9pt", text_color="#333",
+        x_units="screen", y_units="screen",
+        text_align="left", text_baseline="bottom",
+    ))
+
+    title_div = Div(
+        text=("<b>Total scenario variance vs ICC (naive condition)</b>"
+              "<br><span style='font-size:10pt; color:#555'>"
+              f"Each dot is one model × scenario cell. Colour = model. "
+              f"{sp_str}. "
+              "Scenarios with higher total variance tend to show higher ICC, "
+              "meaning vignette wording drives most of the spread.</span>"),
+        styles={"font-size": "12pt", "margin-left": "10px", "margin-bottom": "6px"},
+    )
+    return column(title_div, p), rho, sp_pval
+
+
+# ── Panel 5: Variance tercile × ICC tercile grid ───────────────────
+
+def _variance_by_icc_grid(icc_df, models, var_labels, t1, t2,
+                          icc_labels, icc_t1, icc_t2,
+                          width=900, height=500):
+    """Per-model grid: scenario variance tercile (y) × ICC tercile (x).
+
+    Operates on icc_df (one row per model×scenario) rather than vma
+    (one row per model×vignette).
+    """
+    from bokeh.layouts import gridplot
+    from scipy.stats import chi2_contingency
+
+    df = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))].copy()
+
+    # Variance bin per row
+    scenario_var = df.groupby("scenario_key")["var_total"].mean()
+
+    def _v_bin(row):
+        v = scenario_var.get(row["scenario_key"], 0)
+        if v < t1:
+            return var_labels[0]
+        elif v < t2:
+            return var_labels[1]
+        return var_labels[2]
+
+    def _i_bin(row):
+        icc = row["icc"]
+        if np.isnan(icc):
+            return icc_labels[0]
+        if icc < icc_t1:
+            return icc_labels[0]
+        elif icc < icc_t2:
+            return icc_labels[1]
+        return icc_labels[2]
+
+    df["_var_bin"] = df.apply(_v_bin, axis=1)
+    df["_icc_bin"] = df.apply(_i_bin, axis=1)
+
+    n = len(models)
+    if n <= 5:
+        row_sizes = [n]
+    elif n <= 9:
+        row_sizes = [5, n - 5]
+    else:
+        row_sizes = [5, 4, n - 9] if n <= 13 else [5, 5, n - 10]
+
+    max_circle = 28
+    cell_w = width // 5
+    cell_h = height // len(row_sizes)
+
+    # Pre-compute chi-square p-values
+    model_pvals = {}
+    for m in models:
+        mdf = df[df["model"] == m]
+        table = np.zeros((len(var_labels), len(icc_labels)), dtype=int)
+        for i, vl in enumerate(var_labels):
+            for j, il in enumerate(icc_labels):
+                table[i, j] = int(((mdf["_var_bin"] == vl) & (mdf["_icc_bin"] == il)).sum())
+        try:
+            chi2, pval, dof, expected = chi2_contingency(table)
+            model_pvals[m] = pval
+        except ValueError:
+            model_pvals[m] = np.nan
+
+    all_rows_figs = []
+    idx = 0
+    for row_sz in row_sizes:
+        row_figs = []
+        for _ in range(row_sz):
+            if idx >= n:
+                break
+            m = models[idx]
+            idx += 1
+            cn = _short_model(m)
+            color = MODEL_COLOR_DICT.get(m, "#888888")
+
+            mdf = df[df["model"] == m]
+            n_total = len(mdf)
+
+            xs, ys, sizes, alphas, pcts = [], [], [], [], []
+            for xl in icc_labels:
+                for yl in var_labels:
+                    count = int(((mdf["_icc_bin"] == xl) & (mdf["_var_bin"] == yl)).sum())
+                    prop = count / n_total if n_total else 0
+                    xs.append(xl)
+                    ys.append(yl)
+                    sizes.append(max(3, prop ** 0.5 * max_circle))
+                    alphas.append(0.8 if prop > 0 else 0.05)
+                    pcts.append(f"{prop:.0%}")
+
+            pval = model_pvals.get(m, np.nan)
+            if np.isnan(pval):
+                p_str = "χ²: N/A"
+            elif pval < 0.001:
+                p_str = "χ² p<.001"
+            elif pval < 0.05:
+                p_str = f"χ² p={pval:.3f}"
+            else:
+                p_str = f"χ² p={pval:.2f}"
+
+            p = figure(
+                width=cell_w, height=cell_h,
+                x_range=icc_labels, y_range=list(reversed(var_labels)),
+                toolbar_location=None,
+                title=f"{cn}  ({p_str})",
+            )
+            src = ColumnDataSource(dict(
+                x=xs, y=ys, size=sizes, alpha=alphas, pct=pcts,
+            ))
+            p.scatter("x", "y", size="size", color=color, alpha="alpha",
+                      source=src)
+            p.add_tools(HoverTool(tooltips=[
+                ("ICC Bin", "@x"), ("Variance Bin", "@y"), ("Proportion", "@pct"),
+            ]))
+
+            p.title.text_font_size = "7pt"
+            p.xaxis.major_label_text_font_size = "6pt"
+            p.yaxis.major_label_text_font_size = "6pt"
+            p.xaxis.major_label_orientation = math.pi / 6
+            p.xgrid.visible = False
+            p.ygrid.visible = False
+            p.min_border_left = 50
+            p.min_border_right = 5
+            p.min_border_top = 20
+            p.min_border_bottom = 30
+
+            row_figs.append(p)
+
+        while len(row_figs) < row_sizes[0]:
+            row_figs.append(None)
+        all_rows_figs.append(row_figs)
+
+    grid = gridplot(all_rows_figs, merge_tools=False, toolbar_location=None)
+    title_div = Div(
+        text=(
+            "<b>Scenario Log-ratio Variance × ICC Tercile</b>"
+            "<br><span style='font-size:10pt; color:#555'>"
+            "Columns = ICC terciles per model×scenario cell. "
+            "Rows = scenario log-ratio variance terciles.</span>"
+            "<br><span style='font-size:9pt; color:#666'>"
+            "x-axis: ICC tercile &nbsp;|&nbsp; "
+            "circle area ∝ proportion of model's 20 scenario cells (all 9 bins sum to 100%)</span>"
+        ),
+        styles={"font-size": "12pt", "margin-left": "10px"},
+    )
+    return column(title_div, grid)
+
+
+# ── Stacked variance bar chart ──────────────────────────────────────
+
+def _prepare_scenario_level_data(vma, icc_df):
+    """Aggregate vignette-level *vma* to model×scenario, merge with ICC.
+
+    Returns a DataFrame with columns:
+      model, scenario_key, tight_prop, mean_cv, var_total, var_between,
+      var_within, icc
+    """
+    tight_col = "tight(0.85,1.15)"
+    scen = vma.groupby(["model", "scenario_key"]).agg(
+        tight_prop=(tight_col, "mean"),
+        mean_cv=("observed_dose_cv", "mean"),
+    ).reset_index()
+    icc_sub = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))][
+        ["model", "scenario_key", "var_total", "var_between", "var_within", "icc"]
+    ].copy()
+    return scen.merge(icc_sub, on=["model", "scenario_key"], how="inner")
+
+
+def stacked_variance_bars(
+    icc_csv: str,
+    vignette_model_csv: str,
+    width: int = 800,
+    height: int = 500,
+):
+    """Stacked horizontal bar: within-vignette vs between-vignette variance
+    per model, sorted by vignette accuracy (best at top).
+
+    The headline: models are precise (small within-vignette noise) but
+    wording-sensitive (large between-vignette variance), unless they are
+    accurate — in which case both components collapse.
+    """
+    from scipy.stats import spearmanr
+
+    icc_df = pd.read_csv(icc_csv)
+    icc_df = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))]
+
+    # Accuracy-sorted order
+    acc_order = _get_vignette_accuracy_order(vignette_model_csv)
+
+    # Per-model means
+    model_var = icc_df.groupby("model").agg(
+        mean_within=("var_within", "mean"),
+        mean_between=("var_between", "mean"),
+        mean_total=("var_total", "mean"),
+        mean_icc=("icc", "mean"),
+    ).reindex(acc_order)
+
+    # Get accuracy for annotation
+    tight_col = "tight(0.85,1.15)"
+    vma = pd.read_csv(vignette_model_csv)
+    vma = vma[
+        (vma["include_nielsen"] == False) &
+        (vma["explain_units"] == False) &
+        (vma["has_vignette_text"] == True)
+    ]
+    vma = vma[vma["model"].isin(set(CONSISTENT_MODELS))]
+    model_acc = vma.groupby("model")[tight_col].mean().reindex(acc_order)
+
+    # Build labels (reversed for bottom→top)
+    clean_names = [_short_model(m) for m in acc_order]
+    clean_names_rev = list(reversed(clean_names))
+    models_rev = list(reversed(acc_order))
+
+    within_vals = list(reversed(model_var["mean_within"].tolist()))
+    between_vals = list(reversed(model_var["mean_between"].tolist()))
+    total_vals = list(reversed(model_var["mean_total"].tolist()))
+    icc_vals = list(reversed(model_var["mean_icc"].tolist()))
+    acc_vals = list(reversed(model_acc.tolist()))
+    colors = [MODEL_COLOR_DICT.get(m, "#888888") for m in models_rev]
+
+    src = ColumnDataSource(dict(
+        y=clean_names_rev,
+        within=within_vals,
+        between=between_vals,
+        total=total_vals,
+        icc=icc_vals,
+        acc=acc_vals,
+        color=colors,
+        left_between=within_vals,  # between bar starts where within ends
+    ))
+
+    x_max = max(total_vals) * 1.3
+    p = figure(
+        width=width, height=height,
+        y_range=clean_names_rev,
+        x_range=(0, x_max),
+        toolbar_location=None,
+    )
+
+    # Within-vignette (stochastic noise) — darker, from 0
+    p.hbar(y="y", right="within", height=0.6, color="color",
+           alpha=0.9, source=src,
+           legend_label="Within-vignette (stochastic noise)")
+
+    # Between-vignette (wording effect) — lighter, stacked
+    p.hbar(y="y", left="within", right="total", height=0.6,
+           color="color", alpha=0.3, source=src,
+           legend_label="Between-vignette (wording effect)")
+
+    p.add_tools(HoverTool(tooltips=[
+        ("Model", "@y"),
+        ("σ²_within (noise)", "@within{0.0000}"),
+        ("σ²_between (wording)", "@between{0.0000}"),
+        ("σ²_total", "@total{0.0000}"),
+        ("Mean ICC", "@icc{0.000}"),
+        ("Tight accuracy", "@acc{0.0%}"),
+    ]))
+
+    # Accuracy annotation on right side
+    for i, (name, acc_v) in enumerate(zip(clean_names_rev, acc_vals)):
+        total_v = total_vals[i]
+        p.text(
+            x=[total_v + x_max * 0.01], y=[name],
+            text=[f"{acc_v:.0%} tight acc"],
+            text_font_size="8pt", text_color="#555",
+            text_baseline="middle", text_align="left",
+        )
+
+    p.xaxis.axis_label = "Mean log-ratio variance"
+    p.xaxis.axis_label_text_font_size = "10pt"
+    p.yaxis.major_label_text_font_size = "9pt"
+    p.ygrid.visible = False
+
+    p.legend.location = "bottom_right"
+    p.legend.label_text_font_size = "9pt"
+    p.legend.background_fill_alpha = 0.8
+
+    # Overall stats for subtitle
+    overall_ratio = icc_df["var_between"].mean() / icc_df["var_total"].mean()
+    rho, sp_p = spearmanr(model_acc.values, model_var["mean_total"].values)
+
+    title_div = Div(
+        text=(
+            "<b>Models are precise but wording-sensitive</b>"
+            "<br><span style='font-size:10pt; color:#555'>"
+            "Stacked bar: within-vignette variance (stochastic noise, dark) + "
+            "between-vignette variance (wording effect, light). "
+            f"Overall, {overall_ratio:.0%} of variance is between-vignette. "
+            "Both components collapse for accurate models — they converge on "
+            "the right answer regardless of phrasing. "
+            f"Spearman ρ (accuracy vs total variance) = {rho:.2f}, "
+            f"p {'< 0.001' if sp_p < 0.001 else f'= {sp_p:.3f}'}."
+            "</span>"
+        ),
+        styles={"font-size": "13pt", "margin-left": "10px", "margin-bottom": "6px"},
+    )
+    return column(title_div, p)
+
+
+# ── Spearman ρ bar chart (variance ↔ ICC per model) ────────────────
+
+def spearman_variance_icc_bars(
+    icc_csv: str,
+    vignette_model_csv: str,
+    width: int = 800,
+    height: int = 500,
+):
+    """Horizontal bar chart of per-model Spearman ρ (variance ↔ ICC),
+    sorted by vignette accuracy (best at top), with p-value annotations.
+    """
+    from scipy.stats import spearmanr, binomtest
+
+    icc_df = pd.read_csv(icc_csv)
+    icc_df = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))]
+    acc_order = _get_vignette_accuracy_order(vignette_model_csv)
+
+    # Per-model Spearman: variance_total vs ICC
+    model_stats = {}
+    for m in acc_order:
+        mdf = icc_df[icc_df["model"] == m]
+        rho, pval = spearmanr(mdf["var_total"], mdf["icc"])
+        model_stats[m] = (rho, pval)
+
+    clean_names = [_short_model(m) for m in acc_order]
+    clean_names_rev = list(reversed(clean_names))
+    models_rev = list(reversed(acc_order))
+
+    rhos = [model_stats[m][0] for m in models_rev]
+    pvals = [model_stats[m][1] for m in models_rev]
+    colors = [MODEL_COLOR_DICT.get(m, "#888888") for m in models_rev]
+
+    src = ColumnDataSource(dict(
+        y=clean_names_rev,
+        rho=rhos,
+        pval=pvals,
+        color=colors,
+    ))
+
+    rho_max = max(abs(r) for r in rhos) * 1.3
+    p = figure(
+        width=width, height=height,
+        y_range=clean_names_rev,
+        x_range=(-rho_max, rho_max),
+        toolbar_location=None,
+    )
+
+    # Bars
+    p.hbar(y="y", right="rho", height=0.6, color="color",
+           alpha=0.8, source=src)
+
+    # Zero line
+    p.line([0, 0], [-0.5, len(models_rev) - 0.5 + 1],
+           line_color="#333", line_width=1, line_dash="dashed")
+
+    p.add_tools(HoverTool(tooltips=[
+        ("Model", "@y"),
+        ("Spearman ρ", "@rho{0.000}"),
+        ("p-value", "@pval{0.0000}"),
+    ]))
+
+    # Significance annotations
+    for i, (name, rho_v, pv) in enumerate(zip(clean_names_rev, rhos, pvals)):
+        if pv < 0.001:
+            star = "***"
+        elif pv < 0.01:
+            star = "**"
+        elif pv < 0.05:
+            star = "*"
+        else:
+            star = ""
+
+        p_str = f"p<.001" if pv < 0.001 else f"p={pv:.3f}"
+        label = f"ρ={rho_v:.2f} {p_str}{star}"
+        x_pos = rho_v + (0.02 if rho_v >= 0 else -0.02)
+        align = "left" if rho_v >= 0 else "right"
+
+        p.text(
+            x=[x_pos], y=[name], text=[label],
+            text_font_size="7pt", text_color="#333",
+            text_baseline="middle", text_align=align,
+        )
+
+    p.xaxis.axis_label = "Spearman ρ  (variance ↔ ICC)"
+    p.xaxis.axis_label_text_font_size = "10pt"
+    p.yaxis.major_label_text_font_size = "9pt"
+    p.ygrid.visible = False
+
+    # Sign test summary
+    all_rhos = [model_stats[m][0] for m in acc_order]
+    n_pos = sum(1 for r in all_rhos if r > 0)
+    n_neg = sum(1 for r in all_rhos if r < 0)
+    n_test = n_pos + n_neg
+    n_sig = sum(1 for m in acc_order if model_stats[m][1] < 0.05)
+    k_majority = max(n_pos, n_neg)
+    if n_test > 0:
+        sign_p = binomtest(k_majority, n_test, 0.5,
+                           alternative='two-sided').pvalue
+        sign_str = (
+            f"{n_sig}/{len(acc_order)} models individually significant (p<0.05). "
+            f"{n_pos} positive, {n_neg} negative. "
+            f"Sign test p={'<0.001' if sign_p < 0.001 else f'= {sign_p:.3f}'}."
+        )
+    else:
+        sign_str = ""
+
+    title_div = Div(
+        text=(
+            "<b>Wording-driven variance tracks ICC for many models</b>"
+            "<br><span style='font-size:10pt; color:#555'>"
+            "Per-model Spearman ρ between scenario log-ratio variance and ICC "
+            "(n=20 scenarios per model). "
+            "Positive ρ = scenarios with more total variance have a larger "
+            "proportion attributable to vignette wording. "
+            f"{sign_str}"
+            "</span>"
+        ),
+        styles={"font-size": "13pt", "margin-left": "10px", "margin-bottom": "6px"},
+    )
+    return column(title_div, p)
+
+
+# ── Page-level figure builders ──────────────────────────────────────
+
+def variance_stacked_figure(
+    icc_csv: str,
+    vignette_model_csv: str,
+    width: int = 800,
+):
+    """Page 6a: Stacked variance bars + overall scatter.
+
+    Stacked bar shows within vs between variance per model.
+    Scatter shows total variance vs ICC across all 260 model×scenario cells.
+    """
+    bar_panel = stacked_variance_bars(icc_csv, vignette_model_csv, width=width)
+    scatter_panel, _rho, _sp_p = _variance_vs_icc_scatter(icc_csv, width=width)
+    return column(bar_panel, scatter_panel)
+
+
+def bubble_grid_figure(
+    icc_csv: str,
+    vignette_model_csv: str,
+    width: int = 1200,
+    height: int = 700,
+):
+    """Page 6b: ICC bubble grid sorted by accuracy."""
+    acc_order = _get_vignette_accuracy_order(vignette_model_csv)
+    return icc_bubble_grid(icc_csv, width=width, height=height,
+                           model_order=acc_order)
+
+
+def spearman_bars_figure(
+    icc_csv: str,
+    vignette_model_csv: str,
+    width: int = 800,
+):
+    """Page 6c: Per-model Spearman ρ bar chart (variance ↔ ICC)."""
+    return spearman_variance_icc_bars(icc_csv, vignette_model_csv, width=width)
+
+
+# ── Chi-square independence tests for 3×3 grids ────────────────────
+
+def compute_grid_independence_tests(icc_csv, vignette_model_csv, output_csv=None):
+    """Run chi-square tests of independence on each model's 3×3 grids.
+
+    Tests three grid types per model:
+      1. accuracy_x_variance  — accuracy category vs scenario variance tercile
+      2. variance_x_cv        — scenario variance tercile vs within-vignette CV bin
+      3. variance_x_icc       — scenario variance tercile vs ICC tercile
+    Also computes overall Spearman correlation for variance vs ICC.
+
+    Returns a DataFrame; optionally saves to *output_csv*.
+    """
+    from scipy.stats import chi2_contingency, spearmanr
+
+    vma, icc_df, var_labels, t1, t2, models, icc_labels, icc_t1, icc_t2 = \
+        _prepare_vignette_data(icc_csv, vignette_model_csv)
+
+    # Prepare ICC bins for the icc_df
+    icc_sub = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))].copy()
+    scenario_var = icc_sub.groupby("scenario_key")["var_total"].mean()
+
+    def _v_bin_icc(row):
+        v = scenario_var.get(row["scenario_key"], 0)
+        if v < t1:
+            return var_labels[0]
+        elif v < t2:
+            return var_labels[1]
+        return var_labels[2]
+
+    def _i_bin(row):
+        icc = row["icc"]
+        if np.isnan(icc):
+            return icc_labels[0]
+        if icc < icc_t1:
+            return icc_labels[0]
+        elif icc < icc_t2:
+            return icc_labels[1]
+        return icc_labels[2]
+
+    icc_sub["_var_bin"] = icc_sub.apply(_v_bin_icc, axis=1)
+    icc_sub["_icc_bin"] = icc_sub.apply(_i_bin, axis=1)
+
+    grid_specs = [
+        ("accuracy_x_variance", vma, "_acc", "_var_bin", _ACC_LABELS, var_labels),
+        ("variance_x_cv", vma, "_var_bin", "_cv_bin", var_labels, _CV_LABELS_VIGNETTE),
+        ("variance_x_icc", icc_sub, "_var_bin", "_icc_bin", var_labels, icc_labels),
+    ]
+
+    rows = []
+    for grid_type, data, row_col, col_col, row_labels, col_labels in grid_specs:
+        for m in models:
+            mdf = data[data["model"] == m]
+            table = np.zeros((len(row_labels), len(col_labels)), dtype=int)
+            for i, rl in enumerate(row_labels):
+                for j, cl in enumerate(col_labels):
+                    table[i, j] = int(((mdf[row_col] == rl) & (mdf[col_col] == cl)).sum())
+            n_obs = table.sum()
+            try:
+                chi2, pval, dof, expected = chi2_contingency(table)
+                min_exp = float(expected.min())
+            except ValueError:
+                chi2, pval, dof, min_exp = np.nan, np.nan, np.nan, 0.0
+            rows.append({
+                "grid_type": grid_type, "model": m,
+                "chi2": chi2, "p_value": pval, "dof": dof,
+                "min_expected": min_exp, "n_obs": n_obs,
+                "significant": bool(pval < 0.05) if not np.isnan(pval) else False,
+                "low_expected_warning": bool(min_exp < 5),
+            })
+
+    # Overall Spearman: variance vs ICC
+    rho, sp_p = spearmanr(icc_sub["var_total"].values, icc_sub["icc"].values)
+    rows.append({
+        "grid_type": "spearman_variance_vs_icc", "model": "ALL",
+        "chi2": rho, "p_value": sp_p, "dof": np.nan,
+        "min_expected": np.nan, "n_obs": len(icc_sub),
+        "significant": bool(sp_p < 0.05),
+        "low_expected_warning": False,
+    })
+
+    result = pd.DataFrame(rows)
+    if output_csv:
+        os.makedirs(os.path.dirname(output_csv) or ".", exist_ok=True)
+        result.to_csv(output_csv, index=False)
+    return result
+
+
+# ── Combined multi-panel figure (legacy wrapper) ────────────────────
+
+def vignette_variance_panels(
+    icc_csv: str,
+    vignette_model_csv: str,
+    results_csv: str = None,
+    width: int = 900,
+    height_grid: int = 500,
+    height_mid: int = 700,
+    height_scatter: int = 400,
+):
+    """Legacy wrapper — returns the stacked bar + scatter as a single column.
+
+    Kept for backward compatibility but the three separate page-level
+    functions (``variance_stacked_figure``, ``bubble_grid_figure``,
+    ``spearman_bars_figure``) are preferred.
+    """
+    bar_panel = stacked_variance_bars(icc_csv, vignette_model_csv,
+                                      width=width)
+    scatter_panel, _rho, _sp_p = _variance_vs_icc_scatter(
+        icc_csv, width=width, height=height_scatter)
+
+    if results_csv:
+        compute_grid_independence_tests(icc_csv, vignette_model_csv,
+                                        output_csv=results_csv)
+
+    return column(bar_panel, scatter_panel)
+
+
+# ═══════════════════════════════════════════════════════════════════
 # 3. Kendall's W summary bar chart
 # ═══════════════════════════════════════════════════════════════════
 
@@ -313,13 +1227,29 @@ def kendall_w_summary(
     height: int = 500,
 ):
     """
-    Horizontal bar chart of Kendall's W per scenario.
+    Horizontal bar chart of Mean ICC and Kendall's W per scenario,
+    sorted by mean ICC (highest at top).
 
-    If icc_csv is provided, overlays mean ICC per scenario as a second bar
-    for comparison (ICC = within-scenario vignette effect size,
-    W = cross-model ranking agreement).
+    ICC (intraclass correlation coefficient) measures the proportion of
+    response-log-ratio variance attributable to vignette wording within
+    each model–scenario cell.  Kendall's W measures cross-model agreement
+    on which wording produces higher or lower responses.  Both range 0–1
+    and are displayed on the same axis.
     """
-    w_df = pd.read_csv(kendall_csv).sort_values("kendall_w", ascending=True)
+    w_df = pd.read_csv(kendall_csv)
+
+    # Build ICC means per scenario if available
+    icc_means = None
+    if icc_csv and os.path.exists(icc_csv):
+        icc_df = pd.read_csv(icc_csv)
+        icc_means = icc_df.groupby("scenario_key")["icc"].mean()
+
+    # Sort by mean ICC (descending → highest at top after reversal)
+    if icc_means is not None:
+        w_df["_icc_mean"] = w_df["scenario_key"].map(icc_means).fillna(0)
+        w_df = w_df.sort_values("_icc_mean", ascending=True)  # lowest at bottom → highest at top
+    else:
+        w_df = w_df.sort_values("kendall_w", ascending=True)
 
     scenarios = list(w_df["scenario_key"])
     short_scenarios = [_short_scenario(s) for s in scenarios]
@@ -334,19 +1264,14 @@ def kendall_w_summary(
         })
     w_data = pd.DataFrame(rows)
 
-    # Optionally load ICC means per scenario
-    icc_means = None
-    if icc_csv and os.path.exists(icc_csv):
-        icc_df = pd.read_csv(icc_csv)
-        icc_means = icc_df.groupby("scenario_key")["icc"].mean()
-
     p = figure(
         width=width, height=height,
         y_range=short_scenarios,
         x_range=(0, 1.05),
-        toolbar_location="above",
-        tools="hover,save",
+        toolbar_location=None,
+        tools="hover",
     )
+    p.toolbar.logo = None
 
     # ICC bars (background, wider, lighter)
     if icc_means is not None:
@@ -381,7 +1306,7 @@ def kendall_w_summary(
         ("Significance", "@sig"),
     ]
 
-    p.xaxis.axis_label = "Coefficient value (0–1)"
+    p.xaxis.axis_label = "ICC / Kendall W  (0 = no wording effect  →  1 = all variance from vignette wording)"
     p.xaxis.axis_label_text_font_size = "10pt"
     p.yaxis.major_label_text_font_size = "8pt"
 
@@ -390,11 +1315,13 @@ def kendall_w_summary(
     p.legend.background_fill_alpha = 0.8
 
     title_div = Div(
-        text=("<b>Vignette wording matters, but differently for each model (naive condition)</b>"
+        text=("<b>Wording effect sizes and directions are model-specific (naive condition)</b>"
               "<br><span style='font-size:10pt; color:#555'>"
-              "Blue bars: mean ICC — proportion of variance explained by vignette wording. "
+              "Blue bars: mean ICC (intraclass correlation) — proportion of log-ratio "
+              "variance explained by vignette wording within each model. "
               "Red bars: Kendall's W — agreement across models on which vignette wording "
-              "produces higher/lower responses. High ICC + low W = wording matters, but "
+              "produces higher/lower responses. Both range 0–1. "
+              "High ICC + low W = wording matters, but "
               "models are sensitive to different aspects of the phrasing.</span>"),
         styles={"font-size": "13pt", "margin-left": "10px", "margin-bottom": "6px"},
     )
