@@ -19,7 +19,7 @@ import math
 import numpy as np
 import pandas as pd
 from itertools import combinations
-from scipy.stats import friedmanchisquare, rankdata
+from scipy.stats import rankdata
 
 from bokeh.plotting import figure, output_file, save
 from bokeh.layouts import column
@@ -29,6 +29,7 @@ from bokeh.models import (
 )
 
 from common.models import CONSISTENT_MODELS
+from analysis.kendall_w import kendall_w as _kendall_w
 from visualize.visualization_config import (
     get_ranked_model_order, convert_to_pdf_auto_size, convert_to_png_auto_size,
 )
@@ -45,44 +46,6 @@ def _load_vignette_colors(json_path: str = "resources/reworded_vignettes.json") 
     with open(json_path) as f:
         vigs = json.load(f)
     return {vid: v.get("vignette_color", "#888888") for vid, v in vigs.items()}
-
-
-def _kendall_w(rankings_matrix: np.ndarray) -> tuple:
-    """
-    Compute Kendall's W (coefficient of concordance).
-
-    Parameters
-    ----------
-    rankings_matrix : array of shape (n_judges, n_items)
-        Each row is one judge's rankings of the items.
-
-    Returns
-    -------
-    (W, chi2, p_value)
-    """
-    m, n = rankings_matrix.shape  # m judges, n items
-    if m < 2 or n < 2:
-        return (np.nan, np.nan, np.nan)
-
-    # Rank each row (judge) independently
-    ranked = np.array([rankdata(row) for row in rankings_matrix])
-
-    # Sum of ranks for each item
-    R = ranked.sum(axis=0)
-    R_mean = R.mean()
-
-    # SS of rank sums
-    SS = np.sum((R - R_mean) ** 2)
-
-    # W = 12 * SS / (m² * (n³ - n))
-    W = 12 * SS / (m ** 2 * (n ** 3 - n))
-
-    # Chi-squared approximation
-    chi2 = m * (n - 1) * W
-    from scipy.stats import chi2 as chi2_dist
-    p = 1 - chi2_dist.cdf(chi2, n - 1)
-
-    return (W, chi2, p)
 
 
 def scenario_vignette_strip(

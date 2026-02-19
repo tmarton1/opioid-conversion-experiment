@@ -19,7 +19,8 @@ import os
 import numpy as np
 import pandas as pd
 from typing import Optional
-from scipy.stats import wilcoxon
+
+from analysis.per_model_wilcoxon import lookup_per_model_p, lookup_pooled_p
 
 from bokeh.plotting import figure, output_file, save
 from bokeh.layouts import column, row as bk_row, gridplot
@@ -48,40 +49,33 @@ def _clean(model: str) -> str:
     return model.split("/")[-1] if "/" in model else model
 
 
+def _wilcoxon_csv_from_comparison(comparison_csv: str) -> str:
+    """Derive the pre-computed Wilcoxon CSV path from a comparison CSV path."""
+    d = os.path.dirname(comparison_csv)
+    base = os.path.basename(comparison_csv)
+    return os.path.join(d, base.replace("comparison_", "wilcoxon_"))
+
+
 def _per_model_wilcoxon(comparison_csv: str, model: str, range_type: str = "tight"):
     """
-    Run Wilcoxon signed-rank on tight_diff or broad_diff for one model.
+    Look up pre-computed Wilcoxon signed-rank result for one model.
     Returns (p_value, median_diff, n_diffs).
+
+    Reads from a companion ``wilcoxon_*.csv`` produced by
+    ``analysis.per_model_wilcoxon.compute_per_model_wilcoxon``.
     """
-    df = pd.read_csv(comparison_csv)
-    mdf = df[df["model"] == model]
-    diff_col = f"{range_type}_diff"
-    if diff_col not in mdf.columns:
+    wilcoxon_csv = _wilcoxon_csv_from_comparison(comparison_csv)
+    if not os.path.exists(wilcoxon_csv):
         return None, None, 0
-    diffs = mdf[diff_col].dropna()
-    if len(diffs) < 2:
-        return None, None, len(diffs)
-    nonzero = diffs[diffs != 0]
-    if len(nonzero) < 1:
-        return 1.0, 0.0, len(diffs)
-    _, p = wilcoxon(nonzero, alternative="two-sided")
-    return p, float(diffs.median()), len(diffs)
+    return lookup_per_model_p(wilcoxon_csv, model, range_type)
 
 
 def _overall_wilcoxon(comparison_csv: str, range_type: str = "tight"):
-    """Run Wilcoxon signed-rank on all diffs pooled across models."""
-    df = pd.read_csv(comparison_csv)
-    diff_col = f"{range_type}_diff"
-    if diff_col not in df.columns:
+    """Look up pre-computed pooled Wilcoxon signed-rank result."""
+    wilcoxon_csv = _wilcoxon_csv_from_comparison(comparison_csv)
+    if not os.path.exists(wilcoxon_csv):
         return None, None, 0
-    diffs = df[diff_col].dropna()
-    if len(diffs) < 2:
-        return None, None, len(diffs)
-    nonzero = diffs[diffs != 0]
-    if len(nonzero) < 1:
-        return 1.0, 0.0, len(diffs)
-    _, p = wilcoxon(nonzero, alternative="two-sided")
-    return p, float(diffs.median()), len(diffs)
+    return lookup_pooled_p(wilcoxon_csv, range_type)
 
 
 def _significance_star(p):
@@ -516,12 +510,16 @@ def cv_strip_with_ratio(
     broad_col: str = "broad(0.6,1.7)",
     cv_bins: list | None = None,
     cv_bin_labels: list | None = None,
+    chi2_csv: str | None = None,
 ):
     """
     Three-panel figure:
     Top: strip chart of CV (same as cv_strip_chart).
     Middle: scatter of CV (x) vs mean observed/expected ratio (y) on log scale.
     Bottom: stacked bar mosaic — accuracy bands × CV bins.
+
+    ``chi2_csv`` is the pre-computed per-model chi-square CSV from
+    ``analysis.variance_icc_stats.compute_cv_accuracy_chi2``.
     """
     panel_h = height // 3
 
@@ -605,14 +603,16 @@ def cv_strip_with_ratio(
     # -- bottom panel: accuracy mosaic by CV bin --
     bot = _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
                               width=width, height=panel_h,
-                              cv_bins=cv_bins, cv_bin_labels=cv_bin_labels)
+                              cv_bins=cv_bins, cv_bin_labels=cv_bin_labels,
+                              chi2_csv=chi2_csv)
 
     return column(top, mid, bot)
 
 
 def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
                         width=800, height=500,
-                        cv_bins=None, cv_bin_labels=None):
+                        cv_bins=None, cv_bin_labels=None,
+                        chi2_csv=None):
     """
     Per-model 3×3 circle grid: rows = accuracy categories (tight, broad,
     neither), columns = CV bins.  Circle size ∝ proportion of that model's
@@ -620,9 +620,10 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
 
     Each sub-plot shows the χ² p-value in its title.
     An x-axis label ("CV") is placed on the left-most figure of each row.
-    """
-    from scipy.stats import chi2_contingency
 
+    Chi-square p-values are read from a pre-computed CSV (``chi2_csv``)
+    produced by ``analysis.variance_icc_stats.compute_cv_accuracy_chi2``.
+    """
     cols_needed = [c for c in [cv_col, tight_col, broad_col] if c in df.columns]
     if len(cols_needed) < 3:
         return figure(width=width, height=height // 3, toolbar_location=None,
@@ -665,19 +666,11 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
     cell_w = width // 5
     cell_h = height // len(row_sizes)
 
-    # Pre-compute chi-square p-values per model
-    model_pvals = {}
-    for m in models:
-        mdf = sub[sub["model"] == m]
-        table = np.zeros((len(acc_labels), len(cv_bin_labels)), dtype=int)
-        for i, al in enumerate(acc_labels):
-            for j, bl in enumerate(cv_bin_labels):
-                table[i, j] = int(((mdf["_acc"] == al) & (mdf["_cv_bin"] == bl)).sum())
-        try:
-            chi2, pval, dof, expected = chi2_contingency(table)
-            model_pvals[m] = pval
-        except ValueError:
-            model_pvals[m] = np.nan
+    # Read pre-computed chi-square p-values per model
+    model_pvals: dict[str, float] = {}
+    if chi2_csv and os.path.exists(chi2_csv):
+        chi2_df = pd.read_csv(chi2_csv)
+        model_pvals = dict(zip(chi2_df["model"], chi2_df["p_value"]))
 
     all_rows = []
     idx = 0
@@ -1522,6 +1515,7 @@ class ComprehensiveFigureBuilder:
             title="Naive CV by Model — Vignettes",
             cv_bins=[0, 1e-9, 0.2, float("inf")],
             cv_bin_labels=["CV=0", "0<CV≤0.2", "CV>0.2"],
+            chi2_csv=self._p("cv_accuracy_chi2.csv"),
         )
 
     def build_cv_strip_random_doses(self):
@@ -1613,6 +1607,7 @@ class ComprehensiveFigureBuilder:
         return variance_stacked_figure(
             icc_csv=self._p("icc_analysis.csv"),
             vignette_model_csv=self._p("reworded_vignettes_model_analysis.csv"),
+            spearman_csv=self._p("variance_icc_spearman.csv"),
         )
 
     def build_icc_bubble_grid(self):
@@ -1629,6 +1624,7 @@ class ComprehensiveFigureBuilder:
         return spearman_bars_figure(
             icc_csv=self._p("icc_analysis.csv"),
             vignette_model_csv=self._p("reworded_vignettes_model_analysis.csv"),
+            spearman_csv=self._p("variance_icc_spearman.csv"),
         )
 
     def build_kendall_w_summary(self):

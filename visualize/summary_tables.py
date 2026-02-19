@@ -217,14 +217,16 @@ class SummaryTablesBuilder:
         </table>"""
 
     def _build_verdict(self, df: pd.DataFrame, a_label: str,
-                       b_label: str) -> str:
-        """Overall verdict using Wilcoxon signed-rank test on the raw
-        accuracy-proportion differences (tight_diff, broad_diff).
+                       b_label: str, comparison_csv: str = "") -> str:
+        """Overall verdict using pre-computed Wilcoxon signed-rank results.
 
-        This directly tests H₀: the treatment has no systematic effect
-        on accuracy, without relying on per-test significance counts.
+        Reads pooled Wilcoxon p-values from a companion ``wilcoxon_*.csv``
+        produced by ``analysis.per_model_wilcoxon``.  Positive Δ = A more
+        accurate.
         """
-        from scipy.stats import wilcoxon
+        from analysis.per_model_wilcoxon import lookup_pooled_p
+
+        wilcoxon_csv = comparison_csv.replace("comparison_", "wilcoxon_") if comparison_csv else ""
 
         parts = []   # HTML fragments for each range
         any_sig = False
@@ -235,6 +237,8 @@ class SummaryTablesBuilder:
             diff_col = f"{rng}_diff"
             if diff_col not in df.columns:
                 continue
+
+            # Basic descriptive stats can still come from the raw df
             diffs = df[diff_col].dropna()
             if len(diffs) < 2:
                 continue
@@ -243,13 +247,14 @@ class SummaryTablesBuilder:
             med = float(diffs.median())
             mean = float(diffs.mean())
 
-            # Drop zero differences (Wilcoxon requirement)
-            nonzero = diffs[diffs != 0]
-            if len(nonzero) < 1:
-                parts.append(f"{rng}: n={n}, all differences = 0")
-                continue
+            # Read pre-computed p-value
+            p = None
+            if wilcoxon_csv and os.path.exists(wilcoxon_csv):
+                p, _, _ = lookup_pooled_p(wilcoxon_csv, rng)
 
-            stat, p = wilcoxon(nonzero, alternative="two-sided")
+            if p is None:
+                parts.append(f"{rng}: n={n}, Wilcoxon CSV not found")
+                continue
 
             sig = p < 0.05
             if sig:
@@ -299,24 +304,31 @@ class SummaryTablesBuilder:
         )
 
     @staticmethod
-    def _wilcoxon_verdict(diffs: pd.Series) -> tuple[str, str]:
-        """Run Wilcoxon signed-rank on a Series of differences.
+    def _wilcoxon_verdict(model: str, range_type: str, wilcoxon_csv: str,
+                          diffs: pd.Series) -> tuple[str, str]:
+        """Look up pre-computed per-model Wilcoxon signed-rank result.
 
         Returns (verdict_html, css_class) where verdict_html is a short
         string like '↑ p=1.2e-03' and css_class is one of
         'sig-better', 'sig-worse', 'ns'.
+
+        Falls back to descriptive-only output if the Wilcoxon CSV is
+        unavailable.
         """
-        from scipy.stats import wilcoxon
+        from analysis.per_model_wilcoxon import lookup_per_model_p
 
         diffs = diffs.dropna()
         if len(diffs) < 2:
             return ("—", "ns")
-        nonzero = diffs[diffs != 0]
-        if len(nonzero) < 1:
-            return ("n.s.", "ns")
-
-        _, p = wilcoxon(nonzero, alternative="two-sided")
         med = float(diffs.median())
+
+        p = None
+        if wilcoxon_csv and os.path.exists(wilcoxon_csv):
+            p, _, _ = lookup_per_model_p(wilcoxon_csv, model, range_type)
+
+        if p is None:
+            return ("—", "ns")
+
         p_str = f"{p:.2e}" if p < 0.001 else f"{p:.3f}"
 
         if p >= 0.05:
@@ -332,9 +344,15 @@ class SummaryTablesBuilder:
             return (f"{arrow} p={p_str}", "sig-better" if mean > 0 else "sig-worse")
 
     def _build_comparison_by_model(self, df: pd.DataFrame, a_label: str,
-                                     b_label: str) -> str:
+                                     b_label: str,
+                                     comparison_csv: str = "") -> str:
         """Per-model breakdown table with corrected/uncorrected counts
-        and per-model Wilcoxon signed-rank verdicts."""
+        and per-model Wilcoxon signed-rank verdicts.
+
+        Reads pre-computed Wilcoxon p-values from a companion
+        ``wilcoxon_*.csv``.
+        """
+        wilcoxon_csv = comparison_csv.replace("comparison_", "wilcoxon_") if comparison_csv else ""
         models = sorted(df["model"].unique())
         header = f"""
         <table>
@@ -376,7 +394,8 @@ class SummaryTablesBuilder:
             for rng in ("tight", "broad"):
                 diff_col = f"{rng}_diff"
                 if diff_col in mdf.columns:
-                    verdict, css = self._wilcoxon_verdict(mdf[diff_col])
+                    verdict, css = self._wilcoxon_verdict(
+                        m, rng, wilcoxon_csv, mdf[diff_col])
                     cells.append(f"<td class='{css}'>{verdict}</td>")
                 else:
                     cells.append("<td>—</td>")
@@ -434,13 +453,15 @@ class SummaryTablesBuilder:
         b_label = spec["b_label"]
 
         html = f"<h2>{spec['title']}</h2>"
-        html += self._build_verdict(df, a_label, b_label)
+        html += self._build_verdict(df, a_label, b_label,
+                                    comparison_csv=spec["csv"])
         html += self._build_comparison_overview(df, a_label, b_label)
         html += self._build_comparison_by_condition(
             df, a_label, b_label, spec["hold_constant"]
         )
         html += "<h3>By Model</h3>"
-        html += self._build_comparison_by_model(df, a_label, b_label)
+        html += self._build_comparison_by_model(df, a_label, b_label,
+                                                comparison_csv=spec["csv"])
         return html
 
     # ------------------------------------------------------------------

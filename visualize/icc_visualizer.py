@@ -409,6 +409,7 @@ def _build_circle_grid(
     vma, models, x_col, y_col, x_labels, y_labels,
     title_html, x_axis_note=None,
     width=900, height=500,
+    precomputed_pvals=None,
 ):
     """Generic per-model circle-area grid with chi-square p-values.
 
@@ -418,9 +419,11 @@ def _build_circle_grid(
 
     Each sub-plot title includes the model name and the χ² p-value.
     The title Div includes an x-axis annotation.
+
+    If ``precomputed_pvals`` is a dict mapping model names to p-values,
+    those are used directly.  Otherwise p-values are omitted.
     """
     from bokeh.layouts import gridplot
-    from scipy.stats import chi2_contingency
 
     n = len(models)
     if n <= 5:
@@ -434,19 +437,8 @@ def _build_circle_grid(
     cell_w = width // 5
     cell_h = height // len(row_sizes)
 
-    # Pre-compute chi-square p-values
-    model_pvals = {}
-    for m in models:
-        mdf = vma[vma["model"] == m]
-        table = np.zeros((len(y_labels), len(x_labels)), dtype=int)
-        for i, yl in enumerate(y_labels):
-            for j, xl in enumerate(x_labels):
-                table[i, j] = int(((mdf[y_col] == yl) & (mdf[x_col] == xl)).sum())
-        try:
-            chi2, pval, dof, expected = chi2_contingency(table)
-            model_pvals[m] = pval
-        except ValueError:
-            model_pvals[m] = np.nan
+    # Use pre-computed chi-square p-values if provided
+    model_pvals = precomputed_pvals or {}
 
     all_rows = []
     idx = 0
@@ -532,7 +524,8 @@ def _build_circle_grid(
 
 # ── Panel 1: Accuracy × Scenario Variance ──────────────────────────
 
-def _accuracy_by_variance_grid(vma, models, var_labels, width=900, height=500):
+def _accuracy_by_variance_grid(vma, models, var_labels, width=900, height=500,
+                               precomputed_pvals=None):
     """Per-model grid: accuracy category (y) × scenario variance tercile (x)."""
     return _build_circle_grid(
         vma, models,
@@ -546,12 +539,14 @@ def _accuracy_by_variance_grid(vma, models, var_labels, width=900, height=500):
         ),
         x_axis_note="scenario log-ratio variance tercile",
         width=width, height=height,
+        precomputed_pvals=precomputed_pvals,
     )
 
 
 # ── Panel 3: Scenario Variance × within-Vignette CV ────────────────
 
-def _variance_by_cv_grid(vma, models, var_labels, width=900, height=500):
+def _variance_by_cv_grid(vma, models, var_labels, width=900, height=500,
+                         precomputed_pvals=None):
     """Per-model grid: scenario variance tercile (y) × vignette CV bin (x)."""
     return _build_circle_grid(
         vma, models,
@@ -565,18 +560,19 @@ def _variance_by_cv_grid(vma, models, var_labels, width=900, height=500):
         ),
         x_axis_note="within-vignette CV",
         width=width, height=height,
+        precomputed_pvals=precomputed_pvals,
     )
 
 
 # ── Panel 4: Total variance vs ICC scatter ──────────────────────────
 
-def _variance_vs_icc_scatter(icc_csv, width=900, height=400):
+def _variance_vs_icc_scatter(icc_csv, width=900, height=400,
+                             spearman_csv=None):
     """Scatter of total log-ratio variance (x) vs ICC (y), coloured by model.
 
-    Computes Spearman correlation and annotates the plot.
+    Reads Spearman ρ from pre-computed ``spearman_csv`` (produced by
+    ``analysis.variance_icc_stats``) and annotates the plot.
     """
-    from scipy.stats import spearmanr
-
     df = pd.read_csv(icc_csv)
     df = df[df["model"].isin(set(CONSISTENT_MODELS))]
 
@@ -593,8 +589,17 @@ def _variance_vs_icc_scatter(icc_csv, width=900, height=400):
             mlabels.append(_short_model(m))
             slabels.append(_short_scenario(r["scenario_key"]))
 
-    # Spearman correlation
-    rho, sp_pval = spearmanr(xs, ys)
+    # Read pre-computed Spearman correlation
+    rho, sp_pval = np.nan, np.nan
+    if spearman_csv and os.path.exists(spearman_csv):
+        sp_df = pd.read_csv(spearman_csv)
+        overall = sp_df[
+            (sp_df["stat_type"] == "variance_vs_icc") &
+            (sp_df["model"] == "OVERALL")
+        ]
+        if not overall.empty:
+            rho = float(overall.iloc[0]["rho"])
+            sp_pval = float(overall.iloc[0]["p_value"])
 
     src = ColumnDataSource(dict(
         x=xs, y=ys, color=colors, model=mlabels, scenario=slabels,
@@ -643,14 +648,17 @@ def _variance_vs_icc_scatter(icc_csv, width=900, height=400):
 
 def _variance_by_icc_grid(icc_df, models, var_labels, t1, t2,
                           icc_labels, icc_t1, icc_t2,
-                          width=900, height=500):
+                          width=900, height=500,
+                          precomputed_pvals=None):
     """Per-model grid: scenario variance tercile (y) × ICC tercile (x).
 
     Operates on icc_df (one row per model×scenario) rather than vma
     (one row per model×vignette).
+
+    If ``precomputed_pvals`` is provided (dict of model→p-value), those
+    are used for the chi-square annotations; otherwise they are omitted.
     """
     from bokeh.layouts import gridplot
-    from scipy.stats import chi2_contingency
 
     df = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))].copy()
 
@@ -690,19 +698,8 @@ def _variance_by_icc_grid(icc_df, models, var_labels, t1, t2,
     cell_w = width // 5
     cell_h = height // len(row_sizes)
 
-    # Pre-compute chi-square p-values
-    model_pvals = {}
-    for m in models:
-        mdf = df[df["model"] == m]
-        table = np.zeros((len(var_labels), len(icc_labels)), dtype=int)
-        for i, vl in enumerate(var_labels):
-            for j, il in enumerate(icc_labels):
-                table[i, j] = int(((mdf["_var_bin"] == vl) & (mdf["_icc_bin"] == il)).sum())
-        try:
-            chi2, pval, dof, expected = chi2_contingency(table)
-            model_pvals[m] = pval
-        except ValueError:
-            model_pvals[m] = np.nan
+    # Use pre-computed chi-square p-values if provided
+    model_pvals = precomputed_pvals or {}
 
     all_rows_figs = []
     idx = 0
@@ -813,6 +810,7 @@ def stacked_variance_bars(
     vignette_model_csv: str,
     width: int = 800,
     height: int = 500,
+    spearman_csv: str | None = None,
 ):
     """Stacked horizontal bar: within-vignette vs between-vignette variance
     per model, sorted by vignette accuracy (best at top).
@@ -820,9 +818,10 @@ def stacked_variance_bars(
     The headline: models are precise (small within-vignette noise) but
     wording-sensitive (large between-vignette variance), unless they are
     accurate — in which case both components collapse.
-    """
-    from scipy.stats import spearmanr
 
+    Reads Spearman ρ and between-ratio from a pre-computed
+    ``spearman_csv`` produced by ``analysis.variance_icc_stats``.
+    """
     icc_df = pd.read_csv(icc_csv)
     icc_df = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))]
 
@@ -917,9 +916,25 @@ def stacked_variance_bars(
     p.legend.label_text_font_size = "9pt"
     p.legend.background_fill_alpha = 0.8
 
-    # Overall stats for subtitle
+    # Overall stats for subtitle (read from pre-computed CSV)
     overall_ratio = icc_df["var_between"].mean() / icc_df["var_total"].mean()
-    rho, sp_p = spearmanr(model_acc.values, model_var["mean_total"].values)
+    rho, sp_p = np.nan, np.nan
+    if spearman_csv and os.path.exists(spearman_csv):
+        sp_df = pd.read_csv(spearman_csv)
+        acc_v_row = sp_df[
+            (sp_df["stat_type"] == "accuracy_vs_variance") &
+            (sp_df["model"] == "ALL")
+        ]
+        if not acc_v_row.empty:
+            rho = float(acc_v_row.iloc[0]["rho"])
+            sp_p = float(acc_v_row.iloc[0]["p_value"])
+
+    spearman_str = ""
+    if not np.isnan(rho):
+        spearman_str = (
+            f"Spearman ρ (accuracy vs total variance) = {rho:.2f}, "
+            f"p {'< 0.001' if sp_p < 0.001 else f'= {sp_p:.3f}'}."
+        )
 
     title_div = Div(
         text=(
@@ -930,8 +945,7 @@ def stacked_variance_bars(
             f"Overall, {overall_ratio:.0%} of variance is between-vignette. "
             "Both components collapse for accurate models — they converge on "
             "the right answer regardless of phrasing. "
-            f"Spearman ρ (accuracy vs total variance) = {rho:.2f}, "
-            f"p {'< 0.001' if sp_p < 0.001 else f'= {sp_p:.3f}'}."
+            f"{spearman_str}"
             "</span>"
         ),
         styles={"font-size": "13pt", "margin-left": "10px", "margin-bottom": "6px"},
@@ -946,22 +960,32 @@ def spearman_variance_icc_bars(
     vignette_model_csv: str,
     width: int = 800,
     height: int = 500,
+    spearman_csv: str | None = None,
 ):
     """Horizontal bar chart of per-model Spearman ρ (variance ↔ ICC),
     sorted by vignette accuracy (best at top), with p-value annotations.
-    """
-    from scipy.stats import spearmanr, binomtest
 
+    Reads per-model Spearman ρ and the binomial sign-test summary
+    from a pre-computed ``spearman_csv`` produced by
+    ``analysis.variance_icc_stats``.
+    """
     icc_df = pd.read_csv(icc_csv)
     icc_df = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))]
     acc_order = _get_vignette_accuracy_order(vignette_model_csv)
 
-    # Per-model Spearman: variance_total vs ICC
+    # Read pre-computed per-model Spearman stats
     model_stats = {}
+    if spearman_csv and os.path.exists(spearman_csv):
+        sp_df = pd.read_csv(spearman_csv)
+        per_model = sp_df[sp_df["stat_type"] == "variance_vs_icc"]
+        for _, r in per_model.iterrows():
+            if r["model"] != "OVERALL":
+                model_stats[r["model"]] = (float(r["rho"]), float(r["p_value"]))
+
+    # Fill in any models without precomputed data
     for m in acc_order:
-        mdf = icc_df[icc_df["model"] == m]
-        rho, pval = spearmanr(mdf["var_total"], mdf["icc"])
-        model_stats[m] = (rho, pval)
+        if m not in model_stats:
+            model_stats[m] = (np.nan, np.nan)
 
     clean_names = [_short_model(m) for m in acc_order]
     clean_names_rev = list(reversed(clean_names))
@@ -1027,23 +1051,22 @@ def spearman_variance_icc_bars(
     p.yaxis.major_label_text_font_size = "9pt"
     p.ygrid.visible = False
 
-    # Sign test summary
-    all_rhos = [model_stats[m][0] for m in acc_order]
-    n_pos = sum(1 for r in all_rhos if r > 0)
-    n_neg = sum(1 for r in all_rhos if r < 0)
-    n_test = n_pos + n_neg
-    n_sig = sum(1 for m in acc_order if model_stats[m][1] < 0.05)
-    k_majority = max(n_pos, n_neg)
-    if n_test > 0:
-        sign_p = binomtest(k_majority, n_test, 0.5,
-                           alternative='two-sided').pvalue
-        sign_str = (
-            f"{n_sig}/{len(acc_order)} models individually significant (p<0.05). "
-            f"{n_pos} positive, {n_neg} negative. "
-            f"Sign test p={'<0.001' if sign_p < 0.001 else f'= {sign_p:.3f}'}."
-        )
-    else:
-        sign_str = ""
+    # Sign test summary (read from pre-computed CSV)
+    sign_str = ""
+    if spearman_csv and os.path.exists(spearman_csv):
+        sp_df = pd.read_csv(spearman_csv)
+        sign_row = sp_df[sp_df["stat_type"] == "sign_test"]
+        if not sign_row.empty:
+            sr = sign_row.iloc[0]
+            n_sig_models = int(sr.get("n_individually_sig", 0))
+            n_pos = int(sr.get("n_positive", 0))
+            n_neg = int(sr.get("n_negative", 0))
+            sign_p = float(sr["p_value"])
+            sign_str = (
+                f"{n_sig_models}/{len(acc_order)} models individually significant (p<0.05). "
+                f"{n_pos} positive, {n_neg} negative. "
+                f"Sign test p={'<0.001' if sign_p < 0.001 else f'= {sign_p:.3f}'}."
+            )
 
     title_div = Div(
         text=(
@@ -1067,14 +1090,17 @@ def variance_stacked_figure(
     icc_csv: str,
     vignette_model_csv: str,
     width: int = 800,
+    spearman_csv: str | None = None,
 ):
     """Page 6a: Stacked variance bars + overall scatter.
 
     Stacked bar shows within vs between variance per model.
     Scatter shows total variance vs ICC across all 260 model×scenario cells.
     """
-    bar_panel = stacked_variance_bars(icc_csv, vignette_model_csv, width=width)
-    scatter_panel, _rho, _sp_p = _variance_vs_icc_scatter(icc_csv, width=width)
+    bar_panel = stacked_variance_bars(icc_csv, vignette_model_csv, width=width,
+                                      spearman_csv=spearman_csv)
+    scatter_panel, _rho, _sp_p = _variance_vs_icc_scatter(icc_csv, width=width,
+                                                           spearman_csv=spearman_csv)
     return column(bar_panel, scatter_panel)
 
 
@@ -1094,97 +1120,25 @@ def spearman_bars_figure(
     icc_csv: str,
     vignette_model_csv: str,
     width: int = 800,
+    spearman_csv: str | None = None,
 ):
     """Page 6c: Per-model Spearman ρ bar chart (variance ↔ ICC)."""
-    return spearman_variance_icc_bars(icc_csv, vignette_model_csv, width=width)
+    return spearman_variance_icc_bars(icc_csv, vignette_model_csv, width=width,
+                                      spearman_csv=spearman_csv)
 
 
 # ── Chi-square independence tests for 3×3 grids ────────────────────
 
 def compute_grid_independence_tests(icc_csv, vignette_model_csv, output_csv=None):
-    """Run chi-square tests of independence on each model's 3×3 grids.
+    """Delegate to ``analysis.grid_independence_tests``.
 
-    Tests three grid types per model:
-      1. accuracy_x_variance  — accuracy category vs scenario variance tercile
-      2. variance_x_cv        — scenario variance tercile vs within-vignette CV bin
-      3. variance_x_icc       — scenario variance tercile vs ICC tercile
-    Also computes overall Spearman correlation for variance vs ICC.
-
-    Returns a DataFrame; optionally saves to *output_csv*.
+    Kept as a thin wrapper for backward compatibility.  All statistical
+    computation now lives in the analysis module.
     """
-    from scipy.stats import chi2_contingency, spearmanr
-
-    vma, icc_df, var_labels, t1, t2, models, icc_labels, icc_t1, icc_t2 = \
-        _prepare_vignette_data(icc_csv, vignette_model_csv)
-
-    # Prepare ICC bins for the icc_df
-    icc_sub = icc_df[icc_df["model"].isin(set(CONSISTENT_MODELS))].copy()
-    scenario_var = icc_sub.groupby("scenario_key")["var_total"].mean()
-
-    def _v_bin_icc(row):
-        v = scenario_var.get(row["scenario_key"], 0)
-        if v < t1:
-            return var_labels[0]
-        elif v < t2:
-            return var_labels[1]
-        return var_labels[2]
-
-    def _i_bin(row):
-        icc = row["icc"]
-        if np.isnan(icc):
-            return icc_labels[0]
-        if icc < icc_t1:
-            return icc_labels[0]
-        elif icc < icc_t2:
-            return icc_labels[1]
-        return icc_labels[2]
-
-    icc_sub["_var_bin"] = icc_sub.apply(_v_bin_icc, axis=1)
-    icc_sub["_icc_bin"] = icc_sub.apply(_i_bin, axis=1)
-
-    grid_specs = [
-        ("accuracy_x_variance", vma, "_acc", "_var_bin", _ACC_LABELS, var_labels),
-        ("variance_x_cv", vma, "_var_bin", "_cv_bin", var_labels, _CV_LABELS_VIGNETTE),
-        ("variance_x_icc", icc_sub, "_var_bin", "_icc_bin", var_labels, icc_labels),
-    ]
-
-    rows = []
-    for grid_type, data, row_col, col_col, row_labels, col_labels in grid_specs:
-        for m in models:
-            mdf = data[data["model"] == m]
-            table = np.zeros((len(row_labels), len(col_labels)), dtype=int)
-            for i, rl in enumerate(row_labels):
-                for j, cl in enumerate(col_labels):
-                    table[i, j] = int(((mdf[row_col] == rl) & (mdf[col_col] == cl)).sum())
-            n_obs = table.sum()
-            try:
-                chi2, pval, dof, expected = chi2_contingency(table)
-                min_exp = float(expected.min())
-            except ValueError:
-                chi2, pval, dof, min_exp = np.nan, np.nan, np.nan, 0.0
-            rows.append({
-                "grid_type": grid_type, "model": m,
-                "chi2": chi2, "p_value": pval, "dof": dof,
-                "min_expected": min_exp, "n_obs": n_obs,
-                "significant": bool(pval < 0.05) if not np.isnan(pval) else False,
-                "low_expected_warning": bool(min_exp < 5),
-            })
-
-    # Overall Spearman: variance vs ICC
-    rho, sp_p = spearmanr(icc_sub["var_total"].values, icc_sub["icc"].values)
-    rows.append({
-        "grid_type": "spearman_variance_vs_icc", "model": "ALL",
-        "chi2": rho, "p_value": sp_p, "dof": np.nan,
-        "min_expected": np.nan, "n_obs": len(icc_sub),
-        "significant": bool(sp_p < 0.05),
-        "low_expected_warning": False,
-    })
-
-    result = pd.DataFrame(rows)
-    if output_csv:
-        os.makedirs(os.path.dirname(output_csv) or ".", exist_ok=True)
-        result.to_csv(output_csv, index=False)
-    return result
+    from analysis.grid_independence_tests import (
+        compute_grid_independence_tests as _compute,
+    )
+    return _compute(icc_csv, vignette_model_csv, output_csv=output_csv)
 
 
 # ── Combined multi-panel figure (legacy wrapper) ────────────────────
