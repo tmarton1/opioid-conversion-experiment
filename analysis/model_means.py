@@ -31,8 +31,7 @@ class ModelBatchMeansBuilder:
         for combo in combinations:
             batch_name = combo["batch_name"]
             ome = combo.get("ome", None)
-            # Accept both spellings: "include_nielsen" and "include_nielson"
-            include_nielsen = combo.get("include_nielsen", combo.get("include_nielson", None))
+            include_nielsen = combo.get("include_nielsen", None)
             include_examples = combo.get("include_examples", None)
             explain_units = combo.get("explain_units", None)
             has_vignette_text = combo.get("has_vignette_text", None)

@@ -5,7 +5,7 @@ import numpy as np
 import scipy.stats as stats
 from experiment.prompt_service import PromptedOpioidConversion, PromptService
 from common.conversion_service import ConversionService
-from resources.nielson_data import NIELSON_CONVERSIONS
+from resources.nielsen_data import NIELSEN_CONVERSIONS
 from common.opioid import Opioid
 import os
 from datetime import datetime
@@ -69,7 +69,7 @@ class Experiment:
         self.combinations = list(product(self.opioid_pairs, self.prompt_conditions, self.models))
 
         # Initialize the PromptService once for the entire experiment
-        self.prompt_service = PromptService(ConversionService(NIELSON_CONVERSIONS))
+        self.prompt_service = PromptService(ConversionService(NIELSEN_CONVERSIONS))
         self.filename = filename
 
     def run(self):
@@ -81,7 +81,7 @@ class Experiment:
                 conversion = PromptedOpioidConversion(
                     from_opioid=from_opioid,
                     to_opioid=to_opioid,
-                    include_nielson=condition["include_nielson"],
+                    include_nielsen=condition["include_nielsen"],
                     include_examples=condition["include_examples"],
                     model=model,
                     ask_for_units=condition.get("ask_for_units", False),
@@ -101,7 +101,7 @@ class Experiment:
                         "expected_to_dose": conversion.expected_to_dose,
                         "model": model,
                         "prompt": conversion.prompt,
-                        "include_nielson": condition["include_nielson"],
+                        "include_nielsen": condition["include_nielsen"],
                         "include_examples": condition["include_examples"],
                         "ask_for_units": condition.get("ask_for_units", False),
                         "explain_units": condition.get("explain_units", False),
@@ -130,7 +130,7 @@ class Experiment:
         # Define the fieldnames (columns) for the CSV file
         fieldnames = [
             "experiment_id", "datetime", "from_opioid", "from_opioid_unit", "to_opioid", "to_opioid_unit",
-            "from_dose", "expected_to_dose", "model", "prompt", "include_nielson",
+            "from_dose", "expected_to_dose", "model", "prompt", "include_nielsen",
             "include_examples", "ask_for_units", "explain_units", "observed_to_dose", "ratio_observed_expected", "response"
         ]
 
