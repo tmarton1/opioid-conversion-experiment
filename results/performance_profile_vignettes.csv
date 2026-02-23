@@ -1,0 +1,14 @@
+model,n_obs,correct,precise_wrong,imprecise
+ai21/jamba-large-1.7,80,0.3,0.5875,0.1125
+anthropic/claude-3.5-sonnet:20241022,80,0.325,0.6125,0.0625
+cohere/command-r-plus-08-2024,80,0.1375,0.4625,0.4
+deepseek/deepseek-chat,80,0.2625,0.25,0.4875
+google/gemini-2.5-flash,80,0.25,0.75,0.0
+google/gemini-2.5-pro,80,0.4625,0.3,0.2375
+meta-llama/llama-3.3-70b-instruct,80,0.2875,0.525,0.1875
+mistralai/mistral-large-2407,80,0.4375,0.475,0.0875
+mistralai/mixtral-8x22b-instruct,80,0.1625,0.6,0.2375
+openai/gpt-3.5-turbo,80,0.225,0.6375,0.1375
+openai/gpt-4.1,80,0.4,0.4875,0.1125
+openai/gpt-4.1-mini,80,0.375,0.425,0.2
+qwen/qwen-2.5-72b-instruct,77,0.2077922077922078,0.6753246753246753,0.11688311688311688

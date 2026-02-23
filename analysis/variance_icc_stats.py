@@ -173,14 +173,19 @@ def compute_cv_accuracy_chi2(
     cv_bins: list | None = None,
     cv_bin_labels: list | None = None,
     output_csv: str | None = None,
+    naive_filter: dict | None = None,
 ) -> pd.DataFrame:
     """Per-model χ² independence: accuracy category × CV bin.
 
-    Used by the random-dose ``_cv_accuracy_mosaic()`` grid.
+    Used by the ``_cv_accuracy_mosaic()`` grid.
 
     Returns one row per model with chi2, p_value, dof, n_obs.
     """
     df = pd.read_csv(pair_model_csv)
+    if naive_filter:
+        for col, val in naive_filter.items():
+            if col in df.columns:
+                df = df[df[col] == val]
     df = df[df["model"].isin(_CONSISTENT_SET)]
 
     if cv_bins is None:

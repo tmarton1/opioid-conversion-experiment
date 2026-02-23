@@ -1,0 +1,15 @@
+model,tight_p,tight_median,tight_mean,tight_n,broad_p,broad_median,broad_mean,broad_n
+ai21/jamba-large-1.7,,,,1,,,,1
+anthropic/claude-3.5-sonnet:20241022,,,,1,,,,1
+cohere/command-r-plus-08-2024,,,,1,,,,1
+deepseek/deepseek-chat,,,,1,,,,1
+google/gemini-2.5-flash,,,,1,,,,1
+google/gemini-2.5-pro,,,,1,,,,1
+meta-llama/llama-3.3-70b-instruct,,,,1,,,,1
+mistralai/mistral-large-2407,,,,1,,,,1
+mistralai/mixtral-8x22b-instruct,,,,1,,,,1
+openai/gpt-3.5-turbo,,,,1,,,,1
+openai/gpt-4.1,,,,1,,,,1
+openai/gpt-4.1-mini,,,,1,,,,1
+qwen/qwen-2.5-72b-instruct,,,,1,,,,1
+POOLED,0.85400390625,-0.0071428571428571,0.003316921174064062,13,0.34814453125,-0.0410714285714286,-0.020811926169069024,13

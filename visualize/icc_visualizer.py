@@ -7,8 +7,8 @@ Two figures from results/icc_analysis.csv:
    sorted by mean ICC on both axes.
 
 2. **Bubble Grid** — model × scenario.  Each cell has two concentric circles:
-   - Outer (opaque): area ∝ total variance  (σ²_total)
-   - Inner (lighter/transparent): area ∝ between-vignette variance (σ²_between)
+   - Outer (faint): area ∝ total variance  (σ²_total)
+   - Inner (bold): area ∝ between-vignette variance (σ²_between)
    The inner/outer ratio *is* the ICC.
    Circles inherit the model colour. Models sorted by lowest mean total
    variance at top; scenarios sorted by lowest mean total variance at left.
@@ -24,6 +24,7 @@ from bokeh.layouts import column
 from bokeh.models import (
     ColumnDataSource, HoverTool, Div, BasicTicker, ColorBar,
     LinearColorMapper, FixedTicker, LabelSet, Label,
+    Legend, LegendItem,
 )
 from bokeh.palettes import RdYlGn11
 from bokeh.transform import transform
@@ -164,8 +165,8 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650,
     """
     Model (y) × Scenario (x) bubble grid.
 
-    Outer circle (high transparency): area ∝ total variance
-    Inner circle (low transparency): area ∝ between-vignette variance (= ICC × total)
+    Outer circle (low opacity): area ∝ total variance
+    Inner circle (high opacity): area ∝ between-vignette variance (= ICC × total)
 
     If *model_order* is provided, models are displayed in that order
     (best at top).  Otherwise sorted by lowest mean total variance at top.
@@ -222,12 +223,12 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650,
         outer_rows.append({
             **base,
             "radius": _radius(r["var_total"]),
-            "alpha": 0.85,
+            "alpha": 0.25,
         })
         inner_rows.append({
             **base,
             "radius": _radius(r["var_between"]),
-            "alpha": 0.3,
+            "alpha": 0.85,
         })
 
     outer_src = ColumnDataSource(pd.DataFrame(outer_rows))
@@ -252,18 +253,18 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650,
         p.line([-0.5, len(scenarios) - 0.5], [i - 0.5, i - 0.5],
                line_color="#e0e0e0", line_width=0.5)
 
-    # Outer circles (total variance)
+    # Outer circles (total variance) — low opacity background
     p.circle(
         x="x", y="y", radius="radius", source=outer_src,
         fill_color="color", fill_alpha="alpha",
-        line_color="color", line_alpha=0.4, line_width=0.5,
+        line_color="color", line_alpha=0.3, line_width=0.5,
     )
 
-    # Inner circles (between-vignette variance)
+    # Inner circles (between-vignette variance) — high opacity foreground
     inner_r = p.circle(
         x="x", y="y", radius="radius", source=inner_src,
         fill_color="color", fill_alpha="alpha",
-        line_color="color", line_alpha=0.8, line_width=0.5,
+        line_color="color", line_alpha=0.9, line_width=0.5,
     )
 
     # Hover on inner circles
@@ -320,9 +321,9 @@ def icc_bubble_grid(icc_csv: str, width: int = 1200, height: int = 650,
     title_div = Div(
         text=("<b>Variance decomposition: wording vs stochastic noise</b>"
               "<br><span style='font-size:10pt; color:#555'>"
-              "Outer circle = total log-ratio variance; "
-              "inner circle = between-vignette (wording) variance. "
-              "Larger inner fill = more variance from vignette wording (high ICC). "
+              "Outer circle (faint) = total log-ratio variance; "
+              "inner circle (bold) = between-vignette (wording) variance. "
+              "Prominent inner fill = most variance comes from wording (high ICC). "
               "Text = X/6 pairwise vignette comparisons significant "
               "(Bonferroni-corrected Mann–Whitney U, α=0.05).</span>"),
         styles={"font-size": "13pt", "margin-left": "10px", "margin-bottom": "6px"},
@@ -468,19 +469,27 @@ def _build_circle_grid(
 
             pval = model_pvals.get(m, np.nan)
             if np.isnan(pval):
-                p_str = "χ²: N/A"
+                star = " χ² NA"
             elif pval < 0.001:
-                p_str = "χ² p<.001"
+                star = " χ² ***"
+            elif pval < 0.01:
+                star = " χ² **"
             elif pval < 0.05:
-                p_str = f"χ² p={pval:.3f}"
+                star = " χ² *"
             else:
-                p_str = f"χ² p={pval:.2f}"
+                star = " χ² ns"
+
+            # Shorten long model names for grid cells
+            import re as _re
+            short = _re.sub(r'[:]\d+$', '', cn)
+            short = _re.sub(r'-\d{2}-\d{4}$', '', short)
+            short = _re.sub(r'-\d{4}$', '', short)
 
             p = figure(
                 width=cell_w, height=cell_h,
                 x_range=x_labels, y_range=list(reversed(y_labels)),
                 toolbar_location=None,
-                title=f"{cn}  ({p_str})",
+                title=f"{short}{star}",
             )
             src = ColumnDataSource(dict(
                 x=xs, y=ys, size=sizes, alpha=alphas, pct=pcts,
@@ -491,7 +500,7 @@ def _build_circle_grid(
                 ("Column", "@x"), ("Row", "@y"), ("Proportion", "@pct"),
             ]))
 
-            p.title.text_font_size = "7pt"
+            p.title.text_font_size = "6pt"
             p.xaxis.major_label_text_font_size = "6pt"
             p.yaxis.major_label_text_font_size = "6pt"
             p.xaxis.major_label_orientation = math.pi / 6
@@ -619,21 +628,23 @@ def _variance_vs_icc_scatter(icc_csv, width=900, height=400,
     ]))
 
     p.xaxis.axis_label = "Total log-ratio variance (σ²_total)"
-    p.yaxis.axis_label = "ICC  (0 = no wording effect → 1 = all variance from wording)"
+    p.yaxis.axis_label = "Intraclass Correlation  (none → all from wording)"
     p.xaxis.axis_label_text_font_size = "10pt"
     p.yaxis.axis_label_text_font_size = "10pt"
+    # Remove the 0 and 1 tick labels on y-axis
+    p.yaxis.ticker = []
 
-    # Spearman annotation
+    # Spearman annotation — horizontal, right-aligned with x-axis
     sp_str = f"Spearman ρ = {rho:.3f}, p {'< 0.001' if sp_pval < 0.001 else f'= {sp_pval:.3f}'}"
-    p.add_layout(Label(
-        x=5, y=5, text=sp_str,
-        text_font_size="9pt", text_color="#333",
-        x_units="screen", y_units="screen",
-        text_align="left", text_baseline="bottom",
-    ))
+    from bokeh.layouts import row as bk_row
+    sp_div = Div(
+        text=f"<div style='font-size:9pt; color:#333; white-space:nowrap; "
+             f"padding:0 0 0 8px;'>{sp_str}</div>",
+    )
+    plot_row = bk_row(p, sp_div)
 
     title_div = Div(
-        text=("<b>Total scenario variance vs ICC (naive condition)</b>"
+        text=("<b>Higher response variability corresponds to greater wording effects</b>"
               "<br><span style='font-size:10pt; color:#555'>"
               f"Each dot is one model × scenario cell. Colour = model. "
               f"{sp_str}. "
@@ -641,7 +652,7 @@ def _variance_vs_icc_scatter(icc_csv, width=900, height=400,
               "meaning vignette wording drives most of the spread.</span>"),
         styles={"font-size": "12pt", "margin-left": "10px", "margin-bottom": "6px"},
     )
-    return column(title_div, p), rho, sp_pval
+    return column(title_div, plot_row), rho, sp_pval
 
 
 # ── Panel 5: Variance tercile × ICC tercile grid ───────────────────
@@ -729,19 +740,27 @@ def _variance_by_icc_grid(icc_df, models, var_labels, t1, t2,
 
             pval = model_pvals.get(m, np.nan)
             if np.isnan(pval):
-                p_str = "χ²: N/A"
+                star = " χ² NA"
             elif pval < 0.001:
-                p_str = "χ² p<.001"
+                star = " χ² ***"
+            elif pval < 0.01:
+                star = " χ² **"
             elif pval < 0.05:
-                p_str = f"χ² p={pval:.3f}"
+                star = " χ² *"
             else:
-                p_str = f"χ² p={pval:.2f}"
+                star = " χ² ns"
+
+            # Shorten long model names for grid cells
+            import re as _re
+            short = _re.sub(r'[:]\d+$', '', cn)
+            short = _re.sub(r'-\d{2}-\d{4}$', '', short)
+            short = _re.sub(r'-\d{4}$', '', short)
 
             p = figure(
                 width=cell_w, height=cell_h,
                 x_range=icc_labels, y_range=list(reversed(var_labels)),
                 toolbar_location=None,
-                title=f"{cn}  ({p_str})",
+                title=f"{short}{star}",
             )
             src = ColumnDataSource(dict(
                 x=xs, y=ys, size=sizes, alpha=alphas, pct=pcts,
@@ -752,7 +771,7 @@ def _variance_by_icc_grid(icc_df, models, var_labels, t1, t2,
                 ("ICC Bin", "@x"), ("Variance Bin", "@y"), ("Proportion", "@pct"),
             ]))
 
-            p.title.text_font_size = "7pt"
+            p.title.text_font_size = "6pt"
             p.xaxis.major_label_text_font_size = "6pt"
             p.yaxis.major_label_text_font_size = "6pt"
             p.xaxis.major_label_orientation = math.pi / 6
@@ -870,7 +889,7 @@ def stacked_variance_bars(
         left_between=within_vals,  # between bar starts where within ends
     ))
 
-    x_max = max(total_vals) * 1.3
+    x_max = max(total_vals) * 1.55
     p = figure(
         width=width, height=height,
         y_range=clean_names_rev,
@@ -880,13 +899,27 @@ def stacked_variance_bars(
 
     # Within-vignette (stochastic noise) — darker, from 0
     p.hbar(y="y", right="within", height=0.6, color="color",
-           alpha=0.9, source=src,
-           legend_label="Within-vignette (stochastic noise)")
+           alpha=0.9, source=src)
 
     # Between-vignette (wording effect) — lighter, stacked
     p.hbar(y="y", left="within", right="total", height=0.6,
-           color="color", alpha=0.3, source=src,
-           legend_label="Between-vignette (wording effect)")
+           color="color", alpha=0.3, source=src)
+
+    # Generalizable legend with black/grey swatches (outside right)
+    dummy_src = ColumnDataSource(dict(x=[-10], y=[-10]))
+    d_within = p.rect(x="x", y="y", width=0.001, height=0.001,
+                      fill_color="#333333", fill_alpha=0.9,
+                      line_color="#333333", line_alpha=0.3,
+                      source=dummy_src)
+    d_between = p.rect(x="x", y="y", width=0.001, height=0.001,
+                       fill_color="#999999", fill_alpha=0.3,
+                       line_color="#999999", line_alpha=0.3,
+                       source=dummy_src)
+    legend = Legend(items=[
+        LegendItem(label="Within-vignette (stochastic noise)", renderers=[d_within]),
+        LegendItem(label="Between-vignette (wording effect)", renderers=[d_between]),
+    ], label_text_font_size="9pt", background_fill_alpha=0.8)
+    p.add_layout(legend, "right")
 
     p.add_tools(HoverTool(tooltips=[
         ("Model", "@y"),
@@ -902,19 +935,15 @@ def stacked_variance_bars(
         total_v = total_vals[i]
         p.text(
             x=[total_v + x_max * 0.01], y=[name],
-            text=[f"{acc_v:.0%} tight acc"],
+            text=[f"{acc_v:.0%} tight accuracy"],
             text_font_size="8pt", text_color="#555",
             text_baseline="middle", text_align="left",
         )
 
-    p.xaxis.axis_label = "Mean log-ratio variance"
+    p.xaxis.axis_label = "Mean log-ratio variance across 20 scenarios"
     p.xaxis.axis_label_text_font_size = "10pt"
     p.yaxis.major_label_text_font_size = "9pt"
     p.ygrid.visible = False
-
-    p.legend.location = "bottom_right"
-    p.legend.label_text_font_size = "9pt"
-    p.legend.background_fill_alpha = 0.8
 
     # Overall stats for subtitle (read from pre-computed CSV)
     overall_ratio = icc_df["var_between"].mean() / icc_df["var_total"].mean()
@@ -1264,9 +1293,9 @@ def kendall_w_summary(
     p.xaxis.axis_label_text_font_size = "10pt"
     p.yaxis.major_label_text_font_size = "8pt"
 
-    p.legend.location = "bottom_right"
     p.legend.label_text_font_size = "9pt"
     p.legend.background_fill_alpha = 0.8
+    p.add_layout(p.legend[0], "right")
 
     title_div = Div(
         text=("<b>Wording effect sizes and directions are model-specific (naive condition)</b>"

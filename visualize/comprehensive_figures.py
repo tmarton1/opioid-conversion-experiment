@@ -187,7 +187,7 @@ def naive_performance_bars(
     ranking_csv: str,
     comparison_csv: Optional[str] = None,
     title: str = "Naive Performance",
-    width: int = 700,
+    width: int = 900,
     height: int = 500,
 ):
     """
@@ -296,7 +296,7 @@ def naive_performance_bars(
             text_color="#333",
         ))
 
-    # Legend
+    # Legend — outside right, aligned with x-axis
     ls = ColumnDataSource(dict(y=[clean_names[0]], right=[0]))
     d1 = p.hbar(y="y", right="right", height=0.2, color="black", alpha=0.9, source=ls, visible=True)
     d2 = p.hbar(y="y", right="right", height=0.2, color="black", alpha=0.25, source=ls, visible=True)
@@ -304,7 +304,7 @@ def naive_performance_bars(
         LegendItem(label=f"Tight ({TIGHT_RANGE_LOWER:.2f}–{TIGHT_RANGE_UPPER:.2f}x)", renderers=[d1]),
         LegendItem(label=f"Broad ({BROAD_RANGE_LOWER:.2f}–{BROAD_RANGE_UPPER:.2f}x)", renderers=[d2]),
     ])
-    p.add_layout(legend, "below")
+    p.add_layout(legend, "right")
     p.legend.label_text_font_size = "8pt"
 
     return p
@@ -324,68 +324,42 @@ def error_profile_bars(
     width: int = 800,
     height: int = 380,
     cv_threshold: float = 0.2,
-    title: str = "Error Profile by Model",
+    title: str = "Performance Profile by Model",
+    profile_csv: str | None = None,
 ):
     """
     Stacked horizontal bar chart classifying each model's pair-level
-    results into four categories (left to right):
+    results into five categories (left to right):
 
       1. Correct  (tight accuracy, any CV)            — full opacity, model colour
-      2. Precise but wrong  (CV ≤ threshold, not tight, not dose-dep) — medium opacity
-      3. Other wrong  (not precise, not tight, not dose-dep) — low opacity
-      4. Dose-dependent  (sig. negative slope)         — hatched, right-most
+      2. Precise but wrong  (CV ≤ threshold, not tight, not dose-correlated) — medium opacity
+      3. Other wrong  (not precise, not tight, not dose-correlated) — white space
+      4. Dose-correlated (neg.)  (sig. negative slope) — hatched, right-most
+      5. Dose-correlated (pos.)  (sig. positive slope) — hatched, lighter, right-most
 
-    Uses each model's own colour from MODEL_COLOR_DICT.
+    Reads pre-computed proportions from ``profile_csv`` (produced by
+    ``analysis.performance_profile.compute_random_dose_profile``).
+    Falls back to inline computation if CSV is not provided.
     """
-    if naive_filter is None:
-        naive_filter = {"include_nielsen": False, "include_examples": False}
-
-    df = pd.read_csv(model_csv)
-    for col, val in naive_filter.items():
-        if col in df.columns:
-            df = df[df[col] == val]
-    df = df[df["model"].isin(_CONSISTENT_SET)].copy()
-
-    # Compute ratio & classify
-    df["_ratio"] = df[ratio_num_col] / df[ratio_den_col]
-    df["_tight"] = df["_ratio"].between(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER)
-    df["_precise"] = df[cv_col] <= cv_threshold
-    df["_dose_dep"] = (df[slope_col] < 0) & (df[slope_p_col] < slope_alpha)
-
-    def _cat(row):
-        if row["_dose_dep"]:
-            return "dose_dependent"
-        if row["_tight"]:
-            return "correct"
-        if row["_precise"]:
-            return "precise_wrong"
-        return "other_wrong"
-
-    df["_cat"] = df.apply(_cat, axis=1)
+    # Read pre-computed profile or compute on the fly
+    if profile_csv and os.path.exists(profile_csv):
+        pf = pd.read_csv(profile_csv)
+        pf = pf[pf["model"].isin(_CONSISTENT_SET)]
+    else:
+        from analysis.performance_profile import compute_random_dose_profile
+        pf = compute_random_dose_profile(
+            model_csv, cv_col=cv_col, ratio_num_col=ratio_num_col,
+            ratio_den_col=ratio_den_col, slope_col=slope_col,
+            slope_p_col=slope_p_col, slope_alpha=slope_alpha,
+            cv_threshold=cv_threshold, naive_filter=naive_filter,
+        )
 
     ranked = get_ranked_model_order()
-    models = [m for m in ranked if m in df["model"].unique()]
+    models = [m for m in ranked if m in pf["model"].unique()]
     if not models:
-        models = sorted(df["model"].unique())
+        models = sorted(pf["model"].unique())
 
-    cat_order = ["correct", "precise_wrong", "other_wrong", "dose_dependent"]
-    cat_labels = {
-        "correct": "Correct",
-        "precise_wrong": "Precise but wrong",
-        "other_wrong": "Imprecise & wrong",
-        "dose_dependent": "Dose-dependent",
-    }
-
-    # Compute proportions per model
-    rows = []
-    for m in models:
-        mdf = df[df["model"] == m]
-        n = len(mdf)
-        props = {}
-        for c in cat_order:
-            props[c] = (mdf["_cat"] == c).sum() / n if n else 0
-        rows.append({"model": m, **props})
-    pf = pd.DataFrame(rows)
+    cat_order = ["correct", "precise_wrong", "other_wrong", "dose_dep_neg", "dose_dep_pos"]
 
     # Build figure — models on y-axis (best at top)
     y_labels = [_clean(m) for m in models]
@@ -398,11 +372,11 @@ def error_profile_bars(
     )
 
     bar_h = 0.65
-    # Correct = full opacity, precise-wrong = low opacity, other-wrong = skip (white space), dose-dep = hatched
     alpha_map = {
         "correct": 0.9,
         "precise_wrong": 0.35,
-        "dose_dependent": 0.7,
+        "dose_dep_neg": 0.7,
+        "dose_dep_pos": 0.35,
     }
     skip_cats = {"other_wrong"}
 
@@ -424,14 +398,26 @@ def error_profile_bars(
                 left = right
                 continue
 
-            if cat == "dose_dependent":
-                # Stack dose-dependent at the RIGHT end (1 - w .. 1)
-                dd_left = 1.0 - w
+            if cat in ("dose_dep_neg", "dose_dep_pos"):
+                # Stack dose-correlated at the RIGHT end
+                # Negative slope first from right, positive next
+                dd_neg_w = row["dose_dep_neg"]
+                dd_pos_w = row["dose_dep_pos"]
+                if cat == "dose_dep_neg":
+                    dd_right = 1.0
+                    dd_left = 1.0 - dd_neg_w
+                else:
+                    dd_right = 1.0 - dd_neg_w
+                    dd_left = dd_right - dd_pos_w
+                if dd_left >= dd_right - 0.001:
+                    left = right
+                    continue
+                hatch = "/" if cat == "dose_dep_neg" else "\\"
                 p.hbar(
-                    y=[cn], left=[dd_left], right=[1.0], height=bar_h,
+                    y=[cn], left=[dd_left], right=[dd_right], height=bar_h,
                     fill_color=color, fill_alpha=alpha_map[cat],
                     line_color=color, line_alpha=0.6,
-                    hatch_pattern="/", hatch_color="white",
+                    hatch_pattern=hatch, hatch_color="white",
                     hatch_alpha=0.7, hatch_scale=8, hatch_weight=1.5,
                 )
             else:
@@ -452,14 +438,14 @@ def error_profile_bars(
     legend_items = []
     dummy_src = ColumnDataSource(dict(x=[-10], y=[-10]))
     legend_cats = [
-        ("correct", "Correct", 0.9, False),
-        ("precise_wrong", "Precise but wrong", 0.35, False),
-        ("other_wrong", "Imprecise & wrong (white space)", 0.0, False),
-        ("dose_dependent", "Dose-dependent", 0.7, True),
+        ("correct", "Correct", 0.9, None),
+        ("precise_wrong", "Precise but wrong", 0.35, None),
+        ("other_wrong", "Imprecise & wrong (white space)", 0.0, None),
+        ("dose_dep_neg", "Dose-correlated (neg. slope)", 0.7, "/"),
+        ("dose_dep_pos", "Dose-correlated (pos. slope)", 0.35, "\\"),
     ]
-    for cat, label, alpha, hatched in legend_cats:
+    for cat, label, alpha, hatch in legend_cats:
         if cat == "other_wrong":
-            # White space legend swatch — just a white box with border
             kw = dict(
                 x="x", y="y", width=0.001, height=0.001,
                 fill_color="white", fill_alpha=1.0,
@@ -471,12 +457,121 @@ def error_profile_bars(
                 fill_color="#666666", fill_alpha=alpha,
                 line_color="#666666", line_alpha=0.3,
             )
-            if hatched:
-                kw["hatch_pattern"] = "/"
+            if hatch:
+                kw["hatch_pattern"] = hatch
                 kw["hatch_color"] = "white"
                 kw["hatch_alpha"] = 0.7
                 kw["hatch_scale"] = 8
                 kw["hatch_weight"] = 1.5
+        r = p.rect(source=dummy_src, **kw)
+        legend_items.append(LegendItem(label=label, renderers=[r]))
+
+    legend = Legend(items=legend_items, location="bottom_center",
+                    orientation="horizontal", label_text_font_size="8pt")
+    p.add_layout(legend, "below")
+
+    p.title.text_font_size = "11pt"
+    p.xgrid.visible = False
+    p.ygrid.visible = False
+
+    return p
+
+
+def vignette_performance_profile(
+    model_csv: str,
+    cv_col: str = "observed_dose_cv",
+    ratio_num_col: str = "observed_dose_mean",
+    ratio_den_col: str = "expected_to_dose",
+    naive_filter: Optional[dict] = None,
+    width: int = 800,
+    height: int = 380,
+    title: str = "Performance Profile by Model — Vignettes",
+    profile_csv: str | None = None,
+):
+    """
+    Stacked horizontal bar chart classifying each model's scenario-level
+    vignette results into three categories:
+
+      1. Correct   — tight accuracy (ratio within 0.85–1.15)
+      2. Precise but incorrect — CV=0 but NOT tight accuracy
+      3. Imprecise — everything else (CV > 0 and not tight)
+
+    Reads pre-computed proportions from ``profile_csv`` (produced by
+    ``analysis.performance_profile.compute_vignette_profile``).
+    Falls back to inline computation if CSV is not provided.
+    """
+    # Read pre-computed profile or compute on the fly
+    if profile_csv and os.path.exists(profile_csv):
+        pf = pd.read_csv(profile_csv)
+        pf = pf[pf["model"].isin(_CONSISTENT_SET)]
+    else:
+        from analysis.performance_profile import compute_vignette_profile
+        pf = compute_vignette_profile(
+            model_csv, cv_col=cv_col, ratio_num_col=ratio_num_col,
+            ratio_den_col=ratio_den_col, naive_filter=naive_filter,
+        )
+
+    ranked = get_ranked_model_order()
+    models = [m for m in ranked if m in pf["model"].unique()]
+    if not models:
+        models = sorted(pf["model"].unique())
+
+    cat_order = ["correct", "precise_wrong", "imprecise"]
+
+    y_labels = [_clean(m) for m in models]
+    p = figure(
+        width=width, height=height,
+        y_range=list(reversed(y_labels)),
+        x_range=(0, 1),
+        toolbar_location=None,
+        title=title,
+    )
+
+    bar_h = 0.65
+    alpha_map = {
+        "correct": 0.9,
+        "precise_wrong": 0.45,
+        "imprecise": 0.15,
+    }
+
+    for i, m in enumerate(models):
+        cn = _clean(m)
+        color = MODEL_COLOR_DICT.get(m, "#888888")
+        row = pf[pf["model"] == m].iloc[0]
+
+        left = 0.0
+        for cat in cat_order:
+            w = row[cat]
+            if w < 0.001:
+                left += w
+                continue
+            right = left + w
+            p.hbar(
+                y=[cn], left=[left], right=[right], height=bar_h,
+                fill_color=color, fill_alpha=alpha_map[cat],
+                line_color=color, line_alpha=0.3,
+            )
+            left = right
+
+    from bokeh.models import NumeralTickFormatter
+    p.xaxis.axis_label = "Proportion of vignette scenarios"
+    p.xaxis.formatter = NumeralTickFormatter(format="0%")
+    p.yaxis.axis_label = None
+
+    # Legend
+    legend_items = []
+    dummy_src = ColumnDataSource(dict(x=[-10], y=[-10]))
+    legend_descs = [
+        ("correct", "Correct (tight accuracy)", 0.9),
+        ("precise_wrong", "Precise but incorrect (CV=0, outside tight)", 0.45),
+        ("imprecise", "Imprecise (CV>0, not tight)", 0.15),
+    ]
+    for cat, label, alpha in legend_descs:
+        kw = dict(
+            x="x", y="y", width=0.001, height=0.001,
+            fill_color="#666666", fill_alpha=alpha,
+            line_color="#666666", line_alpha=0.3,
+        )
         r = p.rect(source=dummy_src, **kw)
         legend_items.append(LegendItem(label=label, renderers=[r]))
 
@@ -701,19 +796,27 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
 
             pval = model_pvals.get(m, np.nan)
             if np.isnan(pval):
-                p_str = "χ²: N/A"
+                star = " χ² NA"
             elif pval < 0.001:
-                p_str = f"χ² p<.001"
+                star = " χ² ***"
+            elif pval < 0.01:
+                star = " χ² **"
             elif pval < 0.05:
-                p_str = f"χ² p={pval:.3f}"
+                star = " χ² *"
             else:
-                p_str = f"χ² p={pval:.2f}"
+                star = " χ² ns"
+
+            # Shorten long model names for grid cells
+            import re as _re
+            short = _re.sub(r'[:]\d+$', '', cn)
+            short = _re.sub(r'-\d{2}-\d{4}$', '', short)
+            short = _re.sub(r'-\d{4}$', '', short)
 
             p = figure(
                 width=cell_w, height=cell_h,
                 x_range=cv_bin_labels, y_range=list(reversed(acc_labels)),
                 toolbar_location=None,
-                title=f"{cn}  ({p_str})",
+                title=f"{short}{star}",
             )
             src = ColumnDataSource(dict(
                 x=xs, y=ys, size=sizes, alpha=alphas, pct=pcts,
@@ -724,7 +827,7 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
                 ("CV Bin", "@x"), ("Accuracy", "@y"), ("Proportion", "@pct"),
             ]))
 
-            p.title.text_font_size = "7pt"
+            p.title.text_font_size = "6pt"
             p.xaxis.major_label_text_font_size = "6pt"
             p.yaxis.major_label_text_font_size = "6pt"
             p.xaxis.axis_label = None
@@ -825,8 +928,11 @@ def cv_strip_chart(
                 p_val = row.get(slope_p_col, None)
                 if (slope_val is not None and p_val is not None
                         and not np.isnan(slope_val) and not np.isnan(p_val)
-                        and slope_val < 0 and p_val < slope_alpha):
-                    outlines.append("black")
+                        and p_val < slope_alpha):
+                    if slope_val < 0:
+                        outlines.append("black")
+                    else:
+                        outlines.append("grey")
                 else:
                     outlines.append(None)
             else:
@@ -855,16 +961,28 @@ def cv_strip_chart(
         r1 = p.scatter("x", "y", color="color", alpha=0.6, size=7, source=src_no)
 
     # Dots with black outline (significant negative slope)
-    idx_out = [i for i, o in enumerate(outlines) if o is not None]
-    if idx_out:
-        src_out = ColumnDataSource(dict(
-            x=[xs[i] for i in idx_out],
-            y=[ys[i] for i in idx_out],
-            color=[colors[i] for i in idx_out],
-            pair=[pair_labels[i] for i in idx_out],
+    idx_neg = [i for i, o in enumerate(outlines) if o == "black"]
+    if idx_neg:
+        src_neg = ColumnDataSource(dict(
+            x=[xs[i] for i in idx_neg],
+            y=[ys[i] for i in idx_neg],
+            color=[colors[i] for i in idx_neg],
+            pair=[pair_labels[i] for i in idx_neg],
         ))
         r2 = p.scatter("x", "y", color="color", alpha=0.8, size=8,
-                        line_color="black", line_width=1.5, source=src_out)
+                        line_color="black", line_width=1.5, source=src_neg)
+
+    # Dots with grey outline (significant positive slope)
+    idx_pos = [i for i, o in enumerate(outlines) if o == "grey"]
+    if idx_pos:
+        src_pos = ColumnDataSource(dict(
+            x=[xs[i] for i in idx_pos],
+            y=[ys[i] for i in idx_pos],
+            color=[colors[i] for i in idx_pos],
+            pair=[pair_labels[i] for i in idx_pos],
+        ))
+        r3 = p.scatter("x", "y", color="color", alpha=0.8, size=8,
+                        line_color="#888888", line_width=1.5, source=src_pos)
 
     p.add_tools(HoverTool(tooltips=[("Pair", "@pair"), ("CV", "@x{0.00}")]))
 
@@ -885,14 +1003,20 @@ def cv_strip_chart(
             first_median = False
         p.scatter(**kwargs)
 
-    if idx_out:
+    # Update axis label to reflect slope highlighting
+    slope_parts = []
+    if idx_neg:
+        slope_parts.append(f"black outline = sig. negative slope")
+    if idx_pos:
+        slope_parts.append(f"grey outline = sig. positive slope")
+    if slope_parts:
         p.below[0].axis_label = (
             f"Coefficient of Variation    "
-            f"(black outline = sig. negative slope, p<{slope_alpha})"
+            f"({', '.join(slope_parts)}, p<{slope_alpha})"
         )
 
     p.legend.label_text_font_size = "8pt"
-    p.legend.location = "bottom_right"
+    p.add_layout(p.legend[0], "right")
 
     return p
 
@@ -946,7 +1070,7 @@ def nielsen_effect_bars(
     p = figure(
         width=width, height=height,
         x_range=FactorRange(*x_factors),
-        y_range=(0, 1.08),
+        y_range=(0, 1.18),
         toolbar_location=None,
         title=title,
     )
@@ -1504,19 +1628,79 @@ class ComprehensiveFigureBuilder:
 
     def build_cv_strip_vignettes(self):
         """CV strip chart + ratio scatter — vignettes (naive)."""
+        csv = self._p("reworded_vignettes_model_analysis.csv")
+        naive_filter = {"include_nielsen": False, "explain_units": False,
+                        "has_vignette_text": True}
+
+        # Ensure chi2 CSV exists
+        chi2_csv = self._p("cv_accuracy_chi2.csv")
+        if not os.path.exists(chi2_csv):
+            from analysis.variance_icc_stats import compute_cv_accuracy_chi2
+            compute_cv_accuracy_chi2(
+                csv,
+                cv_col="observed_dose_cv",
+                tight_col="tight(0.85,1.15)",
+                broad_col="broad(0.6,1.7)",
+                cv_bins=[0, 1e-9, 0.2, float("inf")],
+                cv_bin_labels=["CV=0", "0<CV≤0.2", "CV>0.2"],
+                output_csv=chi2_csv,
+                naive_filter=naive_filter,
+            )
+
         return cv_strip_with_ratio(
-            model_csv=self._p("reworded_vignettes_model_analysis.csv"),
+            model_csv=csv,
             cv_col="observed_dose_cv",
             ratio_num_col="observed_dose_mean",
             ratio_den_col="expected_to_dose",
             pair_col="scenario_key",
-            naive_filter={"include_nielsen": False, "explain_units": False,
-                          "has_vignette_text": True},
+            naive_filter=naive_filter,
             title="Naive CV by Model — Vignettes",
+            cv_bins=[0, 1e-9, 0.2, float("inf")],
+            cv_bin_labels=["CV=0", "0<CV≤0.2", "CV>0.2"],
+            chi2_csv=chi2_csv,
+        )
+
+    def build_vignette_performance_profile(self):
+        """Performance profile + accuracy mosaic — vignettes (naive)."""
+        csv = self._p("reworded_vignettes_model_analysis.csv")
+        naive_filter = {"include_nielsen": False, "explain_units": False,
+                        "has_vignette_text": True}
+
+        # Ensure profile CSV exists
+        profile_csv = self._p("performance_profile_vignettes.csv")
+        if not os.path.exists(profile_csv):
+            from analysis.performance_profile import compute_vignette_profile
+            compute_vignette_profile(csv, output_csv=profile_csv,
+                                    naive_filter=naive_filter)
+
+        profile = vignette_performance_profile(
+            model_csv=csv,
+            cv_col="observed_dose_cv",
+            ratio_num_col="observed_dose_mean",
+            ratio_den_col="expected_to_dose",
+            naive_filter=naive_filter,
+            title="Performance Profile by Model — Vignettes",
+            profile_csv=profile_csv,
+        )
+
+        # Re-load data for mosaic
+        df = pd.read_csv(csv)
+        for col, val in naive_filter.items():
+            if col in df.columns:
+                df = df[df[col] == val]
+        df = df[df["model"].isin(_CONSISTENT_SET)]
+
+        mosaic = _cv_accuracy_mosaic(
+            df, cv_col="observed_dose_cv",
+            tight_col="tight(0.85,1.15)",
+            broad_col="broad(0.6,1.7)",
+            width=800, height=500,
             cv_bins=[0, 1e-9, 0.2, float("inf")],
             cv_bin_labels=["CV=0", "0<CV≤0.2", "CV>0.2"],
             chi2_csv=self._p("cv_accuracy_chi2.csv"),
         )
+
+        return column(profile, mosaic)
 
     def build_cv_strip_random_doses(self):
         """CV strip chart + ratio scatter + error profile — random doses (naive)."""
@@ -1587,11 +1771,18 @@ class ComprehensiveFigureBuilder:
         mid.yaxis.axis_label = "Mean Observed / Expected"
 
         # Bottom: error profile stacked bars
+        profile_csv = self._p("performance_profile_random_doses.csv")
+        if not os.path.exists(profile_csv):
+            from analysis.performance_profile import compute_random_dose_profile
+            compute_random_dose_profile(csv, output_csv=profile_csv,
+                                        naive_filter=naive_filter)
+
         bot = error_profile_bars(
             model_csv=csv,
             naive_filter=naive_filter,
             width=800, height=380,
-            title="Error Profile by Model — Random Doses",
+            title="Performance Profile by Model — Random Doses",
+            profile_csv=profile_csv,
         )
 
         return column(top, mid, bot)
@@ -1867,6 +2058,14 @@ class ComprehensiveFigureBuilder:
          " are CV bins and rows are accuracy categories; circle size is"
          " proportional to the share of observations in each cell."),
 
+        ("vignette_performance_profile", "build_vignette_performance_profile",
+         "Most errors are precise: same wrong answer every time",
+         "Two-panel figure. Top: performance profile classifying each"
+         " model's vignette results into Correct (tight accuracy),"
+         " Precise but Incorrect (CV=0 but outside tight range), and"
+         " Imprecise (CV>0 and not tight). Bottom: per-model accuracy"
+         " distribution by CV bin (circle-area grid, χ² p-values)."),
+
         ("variance_stacked", "build_variance_stacked",
          "Most response variance comes from prompt wording, not stochastic noise",
          "Stacked horizontal bar chart decomposing mean log-ratio variance"
@@ -1887,9 +2086,9 @@ class ComprehensiveFigureBuilder:
         ("icc_bubble_grid", "build_icc_bubble_grid",
          "Scenario-level decomposition: wording vs stochastic variance",
          "Concentric-circle grid (model × scenario), sorted by vignette"
-         " accuracy (best at top). Outer circle (opaque) = total log-ratio"
-         " variance; inner circle (lighter) = between-vignette (wording)"
-         " variance. Where the inner nearly fills the outer, most variance"
+         " accuracy (best at top). Outer circle (faint) = total log-ratio"
+         " variance; inner circle (bold) = between-vignette (wording)"
+         " variance. Where the inner is prominent, most variance"
          " comes from wording differences (high ICC). Annotations show X/6"
          " significant pairwise vignette comparisons (Bonferroni-corrected"
          " Mann–Whitney U)."),
@@ -1917,10 +2116,11 @@ class ComprehensiveFigureBuilder:
          "Precision replicates; dose-dependent bias emerges",
          "Three-panel figure (random doses). Top: strip chart of per-pair"
          " CV under naive conditions; black-outlined dots flag opioid"
-         " pairs with a statistically significant negative regression slope"
-         " of the conversion coefficient against dose (p < 0.05). Middle:"
+         " pairs with a statistically significant negative regression slope,"
+         " grey-outlined dots flag significant positive slope"
+         " (p < 0.05). Middle:"
          " scatter of CV vs mean observed/expected coefficient ratio on"
-         " a log scale. Bottom: per-model accuracy × CV grid."),
+         " a log scale. Bottom: performance profile stacked bars."),
 
         ("cross_experiment_bars", "build_cross_experiment",
          "Performance structure is consistent across prompt formats",
