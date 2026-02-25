@@ -2037,7 +2037,7 @@ class ComprehensiveFigureBuilder:
     # ── save all ─────────────────────────────────────────────────
 
     FIGURE_METADATA = [
-        # ── Act I: Vignettes — The Clinical Hook ─────────────────
+        # ── Clinical Vignettes ───────────────────────────────
 
         ("naive_vignette_bars", "build_naive_vignette_bars",
          "LLMs are dangerously inaccurate at opioid dose conversion",
@@ -2103,11 +2103,11 @@ class ComprehensiveFigureBuilder:
          " near-zero W indicates that wording strongly affects output, but"
          " each model is sensitive to different aspects of the phrasing."),
 
-        # ── Act II: Random Doses — Controlled Follow-up ─────────
+        # ── Random Doses ────────────────────────────────────
 
         ("naive_random_dose_bars", "build_naive_random_dose_bars",
          "The same accuracy pattern holds on controlled random-dose prompts",
-         "Horizontal bar chart of model accuracy on 66 random-dose opioid"
+         "Horizontal bar chart of model accuracy on 49 random-dose opioid"
          " pair conversions without reference information. The model ranking"
          " mirrors the vignette results. Significance brackets compare"
          " adjacent-ranked models using Cochran–Mantel–Haenszel tests."),
@@ -2132,7 +2132,7 @@ class ComprehensiveFigureBuilder:
          " model show paired Wilcoxon signed-rank tests on broad-range"
          " accuracy: RD vs empty, empty vs text, and RD vs text."),
 
-        # ── Act III: Can We Fix It? ─────────────────────────────
+        # ── Reference & Unit Augmentation ───────────────────
 
         ("nielsen_effect_combined", "build_nielsen_effect_combined",
          "Adding a reference table improves accuracy on both task formats",

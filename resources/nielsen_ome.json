@@ -6,7 +6,7 @@
         "unit": "mg/day",
         "LQ": 0.1,
         "UQ": 0.2,
-        "priority": 2
+        "priority": 3
     },
     "oral_dextropropoxyphene": {
         "administration_method": "oral",
@@ -69,7 +69,7 @@
         "unit": "mg/day",
         "LQ": null,
         "UQ": null,
-        "priority": 2
+        "priority": 3
     },
     "oral_morphine": {
         "administration_method": "oral",
@@ -96,7 +96,7 @@
         "unit": "mg/day",
         "LQ": null,
         "UQ": null,
-        "priority": 2
+        "priority": 3
     },
     "oral_pentazocine": {
         "administration_method": "oral",
@@ -114,7 +114,7 @@
         "unit": "mg/day",
         "LQ": 0.4,
         "UQ": 0.4,
-        "priority": 2
+        "priority": 3
     },
     "oral_tramadol": {
         "administration_method": "oral",
@@ -132,7 +132,7 @@
         "unit": "mg/day",
         "LQ": 37.5,
         "UQ": 43.8,
-        "priority": 2
+        "priority": 3
     },
     "sublingual_fentanyl": {
         "administration_method": "sublingual",
@@ -159,7 +159,7 @@
         "unit": "mcg/hr",
         "LQ": 1.9,
         "UQ": 2.4,
-        "priority": null
+        "priority": 4
     },
     "transdermal_fentanyl": {
         "administration_method": "transdermal",
@@ -168,7 +168,7 @@
         "unit": "mcg/hr",
         "LQ": 2.4,
         "UQ": 3.2,
-        "priority": 2
+        "priority": 3
     },
     "sc_codeine": {
         "administration_method": "sc",
@@ -195,7 +195,7 @@
         "unit": "mg/day",
         "LQ": 75,
         "UQ": 90.6,
-        "priority": null
+        "priority": 4
     },
     "iv_buprenorphine": {
         "administration_method": "iv",
@@ -204,7 +204,7 @@
         "unit": "mg/day",
         "LQ": 75,
         "UQ": 90.6,
-        "priority": null
+        "priority": 4
     },
     "parenteral_butorphanol": {
         "administration_method": "parenteral",
@@ -249,7 +249,7 @@
         "unit": "mcg/day",
         "LQ": 0.2,
         "UQ": 0.3,
-        "priority": 2
+        "priority": 3
     },
     "im_fentanyl": {
         "administration_method": "im",
@@ -267,7 +267,7 @@
         "unit": "mcg/day",
         "LQ": 0.2,
         "UQ": 0.3,
-        "priority": 2
+        "priority": 3
     },
     "parenteral_levorphanol": {
         "administration_method": "parenteral",
@@ -312,7 +312,7 @@
         "unit": "mg/day",
         "LQ": null,
         "UQ": null,
-        "priority": null
+        "priority": 4
     },
     "parenteral_nalbuphine": {
         "administration_method": "parenteral",
@@ -321,7 +321,7 @@
         "unit": "mg/day",
         "LQ": 3.0,
         "UQ": 3.0,
-        "priority": null
+        "priority": 4
     },
     "sc_oxycodone": {
         "administration_method": "sc",
