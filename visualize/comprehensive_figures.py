@@ -1599,7 +1599,7 @@ class ComprehensiveFigureBuilder:
     performance-based sorting.
     """
 
-    def __init__(self, results_dir: str = "results", figures_dir: str = "figures"):
+    def __init__(self, results_dir: str = "results", figures_dir: str = "summary_w_figures"):
         self.results_dir = results_dir
         self.figures_dir = figures_dir
         os.makedirs(figures_dir, exist_ok=True)
@@ -2041,12 +2041,12 @@ class ComprehensiveFigureBuilder:
 
         ("naive_vignette_bars", "build_naive_vignette_bars",
          "LLMs are dangerously inaccurate at opioid dose conversion",
-         "Horizontal bar chart of each model's accuracy on 20 realistic"
+         "Horizontal bar chart of each model's accuracy on {n_vignette_scenarios} realistic"
          " vignette-based opioid conversion prompts without any reference"
-         " information. Dark bars show tight-range (0.85–1.15×) accuracy;"
-         " translucent extensions show broad-range (0.6–1.7×) accuracy."
+         " information. Dark bars show tight-range ({tight_lower_x}\u2013{tight_upper_x}\u00d7) accuracy;"
+         " translucent extensions show broad-range ({broad_lower_x}\u2013{broad_upper_x}\u00d7) accuracy."
          " Models are sorted by global rank. Significance brackets compare"
-         " adjacent-ranked models with Cochran–Mantel–Haenszel tests."),
+         " adjacent-ranked models with Cochran\u2013Mantel\u2013Haenszel tests."),
 
         ("cv_strip_vignettes", "build_cv_strip_vignettes",
          "Models are precise: they give the same wrong answer consistently",
@@ -2073,12 +2073,12 @@ class ComprehensiveFigureBuilder:
          " (wording effect, light) components per model, sorted by vignette"
          " accuracy (best at top). Annotations show each model's mean tight"
          " accuracy. Below: scatter of total variance vs ICC across all"
-         " 260 model × scenario cells."),
+         " {n_model_scenario_cells} model \u00d7 scenario cells."),
 
         ("spearman_variance_icc", "build_spearman_variance_icc",
          "Wording-driven variance tracks ICC across most models",
          "Horizontal bar chart of per-model Spearman ρ between scenario"
-         " log-ratio variance and ICC (n = 20 scenarios per model), sorted"
+         " log-ratio variance and ICC (n = {n_scenarios_per_model} scenarios per model), sorted"
          " by vignette accuracy. Positive ρ means scenarios with more total"
          " variance have a larger share attributable to wording. Significance"
          " annotations and a sign-test summary are included."),
@@ -2089,9 +2089,10 @@ class ComprehensiveFigureBuilder:
          " accuracy (best at top). Outer circle (faint) = total log-ratio"
          " variance; inner circle (bold) = between-vignette (wording)"
          " variance. Where the inner is prominent, most variance"
-         " comes from wording differences (high ICC). Annotations show X/6"
-         " significant pairwise vignette comparisons (Bonferroni-corrected"
-         " Mann–Whitney U)."),
+         " comes from wording differences (high ICC). Annotations show the count"
+         " of significant pairwise vignette comparisons out of {icc_max_pairs}"
+         " per cell (Bonferroni-corrected Mann–Whitney U; overall"
+         " {icc_total_sig_pairs}/{icc_total_pairs} comparisons significant)."),
 
         ("kendall_w_summary", "build_kendall_w_summary",
          "Wording effect sizes and directions are model-specific",
@@ -2107,7 +2108,7 @@ class ComprehensiveFigureBuilder:
 
         ("naive_random_dose_bars", "build_naive_random_dose_bars",
          "The same accuracy pattern holds on controlled random-dose prompts",
-         "Horizontal bar chart of model accuracy on 49 random-dose opioid"
+         "Horizontal bar chart of model accuracy on {n_opioid_pairs} random-dose opioid"
          " pair conversions without reference information. The model ranking"
          " mirrors the vignette results. Significance brackets compare"
          " adjacent-ranked models using Cochran–Mantel–Haenszel tests."),
@@ -2127,7 +2128,7 @@ class ComprehensiveFigureBuilder:
          "Grouped bar chart comparing each model's tight- and broad-range"
          " accuracy across three experimental paradigms — random-dose pair"
          " conversions, empty vignettes, and text-based vignettes — restricted"
-         " to the 11 opioid pairs present in both experiments. All conditions"
+         " to the {n_matched_pairs} opioid pairs present in both experiments. All conditions"
          " are naive (no reference data). Three significance brackets per"
          " model show paired Wilcoxon signed-rank tests on broad-range"
          " accuracy: RD vs empty, empty vs text, and RD vs text."),
@@ -2197,10 +2198,35 @@ class ComprehensiveFigureBuilder:
                 print(f"✗ {name}: {e}")
                 import traceback; traceback.print_exc()
 
+    def _load_figure_stats(self) -> dict:
+        """
+        Load figure_stats.json from the figures directory.
+        Returns an empty dict (with safe fallback values) if the file is
+        missing so that str.format() calls still succeed.
+        """
+        import json as _json
+        stats_path = os.path.join(self.figures_dir, "figure_stats.json")
+        if os.path.exists(stats_path):
+            with open(stats_path) as f:
+                return _json.load(f)
+        print(f"  [warn] {stats_path} not found — description placeholders will show as '?'")
+        # Provide safe defaults so format() never raises KeyError
+        return {
+            "n_vignette_scenarios": "?", "n_opioid_pairs": "?",
+            "n_matched_pairs": "?", "n_model_scenario_cells": "?",
+            "n_scenarios_per_model": "?", "icc_max_pairs": "?",
+            "icc_total_sig_pairs": "?", "icc_total_pairs": "?",
+            "tight_lower_x": "0.85", "tight_upper_x": "1.15",
+            "broad_lower_x": "0.6", "broad_upper_x": "1.7",
+        }
+
     async def save_annotated_pdf(self, output_path: str = None):
         """
         Generate a single combined PDF with all figures, each preceded
         by a title and descriptive paragraph.
+
+        Description text is formatted against figure_stats.json so that all
+        numeric annotations are data-driven rather than hardcoded.
         """
         if output_path is None:
             output_path = self._f("all_comprehensive_figures.pdf")
@@ -2229,12 +2255,20 @@ class ComprehensiveFigureBuilder:
         margin = 0.75 * inch
         usable_w = page_w - 2 * margin
 
+        stats = self._load_figure_stats()
+
         story = []
         for name, method_name, title, desc in self.FIGURE_METADATA:
             png_path = self._f(f"{name}.png")
             if not os.path.exists(png_path):
                 print(f"  Skipping {name} — PNG not found")
                 continue
+
+            # Fill any {placeholder} fields from figure_stats.json
+            try:
+                desc = desc.format(**stats)
+            except KeyError as e:
+                print(f"  [warn] {name}: missing stats key {e} — leaving placeholder")
 
             # Resize image to fit page width while keeping aspect ratio
             pil = PILImage.open(png_path)

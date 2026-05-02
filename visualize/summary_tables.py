@@ -7,8 +7,8 @@ Usage
     from visualize.summary_tables import SummaryTablesBuilder
     builder = SummaryTablesBuilder()
     await builder.save(
-        "figures/accuracy_summary_tables.html",
-        "figures/accuracy_summary_tables.pdf",
+        "summary_w_figures/accuracy_summary_tables.html",
+        "summary_w_figures/accuracy_summary_tables.pdf",
     )
 """
 

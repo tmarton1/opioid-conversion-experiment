@@ -1,0 +1,1499 @@
+experiment_id,datetime,from_opioid,from_opioid_unit,to_opioid,to_opioid_unit,from_dose,expected_to_dose,model,prompt,include_nielsen,include_examples,ask_for_units,explain_units,observed_to_dose,ratio_observed_expected,response,status,error_type,error_message
+33,2026-02-26T19:00:55.831489,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.16141492325978749,2.0176865407473437,google/gemini-2.5-pro,"Convert 0.16 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.16 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.0,0.9912342475453136,"```json
+{
+    ""calculated dose"": 2.0,
+    """,success,,
+33,2026-02-26T19:01:02.991256,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.27325118284359723,3.415639785544965,google/gemini-2.5-pro,"Convert 0.27 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.27 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.375,0.9881018526259844,"```json
+{
+    ""calculated dose"": 3.375,",success,,
+33,2026-02-26T19:01:09.391390,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.15582876937110743,1.9478596171388427,google/gemini-2.5-pro,"Convert 0.16 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.16 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.0,1.0267680393404042,"```json
+{
+    ""calculated dose"": 2.0,
+    ""units",success,,
+33,2026-02-26T19:01:16.969617,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.40311242117482704,5.038905264685338,google/gemini-2.5-pro,"Convert 0.40 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.40 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,5.0,0.9922790243829346,"```json
+{
+    ""calculated dose"": 5.0,
+    ""units"":",success,,
+33,2026-02-26T19:01:23.026697,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.2615026497256806,3.268783121571008,google/gemini-2.5-pro,"Convert 0.26 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.26 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.25,0.9942537877636921,"```json
+{'calculated dose': 3.25, 'units': 'mg/4",success,,
+33,2026-02-26T19:01:33.281353,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.5047791228608155,6.309739035760194,google/gemini-2.5-pro,"Convert 0.50 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.50 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,6.25,0.9905322493653659,"```json
+{
+    ""calculated dose"": 6.25,",success,,
+33,2026-02-26T19:01:43.910594,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.21089996881786457,2.6362496102233073,google/gemini-2.5-pro,"Convert 0.21 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.21 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.625,0.9957327219017191,"```json
+{
+    ""calculated dose"": 2.625,",success,,
+33,2026-02-26T19:01:49.759977,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.9268350234737278,11.585437793421598,google/gemini-2.5-pro,"Convert 0.93 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.93 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,11.625,1.0034148218896715,"```json
+{
+    ""calculated dose"": 11.625,",success,,
+33,2026-02-26T19:01:56.286340,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.6738896495280529,8.42362061910066,google/gemini-2.5-pro,"Convert 0.67 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.67 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,8.375,0.994228061625851,"```json
+{
+    ""calculated dose"": 8.375,",success,,
+33,2026-02-26T19:02:06.485470,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.22445294323688159,2.80566179046102,google/gemini-2.5-pro,"Convert 0.22 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.22 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.75,0.9801609051204017,"```json
+{
+    ""calculated dose"": 2.75,
+    """,success,,
+33,2026-02-26T19:02:12.296583,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.34451444222907135,4.306430527863392,google/gemini-2.5-pro,"Convert 0.34 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.34 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,4.25,0.9868962177612581,"```json
+{
+    ""calculated dose"": 4.25,",success,,
+33,2026-02-26T19:02:18.306395,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.1552092638495876,1.9401157981198451,google/gemini-2.5-pro,"Convert 0.16 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.16 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.0,1.0308663028970684,"```json
+{
+    ""calculated dose"": 2.0,
+    ""units"":",success,,
+33,2026-02-26T19:02:24.766116,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.2875473617265939,3.594342021582424,google/gemini-2.5-pro,"Convert 0.29 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.29 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:02:35.485326,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.9617942849947239,12.02242856243405,google/gemini-2.5-pro,"Convert 0.96 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.96 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:02:45.668219,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.24603992063491362,3.07549900793642,google/gemini-2.5-pro,"Convert 0.25 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.25 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.125,1.0160952716732605,"```json
+{
+  ""calculated dose"": 3.125",success,,
+33,2026-02-26T19:02:53.068964,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.39850915554015504,4.9813644442519385,google/gemini-2.5-pro,"Convert 0.40 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.40 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:03:03.285747,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.8886664587617654,11.108330734522069,google/gemini-2.5-pro,"Convert 0.89 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.89 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,11.125,1.001500609396345,"```json
+{
+    ""calculated dose"": 11.125,",success,,
+33,2026-02-26T19:03:09.431411,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.13874810062124912,1.7343512577656142,google/gemini-2.5-pro,"Convert 0.14 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.14 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,1.75,1.0090228217405892,"```json
+{
+    ""calculated dose"": 1.75,
+    """,success,,
+33,2026-02-26T19:03:15.280890,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.0305716707870776,12.88214588483847,google/gemini-2.5-pro,"Convert 1.03 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.03 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:03:26.263558,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.1415693428571037,14.269616785713795,google/gemini-2.5-pro,"Convert 1.14 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.14 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:03:37.672147,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.6560603727491563,8.200754659364454,google/gemini-2.5-pro,"Convert 0.66 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.66 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:03:47.628954,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.4131883367294934,5.164854209118667,google/gemini-2.5-pro,"Convert 0.41 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.41 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,5.125,0.9922835751978626,"```json
+{
+    ""calculated dose"": 5.125,
+    """,success,,
+33,2026-02-26T19:03:55.585685,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.24284461045277903,3.035557630659738,google/gemini-2.5-pro,"Convert 0.24 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.24 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:04:03.971223,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.438194956574726,17.977436957184075,google/gemini-2.5-pro,"Convert 1.44 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.44 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:04:12.706505,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.2643825157999558,3.3047814474994475,google/gemini-2.5-pro,"Convert 0.26 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.26 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.25,0.9834235793290059,"```json
+{
+    ""calculated dose"": 3.25,
+    """,success,,
+33,2026-02-26T19:04:18.239098,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.14560822800315246,1.8201028500394056,google/gemini-2.5-pro,"Convert 0.15 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.15 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,1.875,1.0301615647486106,"```json
+{
+    ""calculated dose"": 1.875,
+    """,success,,
+33,2026-02-26T19:04:24.351198,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.2365175222542009,15.45646902817751,google/gemini-2.5-pro,"Convert 1.24 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.24 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:04:35.907943,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.6045144738589153,7.556430923236442,google/gemini-2.5-pro,"Convert 0.60 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.60 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,7.5,0.9925320665523569,"```json
+{
+  ""calculated dose"": 7.5,",success,,
+33,2026-02-26T19:04:42.399758,im_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.46114605328751757,5.76432566609397,google/gemini-2.5-pro,"Convert 0.46 mg/day of buprenorphine (im) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.46 mg/day of buprenorphine (im)?
+
+75 OME: 1 mg/day of buprenorphine (im) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:04:52.254591,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.3766555758286771,17.208194697858463,google/gemini-2.5-pro,"Convert 1.38 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.38 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:05:00.993257,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.2855359695096274,3.5691996188703423,google/gemini-2.5-pro,"Convert 0.29 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.29 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,"I've completed the calculation and am now ready to generate the final response.
+I'",error,ValueError,"Could not extract numeric value from response: I've completed the calculation and am now ready to generate the final response.
+I'"
+33,2026-02-26T19:05:08.233067,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.15334579897245157,1.9168224871556445,google/gemini-2.5-pro,"Convert 0.15 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.15 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:05:18.355396,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.5482561109751931,19.353201387189916,google/gemini-2.5-pro,"Convert 1.55 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.55 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,19.375,1.0011263569460147,"```json
+{
+    ""calculated dose"": 19.375,",success,,
+33,2026-02-26T19:05:24.672540,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.15980725368890059,1.9975906711112572,google/gemini-2.5-pro,"Convert 0.16 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.16 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.0,1.0012061174111324,"```json
+{
+    ""calculated dose"": 2.0,
+    ""units",success,,
+33,2026-02-26T19:05:30.616300,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.2471306470779535,15.58913308847442,google/gemini-2.5-pro,"Convert 1.25 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.25 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,15.625,1.0023007637000738,"```json
+{
+    ""calculated dose"": 15.625",success,,
+33,2026-02-26T19:05:38.140969,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.23527784535795193,2.940973066974399,google/gemini-2.5-pro,"Convert 0.24 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.24 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.0,1.0200705452519925,"```json
+{
+    ""calculated dose"": 3.0,
+    ""units",success,,
+33,2026-02-26T19:05:44.684734,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.21160505981905114,2.6450632477381393,google/gemini-2.5-pro,"Convert 0.21 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.21 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.625,0.9924148325166531,"```json
+{
+    ""calculated dose"": 2.625,",success,,
+33,2026-02-26T19:05:51.900601,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.52804149457279,6.600518682159875,google/gemini-2.5-pro,"Convert 0.53 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.53 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,6.625,1.0037089990982517,"```json
+{
+    ""calculated dose"": 6.625,",success,,
+33,2026-02-26T19:05:57.338709,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.3886381591955415,17.357976989944266,google/gemini-2.5-pro,"Convert 1.39 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.39 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,17.375,1.0009807024208868,"```json
+{'calculated dose': 17.375, 'units':",success,,
+33,2026-02-26T19:06:05.327004,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.4601845593297212,5.7523069916215155,google/gemini-2.5-pro,"Convert 0.46 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.46 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:06:13.434160,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.460600407780467,18.257505097255837,google/gemini-2.5-pro,"Convert 1.46 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.46 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,18.25,0.9995889308415439,"```json
+{
+    ""calculated dose"": 18.25,
+    """,success,,
+33,2026-02-26T19:06:19.154386,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.4196965244691544,17.74620655586443,google/gemini-2.5-pro,"Convert 1.42 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.42 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,17.75,1.0002137608465014,"```json
+{
+    ""calculated dose"": 17.75,",success,,
+33,2026-02-26T19:06:36.003378,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.917454933246875,11.468186665585938,google/gemini-2.5-pro,"Convert 0.92 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.92 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,11.5,1.0027740509761258,"```json
+{
+    ""calculated dose"": 11.5,
+    ""units",success,,
+33,2026-02-26T19:06:45.348908,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.19289549300604208,2.411193662575526,google/gemini-2.5-pro,"Convert 0.19 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.19 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:06:54.698153,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.25751183300891695,3.218897912611462,google/gemini-2.5-pro,"Convert 0.26 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.26 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.25,1.0096623404136806,"```json
+{
+    ""calculated dose"": 3.25,",success,,
+33,2026-02-26T19:07:02.322252,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.254715042330103,3.183938029126287,google/gemini-2.5-pro,"Convert 0.25 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.25 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:07:10.502263,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.15426916887686604,1.9283646109608255,google/gemini-2.5-pro,"Convert 0.15 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.15 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,1.875,0.9723264933107043,"```json
+{
+    ""calculated dose"": 1.875,",success,,
+33,2026-02-26T19:07:16.703405,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.30588913719993266,3.8236142149991585,google/gemini-2.5-pro,"Convert 0.31 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.31 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.875,1.0134390610849984,"```json
+{
+    ""calculated dose"": 3.875,",success,,
+33,2026-02-26T19:07:22.931962,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.41432475701899024,5.179059462737378,google/gemini-2.5-pro,"Convert 0.41 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.41 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:07:31.348164,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.6824666281502655,8.530832851878317,google/gemini-2.5-pro,"Convert 0.68 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.68 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:07:39.207472,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.23834055361280368,2.979256920160046,google/gemini-2.5-pro,"Convert 0.24 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.24 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.0,1.0069625011859802,"```json
+{'calculated dose': 3.0, 'units': 'mg/4",success,,
+33,2026-02-26T19:07:45.279264,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.4795282060279801,5.994102575349751,google/gemini-2.5-pro,"Convert 0.48 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.48 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,6.0,1.0009838711593795,"```json
+{
+    ""calculated dose"": 6.0,
+    ""units"":",success,,
+33,2026-02-26T19:07:50.703590,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.656462861724179,8.205785771552238,google/gemini-2.5-pro,"Convert 0.66 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.66 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:08:00.018948,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.0921638816286836,13.652048520358546,google/gemini-2.5-pro,"Convert 1.09 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.09 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,13.625,0.9980187207569464,"```json
+{
+    ""calculated dose"": 13.625,",success,,
+33,2026-02-26T19:08:05.549418,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.16163301393430649,2.020412674178831,google/gemini-2.5-pro,"Convert 0.16 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.16 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.0,0.9898967797818199,"```json
+{
+    ""calculated dose"": 2.0,
+    """,success,,
+33,2026-02-26T19:08:11.621476,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.8279651798807066,10.349564748508833,google/gemini-2.5-pro,"Convert 0.83 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.83 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:08:20.399617,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.4036685697852718,5.045857122315898,google/gemini-2.5-pro,"Convert 0.40 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.40 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,5.0,0.9909119261199274,"```json
+{
+    ""calculated dose"": 5.0,
+    ""units"":",success,,
+33,2026-02-26T19:08:27.003573,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.898218568992495,11.227732112406187,google/gemini-2.5-pro,"Convert 0.90 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.90 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,11.25,1.0019832934532886,"```json
+{
+    ""calculated dose"": 11.25,",success,,
+33,2026-02-26T19:08:33.973418,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.7585009637779316,9.481262047224146,google/gemini-2.5-pro,"Convert 0.76 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.76 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,9.5,1.0019763141955706,"```json
+{
+    ""calculated dose"": 9.5,
+    """,success,,
+33,2026-02-26T19:08:40.119503,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.13457372070191193,1.682171508773899,google/gemini-2.5-pro,"Convert 0.13 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.13 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:08:48.665127,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.603536250918799,7.544203136484988,google/gemini-2.5-pro,"Convert 0.60 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.60 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,7.5,0.9941407812481593,"```json
+{
+    ""calculated dose"": 7.5,
+    ""units",success,,
+33,2026-02-26T19:08:54.627883,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.22035137484091127,2.754392185511391,google/gemini-2.5-pro,"Convert 0.22 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.22 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:09:03.922416,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.6699387893052315,8.374234866315394,google/gemini-2.5-pro,"Convert 0.67 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.67 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:09:11.557077,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.8504488780843801,10.63061097605475,google/gemini-2.5-pro,"Convert 0.85 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.85 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:09:21.288266,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.8608755435883026,10.760944294853784,google/gemini-2.5-pro,"Convert 0.86 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.86 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:09:31.678588,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.1693742728323344,14.617178410404179,google/gemini-2.5-pro,"Convert 1.17 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.17 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:09:41.258357,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.2056110739537998,2.5701384244224976,google/gemini-2.5-pro,"Convert 0.21 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.21 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:09:51.069456,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,1.2515038887604875,15.643798609506092,google/gemini-2.5-pro,"Convert 1.25 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.25 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:10:00.349273,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.6374890445594469,7.968613056993086,google/gemini-2.5-pro,"Convert 0.64 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.64 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,8.0,1.0039388213209035,"```json
+{
+    ""calculated dose"": 8.0,
+    ""units"":",success,,
+33,2026-02-26T19:10:06.228564,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.1422033766857007,1.777542208571259,google/gemini-2.5-pro,"Convert 0.14 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.14 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,1.75,0.9845054545324149,"```json
+{
+    ""calculated dose"": 1.75,",success,,
+33,2026-02-26T19:10:12.030114,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.1452927830883601,1.8161597886045013,google/gemini-2.5-pro,"Convert 0.15 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.15 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,1.875,1.0323981467735888,"```json
+{
+    ""calculated dose"": 1.875,
+    """,success,,
+33,2026-02-26T19:10:18.592275,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.6051185602686566,7.563982003358208,google/gemini-2.5-pro,"Convert 0.61 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.61 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,7.625,1.0080669145715446,"```json
+{
+    ""calculated dose"": 7.625,",success,,
+33,2026-02-26T19:10:24.548111,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.5906422443559655,7.383028054449568,google/gemini-2.5-pro,"Convert 0.59 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.59 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,7.375,0.9989126338962332,"```json
+{
+    ""calculated dose"": 7.375,",success,,
+33,2026-02-26T19:10:30.776703,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.4843154847728948,6.053943559661185,google/gemini-2.5-pro,"Convert 0.48 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.48 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,6.0,0.9910895172494465,"```json
+{
+    ""calculated dose"": 6.0,
+    ""units",success,,
+33,2026-02-26T19:10:38.913323,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.17452872712572642,2.1816090890715802,google/gemini-2.5-pro,"Convert 0.17 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.17 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:10:48.937781,iv_buprenorphine,mg/day,oral_morphine,mg/4 hours,0.23583659331631718,2.947957416453965,google/gemini-2.5-pro,"Convert 0.24 mg/day of buprenorphine (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.24 mg/day of buprenorphine (iv)?
+
+75 OME: 1 mg/day of buprenorphine (iv) is equivalent to 75 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:10:59.625635,iv_fentanyl,mcg/day,oral_morphine,mg/4 hours,396.7250278004002,13.224167593346673,google/gemini-2.5-pro,"Convert 396.73 mcg/day of fentanyl (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 396.73 mcg/day of fentanyl (iv)?
+
+0.2 OME: 1 mcg/day of fentanyl (iv) is equivalent to 0.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,13.224,0.999987326737544,"```json
+{""calculated dose"": 13.224",success,,
+33,2026-02-26T19:11:05.479188,iv_hydromorphone,mg/day,oral_morphine,mg/4 hours,0.9014098035988495,2.629111927163311,google/gemini-2.5-pro,"Convert 0.90 mg/day of hydromorphone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.90 mg/day of hydromorphone (iv)?
+
+17.5 OME: 1 mg/day of hydromorphone (iv) is equivalent to 17.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.625,0.9984360014798809,"```json
+{
+    ""calculated dose"": 2.625,
+    """,success,,
+33,2026-02-26T19:11:11.256627,iv_methadone,mg/day,oral_morphine,mg/4 hours,2.426147098604044,5.458830971859098,google/gemini-2.5-pro,"Convert 2.43 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 2.43 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,5.4675,1.0015880741106644,"```json
+{'calculated dose': 5.4675, 'units':",success,,
+33,2026-02-26T19:11:17.188478,iv_methadone,mg/day,oral_morphine,mg/4 hours,4.628798216437096,10.414795986983467,google/gemini-2.5-pro,"Convert 4.63 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 4.63 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,10.4175,1.0002596318756425,"```json
+{
+    ""calculated dose"": 10.4175,",success,,
+33,2026-02-26T19:11:23.487528,iv_methadone,mg/day,oral_morphine,mg/4 hours,4.9832634925408605,11.212342858216935,google/gemini-2.5-pro,"Convert 4.98 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 4.98 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,11.205,0.9993451093754635,"```json
+{
+  ""calculated dose"": 11.205,",success,,
+33,2026-02-26T19:11:29.946705,iv_methadone,mg/day,oral_morphine,mg/4 hours,1.3771459202983762,3.0985783206713466,google/gemini-2.5-pro,"Convert 1.38 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.38 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:11:40.958939,iv_methadone,mg/day,oral_morphine,mg/4 hours,4.618860792504046,10.392436783134103,google/gemini-2.5-pro,"Convert 4.62 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 4.62 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,10.395,1.0002466425266168,"```json
+{
+    ""calculated dose"": 10.395,",success,,
+33,2026-02-26T19:11:54.271316,iv_methadone,mg/day,oral_morphine,mg/4 hours,3.3534474998965265,7.545256874767184,google/gemini-2.5-pro,"Convert 3.35 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 3.35 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,7.5375,0.9989719535204792,"```json
+{
+    ""calculated dose"": 7.5375",success,,
+33,2026-02-26T19:12:03.918108,iv_methadone,mg/day,oral_morphine,mg/4 hours,1.2228423533353192,2.751395295004468,google/gemini-2.5-pro,"Convert 1.22 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 1.22 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.745,0.9976756175253773,"```json
+{
+    ""calculated dose"": 2.745,
+    """,success,,
+33,2026-02-26T19:12:09.878385,iv_methadone,mg/day,oral_morphine,mg/4 hours,7.019033113913959,15.792824506306408,google/gemini-2.5-pro,"Convert 7.02 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 7.02 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:12:20.146857,iv_methadone,mg/day,oral_morphine,mg/4 hours,4.131116008818776,9.295011019842248,google/gemini-2.5-pro,"Convert 4.13 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 4.13 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,9.2925,0.9997298529461787,"```json
+{
+    ""calculated dose"": 9.2925,",success,,
+33,2026-02-26T19:12:26.139114,iv_methadone,mg/day,oral_morphine,mg/4 hours,5.546733716054905,12.480150861123535,google/gemini-2.5-pro,"Convert 5.55 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 5.55 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,12.4875,1.0005888661890585,"```json
+{
+    ""calculated dose"": 12.4875,",success,,
+33,2026-02-26T19:12:33.454258,iv_methadone,mg/day,oral_morphine,mg/4 hours,4.801484666309672,10.803340499196763,google/gemini-2.5-pro,"Convert 4.80 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 4.80 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,10.8,0.999690790159117,"```json
+{
+    ""calculated dose"": 10.8,
+    """,success,,
+33,2026-02-26T19:12:38.823828,iv_methadone,mg/day,oral_morphine,mg/4 hours,4.674753957255684,10.518196403825291,google/gemini-2.5-pro,"Convert 4.67 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 4.67 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:12:48.209382,iv_methadone,mg/day,oral_morphine,mg/4 hours,2.3146563119242427,5.207976701829546,google/gemini-2.5-pro,"Convert 2.31 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 2.31 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:12:57.997390,iv_methadone,mg/day,oral_morphine,mg/4 hours,0.9022438893687763,2.0300487510797467,google/gemini-2.5-pro,"Convert 0.90 mg/day of methadone (iv) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 0.90 mg/day of methadone (iv)?
+
+13.5 OME: 1 mg/day of methadone (iv) is equivalent to 13.5 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.025,0.9975129902288989,"```json
+{
+    ""calculated dose"": 2.025,
+    """,success,,
+33,2026-02-26T19:13:03.960076,oral_morphine,mg/day,oral_morphine,mg/4 hours,10.358869236172588,1.7264782060287647,google/gemini-2.5-pro,"Convert 10.36 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 10.36 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:13:12.853033,oral_morphine,mg/day,oral_morphine,mg/4 hours,38.976823021855374,6.496137170309229,google/gemini-2.5-pro,"Convert 38.98 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 38.98 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,6.5,1.0005946348713857,"```json
+{
+    ""calculated dose"": 6.5,
+    """,success,,
+33,2026-02-26T19:13:19.206591,oral_morphine,mg/day,oral_morphine,mg/4 hours,52.72301015892268,8.787168359820447,google/gemini-2.5-pro,"Convert 52.72 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 52.72 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:13:30.405541,oral_morphine,mg/day,oral_morphine,mg/4 hours,21.581650198272985,3.5969416997121644,google/gemini-2.5-pro,"Convert 21.58 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 21.58 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.5966,0.9999050027104438,"```json
+{
+    ""calculated dose"": 3.5966",success,,
+33,2026-02-26T19:13:35.919282,oral_morphine,mg/day,oral_morphine,mg/4 hours,87.35120378707235,14.558533964512058,google/gemini-2.5-pro,"Convert 87.35 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 87.35 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,14.56,1.0001006993898915,"```json
+{
+    ""calculated dose"": 14.56,",success,,
+33,2026-02-26T19:13:53.516966,oral_morphine,mg/day,oral_morphine,mg/4 hours,11.424873979709606,1.9041456632849343,google/gemini-2.5-pro,"Convert 11.42 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 11.42 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,1.90333,0.999571638188894,"```json
+{
+    ""calculated_dose"": 1.90333",success,,
+33,2026-02-26T19:13:59.198346,oral_morphine,mg/day,oral_morphine,mg/4 hours,37.045396907146,6.174232817857667,google/gemini-2.5-pro,"Convert 37.05 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 37.05 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,6.175,1.0001242554605512,"```json
+{
+    ""calculated dose"": 6.175,",success,,
+33,2026-02-26T19:14:17.926947,oral_morphine,mg/day,oral_morphine,mg/4 hours,24.792268702398257,4.1320447837330425,google/gemini-2.5-pro,"Convert 24.79 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 24.79 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,4.1316666,0.9999084754031391,"```json
+{
+    ""calculated dose"": 4.1316666",success,,
+33,2026-02-26T19:14:24.266107,oral_morphine,mg/day,oral_morphine,mg/4 hours,37.09155955376012,6.181926592293354,google/gemini-2.5-pro,"Convert 37.09 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 37.09 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,6.18,0.9996883508296983,"```json
+{
+    ""calculated dose"": 6.18,
+    """,success,,
+33,2026-02-26T19:14:48.270111,oral_morphine,mg/day,oral_morphine,mg/4 hours,12.963082426462663,2.160513737743777,google/gemini-2.5-pro,"Convert 12.96 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 12.96 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.16,0.9997622150071059,"```json
+{'calculated dose': 2.16, 'units': '",success,,
+33,2026-02-26T19:14:57.513729,oral_morphine,mg/day,oral_morphine,mg/4 hours,12.460883906832235,2.076813984472039,google/gemini-2.5-pro,"Convert 12.46 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 12.46 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.07666,0.9999258554337603,"```json
+{
+    ""calculated_dose"": 2.07666",success,,
+33,2026-02-26T19:15:17.692094,oral_morphine,mg/day,oral_morphine,mg/4 hours,65.14831573177523,10.858052621962537,google/gemini-2.5-pro,"Convert 65.15 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 65.15 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,10.8583,1.0000227829101658,"```json
+{
+    ""calculated_dose"": 10.8583",success,,
+33,2026-02-26T19:15:23.680855,oral_morphine,mg/day,oral_morphine,mg/4 hours,76.94456657261426,12.824094428769044,google/gemini-2.5-pro,"Convert 76.94 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 76.94 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,12.82,0.9996807237507657,"```json
+{
+    ""calculated dose"": 12.82,",success,,
+33,2026-02-26T19:15:40.220142,oral_morphine,mg/day,oral_morphine,mg/4 hours,20.174360471152596,3.362393411858766,google/gemini-2.5-pro,"Convert 20.17 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 20.17 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.36,0.9992881820876983,"```json
+{'calculated dose': 3.36, 'units':",success,,
+33,2026-02-26T19:15:55.138115,oral_morphine,mg/day,oral_morphine,mg/4 hours,73.37877006844829,12.229795011408049,google/gemini-2.5-pro,"Convert 73.38 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 73.38 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,12.23,1.0000167614086548,"```json
+{
+    ""calculated dose"": 12.23,
+    """,success,,
+33,2026-02-26T19:16:12.374125,oral_morphine,mg/day,oral_morphine,mg/4 hours,45.92636555384467,7.654394258974111,google/gemini-2.5-pro,"Convert 45.93 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 45.93 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,7.655,1.000079136376491,"```json
+{
+    ""calculated dose"": 7.655,
+    """,success,,
+33,2026-02-26T19:16:18.555885,oral_morphine,mg/day,oral_morphine,mg/4 hours,18.300602115329696,3.0501003525549493,google/gemini-2.5-pro,"Convert 18.30 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 18.30 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,3.05,0.9999670986055048,"```json
+{
+    ""calculated_dose"": 3.05,",success,,
+33,2026-02-26T19:16:34.774177,oral_morphine,mg/day,oral_morphine,mg/4 hours,28.254064944448707,4.7090108240747846,google/gemini-2.5-pro,"Convert 28.25 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 28.25 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,4.7083333,0.9998561217843627,"```json
+{
+    ""calculated dose"": 4.7083333",success,,
+33,2026-02-26T19:16:44.990380,oral_morphine,mg/day,oral_morphine,mg/4 hours,44.33334362852201,7.388890604753668,google/gemini-2.5-pro,"Convert 44.33 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 44.33 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,7.39,1.0001501436826818,"```json
+{
+    ""calculated dose"": 7.39,",success,,
+33,2026-02-26T19:16:54.045413,oral_morphine,mg/day,oral_morphine,mg/4 hours,48.66399573808596,8.11066595634766,google/gemini-2.5-pro,"Convert 48.66 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 48.66 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,8.11,0.999917891286456,"```json
+{
+    ""calculated dose"": 8.11,",success,,
+33,2026-02-26T19:17:07.952103,oral_morphine,mg/day,oral_morphine,mg/4 hours,13.304950131912156,2.217491688652026,google/gemini-2.5-pro,"Convert 13.30 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 13.30 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.22,1.0011311480267595,"```json
+{
+    ""calculated_dose"": 2.22,",success,,
+33,2026-02-26T19:17:14.194221,oral_morphine,mg/day,oral_morphine,mg/4 hours,11.645518462449512,1.9409197437415855,google/gemini-2.5-pro,"Convert 11.65 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 11.65 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,1.941666,1.0003844858917124,"```json
+{
+    ""calculated_dose"": 1.941666",success,,
+33,2026-02-26T19:17:20.704450,oral_morphine,mg/day,oral_morphine,mg/4 hours,75.44428447294517,12.574047412157528,google/gemini-2.5-pro,"Convert 75.44 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 75.44 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,12.57,0.9996781138145213,"```json
+{
+    ""calculated_dose"": 12.57,",success,,
+33,2026-02-26T19:17:27.514634,oral_morphine,mg/day,oral_morphine,mg/4 hours,14.385416523025109,2.3975694205041846,google/gemini-2.5-pro,"Convert 14.39 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 14.39 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.3983,1.0003047167225136,"```json
+{
+    ""calculated dose"": 2.3983",success,,
+33,2026-02-26T19:17:37.036673,oral_morphine,mg/day,oral_morphine,mg/4 hours,33.210536591358704,5.535089431893117,google/gemini-2.5-pro,"Convert 33.21 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 33.21 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,5.535,0.999983842737463,"```json
+{
+    ""calculated dose"": 5.535,
+    """,success,,
+33,2026-02-26T19:17:42.692267,oral_morphine,mg/day,oral_morphine,mg/4 hours,10.701225526742393,1.7835375877903987,google/gemini-2.5-pro,"Convert 10.70 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 10.70 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,1.78,0.9980165330887243,"```json
+{
+    ""calculated dose"": 1.78,",success,,
+33,2026-02-26T19:17:48.849328,oral_morphine,mg/day,oral_morphine,mg/4 hours,108.90601334740442,18.151002224567403,google/gemini-2.5-pro,"Convert 108.91 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 108.91 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,18.15,0.9999447840645379,"```json
+{
+    ""calculated dose"": 18.15,
+    """,success,,
+33,2026-02-26T19:17:55.630065,oral_morphine,mg/day,oral_morphine,mg/4 hours,11.00734186648021,1.8345569777467017,google/gemini-2.5-pro,"Convert 11.01 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 11.01 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:18:06.656303,oral_morphine,mg/day,oral_morphine,mg/4 hours,24.884132874807996,4.147355479134666,google/gemini-2.5-pro,"Convert 24.88 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 24.88 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,4.15,1.0006376402694774,"```json
+{
+    ""calculated dose"": 4.15,
+    """,success,,
+33,2026-02-26T19:18:12.740524,oral_morphine,mg/day,oral_morphine,mg/4 hours,71.79917272573644,11.96652878762274,google/gemini-2.5-pro,"Convert 71.80 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 71.80 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,11.97,1.0002900767999532,"```json
+{
+    ""calculated dose"": 11.97,",success,,
+33,2026-02-26T19:18:18.662902,oral_morphine,mg/day,oral_morphine,mg/4 hours,10.312909420571755,1.718818236761959,google/gemini-2.5-pro,"Convert 10.31 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 10.31 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,1.72,1.0006875440420433,"```json
+{
+    ""calculated dose"": 1.72,",success,,
+33,2026-02-26T19:18:24.982426,oral_morphine,mg/day,oral_morphine,mg/4 hours,19.98829393542812,3.3313823225713537,google/gemini-2.5-pro,"Convert 19.99 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 19.99 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.33,0.9995850603630848,"```json
+{
+    ""calculated dose"": 3.33,",success,,
+33,2026-02-26T19:18:31.968545,oral_morphine,mg/day,oral_morphine,mg/4 hours,35.647314045086006,5.941219007514334,google/gemini-2.5-pro,"Convert 35.65 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 35.65 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,5.94,0.9997948219863984,"```json
+{
+    ""calculated dose"": 5.94,
+    ""units",success,,
+33,2026-02-26T19:18:41.266077,oral_morphine,mg/day,oral_morphine,mg/4 hours,37.857306096765456,6.309551016127576,google/gemini-2.5-pro,"Convert 37.86 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 37.86 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,6.31,1.0000711594012437,"```json
+{
+    ""calculated dose"": 6.31,
+    """,success,,
+33,2026-02-26T19:18:53.681542,oral_morphine,mg/day,oral_morphine,mg/4 hours,77.87675226022051,12.979458710036752,google/gemini-2.5-pro,"Convert 77.88 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 77.88 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:19:05.633140,oral_morphine,mg/day,oral_morphine,mg/4 hours,65.84460435250722,10.97410072541787,google/gemini-2.5-pro,"Convert 65.84 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 65.84 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,10.97,0.9996263269747132,"```json
+{
+    ""calculated dose"": 10.97,",success,,
+33,2026-02-26T19:19:11.315472,oral_morphine,mg/day,oral_morphine,mg/4 hours,30.79218084597132,5.13203014099522,google/gemini-2.5-pro,"Convert 30.79 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 30.79 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,5.13,0.9996044175619696,"```json
+{
+    ""calculated dose"": 5.13,",success,,
+33,2026-02-26T19:19:17.889738,oral_morphine,mg/day,oral_morphine,mg/4 hours,15.779658523278126,2.629943087213021,google/gemini-2.5-pro,"Convert 15.78 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 15.78 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.63,1.0000216403112507,"```json
+{
+    ""calculated dose"": 2.63,",success,,
+33,2026-02-26T19:19:24.680413,oral_morphine,mg/day,oral_morphine,mg/4 hours,17.54374452678708,2.92395742113118,google/gemini-2.5-pro,"Convert 17.54 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 17.54 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.9233,0.9997751604977456,"```json
+{
+    ""calculated dose"": 2.9233",success,,
+33,2026-02-26T19:19:30.622432,oral_morphine,mg/day,oral_morphine,mg/4 hours,12.458386331729324,2.0763977219548875,google/gemini-2.5-pro,"Convert 12.46 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 12.46 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.08,1.0017348690027077,"```json
+{
+    ""calculated dose"": 2.08,",success,,
+33,2026-02-26T19:19:37.191236,oral_morphine,mg/day,oral_morphine,mg/4 hours,21.750310715151883,3.625051785858647,google/gemini-2.5-pro,"Convert 21.75 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 21.75 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.625,0.9999857144499703,"```json
+{
+    ""calculated dose"": 3.625,",success,,
+33,2026-02-26T19:19:53.931158,oral_morphine,mg/day,oral_morphine,mg/4 hours,13.70491090637499,2.284151817729165,google/gemini-2.5-pro,"Convert 13.70 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 13.70 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.28,0.9981823372260376,"```json
+{
+    ""calculated dose"": 2.28,
+    ""units",success,,
+33,2026-02-26T19:20:04.237048,oral_morphine,mg/day,oral_morphine,mg/4 hours,44.550829049168264,7.425138174861377,google/gemini-2.5-pro,"Convert 44.55 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 44.55 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,7.425,0.9999813909373639,"```json
+{
+    ""calculated dose"": 7.425,
+    """,success,,
+33,2026-02-26T19:20:10.454536,oral_morphine,mg/day,oral_morphine,mg/4 hours,20.813875292083193,3.4689792153471988,google/gemini-2.5-pro,"Convert 20.81 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 20.81 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.47,1.000294260815483,"```json
+{
+    ""calculated dose"": 3.47,",success,,
+33,2026-02-26T19:20:16.761753,oral_morphine,mg/day,oral_morphine,mg/4 hours,32.95040854835231,5.491734758058718,google/gemini-2.5-pro,"Convert 32.95 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 32.95 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,5.49,0.9996841147405795,"```json
+{
+    ""calculated dose"": 5.49,
+    """,success,,
+33,2026-02-26T19:20:22.743804,oral_morphine,mg/day,oral_morphine,mg/4 hours,14.07828467625586,2.3463807793759766,google/gemini-2.5-pro,"Convert 14.08 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 14.08 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.346666,1.0001215576885603,"```json
+{
+    ""calculated dose"": 2.346666",success,,
+33,2026-02-26T19:20:41.237043,oral_morphine,mg/day,oral_morphine,mg/4 hours,43.59627972802317,7.266046621337195,google/gemini-2.5-pro,"Convert 43.60 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 43.60 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,7.2,0.990910239807264,"```json
+{
+    ""calculated dose"": 7.2",success,,
+33,2026-02-26T19:20:57.742037,oral_morphine,mg/day,oral_morphine,mg/4 hours,10.325771303785242,1.720961883964207,google/gemini-2.5-pro,"Convert 10.33 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 10.33 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,1.72,0.9994410777059215,"```json
+{
+    ""calculated dose"": 1.72,",success,,
+33,2026-02-26T19:21:16.487525,oral_morphine,mg/day,oral_morphine,mg/4 hours,15.937577278027408,2.656262879671235,google/gemini-2.5-pro,"Convert 15.94 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 15.94 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.66,1.001406909066631,"```json
+{
+    ""calculated dose"": 2.66,",success,,
+33,2026-02-26T19:21:22.639562,oral_morphine,mg/day,oral_morphine,mg/4 hours,18.383996756964784,3.0639994594941307,google/gemini-2.5-pro,"Convert 18.38 mg/day of morphine (oral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 18.38 mg/day of morphine (oral)?
+
+1.0 OME: 1 mg/day of morphine (oral) is equivalent to 1.0 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.06,0.9986946931463262,"```json
+{
+    ""calculated dose"": 3.06,",success,,
+33,2026-02-26T19:21:30.956045,parenteral_nalbuphine,mg/day,oral_morphine,mg/4 hours,4.439525240601264,2.219762620300632,google/gemini-2.5-pro,"Convert 4.44 mg/day of nalbuphine (parenteral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 4.44 mg/day of nalbuphine (parenteral)?
+
+3.0 OME: 1 mg/day of nalbuphine (parenteral) is equivalent to 3.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:21:42.340970,parenteral_nalbuphine,mg/day,oral_morphine,mg/4 hours,32.214144484739506,16.107072242369753,google/gemini-2.5-pro,"Convert 32.21 mg/day of nalbuphine (parenteral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 32.21 mg/day of nalbuphine (parenteral)?
+
+3.0 OME: 1 mg/day of nalbuphine (parenteral) is equivalent to 3.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,16.105,0.9998713458076942,"```json
+{
+    ""calculated dose"": 16.105,",success,,
+33,2026-02-26T19:21:58.827906,parenteral_nalbuphine,mg/day,oral_morphine,mg/4 hours,31.004537025876047,15.502268512938024,google/gemini-2.5-pro,"Convert 31.00 mg/day of nalbuphine (parenteral) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 31.00 mg/day of nalbuphine (parenteral)?
+
+3.0 OME: 1 mg/day of nalbuphine (parenteral) is equivalent to 3.0 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,15.5,0.9998536657434278,"```json
+{
+    ""calculated dose"": 15.5,",success,,
+33,2026-02-26T19:22:19.616506,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,7.397697946493851,2.7124892470477455,google/gemini-2.5-pro,"Convert 7.40 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 7.40 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,2.71,0.9990823015978939,"```json
+{
+    ""calculated dose"": 2.71,",success,,
+33,2026-02-26T19:22:25.170091,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,6.888131539956907,2.525648231317533,google/gemini-2.5-pro,"Convert 6.89 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 6.89 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:22:45.566785,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,17.34643607728616,6.360359895004926,google/gemini-2.5-pro,"Convert 17.35 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 17.35 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:23:03.593831,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,19.87651938333205,7.288057107221753,google/gemini-2.5-pro,"Convert 19.88 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 19.88 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,7.29,1.000266585833462,"```json
+{
+    ""calculated dose"": 7.29,",success,,
+33,2026-02-26T19:23:09.650351,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,5.189494446856594,1.9028146305140847,google/gemini-2.5-pro,"Convert 5.19 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 5.19 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,1.9029999,1.000097366019235,"```json
+{
+  ""calculated dose"": 1.9029999",success,,
+33,2026-02-26T19:23:15.486388,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,14.181793509889893,5.199990953626295,google/gemini-2.5-pro,"Convert 14.18 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 14.18 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,5.2,1.0000017396902776,"```json
+{
+    ""calculated dose"": 5.2,
+    ""units",success,,
+33,2026-02-26T19:23:21.388690,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,15.437994648581558,5.660598037813238,google/gemini-2.5-pro,"Convert 15.44 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 15.44 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,5.661333,1.0001298382576986,"```json
+{
+    ""calculated dose"": 5.661333",success,,
+33,2026-02-26T19:23:33.687683,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,45.95436729101598,16.849934673372527,google/gemini-2.5-pro,"Convert 45.95 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 45.95 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:23:44.451273,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,10.42842464612077,3.8237557035776164,google/gemini-2.5-pro,"Convert 10.43 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 10.43 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,,,,error,ValueError,Could not extract numeric value from response: 
+33,2026-02-26T19:24:02.966161,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,19.66639434358165,7.211011259313273,google/gemini-2.5-pro,"Convert 19.67 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 19.67 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,7.21,0.9998597617897258,"```json
+{
+    ""calculated dose"": 7.21,",success,,
+33,2026-02-26T19:24:09.017551,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,12.190492462800618,4.469847236360227,google/gemini-2.5-pro,"Convert 12.19 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 12.19 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,4.469666,0.9999594535672824,"```json
+{
+    ""calculated dose"": 4.469666",success,,
+33,2026-02-26T19:24:14.953352,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,25.54049818966558,9.364849336210714,google/gemini-2.5-pro,"Convert 25.54 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 25.54 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,9.36,0.9994821768042799,"```json
+{
+    ""calculated dose"": 9.36,",success,,
+33,2026-02-26T19:24:20.949503,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,13.245630147398003,4.856731054045935,google/gemini-2.5-pro,"Convert 13.25 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 13.25 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+
+Notice that this is a request for the equivalent dose administered over 4 hours, not over 1 day. 
+The equivalent dose over 4 hours should be 1/6 the total dose for 1 day.
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,True,4.85833333,1.0003299083140975,"```json
+{'calculated dose': 4.85833333",success,,
+33,2026-02-26T19:24:31.482133,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,11.440254999518785,4.194760166490222,google/gemini-2.5-pro,"Convert 11.44 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 11.44 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,4.1952,1.0001048530767722,"```json
+{
+    ""calculated dose"": 4.1952,",success,,
+33,2026-02-26T19:24:37.331093,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,18.39250991419111,6.743920301870074,google/gemini-2.5-pro,"Convert 18.39 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 18.39 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,6.743,0.9998635360696925,"```json
+{
+    ""calculated dose"": 6.743,",success,,
+33,2026-02-26T19:24:45.551088,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,5.597536553886665,2.052430069758444,google/gemini-2.5-pro,"Convert 5.60 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 5.60 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,2.053333,1.000439932280695,"```json
+{
+    ""calculated dose"": 2.053333",success,,
+33,2026-02-26T19:24:51.497069,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,8.819563201560491,3.2338398405721804,google/gemini-2.5-pro,"Convert 8.82 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 8.82 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.234,1.0000495260853088,"```json
+{
+    ""calculated dose"": 3.234,
+    """,success,,
+33,2026-02-26T19:25:00.810373,transdermal_buprenorphine,mcg/hr,oral_morphine,mg/4 hours,9.179753785753425,3.365909721442923,google/gemini-2.5-pro,"Convert 9.18 mcg/hr of buprenorphine (transdermal) to mg/4 hours of morphine (oral).
+How many mg/4 hours of morphine (oral) is equivalent to 9.18 mcg/hr of buprenorphine (transdermal)?
+
+2.2 OME: 1 mcg/hr of buprenorphine (transdermal) is equivalent to 2.2 mg/day morphine (oral).
+
+Express the response in the format {'calculated dose': value, 'units': 'mg/4 hours'}. Do not include any additional text in your response, only the dictionary.",True,False,True,False,3.366,1.0000268214433983,"```json
+{
+    ""calculated dose"": 3.366,
+    """,success,,
