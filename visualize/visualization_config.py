@@ -106,13 +106,13 @@ def _hue_color(index: int, total: int) -> str:
 
 MODEL_COLOR_DICT = _build_ranked_color_dict()
 
-# Range thresholds for opioid conversion visualizations
-TIGHT_RANGE_LOWER = 0.85
-TIGHT_RANGE_UPPER = 1.15
-BROAD_RANGE_LOWER = 0.6
-BROAD_RANGE_UPPER = 1.7
-
-EPSILON_FOR_WEIGHT = 5e-2
+# Range thresholds and weighting epsilon — canonical definitions live in
+# common/config.py; imported here for backward compatibility.
+from common.config import (
+    TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
+    BROAD_RANGE_LOWER, BROAD_RANGE_UPPER,
+    EPSILON_FOR_WEIGHT,
+)
 
 def get_ranked_model_order() -> List[str]:
     """

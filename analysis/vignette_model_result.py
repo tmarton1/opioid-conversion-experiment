@@ -3,7 +3,7 @@ import numpy as np
 from typing import Dict, Optional
 from pathlib import Path
 import csv
-from visualize.visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from common.config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
 from analysis.opioid_pair_consensus import OpioidPairConsensus
 
 class VignetteModelResult:

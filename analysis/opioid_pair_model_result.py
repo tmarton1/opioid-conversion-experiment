@@ -5,7 +5,7 @@ from pathlib import Path
 import csv
 from scipy import stats
 from common.opioid import Opioid
-from visualize.visualization_config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
+from common.config import EPSILON_FOR_WEIGHT, TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER, BROAD_RANGE_LOWER, BROAD_RANGE_UPPER
 
 class OpioidPairModelResult:
     """

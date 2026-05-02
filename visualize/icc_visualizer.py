@@ -1319,7 +1319,7 @@ def kendall_w_summary(
 async def save_icc_figures(
     icc_csv: str = "results/icc_analysis.csv",
     kendall_csv: str = "results/kendall_w_vignettes.csv",
-    figures_dir: str = "figures",
+    figures_dir: str = "raw_figures",
 ):
     """Save all ICC figures as HTML + PDF + PNG."""
     os.makedirs(figures_dir, exist_ok=True)

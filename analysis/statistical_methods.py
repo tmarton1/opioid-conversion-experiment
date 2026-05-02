@@ -5,7 +5,7 @@ with observed test statistics, sample sizes, p-values, figure references,
 source-code links, and results-CSV links.
 
 Usage:
-    python -m analysis.statistical_methods          # writes figures/statistical_methods.html
+    python -m analysis.statistical_methods          # writes raw_figures/statistical_methods.html
     python -m analysis.statistical_methods --pdf     # also writes a PDF version
 """
 from __future__ import annotations
@@ -22,7 +22,7 @@ from typing import Optional
 # ── Config ───────────────────────────────────────────────────────────
 
 RESULTS_DIR = Path(__file__).resolve().parent.parent / "results"
-FIGURES_DIR = Path(__file__).resolve().parent.parent / "figures"
+FIGURES_DIR = Path(__file__).resolve().parent.parent / "raw_figures"
 
 GITHUB_REPO = "https://github.com/tmarton1/opioid-conversion-experiment"
 GITHUB_BRANCH = "main"

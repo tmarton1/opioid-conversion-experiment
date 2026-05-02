@@ -32,7 +32,7 @@ Production scripts that replace the experiment-running and analysis cells in the
 
 3. generate_summaries.py    →  summary_w_figures/figure_stats.json
                                summary_w_figures/accuracy_summary_tables.html/.pdf
-                               summary_w_figures/{slug}.html/.pdf/.png
+                               summary_w_figures/pub_figures/{slug}.html/.pdf/.png
                                summary_w_figures/all_comprehensive_figures.pdf
 ```
 
@@ -101,7 +101,7 @@ python orchestration/generate_summaries.py --section pdf
 |---|---|
 | `stats` | `summary_w_figures/figure_stats.json` |
 | `tables` | `summary_w_figures/accuracy_summary_tables.html/.pdf` |
-| `figures` | `summary_w_figures/{slug}.html/.pdf/.png` (15 figures) |
+| `figures` | `summary_w_figures/pub_figures/{slug}.html/.pdf/.png` (15 figures) |
 | `pdf` | `summary_w_figures/all_comprehensive_figures.pdf` |
 | `all` | All of the above in order *(default)* |
 

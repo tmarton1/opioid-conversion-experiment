@@ -242,7 +242,7 @@ def scenario_vignette_strip(
 
 async def save_all_scenario_strips(
     results_csv: str = "results/reworded_vignettes_results.csv",
-    figures_dir: str = "figures",
+    figures_dir: str = "raw_figures",
     filters: dict = None,
 ):
     """

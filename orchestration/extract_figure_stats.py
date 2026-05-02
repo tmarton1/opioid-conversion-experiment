@@ -40,15 +40,10 @@ def compute_stats() -> dict:
     stats: dict = {}
 
     # ── Accuracy range constants ──────────────────────────────────────
-    # Import from visualization_config so they are always in sync.
-    try:
-        from visualize.visualization_config import (
-            TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
-            BROAD_RANGE_LOWER, BROAD_RANGE_UPPER,
-        )
-    except ImportError:
-        TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER = 0.85, 1.15
-        BROAD_RANGE_LOWER, BROAD_RANGE_UPPER = 0.6, 1.7
+    from common.config import (
+        TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER,
+        BROAD_RANGE_LOWER, BROAD_RANGE_UPPER,
+    )
 
     # Format as plain numbers for use in description strings (e.g. "0.85")
     stats["tight_lower_x"] = f"{TIGHT_RANGE_LOWER:g}"

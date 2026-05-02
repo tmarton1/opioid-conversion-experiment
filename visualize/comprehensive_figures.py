@@ -1599,7 +1599,7 @@ class ComprehensiveFigureBuilder:
     performance-based sorting.
     """
 
-    def __init__(self, results_dir: str = "results", figures_dir: str = "summary_w_figures"):
+    def __init__(self, results_dir: str = "results", figures_dir: str = "summary_w_figures/pub_figures"):
         self.results_dir = results_dir
         self.figures_dir = figures_dir
         os.makedirs(figures_dir, exist_ok=True)
@@ -2205,7 +2205,7 @@ class ComprehensiveFigureBuilder:
         missing so that str.format() calls still succeed.
         """
         import json as _json
-        stats_path = os.path.join(self.figures_dir, "figure_stats.json")
+        stats_path = os.path.join(os.path.dirname(self.figures_dir), "figure_stats.json")
         if os.path.exists(stats_path):
             with open(stats_path) as f:
                 return _json.load(f)
@@ -2229,7 +2229,7 @@ class ComprehensiveFigureBuilder:
         numeric annotations are data-driven rather than hardcoded.
         """
         if output_path is None:
-            output_path = self._f("all_comprehensive_figures.pdf")
+            output_path = os.path.join(os.path.dirname(self.figures_dir), "all_comprehensive_figures.pdf")
 
         from reportlab.lib.pagesizes import letter
         from reportlab.lib.units import inch

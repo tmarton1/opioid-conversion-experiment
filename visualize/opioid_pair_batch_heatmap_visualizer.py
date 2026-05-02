@@ -439,8 +439,8 @@ class OpioidPairBatchHeatmapVisualizer:
         Must be called after create_heatmaps().
 
         Args:
-            prefix: File path prefix, e.g. 'figures/all_n0' →
-                    figures/all_n0_weight_cv.html / .png, etc.
+            prefix: File path prefix, e.g. 'raw_figures/all_n0' →
+                    raw_figures/all_n0_weight_cv.html / .png, etc.
         """
         if not hasattr(self, '_subplots') or not self._subplots:
             raise RuntimeError("Call create_heatmaps() before save_subplot_pngs()")

@@ -202,7 +202,7 @@ def _plot_vignette(ax, vr: pd.DataFrame, ex: dict, panel_letter: str):
 def build_consistency_figure(
     results_csv: str = "results/experiment_results.csv",
     vignette_csv: str = "results/reworded_vignettes_results.csv",
-    output_dir: str = "figures",
+    output_dir: str = "raw_figures",
 ):
     """Build the 2×3 consistency illustration figure and save PNG + PDF."""
     raw = pd.read_csv(results_csv)

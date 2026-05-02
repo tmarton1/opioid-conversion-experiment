@@ -60,7 +60,7 @@ Models are ordered from best (top) to worst (bottom) by CMH rank.  Significance
 brackets between adjacent-ranked models are drawn from the pairwise `tight_p_bonf`
 column; stars or "n.s." are placed at the right edge of the longer bar.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -108,7 +108,7 @@ joint distribution of precision and calibration.
 scenarios falling in that cell.  Chi-square p-values from `cv_accuracy_chi2.csv`
 are annotated per model.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -148,7 +148,7 @@ Bars are sorted by overall vignette rank.
 *Bottom panel (mosaic)*: same circle-area grid as `cv_strip_vignettes` but
 coloured to highlight the Precise-incorrect mass.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -187,7 +187,7 @@ log-ratio variance, y = ICC.  Colour = model.  Illustrates the strong positive
 correlation between total variance and ICC — scenarios where models vary a lot
 do so primarily because of wording, not noise.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -224,7 +224,7 @@ have a larger wording-attributable fraction (positive ICC–variance coupling).
 Individual bars are coloured by significance (p < 0.05).  A summary line below
 shows the overall pooled ρ, overall p-value, and binomial sign-test result.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -266,7 +266,7 @@ uniform across all wordings.
 Each cell is also annotated with `sig_pairs / total_pairs` — the count of
 wording pairs with a significant Bonferroni-corrected Mann–Whitney U test.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -303,7 +303,7 @@ wording strongly affects individual model responses, but different models are
 sensitive to different aspects of the phrasing — there is no consistent
 cross-model direction of the wording effect.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -335,7 +335,7 @@ one randomly-sampled numeric dose per opioid pair × model × repetition.
 Renders a horizontal bar chart sorted by CMH rank with tight + broad
 bars and significance brackets.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -380,7 +380,7 @@ Correct, Precise-wrong, Other-wrong, Dose-dep-neg, Dose-dep-pos.  The
 Dose-dep categories are specific to random doses (vignettes collapse into three
 categories).
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -415,7 +415,7 @@ both experiments.  Accuracy bars show both tight (dark) and broad (light
 extension).  Three significance bracket sets are drawn per model using
 `cross_experiment_matched_wilcoxon.csv`.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -454,7 +454,7 @@ grouped bars: naive and Nielsen-augmented accuracy (tight + broad extension).
 Wilcoxon significance stars (from `wilcoxon_*.csv`) are drawn per model between
 the naive and Nielsen bars.  Models are sorted by overall rank.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -487,7 +487,7 @@ Identical layout to `naive_random_dose_bars` (§8) but after Nielsen augmentatio
 The CMH ranking may differ substantially from the naive ranking, revealing which
 models benefit most from reference data.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -528,7 +528,7 @@ specific experiment × OME stratum.  The stacking makes it visually obvious that
 improvement is much larger for OME (oral morphine equivalent) pairs, where the
 Nielsen table provides direct conversion factors, than for non-OME pairs.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -577,7 +577,7 @@ when the explanation is added.
 (0) naive through (1) Nielsen, (2) Nielsen + 4h drop, (3) Nielsen + 4h + units
 explanation.  Bars annotated with Fisher exact p-values between steps.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
@@ -613,7 +613,7 @@ explanation).  Bottom shows best-achievable vignette accuracy (all scenarios,
 Nielsen + units explanation).  Together they set the ceiling against which naive
 performance (§1, §8) is measured.
 
-**Annotation fields from `figure_stats.json`**
+**Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning |
 |-------|---------|
