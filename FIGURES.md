@@ -6,7 +6,9 @@ All 15 figures produced by `visualize/comprehensive_figures.py` →
 - **Build method** — the `ComprehensiveFigureBuilder` method that constructs it
 - **CSVs consumed** — every results CSV the method reads
 - **Annotation fields** — keys from `summary_w_figures/figure_stats.json` interpolated
-  into the PDF annotation for this figure
+  into the PDF annotation for this figure; each table has a **Computed from** column
+  tracing the key back to its source CSV and operation in
+  `orchestration/extract_figure_stats.py → compute_stats()`
 - **What the code does** — the rendering logic
 
 See [STATISTICAL_METHODS.md](STATISTICAL_METHODS.md) for the statistical tests
@@ -62,15 +64,15 @@ column; stars or "n.s." are placed at the right edge of the longer bar.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_vignette_scenarios` | Total unique vignette scenarios (denominator of accuracy) |
-| `naive_vig_best_tight_pct` | Best model's tight-range accuracy (%) |
-| `naive_vig_worst_tight_pct` | Worst model's tight-range accuracy (%) |
-| `naive_vig_mean_tight_pct` | Mean tight accuracy across all models (%) |
-| `naive_vig_best_broad_pct` | Best model's broad-range accuracy (%) |
-| `tight_lower_x`, `tight_upper_x` | Tight accuracy range bounds |
-| `broad_lower_x`, `broad_upper_x` | Broad accuracy range bounds |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_vignette_scenarios` | Total unique vignette scenarios (denominator of accuracy) | `reworded_vignettes_model_analysis.csv` → `scenario_key.nunique()` (naive filter) |
+| `naive_vig_best_tight_pct` | Best model's tight-range accuracy (%) | `ranking_naive_vignettes.csv` → `mean_tight_prop.max() × 100` |
+| `naive_vig_worst_tight_pct` | Worst model's tight-range accuracy (%) | `ranking_naive_vignettes.csv` → `mean_tight_prop.min() × 100` |
+| `naive_vig_mean_tight_pct` | Mean tight accuracy across all models (%) | `ranking_naive_vignettes.csv` → `mean_tight_prop.mean() × 100` |
+| `naive_vig_best_broad_pct` | Best model's broad-range accuracy (%) | `ranking_naive_vignettes.csv` → `mean_broad_prop.max() × 100` |
+| `tight_lower_x`, `tight_upper_x` | Tight accuracy range bounds | `common/config.py` → `TIGHT_RANGE_LOWER / UPPER` |
+| `broad_lower_x`, `broad_upper_x` | Broad accuracy range bounds | `common/config.py` → `BROAD_RANGE_LOWER / UPPER` |
 
 ---
 
@@ -110,11 +112,11 @@ are annotated per model.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_vignette_scenarios` | Total scenarios per model |
-| `n_sig_cv_chi2_vignettes` | Number of models with significant CV × accuracy chi-square |
-| `n_models` | Total model count |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_vignette_scenarios` | Total scenarios per model | `reworded_vignettes_model_analysis.csv` → `scenario_key.nunique()` (naive filter) |
+| `n_sig_cv_chi2_vignettes` | Number of models with significant CV × accuracy chi-square | `cv_accuracy_chi2.csv` → `significant.sum()` |
+| `n_models` | Total model count | `common/models.py` → `len(CONSISTENT_MODELS)` |
 
 ---
 
@@ -150,12 +152,12 @@ coloured to highlight the Precise-incorrect mass.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `vig_mean_correct_pct` | Mean correct proportion across models (%) |
-| `vig_mean_precise_wrong_pct` | Mean precise-but-wrong proportion (%) |
-| `vig_mean_imprecise_pct` | Mean imprecise proportion (%) |
-| `n_vignette_scenarios` | Observations per model |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `vig_mean_correct_pct` | Mean correct proportion across models (%) | `performance_profile_vignettes.csv` → `correct.mean() × 100` |
+| `vig_mean_precise_wrong_pct` | Mean precise-but-wrong proportion (%) | `performance_profile_vignettes.csv` → `precise_wrong.mean() × 100` |
+| `vig_mean_imprecise_pct` | Mean imprecise proportion (%) | `performance_profile_vignettes.csv` → `imprecise.mean() × 100` |
+| `n_vignette_scenarios` | Observations per model | `reworded_vignettes_model_analysis.csv` → `scenario_key.nunique()` (naive filter) |
 
 ---
 
@@ -189,14 +191,14 @@ do so primarily because of wording, not noise.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_model_scenario_cells` | Total model × scenario cells (= rows in icc_analysis.csv restricted to CONSISTENT_MODELS) |
-| `mean_icc` | Mean ICC across all cells |
-| `median_icc` | Median ICC |
-| `mean_between_var_pct` | Mean fraction of variance attributable to wording (%) |
-| `n_models_icc_gt_half` | Models with mean ICC > 0.5 |
-| `n_models` | Total model count |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_model_scenario_cells` | Total model × scenario cells (= rows in icc_analysis.csv restricted to CONSISTENT_MODELS) | `icc_analysis.csv` → `len()` |
+| `mean_icc` | Mean ICC across all cells | `icc_analysis.csv` → `icc.mean()` |
+| `median_icc` | Median ICC | `icc_analysis.csv` → `icc.median()` |
+| `mean_between_var_pct` | Mean fraction of variance attributable to wording (%) | `icc_analysis.csv` → `(var_between / var_total).mean() × 100` |
+| `n_models_icc_gt_half` | Models with mean ICC > 0.5 | `icc_analysis.csv` → models where per-model `icc.mean() > 0.5` |
+| `n_models` | Total model count | `common/models.py` → `len(CONSISTENT_MODELS)` |
 
 ---
 
@@ -226,14 +228,14 @@ shows the overall pooled ρ, overall p-value, and binomial sign-test result.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_scenarios_per_model` | Scenarios per model (= n in each Spearman test) |
-| `spearman_rho_variance_icc` | Overall pooled Spearman ρ |
-| `spearman_p_variance_icc` | Overall pooled p-value |
-| `n_positive_rho_models` | Models with ρ > 0 |
-| `n_sig_rho_models` | Models with individually significant ρ (p < 0.05) |
-| `n_total_rho_models` | Total models |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_scenarios_per_model` | Scenarios per model (= n in each Spearman test) | `icc_analysis.csv` → `scenario_key.nunique()` per model, median |
+| `spearman_rho_variance_icc` | Overall pooled Spearman ρ | `variance_icc_spearman.csv` → OVERALL row `rho` |
+| `spearman_p_variance_icc` | Overall pooled p-value | `variance_icc_spearman.csv` → OVERALL row `p_value` |
+| `n_positive_rho_models` | Models with ρ > 0 | `variance_icc_spearman.csv` → per-model `(rho > 0).sum()` |
+| `n_sig_rho_models` | Models with individually significant ρ (p < 0.05) | `variance_icc_spearman.csv` → `(p_value < 0.05).sum()` |
+| `n_total_rho_models` | Total models | `variance_icc_spearman.csv` → per-model row count |
 
 ---
 
@@ -268,13 +270,13 @@ wording pairs with a significant Bonferroni-corrected Mann–Whitney U test.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `icc_max_pairs` | Max pairwise comparisons per cell (C(k,2) = 6 for k=4 wordings) |
-| `icc_total_sig_pairs` | Total significant pairwise comparisons across all cells |
-| `icc_total_pairs` | Total pairwise comparisons across all cells |
-| `n_models_with_sig_icc` | Models with at least one significant F-test |
-| `n_model_scenario_cells` | Total cells |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `icc_max_pairs` | Max pairwise comparisons per cell (C(k,2) = 6 for k=4 wordings) | `icc_analysis.csv` → `total_pairs.mode()` |
+| `icc_total_sig_pairs` | Total significant pairwise comparisons across all cells | `icc_analysis.csv` → `sig_pairs.sum()` |
+| `icc_total_pairs` | Total pairwise comparisons across all cells | `icc_analysis.csv` → `total_pairs.sum()` |
+| `n_models_with_sig_icc` | Models with at least one significant F-test | `icc_analysis.csv` → models where `f_pvalue.min() < 0.05` |
+| `n_model_scenario_cells` | Total cells | `icc_analysis.csv` → `len()` |
 
 ---
 
@@ -305,13 +307,13 @@ cross-model direction of the wording effect.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `mean_kendall_w` | Mean Kendall's W across all scenarios |
-| `median_kendall_w` | Median Kendall's W |
-| `n_sig_kendall_w` | Scenarios with significant W (p < 0.05) |
-| `mean_icc` | Mean ICC for comparison |
-| `n_vignette_scenarios` | Total scenarios |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `mean_kendall_w` | Mean Kendall's W across all scenarios | `kendall_w_vignettes.csv` → `kendall_w.mean()` |
+| `median_kendall_w` | Median Kendall's W | `kendall_w_vignettes.csv` → `kendall_w.median()` |
+| `n_sig_kendall_w` | Scenarios with significant W (p < 0.05) | `kendall_w_vignettes.csv` → `(kendall_p < 0.05).sum()` |
+| `mean_icc` | Mean ICC for comparison | `icc_analysis.csv` → `icc.mean()` |
+| `n_vignette_scenarios` | Total scenarios | `reworded_vignettes_model_analysis.csv` → `scenario_key.nunique()` (naive filter) |
 
 ---
 
@@ -337,15 +339,15 @@ bars and significance brackets.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_opioid_pairs` | Total unique opioid pairs in the naive random-dose condition |
-| `naive_rd_best_tight_pct` | Best model's tight accuracy (%) |
-| `naive_rd_worst_tight_pct` | Worst model's tight accuracy (%) |
-| `naive_rd_mean_tight_pct` | Mean tight accuracy across models (%) |
-| `naive_rd_best_broad_pct` | Best model's broad accuracy (%) |
-| `tight_lower_x`, `tight_upper_x` | Tight accuracy range bounds |
-| `broad_lower_x`, `broad_upper_x` | Broad accuracy range bounds |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_opioid_pairs` | Total unique opioid pairs in the naive random-dose condition | `pair_model_analysis.csv` → `opioid_pair.nunique()` (naive filter) |
+| `naive_rd_best_tight_pct` | Best model's tight accuracy (%) | `ranking_naive_random_doses.csv` → `mean_tight_prop.max() × 100` |
+| `naive_rd_worst_tight_pct` | Worst model's tight accuracy (%) | `ranking_naive_random_doses.csv` → `mean_tight_prop.min() × 100` |
+| `naive_rd_mean_tight_pct` | Mean tight accuracy across models (%) | `ranking_naive_random_doses.csv` → `mean_tight_prop.mean() × 100` |
+| `naive_rd_best_broad_pct` | Best model's broad accuracy (%) | `ranking_naive_random_doses.csv` → `mean_broad_prop.max() × 100` |
+| `tight_lower_x`, `tight_upper_x` | Tight accuracy range bounds | `common/config.py` → `TIGHT_RANGE_LOWER / UPPER` |
+| `broad_lower_x`, `broad_upper_x` | Broad accuracy range bounds | `common/config.py` → `BROAD_RANGE_LOWER / UPPER` |
 
 ---
 
@@ -382,14 +384,14 @@ categories).
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_opioid_pairs` | Total unique pairs |
-| `rd_mean_correct_pct` | Mean correct proportion (%) |
-| `rd_mean_precise_wrong_pct` | Mean precise-but-wrong proportion (%) |
-| `rd_mean_dose_dep_neg_pct` | Mean dose-dependent-negative proportion (%) |
-| `n_sig_cv_chi2_rd` | Models with significant CV × accuracy chi-square |
-| `n_models` | Total model count |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_opioid_pairs` | Total unique pairs | `pair_model_analysis.csv` → `opioid_pair.nunique()` (naive filter) |
+| `rd_mean_correct_pct` | Mean correct proportion (%) | `performance_profile_random_doses.csv` → `correct.mean() × 100` |
+| `rd_mean_precise_wrong_pct` | Mean precise-but-wrong proportion (%) | `performance_profile_random_doses.csv` → `precise_wrong.mean() × 100` |
+| `rd_mean_dose_dep_neg_pct` | Mean dose-dependent-negative proportion (%) | `performance_profile_random_doses.csv` → `dose_dep_neg.mean() × 100` |
+| `n_sig_cv_chi2_rd` | Models with significant CV × accuracy chi-square | `pair_model_analysis.csv` → chi2 per model on CV-bin × accuracy-category table |
+| `n_models` | Total model count | `common/models.py` → `len(CONSISTENT_MODELS)` |
 
 ---
 
@@ -417,14 +419,14 @@ extension).  Three significance bracket sets are drawn per model using
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_matched_pairs` | Opioid pairs present in both experiments |
-| `cross_pooled_broad_p_rd_text` | POOLED Wilcoxon broad p: random-dose vs text vignette |
-| `cross_pooled_broad_p_rd_empty` | POOLED Wilcoxon broad p: random-dose vs empty vignette |
-| `cross_pooled_broad_p_empty_text` | POOLED Wilcoxon broad p: empty vs text vignette |
-| `cross_spearman_rho_rd_text_broad` | Mean model-level Spearman ρ: RD vs text (broad range) |
-| `cross_n_sig_spearman_rd_text` | Models with significant cross-experiment Spearman ρ |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_matched_pairs` | Opioid pairs present in both experiments | `cross_experiment_matched_means.csv` → `n_pairs.mode()` |
+| `cross_pooled_broad_p_rd_text` | POOLED Wilcoxon broad p: random-dose vs text vignette | `cross_experiment_matched_wilcoxon.csv` → Wilcoxon signed-rank on per-model `broad_diff` |
+| `cross_pooled_broad_p_rd_empty` | POOLED Wilcoxon broad p: random-dose vs empty vignette | `cross_experiment_matched_wilcoxon.csv` → same, RD vs empty |
+| `cross_pooled_broad_p_empty_text` | POOLED Wilcoxon broad p: empty vs text vignette | `cross_experiment_matched_wilcoxon.csv` → same, empty vs text |
+| `cross_spearman_rho_rd_text_broad` | Mean model-level Spearman ρ: RD vs text (broad range) | `cross_experiment_matched_spearman.csv` → `spearman_rho.mean()` (RD vs text, broad) |
+| `cross_n_sig_spearman_rd_text` | Models with significant cross-experiment Spearman ρ | `cross_experiment_matched_spearman.csv` → `(spearman_p < 0.05).sum()` (RD vs text, broad) |
 
 ---
 
@@ -456,15 +458,15 @@ the naive and Nielsen bars.  Models are sorted by overall rank.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `nielsen_n_sig_tight_vignettes` | Models with significant tight improvement — vignettes |
-| `nielsen_n_sig_tight_rd` | Models with significant tight improvement — random doses |
-| `nielsen_mean_tight_improvement_vignettes` | Mean tight accuracy gain — vignettes (pp) |
-| `nielsen_mean_tight_improvement_rd` | Mean tight accuracy gain — random doses (pp) |
-| `nielsen_pooled_tight_p_vignettes` | POOLED Wilcoxon p — vignettes tight |
-| `nielsen_pooled_tight_p_rd` | POOLED Wilcoxon p — random doses tight |
-| `n_models` | Total model count |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `nielsen_n_sig_tight_vignettes` | Models with significant tight improvement — vignettes | `wilcoxon_nielsen_effect_vignettes.csv` → `(tight_p < 0.05).sum()` (per-model rows) |
+| `nielsen_n_sig_tight_rd` | Models with significant tight improvement — random doses | `wilcoxon_nielsen_effect_random_dose.csv` → `(tight_p < 0.05).sum()` |
+| `nielsen_mean_tight_improvement_vignettes` | Mean tight accuracy gain — vignettes (pp) | `wilcoxon_nielsen_effect_vignettes.csv` → `tight_mean.mean() × 100` |
+| `nielsen_mean_tight_improvement_rd` | Mean tight accuracy gain — random doses (pp) | `wilcoxon_nielsen_effect_random_dose.csv` → `tight_mean.mean() × 100` |
+| `nielsen_pooled_tight_p_vignettes` | POOLED Wilcoxon p — vignettes tight | `wilcoxon_nielsen_effect_vignettes.csv` → POOLED row `tight_p` |
+| `nielsen_pooled_tight_p_rd` | POOLED Wilcoxon p — random doses tight | `wilcoxon_nielsen_effect_random_dose.csv` → POOLED row `tight_p` |
+| `n_models` | Total model count | `common/models.py` → `len(CONSISTENT_MODELS)` |
 
 ---
 
@@ -489,12 +491,12 @@ models benefit most from reference data.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `n_opioid_pairs` | Total unique pairs |
-| `nielsen_rd_best_tight_pct` | Best model tight accuracy after Nielsen (%) |
-| `nielsen_rd_mean_tight_pct` | Mean tight accuracy after Nielsen (%) |
-| `best_rd_model_after_nielsen` | Short name of top model after Nielsen |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `n_opioid_pairs` | Total unique pairs | `pair_model_analysis.csv` → `opioid_pair.nunique()` (naive filter) |
+| `nielsen_rd_best_tight_pct` | Best model tight accuracy after Nielsen (%) | `ranking_random_doses_nielsen.csv` → `mean_tight_prop.max() × 100` |
+| `nielsen_rd_mean_tight_pct` | Mean tight accuracy after Nielsen (%) | `ranking_random_doses_nielsen.csv` → `mean_tight_prop.mean() × 100` |
+| `best_rd_model_after_nielsen` | Short name of top model after Nielsen | `ranking_random_doses_nielsen.csv` → model at `adjusted_rank == 1` |
 
 ---
 
@@ -530,18 +532,18 @@ Nielsen table provides direct conversion factors, than for non-OME pairs.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `vig_ome_naive_tight_pct` | Vignette OME naive mean tight (%) |
-| `vig_ome_nielsen_tight_pct` | Vignette OME Nielsen mean tight (%) |
-| `vig_ome_tight_improvement_pp` | Vignette OME tight improvement (pp) |
-| `vig_nonome_tight_improvement_pp` | Vignette non-OME tight improvement (pp) |
-| `rd_ome_tight_improvement_pp` | RD OME tight improvement (pp) |
-| `rd_nonome_tight_improvement_pp` | RD non-OME tight improvement (pp) |
-| `nielsen_vig_ome_pooled_p` | POOLED Wilcoxon p — vignettes OME |
-| `nielsen_vig_nonome_pooled_p` | POOLED Wilcoxon p — vignettes non-OME |
-| `nielsen_rd_ome_pooled_p` | POOLED Wilcoxon p — RD OME |
-| `nielsen_rd_nonome_pooled_p` | POOLED Wilcoxon p — RD non-OME |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `vig_ome_naive_tight_pct` | Vignette OME naive mean tight (%) | `model_batch_means_vignettes.csv` → `mean_in_tight.mean() × 100` where `batch_name='ome_n0'` |
+| `vig_ome_nielsen_tight_pct` | Vignette OME Nielsen mean tight (%) | `model_batch_means_vignettes.csv` → `mean_in_tight.mean() × 100` where `batch_name='ome_n1'` |
+| `vig_ome_tight_improvement_pp` | Vignette OME tight improvement (pp) | diff of `vig_ome_nielsen_tight_pct − vig_ome_naive_tight_pct` |
+| `vig_nonome_tight_improvement_pp` | Vignette non-OME tight improvement (pp) | `model_batch_means_vignettes.csv` → `pairs_n1 − pairs_n0` mean tight |
+| `rd_ome_tight_improvement_pp` | RD OME tight improvement (pp) | `model_batch_means.csv` → `ome_n1 − ome_n0` mean tight |
+| `rd_nonome_tight_improvement_pp` | RD non-OME tight improvement (pp) | `model_batch_means.csv` → `pairs_n1 − pairs_n0` mean tight |
+| `nielsen_vig_ome_pooled_p` | POOLED Wilcoxon p — vignettes OME | `wilcoxon_nielsen_effect_vignettes_ome.csv` → POOLED row `tight_p` |
+| `nielsen_vig_nonome_pooled_p` | POOLED Wilcoxon p — vignettes non-OME | `wilcoxon_nielsen_effect_vignettes_nonome.csv` → POOLED row `tight_p` |
+| `nielsen_rd_ome_pooled_p` | POOLED Wilcoxon p — RD OME | `wilcoxon_nielsen_effect_random_dose_ome.csv` → POOLED row `tight_p` |
+| `nielsen_rd_nonome_pooled_p` | POOLED Wilcoxon p — RD non-OME | `wilcoxon_nielsen_effect_random_dose_nonome.csv` → POOLED row `tight_p` |
 
 ---
 
@@ -579,14 +581,14 @@ explanation.  Bars annotated with Fisher exact p-values between steps.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `dosing_n_sig_drop_tight` | Models with significant tight drop daily→4h |
-| `dosing_mean_tight_drop_pp` | Mean tight accuracy drop daily→4h (pp) |
-| `dosing_pooled_tight_p` | POOLED Wilcoxon p — daily vs 4h drop |
-| `units_n_sig_recovery_tight` | Models with significant tight recovery with units explanation |
-| `units_mean_tight_recovery_pp` | Mean tight accuracy recovery (pp) |
-| `units_pooled_tight_p` | POOLED Wilcoxon p — units explanation recovery |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `dosing_n_sig_drop_tight` | Models with significant tight drop daily→4h | `wilcoxon_dosing_unit_effect.csv` → `(tight_p < 0.05).sum()` (per-model rows) |
+| `dosing_mean_tight_drop_pp` | Mean tight accuracy drop daily→4h (pp) | `wilcoxon_dosing_unit_effect.csv` → `tight_mean.mean() × 100` |
+| `dosing_pooled_tight_p` | POOLED Wilcoxon p — daily vs 4h drop | `wilcoxon_dosing_unit_effect.csv` → POOLED row `tight_p` |
+| `units_n_sig_recovery_tight` | Models with significant tight recovery with units explanation | `wilcoxon_units_effect_random_dose.csv` → `(tight_p < 0.05).sum()` |
+| `units_mean_tight_recovery_pp` | Mean tight accuracy recovery (pp) | `wilcoxon_units_effect_random_dose.csv` → `tight_mean.mean() × 100` |
+| `units_pooled_tight_p` | POOLED Wilcoxon p — units explanation recovery | `wilcoxon_units_effect_random_dose.csv` → POOLED row `tight_p` |
 
 ---
 
@@ -615,14 +617,14 @@ performance (§1, §8) is measured.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
-| Field | Meaning |
-|-------|---------|
-| `best_rd_model_after_all` | Short model name: top random-dose after all augmentations |
-| `best_rd_tight_after_all_pct` | Top random-dose tight accuracy after all augmentations (%) |
-| `mean_rd_tight_after_all_pct` | Mean random-dose tight accuracy after all augmentations (%) |
-| `best_vig_model_after_all` | Short model name: top vignette after all augmentations |
-| `best_vig_tight_after_all_pct` | Top vignette tight accuracy after all augmentations (%) |
-| `mean_vig_tight_after_all_pct` | Mean vignette tight accuracy after all augmentations (%) |
+| Field | Meaning | Computed from |
+|-------|---------|---------------|
+| `best_rd_model_after_all` | Short model name: top random-dose after all augmentations | `ranking_random_doses_nielsen_units.csv` → model at `adjusted_rank == 1` |
+| `best_rd_tight_after_all_pct` | Top random-dose tight accuracy after all augmentations (%) | `ranking_random_doses_nielsen_units.csv` → `mean_tight_prop` of top model |
+| `mean_rd_tight_after_all_pct` | Mean random-dose tight accuracy after all augmentations (%) | `ranking_random_doses_nielsen_units.csv` → `mean_tight_prop.mean() × 100` |
+| `best_vig_model_after_all` | Short model name: top vignette after all augmentations | `ranking_vignettes_nielsen_units.csv` → model at `adjusted_rank == 1` |
+| `best_vig_tight_after_all_pct` | Top vignette tight accuracy after all augmentations (%) | `ranking_vignettes_nielsen_units.csv` → `mean_tight_prop` of top model |
+| `mean_vig_tight_after_all_pct` | Mean vignette tight accuracy after all augmentations (%) | `ranking_vignettes_nielsen_units.csv` → `mean_tight_prop.mean() × 100` |
 
 ---
 

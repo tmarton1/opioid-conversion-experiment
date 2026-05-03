@@ -10,6 +10,7 @@ Production scripts that replace the experiment-running and analysis cells in the
 |---|---|
 | `run_experiments.py` | Dispatch all LLM API calls and write raw results to `results/` |
 | `run_analysis.py` | Process raw CSVs through the full statistical analysis pipeline |
+| `generate_raw_figures.py` | Build intermediate exploratory figures in `raw_figures/` |
 | `extract_figure_stats.py` | Read analysis CSVs and save key data-driven numbers to `summary_w_figures/figure_stats.json` |
 | `generate_summaries.py` | Build the final deliverable documents in `summary_w_figures/` |
 
@@ -30,13 +31,26 @@ Production scripts that replace the experiment-running and analysis cells in the
                                results/ranking_*.csv
                                ... (all other derived CSVs)
 
-3. generate_summaries.py    →  summary_w_figures/figure_stats.json
+3. generate_raw_figures.py  →  raw_figures/{name}_batch.html/.pdf        (6 pair-batch grids)
+                               raw_figures/{name}_heatmaps.html/.pdf      (6 pair-batch heatmaps)
+                               raw_figures/all_reworded_vignette_batch.html/.pdf
+                               raw_figures/model_comparison_bar.html/.pdf
+                               raw_figures/model_comparison_scatter.pdf
+                               raw_figures/explain_units_bar.html/.pdf
+                               raw_figures/icc_heatmap.html/.pdf/.png
+                               raw_figures/icc_bubble_grid.html/.pdf/.png
+                               raw_figures/kendall_w_summary.html/.pdf/.png
+                               raw_figures/scenario_strip_{scenario}.html/.png
+                               raw_figures/consistency_examples.png/.pdf
+                               raw_figures/statistical_methods.html
+
+4. generate_summaries.py    →  summary_w_figures/figure_stats.json
                                summary_w_figures/accuracy_summary_tables.html/.pdf
                                summary_w_figures/pub_figures/{slug}.html/.pdf/.png
                                summary_w_figures/all_comprehensive_figures.pdf
 ```
 
-`generate_summaries.py` calls `extract_figure_stats.py` internally as its first step, so you do not need to run it separately.
+`generate_summaries.py` calls `extract_figure_stats.py` internally as its first step, so you do not need to run it separately. `generate_raw_figures.py` is optional — skip it if you only need the publication figures in `summary_w_figures/`.
 
 ---
 
@@ -48,6 +62,7 @@ Run all scripts from the **repository root**:
 # Full pipeline
 python orchestration/run_experiments.py
 python orchestration/run_analysis.py
+python orchestration/generate_raw_figures.py
 python orchestration/generate_summaries.py
 ```
 
@@ -59,6 +74,9 @@ python orchestration/run_experiments.py --section vignettes
 
 # Run only the ICC analysis step
 python orchestration/run_analysis.py --section icc
+
+# Regenerate only the heatmaps
+python orchestration/generate_raw_figures.py --section pair_batches
 
 # Regenerate only the annotated PDF
 python orchestration/generate_summaries.py --section pdf
@@ -93,6 +111,20 @@ python orchestration/generate_summaries.py --section pdf
 | `profiles` | `performance_profile_*.csv` |
 | `cv_chi2` | `cv_accuracy_chi2.csv` |
 | `rankings` | `ranking_*.csv` (5 files) |
+| `all` | All of the above in order *(default)* |
+
+### `generate_raw_figures.py` sections
+
+| Section | What it produces |
+|---|---|
+| `pair_batches` | `raw_figures/{all,ome,pairs}_{n0,n1}_batch.html/.pdf` and `_heatmaps.html/.pdf` (6 × 2 = 12 files) |
+| `vignette_batch` | `raw_figures/all_reworded_vignette_batch.html/.pdf` |
+| `model_comparison` | `raw_figures/model_comparison_bar.html/.pdf`, `model_comparison_scatter.pdf` |
+| `explain_units` | `raw_figures/explain_units_bar.html/.pdf` |
+| `icc` | `raw_figures/icc_heatmap.*`, `icc_bubble_grid.*`, `kendall_w_summary.*` (HTML+PDF+PNG each) |
+| `scenario_strips` | `raw_figures/scenario_strip_{scenario_key}.html/.png` (one per vignette scenario) + combined PDF |
+| `consistency` | `raw_figures/consistency_examples.png/.pdf` |
+| `statistical_methods` | `raw_figures/statistical_methods.html` |
 | `all` | All of the above in order *(default)* |
 
 ### `generate_summaries.py` sections
