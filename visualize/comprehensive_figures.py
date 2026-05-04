@@ -1645,7 +1645,7 @@ class ComprehensiveFigureBuilder:
         ax_max = max(merged["mean_tight_prop_vig"].max(), merged["mean_tight_prop_rd"].max()) + 0.05
 
         scatter = figure(
-            width=500, height=380,
+            width=bar_fig.width, height=450,
             x_range=(0, ax_max), y_range=(0, ax_max),
             toolbar_location=None,
             title="Vignette vs random-dose tight accuracy per model",
