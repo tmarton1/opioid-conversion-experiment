@@ -106,6 +106,17 @@ This document is organised two ways:
 
 **Output**: `cross_experiment_matched_spearman.csv` — columns: `model`, `condition_a`, `condition_b`, `range`, `spearman_rho`, `spearman_p`, `n_pairs`
 
+#### 5a. Spearman ρ (naive vignette vs naive random-dose, all pairs)
+
+**Code**: `orchestration/extract_figure_stats.py` — computed inline and written to `summary_w_figures/figure_stats.json` (keys: `naive_rank_spearman_rho`, `naive_rank_spearman_p`, `naive_rank_n_models`)
+
+**Description**: Spearman rank correlation between each consistent model's mean tight accuracy on naive vignette prompts (`ranking_naive_vignettes.csv → mean_tight_prop`) and its mean tight accuracy on naive random-dose prompts (`ranking_naive_random_doses.csv → mean_tight_prop`). Unlike §5, this uses the **full set of opioid pairs** in each experiment (not only the 11 matched pairs), and operates at the model level (unit = 1 scalar accuracy per model per task). The correlation is displayed in the rank comparison scatter panel of figure 8 (`naive_random_dose_bars`).
+
+**Input**: `results/ranking_naive_vignettes.csv`, `results/ranking_naive_random_doses.csv`
+**Filter**: rows where `model ∈ CONSISTENT_MODELS` (N = 13)
+**Test statistic**: `scipy.stats.spearmanr(mean_tight_prop_vig, mean_tight_prop_rd)`
+**Output**: written to `summary_w_figures/figure_stats.json` only; no separate CSV
+
 ---
 
 ### 6. ICC(1,1) + F-test
@@ -263,6 +274,7 @@ Each figure slug links to its full specification in [FIGURES.md](FIGURES.md).
 | Step | Method (§) | Code file → method | Output CSV |
 |------|-----------|-------------------|------------|
 | Model ranking | §1 CMH | `analysis/model_ranking.py` → `ModelRanking.build_all_rankings()` | `ranking_naive_random_doses.csv` |
+| Rank correlation with vignettes | §5a Spearman ρ (naive) | `orchestration/extract_figure_stats.py` (inline) | `summary_w_figures/figure_stats.json` |
 
 ### [`cv_strip_random_doses`](FIGURES.md#9-cv_strip_random_doses)
 

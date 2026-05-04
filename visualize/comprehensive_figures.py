@@ -1620,11 +1620,60 @@ class ComprehensiveFigureBuilder:
         )
 
     def build_naive_random_dose_bars(self):
-        """Naive random dose performance horizontal bars."""
-        return naive_performance_bars(
+        """Naive random dose performance horizontal bars + vignette rank comparison scatter."""
+        from scipy.stats import spearmanr as _spearmanr
+
+        bar_fig = naive_performance_bars(
             ranking_csv=self._p("ranking_naive_random_doses.csv"),
             title="Naive Random Dose Performance by Model",
         )
+
+        # ── Rank comparison scatter: vignette vs random-dose tight accuracy ──
+        rv = pd.read_csv(self._p("ranking_naive_vignettes.csv"))
+        rr = pd.read_csv(self._p("ranking_naive_random_doses.csv"))
+        rv = rv[rv["model"].isin(_CONSISTENT_SET)]
+        rr = rr[rr["model"].isin(_CONSISTENT_SET)]
+        merged = rv[["model", "mean_tight_prop"]].merge(
+            rr[["model", "mean_tight_prop"]], on="model", suffixes=("_vig", "_rd")
+        )
+        rho, p_val = _spearmanr(merged["mean_tight_prop_vig"], merged["mean_tight_prop_rd"])
+        p_str = f"p = {p_val:.3f}" if p_val >= 0.001 else "p < 0.001"
+
+        merged["label"] = merged["model"].apply(_clean)
+        merged["color"] = merged["model"].apply(lambda m: MODEL_COLOR_DICT.get(m, "#888888"))
+
+        ax_max = max(merged["mean_tight_prop_vig"].max(), merged["mean_tight_prop_rd"].max()) + 0.05
+
+        scatter = figure(
+            width=500, height=380,
+            x_range=(0, ax_max), y_range=(0, ax_max),
+            toolbar_location=None,
+            title="Vignette vs random-dose tight accuracy per model",
+        )
+        # Diagonal reference line (y = x)
+        scatter.line([0, ax_max], [0, ax_max], line_color="#aaaaaa",
+                     line_dash="dashed", line_width=1.2)
+
+        src = ColumnDataSource(merged)
+        scatter.circle(
+            x="mean_tight_prop_vig", y="mean_tight_prop_rd",
+            color="color", size=10, alpha=0.85, source=src,
+        )
+        scatter.add_layout(LabelSet(
+            x="mean_tight_prop_vig", y="mean_tight_prop_rd",
+            text="label", source=src,
+            x_offset=5, y_offset=3,
+            text_font_size="8pt", text_color="#333333",
+        ))
+        scatter.add_layout(Label(
+            x=0.02, y=ax_max - 0.06,
+            text=f"Spearman ρ = {rho:.2f}, {p_str}  (n = {len(merged)} models)",
+            text_font_size="9pt", text_color="#333333",
+        ))
+        scatter.xaxis.axis_label = "Vignette tight accuracy"
+        scatter.yaxis.axis_label = "Random-dose tight accuracy"
+
+        return column(bar_fig, scatter)
 
     def build_cv_strip_vignettes(self):
         """CV strip chart + ratio scatter — vignettes (naive)."""
@@ -2112,10 +2161,14 @@ class ComprehensiveFigureBuilder:
 
         ("naive_random_dose_bars", "build_naive_random_dose_bars",
          "The same accuracy pattern holds on controlled random-dose prompts",
-         "Horizontal bar chart of model accuracy on {n_opioid_pairs} random-dose opioid"
-         " pair conversions without reference information. The model ranking"
-         " mirrors the vignette results. Significance brackets compare"
-         " adjacent-ranked models using Cochran–Mantel–Haenszel tests."),
+         "Top: horizontal bar chart of model accuracy on {n_opioid_pairs} random-dose opioid"
+         " pair conversions without reference information. Significance brackets compare"
+         " adjacent-ranked models using Cochran\u2013Mantel\u2013Haenszel tests."
+         " Bottom: scatter plot of each model's tight accuracy on vignette prompts"
+         " (x-axis) vs random-dose prompts (y-axis). The dashed diagonal is the identity"
+         " line (equal performance on both tasks). Spearman \u03c1 = {naive_rank_spearman_rho}"
+         " (p = {naive_rank_spearman_p}, n = {naive_rank_n_models} models) confirms that the"
+         " model ranking is significantly correlated across the two prompt formats."),
 
         ("cv_strip_random_doses", "build_cv_strip_random_doses",
          "Precision replicates; dose-dependent bias emerges",
@@ -2216,12 +2269,14 @@ class ComprehensiveFigureBuilder:
         print(f"  [warn] {stats_path} not found — description placeholders will show as '?'")
         # Provide safe defaults so format() never raises KeyError
         return {
-            "n_vignette_scenarios": "?", "n_opioid_pairs": "?",
+            "n_vignette_scenarios": "?", "n_vignette_wordings": "?",
+            "n_vignette_prompts": "?", "n_opioid_pairs": "?",
             "n_matched_pairs": "?", "n_model_scenario_cells": "?",
             "n_scenarios_per_model": "?", "icc_max_pairs": "?",
             "icc_total_sig_pairs": "?", "icc_total_pairs": "?",
             "tight_lower_x": "0.85", "tight_upper_x": "1.15",
             "broad_lower_x": "0.6", "broad_upper_x": "1.7",
+            "naive_rank_spearman_rho": "?", "naive_rank_spearman_p": "?",
         }
 
     async def save_annotated_pdf(self, output_path: str = None):

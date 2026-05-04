@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import numpy as np
 import pandas as pd
-from scipy.stats import chi2_contingency, wilcoxon as _wilcoxon
+from scipy.stats import chi2_contingency, wilcoxon as _wilcoxon, spearmanr
 
 
 RESULTS_DIR = "results"
@@ -123,6 +123,30 @@ def compute_stats() -> dict:
         for k in ("naive_rd_best_tight_pct", "naive_rd_worst_tight_pct",
                   "naive_rd_mean_tight_pct", "naive_rd_best_broad_pct"):
             stats[k] = "?"
+
+    # ── Fig 8: Cross-experiment rank correlation (vignette vs random doses) ──
+    # Source: results/ranking_naive_vignettes.csv + ranking_naive_random_doses.csv
+    #         → Spearman ρ on mean_tight_prop across CONSISTENT_MODELS
+    if rvig is not None and rrd is not None:
+        merged_ranks = rvig[["model", "mean_tight_prop"]].merge(
+            rrd[["model", "mean_tight_prop"]], on="model", suffixes=("_vig", "_rd")
+        )
+        if len(merged_ranks) >= 3:
+            rho, p_val = spearmanr(
+                merged_ranks["mean_tight_prop_vig"],
+                merged_ranks["mean_tight_prop_rd"],
+            )
+            stats["naive_rank_spearman_rho"] = round(float(rho), 2)
+            stats["naive_rank_spearman_p"]   = round(float(p_val), 3)
+            stats["naive_rank_n_models"]     = int(len(merged_ranks))
+        else:
+            stats["naive_rank_spearman_rho"] = "?"
+            stats["naive_rank_spearman_p"]   = "?"
+            stats["naive_rank_n_models"]     = "?"
+    else:
+        stats["naive_rank_spearman_rho"] = "?"
+        stats["naive_rank_spearman_p"]   = "?"
+        stats["naive_rank_n_models"]     = "?"
 
     # ── Figs 2 & 3: CV strips / performance profile — vignettes ─────────────
     # Source: results/reworded_vignettes_model_analysis.csv

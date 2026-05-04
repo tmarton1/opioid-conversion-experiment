@@ -324,26 +324,36 @@ cross-model direction of the wording effect.
 **Title**: The same accuracy pattern holds on controlled random-dose prompts
 
 **Build method**: `ComprehensiveFigureBuilder.build_naive_random_dose_bars()`
-→ calls `naive_performance_bars(ranking_csv=…)`
+→ returns `column(naive_performance_bars(…), scatter_panel)`
 
 **CSVs consumed**
 
 | CSV | Role |
 |-----|------|
 | `results/ranking_naive_random_doses.csv` | CMH ranking for random-dose naive condition; tight/broad accuracy and pairwise significance |
+| `results/ranking_naive_vignettes.csv` | Vignette CMH ranking; provides x-axis values for the rank comparison scatter |
 
 **What the code does**
 
-Identical layout to `naive_vignette_bars` (§1) but using random-dose prompts:
-one randomly-sampled numeric dose per opioid pair × model × repetition.
-Renders a horizontal bar chart sorted by CMH rank with tight + broad
-bars and significance brackets.
+Top panel: identical layout to `naive_vignette_bars` (§1) but using random-dose
+prompts — one randomly-sampled numeric dose per opioid pair × model × repetition.
+Renders a horizontal bar chart sorted by CMH rank with tight + broad bars and
+significance brackets.
+
+Bottom panel: scatter plot where each point is one of the 13 consistent models.
+The x-axis is the model's mean tight accuracy on vignette prompts; the y-axis is
+its mean tight accuracy on random-dose prompts. A dashed diagonal reference line
+marks equal performance on both tasks. A Spearman ρ annotation (computed by
+`orchestration/extract_figure_stats.py`) is displayed at the top-left corner.
 
 **Annotation fields from `summary_w_figures/figure_stats.json`**
 
 | Field | Meaning | Computed from |
 |-------|---------|---------------|
 | `n_opioid_pairs` | Total unique opioid pairs in the naive random-dose condition | `pair_model_analysis.csv` → `opioid_pair.nunique()` (naive filter) |
+| `naive_rank_spearman_rho` | Spearman ρ between vignette and random-dose tight accuracy | `ranking_naive_vignettes.csv` + `ranking_naive_random_doses.csv` → `spearmanr(tight_vig, tight_rd)` across CONSISTENT_MODELS |
+| `naive_rank_spearman_p` | p-value for the Spearman correlation | same merge as above |
+| `naive_rank_n_models` | Number of models in the correlation (should be 13) | same merge as above |
 | `naive_rd_best_tight_pct` | Best model's tight accuracy (%) | `ranking_naive_random_doses.csv` → `mean_tight_prop.max() × 100` |
 | `naive_rd_worst_tight_pct` | Worst model's tight accuracy (%) | `ranking_naive_random_doses.csv` → `mean_tight_prop.min() × 100` |
 | `naive_rd_mean_tight_pct` | Mean tight accuracy across models (%) | `ranking_naive_random_doses.csv` → `mean_tight_prop.mean() × 100` |

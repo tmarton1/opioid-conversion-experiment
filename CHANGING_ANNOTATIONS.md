@@ -100,3 +100,62 @@ by their absence in the Qwen rows.
 
 **Remediation**: Re-run the 3 missing wording experiments for Qwen and append the
 results to `results/reworded_vignettes_results.csv`, then re-run analysis.
+
+---
+
+## Figure 8 — `naive_random_dose_bars` (rank comparison panel added)
+
+**Reason**: The figure title ("The same accuracy pattern holds on controlled random-dose
+prompts") and the prior annotation ("The model ranking mirrors the vignette results")
+made a factual claim that was not backed by any displayed data. A Spearman rank
+correlation scatter panel was added to provide actual evidence.
+
+| | Before | After |
+|---|---|---|
+| Build method returns | `naive_performance_bars(…)` (single bar chart) | `column(bar_chart, scatter_panel)` (bar chart + scatter) |
+| Annotation | `"Horizontal bar chart of model accuracy on {n_opioid_pairs} random-dose opioid pair conversions without reference information. The model ranking mirrors the vignette results. Significance brackets…"` | `"Top: horizontal bar chart… Bottom: scatter plot of each model's tight accuracy on vignette prompts (x-axis) vs random-dose prompts (y-axis)… Spearman ρ = {naive_rank_spearman_rho} (p = {naive_rank_spearman_p}, n = {naive_rank_n_models} models) confirms…"` |
+| Rendered Spearman ρ | (absent) | ρ = 0.68, p = 0.011, n = 13 |
+
+New stats added to `extract_figure_stats.py` and `figure_stats.json`:
+- `naive_rank_spearman_rho` = 0.68
+- `naive_rank_spearman_p` = 0.011
+- `naive_rank_n_models` = 13
+
+The Spearman correlation is computed on `mean_tight_prop` (not on integer ranks) across
+all 13 CONSISTENT_MODELS, using both experiments' full opioid-pair sets (not the 11
+matched pairs used by §5 / figure 10). See `STATISTICAL_METHODS.md §5a` for details.
+
+---
+
+## Feb 2026 vs current annotation comparison
+
+The Feb 2026 reference point is commit `c057501` (2026-02-25, "added missing opioids
+from explain units experiments"). At that commit, `summary_w_figures/figure_stats.json`
+**did not exist** — it was introduced in commit `1ec77f2`. All annotation numbers in
+Feb 2026 were hardcoded strings in `FIGURE_METADATA`.
+
+The table below lists every annotation string that differs between `c057501` and
+the current HEAD. Figures whose annotation text is unchanged are omitted.
+
+| Figure | Feb 2026 annotation (c057501) | Current annotation |
+|--------|-------------------------------|-------------------|
+| 1 `naive_vignette_bars` | `…on 20 realistic vignette-based opioid conversion prompts without any reference information. Dark bars show tight-range (0.85–1.15×) accuracy; translucent extensions show broad-range (0.6–1.7×) accuracy.` | `…on {n_vignette_prompts} realistic vignette-based opioid conversion prompts ({n_vignette_scenarios} clinical scenarios, {n_vignette_wordings} wordings each) without any reference information. Dark bars show tight-range ({tight_lower_x}–{tight_upper_x}×) accuracy; translucent extensions show broad-range ({broad_lower_x}–{broad_upper_x}×) accuracy.` → rendered: "…on **80** realistic … (**20** clinical scenarios, **4** wordings each)…" |
+| 4 `variance_stacked` | `…across all 260 model × scenario cells.` | `…across all {n_model_scenario_cells} model × scenario cells.` → rendered: "260" (same value) |
+| 5 `spearman_variance_icc` | `…and ICC (n = 20 scenarios per model), sorted…` | `…and ICC (n = {n_scenarios_per_model} scenarios per model), sorted…` → rendered: "20" (same value) |
+| 6 `icc_bubble_grid` | `…Annotations show X/6 significant pairwise vignette comparisons (Bonferroni-corrected Mann–Whitney U).` | `…Annotations show the count of significant pairwise vignette comparisons out of {icc_max_pairs} per cell (Bonferroni-corrected Mann–Whitney U; overall {icc_total_sig_pairs}/{icc_total_pairs}† comparisons significant). † qwen/qwen-2.5-72b-instruct has only 3 wordings …` → rendered: "…out of **6** per cell (…; overall **420/1551**† …)" |
+| 8 `naive_random_dose_bars` | `Horizontal bar chart of model accuracy on 49 random-dose opioid pair conversions without reference information. The model ranking mirrors the vignette results. Significance brackets compare adjacent-ranked models using Cochran–Mantel–Haenszel tests.` | Top bar + scatter panel; `…{n_opioid_pairs} random-dose… Spearman ρ = {naive_rank_spearman_rho} (p = {naive_rank_spearman_p}, n = {naive_rank_n_models} models) confirms that the model ranking is significantly correlated across the two prompt formats.` → rendered includes "**49**…ρ = **0.68** (p = **0.011**, n = **13** models)" |
+| 10 `cross_experiment_bars` | `…restricted to the 11 opioid pairs present in both experiments.` | `…restricted to the {n_matched_pairs} opioid pairs present in both experiments.` → rendered: "**11**" (same value) |
+
+**Summary of substantive changes** (values actually changed, not just converted to placeholders):
+
+| Change | Feb 2026 rendered value | Current rendered value |
+|--------|------------------------|----------------------|
+| Fig 1 prompt count | 20 prompts | 80 prompts (20 scenarios × 4 wordings) |
+| Fig 6 annotation detail | "X/6 sig pairs" (literal X) | "420/1551† sig pairs" with footnote explaining Qwen gap |
+| Fig 8 rank evidence | claim only ("mirrors vignette results") | scatter panel + ρ = 0.68, p = 0.011 |
+
+**No-op conversions** (value unchanged, only made data-driven):
+- Fig 4: 260 → `{n_model_scenario_cells}` = 260
+- Fig 5: 20 → `{n_scenarios_per_model}` = 20
+- Fig 10: 11 → `{n_matched_pairs}` = 11
+- Fig 1: 0.85/1.15/0.6/1.7 → `{tight_lower_x}` etc. (same values)
