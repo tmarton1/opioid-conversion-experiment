@@ -2041,8 +2041,9 @@ class ComprehensiveFigureBuilder:
 
         ("naive_vignette_bars", "build_naive_vignette_bars",
          "LLMs are dangerously inaccurate at opioid dose conversion",
-         "Horizontal bar chart of each model's accuracy on {n_vignette_scenarios} realistic"
-         " vignette-based opioid conversion prompts without any reference"
+         "Horizontal bar chart of each model's accuracy on {n_vignette_prompts} realistic"
+         " vignette-based opioid conversion prompts ({n_vignette_scenarios} clinical scenarios,"
+         " {n_vignette_wordings} wordings each) without any reference"
          " information. Dark bars show tight-range ({tight_lower_x}\u2013{tight_upper_x}\u00d7) accuracy;"
          " translucent extensions show broad-range ({broad_lower_x}\u2013{broad_upper_x}\u00d7) accuracy."
          " Models are sorted by global rank. Significance brackets compare"
@@ -2092,7 +2093,10 @@ class ComprehensiveFigureBuilder:
          " comes from wording differences (high ICC). Annotations show the count"
          " of significant pairwise vignette comparisons out of {icc_max_pairs}"
          " per cell (Bonferroni-corrected Mann–Whitney U; overall"
-         " {icc_total_sig_pairs}/{icc_total_pairs} comparisons significant)."),
+         " {icc_total_sig_pairs}/{icc_total_pairs}\u2020 comparisons significant)."
+         " \u2020 qwen/qwen-2.5-72b-instruct has only 3 wordings (vs 4 for all other models)"
+         " in 3 scenarios (elderly-hip-fracture, young-adult-sickle-cell-crisis,"
+         " young-man-car-accident), reducing the maximum from 1\u202f560 (13\u202f\u00d7\u202f20\u202f\u00d7\u202f6) to 1\u202f551."),
 
         ("kendall_w_summary", "build_kendall_w_summary",
          "Wording effect sizes and directions are model-specific",

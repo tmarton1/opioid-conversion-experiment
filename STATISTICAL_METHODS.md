@@ -104,7 +104,7 @@ This document is organised two ways:
 
 **Description**: Spearman rank correlation between each model's mean accuracy in the random-dose experiment and its mean accuracy in the vignette experiment, computed on the matched-pair subset. Quantifies whether model ranking is consistent across task formats.
 
-**Output**: `cross_experiment_matched_spearman.csv` — columns: `condition`, `rho`, `p_value`, `n_models`
+**Output**: `cross_experiment_matched_spearman.csv` — columns: `model`, `condition_a`, `condition_b`, `range`, `spearman_rho`, `spearman_p`, `n_pairs`
 
 ---
 
@@ -140,7 +140,7 @@ An F-test (H₀: σ²_between = 0) is included. Degrees of freedom: df_between =
 
 **Formula**: W = 12S / (m²(n³ − n)), where S is the sum of squared rank-sum deviations, m = number of models, n = number of vignette wordings.
 
-**Output columns** (in `kendall_w_vignettes.csv`): `scenario_key`, `kendall_w`, `chi2`, `p_value`, `n_models`, `n_wordings`
+**Output columns** (in `kendall_w_vignettes.csv`): `scenario_key`, `kendall_w`, `kendall_p`
 
 ---
 
@@ -181,9 +181,13 @@ Bins are tertiles. Cells with expected count < 5 are noted in the output.
 
 **Code**: `analysis/variance_icc_stats.py` → `compute_cv_accuracy_chi2()`
 
-**Description**: Per model, a chi-square test of independence between CV bin (<0.1, 0.1–0.5, ≥0.5) and accuracy category (tight / broad-only / incorrect) under naive conditions. CV is computed from the observed_coefficient_cv column in `pair_model_analysis.csv`.
+**Description**: Per model, a chi-square test of independence between CV bin and accuracy category (tight / broad-only / incorrect) under naive conditions.
 
-**Output** (in `cv_accuracy_chi2.csv`): `model`, `chi2`, `p_value`, `df`, `n`
+Applied in two variants:
+- **Vignette variant** (saved to `cv_accuracy_chi2.csv`): called by `visualize/comprehensive_figures.py → build_cv_strip_vignettes()` from `reworded_vignettes_model_analysis.csv`, CV column `observed_dose_cv`, bins `[0, 1e-9, 0.2, ∞]` (labels: CV=0 / 0<CV≤0.2 / CV>0.2).
+- **Random-dose variant** (computed inline, not saved): computed in `orchestration/extract_figure_stats.py` from `pair_model_analysis.csv`, CV column `observed_coefficient_cv`, bins `[0, 0.1, 0.5, ∞]` (labels: <0.1 / 0.1–0.5 / ≥0.5).
+
+**Output** (vignette variant, `cv_accuracy_chi2.csv`): `model`, `chi2`, `p_value`, `df`, `n`
 
 ---
 
@@ -214,7 +218,7 @@ Each figure slug links to its full specification in [FIGURES.md](FIGURES.md).
 
 | Step | Method (§) | Code file → method | Output CSV |
 |------|-----------|-------------------|------------|
-| CV × accuracy independence | §11 Chi-square | `analysis/variance_icc_stats.py` → `compute_cv_accuracy_chi2()` | `cv_accuracy_chi2.csv` |
+| CV × accuracy independence | §12 Chi-square CV | `analysis/variance_icc_stats.py` → `compute_cv_accuracy_chi2()` | `cv_accuracy_chi2.csv` |
 
 > Source data: `reworded_vignettes_model_analysis.csv` (filtered naive)
 
@@ -328,7 +332,7 @@ Each figure slug links to its full specification in [FIGURES.md](FIGURES.md).
 | `kendall_w_vignettes.csv` | `kendall_w.py` | `kendall_w_summary` |
 | `variance_icc_spearman.csv` | `variance_icc_stats.py` | `spearman_variance_icc` |
 | `grid_independence_tests.csv` | `grid_independence_tests.py` | `icc_bubble_grid`, `cv_strip_vignettes` |
-| `cv_accuracy_chi2.csv` | `variance_icc_stats.py` | `cv_strip_random_doses` |
+| `cv_accuracy_chi2.csv` | `variance_icc_stats.py` (called by `comprehensive_figures.py`) | `cv_strip_vignettes` (vignette variant); RD variant computed inline in `extract_figure_stats.py` |
 | `performance_profile_random_doses.csv` | `performance_profile.py` | `cv_strip_random_doses`, `vignette_performance_profile` |
 | `performance_profile_vignettes.csv` | `performance_profile.py` | `vignette_performance_profile` |
 | `summary_w_figures/figure_stats.json` | `orchestration/extract_figure_stats.py` | `all_comprehensive_figures.pdf` annotations |

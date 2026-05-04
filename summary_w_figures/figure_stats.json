@@ -13,6 +13,8 @@
   "naive_rd_mean_tight_pct": 19.5,
   "naive_rd_best_broad_pct": 82.1,
   "n_vignette_scenarios": 20,
+  "n_vignette_wordings": 4,
+  "n_vignette_prompts": 80,
   "n_sig_cv_chi2_vignettes": 2,
   "vig_mean_correct_pct": 29.5,
   "vig_mean_precise_wrong_pct": 52.2,

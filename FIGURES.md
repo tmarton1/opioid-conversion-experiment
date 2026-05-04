@@ -66,7 +66,9 @@ column; stars or "n.s." are placed at the right edge of the longer bar.
 
 | Field | Meaning | Computed from |
 |-------|---------|---------------|
-| `n_vignette_scenarios` | Total unique vignette scenarios (denominator of accuracy) | `reworded_vignettes_model_analysis.csv` → `scenario_key.nunique()` (naive filter) |
+| `n_vignette_scenarios` | Total unique vignette scenarios | `reworded_vignettes_model_analysis.csv` → `scenario_key.nunique()` (naive filter) |
+| `n_vignette_wordings` | Number of distinct wordings per scenario | `reworded_vignettes_model_analysis.csv` → `vignette_id.nunique()` per scenario (mode) |
+| `n_vignette_prompts` | Total prompts = scenarios × wordings | `n_vignette_scenarios × n_vignette_wordings` |
 | `naive_vig_best_tight_pct` | Best model's tight-range accuracy (%) | `ranking_naive_vignettes.csv` → `mean_tight_prop.max() × 100` |
 | `naive_vig_worst_tight_pct` | Worst model's tight-range accuracy (%) | `ranking_naive_vignettes.csv` → `mean_tight_prop.min() × 100` |
 | `naive_vig_mean_tight_pct` | Mean tight accuracy across all models (%) | `ranking_naive_vignettes.csv` → `mean_tight_prop.mean() × 100` |

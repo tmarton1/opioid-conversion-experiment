@@ -137,8 +137,13 @@ def compute_stats() -> dict:
             (vdf.get("has_vignette_text", pd.Series(True, index=vdf.index)) == True)
         ]
         stats["n_vignette_scenarios"] = int(naive_vdf["scenario_key"].nunique())
+        n_wordings = int(naive_vdf.groupby("scenario_key")["vignette_id"].nunique().mode()[0])
+        stats["n_vignette_wordings"]  = n_wordings
+        stats["n_vignette_prompts"]   = stats["n_vignette_scenarios"] * n_wordings
     else:
         stats["n_vignette_scenarios"] = "?"
+        stats["n_vignette_wordings"]  = "?"
+        stats["n_vignette_prompts"]   = "?"
 
     # Source: results/cv_accuracy_chi2.csv
     #         → vignette chi2 per model (significant col); see run_analysis.py §14
