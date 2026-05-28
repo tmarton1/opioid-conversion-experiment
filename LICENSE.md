@@ -1,6 +1,6 @@
 # COPYRIGHT AND LICENSE
 
-**Copyright (c) [Year] [Your Name/Organization]. All rights reserved.**
+**Copyright (c) 2026 Tanya Marton. All rights reserved.**
 
 This source code and repository are proprietary and confidential. 
 
