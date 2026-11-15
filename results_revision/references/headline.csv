@@ -1,0 +1,13 @@
+key,value
+n_study_agents_excl_oral_morphine,19
+agents_with_standard_gt15pct_from_nielsen_all,10
+agents_with_standard_gt15pct_from_nielsen_current,8
+conversions_total,69
+conversions_with_alternative_all,59
+conversions_with_alternative_current,59
+conversions_outside_tight_all,44
+conversions_outside_tight_current,36
+conversions_outside_broad_all,"[""oral_oxycodone -> oral_tramadol"", ""oral_tramadol -> oral_morphine"", ""oral_tramadol -> oral_oxycodone"", ""elderly-female-bunionectomy"", ""middle-aged-female-shoulder-pain""]"
+cdc_2022_vs_heal_differ_on,"[""oral_tapentadol""]"
+iv_route_alternatives,"{""iv_buprenorphine"": [], ""iv_hydromorphone"": [""mcpherson_2018""], ""iv_fentanyl"": [""mcpherson_2018""], ""iv_morphine"": [""mcpherson_2018""], ""iv_methadone"": []}"
+nielsen_lone_outlier_agents,"[""oral_codeine"", ""oral_hydrocodone"", ""transdermal_fentanyl""]"

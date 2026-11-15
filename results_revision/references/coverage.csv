@@ -1,0 +1,6 @@
+standard,oral_codeine,oral_hydrocodone,oral_hydromorphone,oral_methadone,oral_morphine,oral_oxycodone,oral_oxymorphone,oral_tapentadol,oral_tramadol,sublingual_buprenorphine,transdermal_buprenorphine,transdermal_fentanyl,im_buprenorphine,iv_buprenorphine,iv_hydromorphone,iv_fentanyl,sc_fentanyl,iv_morphine,iv_methadone,parenteral_nalbuphine
+nielsen,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+cdc_2016,1,1,1,0,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0
+cdc_2022,1,1,1,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0
+nih_heal,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+mcpherson_2018,0,1,1,0,1,1,1,0,0,0,0,0,0,0,1,1,0,1,0,0
