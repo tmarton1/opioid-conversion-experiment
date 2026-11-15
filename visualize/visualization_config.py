@@ -44,7 +44,7 @@ MODEL_ORDER = [
     'deepseek/deepseek-chat'
 ]
 
-# Ranking CSVs used to determine global model order and colours.
+# Ranking CSVs used to determine the global model order (colors are a fixed map).
 _RANKING_CSV_NAMES = [
     "ranking_vignettes_nielsen_units.csv",
     "ranking_random_doses_nielsen.csv",
@@ -54,7 +54,11 @@ _RANKING_CSV_NAMES = [
 
 def _collect_ranking_ranks() -> Dict[str, List[float]]:
     """Read adjusted_rank from the canonical ranking CSVs and return per-model lists."""
-    results_dir = os.path.join(os.path.dirname(__file__), "..", RESULTS_DIR)
+    # MODEL_ORDER_RESULTS_DIR (environment) fixes the global model order to one
+    # results directory whatever RESULTS_DIR is; the revision framework sets it
+    # to results_nielsen so every score's figures share one model order.
+    order_dir = os.environ.get("MODEL_ORDER_RESULTS_DIR", RESULTS_DIR)
+    results_dir = os.path.join(os.path.dirname(__file__), "..", order_dir)
     ranks: Dict[str, List[float]] = {}
     for name in _RANKING_CSV_NAMES:
         path = os.path.join(results_dir, name)
@@ -69,10 +73,11 @@ def _collect_ranking_ranks() -> Dict[str, List[float]]:
 
 def _build_ranked_color_dict() -> Dict[str, str]:
     """
-    Not used for MODEL_COLOR_DICT any more (colours are a fixed map, below);
-    kept to document how the published colours were derived.
+    Not called at import any more: MODEL_COLOR_DICT is a fixed map (below),
+    computed once with this function from the results_all/ rankings. Kept to
+    document how those colors were derived.
 
-    Assign rainbow colours based on the average of each model's adjusted
+    Assign rainbow colors based on the average of each model's adjusted
     rank across three conditions:
       1. Vignettes + Nielsen + explain-units
       2. Random doses + Nielsen
@@ -86,7 +91,7 @@ def _build_ranked_color_dict() -> Dict[str, str]:
     ranks = _collect_ranking_ranks()
 
     if not ranks:
-        # Fallback: return colours in MODEL_ORDER
+        # Fallback: return colors in MODEL_ORDER
         consistent = [m for m in MODEL_ORDER if m in CONSISTENT_MODELS]
         n = len(consistent)
         return {m: _hue_color(i, n) for i, m in enumerate(consistent)}
@@ -102,32 +107,35 @@ def _build_ranked_color_dict() -> Dict[str, str]:
 
 
 def _hue_color(index: int, total: int) -> str:
-    """Return an evenly-spaced rainbow hex colour."""
+    """Return an evenly-spaced rainbow hex color."""
     hue = index / max(total, 1)
     r, g, b = colorsys.hsv_to_rgb(hue, 0.72, 0.90)
     return f"#{int(r*255):02x}{int(g*255):02x}{int(b*255):02x}"
 
 
-# Fixed model-to-colour map: colours follow the model, never its rank, so
-# they stay the same in every figure (old and new, any score) when the model
-# order changes. Each model keeps its published colour: these are the values
-# _build_ranked_color_dict() gave with the published ranking CSVs in results/
-# (summary_w_figures/pub_figures). Models not listed fall back to the
-# callers' default colour.
+# Fixed model-to-color map, used by every figure under every score and view.
+# Colors follow the model, never its rank, and are never recomputed from
+# another score's rankings. Computed once (2026-11-14) with the rank-based
+# rainbow of _build_ranked_color_dict() from the all-standards rankings in
+# results_all/ (ranking_vignettes_nielsen_units with text-only vignettes,
+# ranking_random_doses_nielsen, ranking_random_doses_nielsen_units). These are
+# reference-grounded conditions, where ranking against Nielsen alone would be
+# circular. Ties in average rank were broken by input order. Models not listed
+# fall back to the callers' default color.
 MODEL_COLOR_DICT: Dict[str, str] = {
-    "google/gemini-2.5-pro":                "#e54040",
-    "anthropic/claude-3.5-sonnet:20241022": "#e58c40",
-    "openai/gpt-4.1":                       "#e5d840",
-    "deepseek/deepseek-chat":               "#a5e540",
-    "openai/gpt-4.1-mini":                  "#59e540",
-    "mistralai/mistral-large-2407":         "#40e573",
-    "google/gemini-2.5-flash":              "#40e5bf",
-    "qwen/qwen-2.5-72b-instruct":           "#40bfe5",
-    "mistralai/mixtral-8x22b-instruct":     "#4073e5",
-    "meta-llama/llama-3.3-70b-instruct":    "#5940e5",
-    "ai21/jamba-large-1.7":                 "#a540e5",
-    "cohere/command-r-plus-08-2024":        "#e540d8",
-    "openai/gpt-3.5-turbo":                 "#e5408c",
+    "anthropic/claude-3.5-sonnet:20241022":  "#e54040",
+    "google/gemini-2.5-pro":                 "#e58c40",
+    "openai/gpt-4.1":                        "#e5d840",
+    "deepseek/deepseek-chat":                "#a5e540",
+    "mistralai/mistral-large-2407":          "#59e540",
+    "openai/gpt-4.1-mini":                   "#40e573",
+    "google/gemini-2.5-flash":               "#40e5bf",
+    "qwen/qwen-2.5-72b-instruct":            "#40bfe5",
+    "mistralai/mixtral-8x22b-instruct":      "#4073e5",
+    "meta-llama/llama-3.3-70b-instruct":     "#5940e5",
+    "ai21/jamba-large-1.7":                  "#a540e5",
+    "cohere/command-r-plus-08-2024":         "#e540d8",
+    "openai/gpt-3.5-turbo":                  "#e5408c",
 }
 
 # Range thresholds and weighting epsilon — canonical definitions live in

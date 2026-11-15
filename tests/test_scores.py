@@ -11,8 +11,8 @@ from analysis.revision.rescore import rescore
 
 
 def test_registry_has_initial_scores_in_order():
-    assert list(S.SCORES)[:4] == ["nielsen", "all", "non_nielsen", "consensus"]
-    assert S.SCORES["consensus"].variance_valid and S.SCORES["nielsen"].variance_valid
+    assert list(S.SCORES)[:4] == ["nielsen", "all", "non_nielsen", "geomean"]
+    assert S.SCORES["geomean"].variance_valid and S.SCORES["nielsen"].variance_valid
     assert not S.SCORES["all"].variance_valid and not S.SCORES["non_nielsen"].variance_valid
 
 
@@ -21,7 +21,7 @@ def test_nearest_and_geometric_mean_rules():
     assert S.SCORES["all"].fn(82.0, e) == (80.0, "cdc_2022")
     assert S.SCORES["all"].fn(120.0, e) == (125.0, "mcpherson_2018")
     assert S.SCORES["non_nielsen"].fn(99.0, e)[1] in ("cdc_2022", "mcpherson_2018")
-    g, _ = S.SCORES["consensus"].fn(None, e)
+    g, _ = S.SCORES["geomean"].fn(None, e)
     assert abs(g - (100 * 80 * 125) ** (1 / 3)) < 1e-9
     # no alternative standard -> excluded under non_nielsen
     assert S.SCORES["non_nielsen"].fn(50.0, {"nielsen": 100.0}) == (None, None)

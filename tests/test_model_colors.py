@@ -1,4 +1,4 @@
-"""Model colours are a fixed map: they follow the model, never its rank."""
+"""Model colors are a fixed map: they follow the model, never its rank."""
 import os
 import subprocess
 import sys
@@ -30,6 +30,16 @@ def test_colors_do_not_depend_on_results_dir_or_ranking():
     b = _colors_under("results_nielsen")
     c = _colors_under("results_does_not_exist")
     assert a == b == c
-    # published colours (summary_w_figures/pub_figures)
-    assert a["qwen/qwen-2.5-72b-instruct"] == "#40bfe5"
-    assert a["mistralai/mixtral-8x22b-instruct"] == "#4073e5"
+
+
+def test_fixed_map_equals_rainbow_from_all_standards_rankings():
+    """The frozen map is the rank-based rainbow computed from results_all/
+    (decision 2026-11-14); it must not be recomputed from another score."""
+    code = ("import json, visualize.visualization_config as v; "
+            "print(json.dumps(v._build_ranked_color_dict()))")
+    env = dict(os.environ, RESULTS_DIR="results_all")
+    env.pop("MODEL_ORDER_RESULTS_DIR", None)
+    out = subprocess.run([sys.executable, "-c", code], cwd=ROOT, env=env,
+                         capture_output=True, text=True, check=True).stdout
+    import json
+    assert json.loads(out.strip().splitlines()[-1]) == _colors_under("results_nielsen")

@@ -45,7 +45,7 @@ def test_response_equal_to_nielsen_for_hydrocodone():
     expected = {"nielsen": n, "cdc_2022": n / 1.2, "nih_heal": n / 1.2, "mcpherson_2018": n / 1.2}
     obs = n
     ratios = {}
-    for name in ("nielsen", "all", "non_nielsen", "consensus"):
+    for name in ("nielsen", "all", "non_nielsen", "geomean"):
         ref, _ = SCORES[name].fn(obs, expected)
         r = obs / ref
         ratios[name] = max(r, 1 / r)  # fold error
@@ -54,8 +54,8 @@ def test_response_equal_to_nielsen_for_hydrocodone():
     assert close(ratios["non_nielsen"], 1.2)
     gm = math.exp((math.log(1) + 3 * math.log(1 / 1.2)) / 4)
     assert close(gm, 0.872)
-    assert close(ratios["consensus"], 1 / gm)
-    assert close(ratios["consensus"], 1.147)
+    assert close(ratios["geomean"], 1 / gm)
+    assert close(ratios["geomean"], 1.147)
 
 
 def test_reference_agreement_guarantee():

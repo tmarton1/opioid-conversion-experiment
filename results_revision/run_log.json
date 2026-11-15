@@ -1,7 +1,7 @@
 {
-  "git_commit": "ae0ea119aea3c879bebffa93258762b5bf9dbcb8",
-  "working_tree_modified": false,
-  "timestamp": "2026-11-14T19:43:24",
+  "git_commit": "2c5a0c5403443d5bf23173bad9f7188b20d03737",
+  "working_tree_modified": true,
+  "timestamp": "2026-11-14T21:06:06",
   "steps": [
     "pipeline"
   ],
@@ -9,7 +9,7 @@
     "nielsen",
     "all",
     "non_nielsen",
-    "consensus"
+    "geomean"
   ],
   "reference_files": {
     "nielsen": {

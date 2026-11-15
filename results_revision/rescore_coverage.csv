@@ -1,10 +1,10 @@
 score,file,rows_total,rows_scored,conversions_total,conversions_scored
 all,experiment_results.csv,26871,26871,49,49
 non_nielsen,experiment_results.csv,26871,22741,49,40
-consensus,experiment_results.csv,26871,26871,49,49
+geomean,experiment_results.csv,26871,26871,49,49
 all,explain_units_experiment_results.csv,13625,13625,20,20
 non_nielsen,explain_units_experiment_results.csv,13625,10424,20,15
-consensus,explain_units_experiment_results.csv,13625,13625,20,20
+geomean,explain_units_experiment_results.csv,13625,13625,20,20
 all,reworded_vignettes_results.csv,28814,28814,20,20
 non_nielsen,reworded_vignettes_results.csv,28814,27366,20,19
-consensus,reworded_vignettes_results.csv,28814,28814,20,20
+geomean,reworded_vignettes_results.csv,28814,28814,20,20

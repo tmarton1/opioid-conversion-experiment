@@ -113,8 +113,8 @@ register(Score(
                 "non-Nielsen standard are excluded.",
 ))
 register(Score(
-    name="consensus", label="Consensus (geometric mean)",
-    title_suffix=" — scored against the consensus of all standards",
+    name="geomean", label="geometric mean of standards",
+    title_suffix=" — scored against the geometric mean of standards",
     fn=geometric_mean_of(SCORING_INPUTS), variance_valid=True,
     description="Geometric mean of the available standards' expected doses "
                 "(a fixed multiple of Nielsen per conversion).",
