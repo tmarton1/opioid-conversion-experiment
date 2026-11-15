@@ -1,0 +1,38 @@
+{
+  "git_commit": "1607c43e4195c6ba81b69bda421351512b0e186e",
+  "working_tree_modified": false,
+  "timestamp": "2026-11-14T19:40:36",
+  "steps": [
+    "rescore",
+    "references"
+  ],
+  "scores": [
+    "nielsen",
+    "all",
+    "non_nielsen",
+    "consensus"
+  ],
+  "reference_files": {
+    "nielsen": {
+      "file": "resources/nielsen_ome.json",
+      "sha256": "6f9361c143980ddec20f0478d989ae1cf89a5002b3a0c26f26e083f5491fb252"
+    },
+    "cdc_2016": {
+      "file": "resources/cdc_2016_ome.json",
+      "sha256": "77a47f859d8ce7ee1e42077b52c42ceae2bf546b349d9bf9582cc4ab3655acd0"
+    },
+    "cdc_2022": {
+      "file": "resources/cdc_2022_ome.json",
+      "sha256": "d4198c29f7a20716725f659febb980054d448d5873c009d725885085262d2e1e"
+    },
+    "nih_heal": {
+      "file": "resources/nih_heal_ome.json",
+      "sha256": "156db435a5a6cbbe7a6e992e1576ae4d29a6ce15906be18cc9a7ad465c2f2dbc"
+    },
+    "mcpherson_2018": {
+      "file": "resources/mcpherson_2018_ome.json",
+      "sha256": "92a47a90710571845f6f1b9318a8b860d494a9d582a6bafa437ace5c75b7e69b"
+    }
+  },
+  "random_seeds": {}
+}
