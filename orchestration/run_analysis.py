@@ -157,6 +157,11 @@ def run_batch_means():
         {"ome": False,"include_nielsen": False, "explain_units": False, "batch_name": "pairs_n0"},
         {"ome": False,"include_nielsen": True,  "explain_units": False, "batch_name": "pairs_n1"},
     ]
+    # Text vignettes only: the empty-vignette controls (v82-v101) were added to
+    # the vignette results after these batch means were first built and are
+    # analysed separately (text vs empty below). Matches the published
+    # model_batch_means_vignettes.csv exactly.
+    vig_combos = [{**c, "has_vignette_text": True} for c in vig_combos]
     ModelBatchMeansBuilder(VIGNETTE_CSV).save_means_df(vig_combos, BATCH_MEANS_VIG)
 
     print("── Building text-vs-empty batch means ──")
@@ -329,41 +334,43 @@ def run_text_effects():
 
 def run_ome_comparisons():
     """
-    Compare OME vs non-OME accuracy distributions for naive and Nielsen
-    conditions, both overall and per-model.
+    Compare OME (to oral morphine) vs non-OME (opioid-to-opioid) accuracy,
+    naive and Nielsen conditions, random-dose experiment.
+
+    Restores the generators that produced the published files
+    (``_gen_ome_comparisons.py`` and ``analysis/batch_comparison.py`` at
+    commit ce11a0b); OME and non-OME items are different opioid pairs, so a
+    test paired on (model, pair) cannot be used.
+
+    Outputs:
+      comparison_ome_vs_nonome_{naive,nielsen}.csv
+          model-level batch means (ome_n* vs pairs_n*), Wilcoxon across models
+      comparison_ome_vs_nonome_{naive,nielsen}_permodel.csv
+          per-model unpaired Mann-Whitney U on per-pair tight/broad proportions
     """
-    from analysis.accuracy_comparison import AccuracyComparison
+    from analysis.batch_comparison import BatchComparison
+    from analysis.cross_experiment_comparison import CrossExperimentComparison
+    from common.models import CONSISTENT_MODELS
 
-    specs = [
-        dict(
-            csv_path=PAIR_CSV,
-            group_col="ome", group_a_value=True, group_b_value=False,
-            group_a_label="ome", group_b_label="non_ome",
-            unit_col="opioid_pair",
-            filters={"include_nielsen": False, "include_examples": False},
-            output=f"{RESULTS_DIR}/comparison_ome_vs_nonome_naive.csv",
-        ),
-        dict(
-            csv_path=PAIR_CSV,
-            group_col="ome", group_a_value=True, group_b_value=False,
-            group_a_label="ome", group_b_label="non_ome",
-            unit_col="opioid_pair",
-            filters={"include_nielsen": True, "include_examples": False},
-            output=f"{RESULTS_DIR}/comparison_ome_vs_nonome_nielsen.csv",
-        ),
-    ]
-    # Per-model versions (no hold_constant, so each model-unit row is tested directly)
-    for spec in specs:
-        output = spec.pop("output")
-        filters = spec.pop("filters", None)
+    for cond, include_nielsen, suffix in [("naive", False, "n0"), ("nielsen", True, "n1")]:
+        output = f"{RESULTS_DIR}/comparison_ome_vs_nonome_{cond}.csv"
         print(f"── OME comparison → {os.path.basename(output)} ──")
-        comp = AccuracyComparison(**spec, filters=filters)
-        comp.save(output)
+        BatchComparison(
+            batch_means_csv=BATCH_MEANS_RD,
+            batch_a=f"ome_{suffix}", batch_b=f"pairs_{suffix}",
+            label_a="ome", label_b="non_ome",
+            models=CONSISTENT_MODELS,
+        ).save(output)
 
-        # Per-model version
-        permodel_output = output.replace(".csv", "_permodel.csv")
-        comp2 = AccuracyComparison(**spec, filters=filters)
-        comp2.save(permodel_output)
+        permodel_output = f"{RESULTS_DIR}/comparison_ome_vs_nonome_{cond}_permodel.csv"
+        print(f"── OME comparison → {os.path.basename(permodel_output)} ──")
+        base = {"include_nielsen": include_nielsen, "include_examples": False, "explain_units": False}
+        CrossExperimentComparison(
+            csv_a=PAIR_CSV, csv_b=PAIR_CSV,
+            filter_a={**base, "ome": True}, filter_b={**base, "ome": False},
+            label_a="ome", label_b="non_ome",
+            models=CONSISTENT_MODELS,
+        ).save(permodel_output)
     print("✓ OME comparisons complete")
 
 
@@ -398,8 +405,17 @@ def run_dosing_comparison():
         on=["model", "opioid_pair"],
         suffixes=("_daily", "_4h"),
     )
-    merged["tight_diff"] = merged[f"{tight_col}_4h"] - merged[f"{tight_col}_daily"]
-    merged["broad_diff"] = merged[f"{broad_col}_4h"] - merged[f"{broad_col}_daily"]
+    # Published format (results/comparison_dosing_unit_effect.csv): diff is
+    # daily minus 4-hour, so a positive value is the accuracy drop that
+    # figure_stats reports as dosing_mean_tight_drop_pp.
+    merged = merged.rename(columns={
+        f"{tight_col}_daily": "daily_tight", f"{broad_col}_daily": "daily_broad",
+        f"{tight_col}_4h": "fourh_tight", f"{broad_col}_4h": "fourh_broad",
+    })
+    merged["tight_diff"] = merged["daily_tight"] - merged["fourh_tight"]
+    merged["broad_diff"] = merged["daily_broad"] - merged["fourh_broad"]
+    merged = merged[["model", "opioid_pair", "daily_tight", "daily_broad",
+                     "fourh_tight", "fourh_broad", "tight_diff", "broad_diff"]]
 
     output = f"{RESULTS_DIR}/comparison_dosing_unit_effect.csv"
     merged.to_csv(output, index=False)
@@ -533,21 +549,28 @@ def run_profiles():
 
 def run_cv_chi2():
     """
-    Per-model chi-square tests for accuracy × CV-bin independence.
+    Per-model chi-square tests for accuracy × CV-bin independence, naive
+    text vignettes (figure 2 and figure_stats ``n_sig_cv_chi2_vignettes``).
     Output: results/cv_accuracy_chi2.csv
+
+    Same arguments as the original call in
+    visualize/comprehensive_figures.py → build_cv_strip_vignettes()
+    (commit 3dca061), which produced the published file. The random-dose
+    version is computed inline in orchestration/extract_figure_stats.py.
     """
     from analysis.variance_icc_stats import compute_cv_accuracy_chi2
 
-    print("── Running CV–accuracy chi-square tests ──")
+    print("── Running CV–accuracy chi-square tests (vignettes) ──")
     compute_cv_accuracy_chi2(
-        PAIR_CSV,
-        cv_col="observed_coefficient_cv",
+        VIGNETTE_CSV,
+        cv_col="observed_dose_cv",
         tight_col="tight(0.85,1.15)",
         broad_col="broad(0.6,1.7)",
-        cv_bins=[0, 0.1, 0.5, float("inf")],
-        cv_bin_labels=["<0.1", "0.1–0.5", "≥0.5"],
+        cv_bins=[0, 1e-9, 0.2, float("inf")],
+        cv_bin_labels=["CV=0", "0<CV≤0.2", "CV>0.2"],
         output_csv=f"{RESULTS_DIR}/cv_accuracy_chi2.csv",
-        naive_filter={"include_nielsen": False, "include_examples": False},
+        naive_filter={"include_nielsen": False, "explain_units": False,
+                      "has_vignette_text": True},
     )
     print("✓ CV chi-square tests complete")
 
