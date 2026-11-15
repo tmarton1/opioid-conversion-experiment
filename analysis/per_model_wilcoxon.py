@@ -22,6 +22,8 @@ import numpy as np
 import pandas as pd
 from scipy.stats import wilcoxon
 
+from common.models import CONSISTENT_MODELS
+
 
 def _run_wilcoxon(diffs: pd.Series):
     """Run Wilcoxon signed-rank on a Series.  Returns (p, median, mean, n)."""
@@ -60,6 +62,8 @@ def compute_per_model_wilcoxon(
             f"comparison CSV must contain tight_diff and broad_diff columns; "
             f"found: {list(df.columns)}"
         )
+    # Restrict to the 13 consistently-run models before any test (including POOLED).
+    df = df[df["model"].isin(CONSISTENT_MODELS)]
 
     rows = []
 

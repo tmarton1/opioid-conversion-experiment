@@ -63,6 +63,8 @@ import numpy as np
 from scipy.stats import norm
 from statsmodels.stats.multitest import multipletests
 
+from common.models import CONSISTENT_MODELS
+
 
 class ModelRanking:
     """
@@ -103,6 +105,8 @@ class ModelRanking:
 
     def _load_and_filter(self) -> pd.DataFrame:
         df = pd.read_csv(self.csv_path)
+        # Restrict to the 13 consistently-run models before any test or summary.
+        df = df[df["model"].isin(CONSISTENT_MODELS)]
         for col, val in self.filters.items():
             if col in df.columns:
                 df = df[df[col] == val]
