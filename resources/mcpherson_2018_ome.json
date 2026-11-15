@@ -1,0 +1,74 @@
+{
+    "oral_hydrocodone": {
+        "administration_method": "oral",
+        "substance": "hydrocodone",
+        "conversion_factor": 1.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 2
+    },
+    "oral_hydromorphone": {
+        "administration_method": "oral",
+        "substance": "hydromorphone",
+        "conversion_factor": 5.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "oral_morphine": {
+        "administration_method": "oral",
+        "substance": "morphine",
+        "conversion_factor": 1.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "oral_oxycodone": {
+        "administration_method": "oral",
+        "substance": "oxycodone",
+        "conversion_factor": 1.25,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "oral_oxymorphone": {
+        "administration_method": "oral",
+        "substance": "oxymorphone",
+        "conversion_factor": 2.5,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 3
+    },
+    "iv_hydromorphone": {
+        "administration_method": "iv",
+        "substance": "hydromorphone",
+        "conversion_factor": 12.5,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "iv_morphine": {
+        "administration_method": "iv",
+        "substance": "morphine",
+        "conversion_factor": 2.5,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "iv_fentanyl": {
+        "administration_method": "iv",
+        "substance": "fentanyl",
+        "conversion_factor": 0.1667,
+        "unit": "mcg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 3
+    }
+}

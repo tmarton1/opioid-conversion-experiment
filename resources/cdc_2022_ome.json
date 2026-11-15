@@ -1,0 +1,92 @@
+{
+    "oral_codeine": {
+        "administration_method": "oral",
+        "substance": "codeine",
+        "conversion_factor": 0.15,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 3
+    },
+    "oral_hydrocodone": {
+        "administration_method": "oral",
+        "substance": "hydrocodone",
+        "conversion_factor": 1.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 2
+    },
+    "oral_hydromorphone": {
+        "administration_method": "oral",
+        "substance": "hydromorphone",
+        "conversion_factor": 5.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "oral_methadone": {
+        "administration_method": "oral",
+        "substance": "methadone",
+        "conversion_factor": 4.7,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 3
+    },
+    "oral_morphine": {
+        "administration_method": "oral",
+        "substance": "morphine",
+        "conversion_factor": 1.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "oral_oxycodone": {
+        "administration_method": "oral",
+        "substance": "oxycodone",
+        "conversion_factor": 1.5,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 1
+    },
+    "oral_oxymorphone": {
+        "administration_method": "oral",
+        "substance": "oxymorphone",
+        "conversion_factor": 3.0,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 3
+    },
+    "oral_tapentadol": {
+        "administration_method": "oral",
+        "substance": "tapentadol",
+        "conversion_factor": 0.4,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 3
+    },
+    "oral_tramadol": {
+        "administration_method": "oral",
+        "substance": "tramadol",
+        "conversion_factor": 0.2,
+        "unit": "mg/day",
+        "LQ": null,
+        "UQ": null,
+        "priority": 2
+    },
+    "transdermal_fentanyl": {
+        "administration_method": "transdermal",
+        "substance": "fentanyl",
+        "conversion_factor": 2.4,
+        "unit": "mcg/hr",
+        "LQ": null,
+        "UQ": null,
+        "priority": 3
+    }
+}

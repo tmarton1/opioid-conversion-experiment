@@ -1,0 +1,52 @@
+{
+    "nielsen": {
+        "file": "resources/nielsen_ome.json",
+        "label": "Nielsen 2016",
+        "citation": "Nielsen S, Degenhardt L, Hoban B, Gisev N. A synthesis of oral morphine equivalents (OME) for opioid utilisation studies. Pharmacoepidemiol Drug Saf. 2016;25(6):733-737.",
+        "url": "https://doi.org/10.1002/pds.3945",
+        "year": 2016,
+        "role": "scoring",
+        "verified": true,
+        "notes": "Original reference standard of the study; factors and interquartile range (LQ, UQ) as used in the experiments. Citation text should be replaced by the manuscript's own reference entry if it differs (the manuscript is not in this repository)."
+    },
+    "cdc_2016": {
+        "file": "resources/cdc_2016_ome.json",
+        "label": "CDC 2016 (superseded)",
+        "citation": "Dowell D, Haegerich TM, Chou R. CDC Guideline for Prescribing Opioids for Chronic Pain, United States, 2016. MMWR Recomm Rep 2016;65(RR-1).",
+        "url": "https://www.cdc.gov/mmwr/volumes/65/rr/rr6501e1.htm",
+        "year": 2016,
+        "role": "recall_check_only",
+        "verified": false,
+        "notes": "Superseded by CDC 2022; used only for the DI 8 recall check, never for scoring. Methadone used dose-tiered factors (4-12) and is omitted."
+    },
+    "cdc_2022": {
+        "file": "resources/cdc_2022_ome.json",
+        "label": "CDC 2022",
+        "citation": "Dowell D, Ragan KR, Jones CM, Baldwin GT, Chou R. CDC Clinical Practice Guideline for Prescribing Opioids for Pain, United States, 2022. MMWR Recomm Rep 2022;71(RR-3).",
+        "url": "https://www.cdc.gov/mmwr/volumes/71/rr/rr7103a1.htm",
+        "year": 2022,
+        "role": "scoring",
+        "verified": false,
+        "notes": "Values checked against a reprint of the guideline table; confirm against the MMWR itself. The guideline lists no buprenorphine factor and warns against using MME factors to convert between opioids."
+    },
+    "nih_heal": {
+        "file": "resources/nih_heal_ome.json",
+        "label": "NIH HEAL",
+        "citation": "Adams MCB, Sward KA, Perkins ML, Hurley RW. Standardizing research methods for opioid dose comparison: the NIH HEAL morphine milligram equivalent calculator. Pain. 2025.",
+        "url": "https://journals.lww.com/pain/fulltext/10.1097/j.pain.0000000000003529",
+        "year": 2025,
+        "role": "scoring",
+        "verified": false,
+        "notes": "Values as entered in the authors' nielson_data sheet, not independently verified. Author list taken from an institutional publication listing; confirm order and volume/pages against the article."
+    },
+    "mcpherson_2018": {
+        "file": "resources/mcpherson_2018_ome.json",
+        "label": "McPherson 2018",
+        "citation": "McPherson ML. Demystifying Opioid Conversion Calculations: A Guide for Effective Dosing. 2nd ed. ASHP; 2018.",
+        "url": "",
+        "year": 2018,
+        "role": "scoring",
+        "verified": false,
+        "notes": "Values from reprinted tables; confirm against the 2nd edition. 10 mg IV morphine = 25 mg oral morphine; IV fentanyl 0.15 mg = 10 mg IV morphine (0.1667 mg oral morphine per mcg); IV hydromorphone 2 mg = 10 mg IV morphine. Methadone and transdermal fentanyl are handled separately in the book and omitted here."
+    }
+}
