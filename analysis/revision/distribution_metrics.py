@@ -7,6 +7,14 @@ Writes (atomically, deterministic, no randomness):
   results_revision/distribution_summary.csv     model x experiment x condition x score (+ POOLED)
   results_revision/extreme_errors.csv           DZ 7 table, Nielsen score
   results_revision/wilcoxon_threshold_free.csv  paired Wilcoxon, median |log ratio| next to tight proportion
+  (the safety tails overdose, severe_overdose and underdose are registry entries
+   in analysis/revision/tolerances.py and appear as pct_<entry> columns of
+   distribution_summary.csv like tight and broad; POOLED rows also give
+   n_ge_10x_highest, the count of responses >= 10x the highest standard)
+  results_revision/safety_exceedance.csv        % of responses above each multiple (1x-10x) of the
+                                                highest current standard, per condition x model (+ POOLED)
+  extreme_errors.csv is the supplementary DZ 7 table: > 2x / < 0.5x of the score's
+  expected dose (the reviewer's literal question).
 
 Conventions
   * Text vignettes are the vignette experiment; empty prompts are separate
@@ -14,8 +22,10 @@ Conventions
   * subset "ome" = oral morphine is source or target (the pipeline's flag).
   * Model rows: pct_<band> = mean over items of the item's mean cell proportion
     (the ranking average); distribution metrics are over responses.
-    POOLED rows: distribution metrics over all pooled responses, pct_<band> =
-    mean of the 13 model values.
+    POOLED rows: median_fold_error is pooled over all responses
+    (median_fold_error_basis = "pooled_responses"); mean_model_median_fold_error
+    is the mean of the 13 per-model medians (the basis used in the report's
+    findings and the circularity tables); pct_<band> = mean of the 13 model values.
   * Paired tests: pairing unit = conversion item; positive diff = condition b better.
 """
 from __future__ import annotations
@@ -67,7 +77,12 @@ def summary_rows(long, score, cond) -> list[dict]:
     rows = [{**base, "model": r["model"], **{k: r[k] for k in ms.columns
             if k not in ("score", "condition", "subset", "model")}} for _, r in ms.iterrows()]
     d = stats.responses(long, score, cond, "all", bands)
-    pooled = {**base, "model": "POOLED", **_dist(d), "n_items": int(d[c.item].nunique())}
+    pooled = {**base, "model": "POOLED", **_dist(d), "n_items": int(d[c.item].nunique()),
+              "median_fold_error_basis": "pooled_responses",
+              "mean_model_median_fold_error": float(ms["median_fold_error"].mean()),
+              "n_ge_10x_highest": int(stats.gross_error_count(long, cond).set_index("model").loc["POOLED", "n_ge_10x_highest"])}
+    for r in rows:
+        r["median_fold_error_basis"] = "model_responses"
     for b in bands:
         pooled[f"pct_{b}"] = float(ms[f"pct_{b}"].mean())
     rows.append(pooled)
@@ -80,9 +95,10 @@ def build_summary(long) -> pd.DataFrame:
         for cond in MAIN + SUPP:
             rows += summary_rows(long, score, cond)
     cols = ["experiment", "condition", "condition_label", "role", "score", "model", "n_responses", "n_items",
-            "median_fold_error", "median_log2_ratio", "iqr_log2_ratio"] + [f"pct_{b}" for b in BANDS] + \
-           ["pct_over_2x", "pct_under_half"]
-    return pd.DataFrame(rows)[cols]
+            "median_fold_error", "median_fold_error_basis", "mean_model_median_fold_error",
+            "median_log2_ratio", "iqr_log2_ratio"] + [f"pct_{b}" for b in BANDS] + \
+           ["pct_over_2x", "pct_under_half", "n_ge_10x_highest"]
+    return pd.DataFrame(rows).reindex(columns=cols)
 
 
 def build_extreme(summary: pd.DataFrame) -> pd.DataFrame:
@@ -155,7 +171,14 @@ def main() -> None:
     write_csv(summary, "distribution_summary.csv")
     write_csv(build_extreme(summary), "extreme_errors.csv")
     write_csv(build_wilcoxon(long), "wilcoxon_threshold_free.csv")
-    print("wrote distribution_summary.csv, extreme_errors.csv, wilcoxon_threshold_free.csv")
+    exc = []
+    for cond in MAIN + SUPP:
+        c = CONDITIONS[cond]
+        e = stats.overdose_exceedance(long, cond)
+        e.insert(0, "role", role(cond)); e.insert(0, "condition_label", c.label); e.insert(0, "experiment", c.experiment)
+        exc.append(e)
+    write_csv(pd.concat(exc, ignore_index=True), "safety_exceedance.csv")
+    print("wrote distribution_summary.csv, extreme_errors.csv, wilcoxon_threshold_free.csv, safety_exceedance.csv")
 
 
 if __name__ == "__main__":

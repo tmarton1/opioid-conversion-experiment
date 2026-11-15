@@ -671,7 +671,7 @@ parameters, not separate code paths.
 python -m orchestration.build_figures --figures 1,11 --scores nielsen,all,non_nielsen \
     --views bands,distribution --compare
 python -m orchestration.build_figures --figures 11 --scores nielsen,non_nielsen --views bands \
-    --bands tight,broad,reference_agreement,reference_envelope --compare
+    --bands broad --compare
 python -m orchestration.build_figures --figures all --scores nielsen --views bands   # reproduces the 15 figures
 python -m orchestration.build_figures --list
 ```
@@ -682,9 +682,11 @@ python -m orchestration.build_figures --list
 |---|---|---|
 | score | `analysis/revision/scores.py` | `nielsen`, `all`, `non_nielsen`, `geomean` (geometric mean of standards) |
 | view | — | `bands` (proportion within bands), `distribution` (observed / reference on a log fold axis) |
-| bands | `analysis/revision/tolerances.py` | `tight`, `broad` (default), `reference_agreement`, `reference_envelope` |
+| bands | `analysis/revision/tolerances.py` | `tight`, `broad` (reference_agreement and reference_envelope superseded, 2026-11-15) |
 | condition, subset | `analysis/revision/conditions.py` | e.g. `vignette_naive`, `rd_nielsen`, `eu_4h_nielsen_units`; subsets `all`, `ome`, `nonome`, `matched`, `matched_same_conversion`, `same_conversion`, `reduction`, `di2`, `no_di2` |
 | figure | `visualize/revision/registry.py` | figures 1–15: rescorable 1, 2, 3, 8–15; score-independent 4–7 (Nielsen, bands view only) |
+
+**Bands and tails.** Each entry of the band registry is an interval on a ratio: bounds may be open (0, infinity); the anchor is the score's expected dose (`tight`, `broad`) or the highest / lowest current standard for the conversion (`overdose` > 2×, `severe_overdose` > 4× the highest; `underdose` < 0.5× the lowest; the same under every score); a polarity flag says whether a higher share is better (bands) or worse (tails). Figures shade only expected-anchored bands on ratio axes and label tails "lower is better"; statistics and verdicts use the polarity so a positive difference always means "better". Example figure E8 (`visualize/revision/examples_safety.py`) shows the overdose exceedance curve per condition.
 
 **Engines** (`visualize/revision/compose.py`)
 

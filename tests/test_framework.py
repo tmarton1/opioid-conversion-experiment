@@ -50,8 +50,8 @@ def test_threshold_free_outcome_and_bands_for_any_score():
     pe = stats.paired_effect(L, "non_nielsen", "rd_naive", "rd_nielsen", outcome=stats.THRESHOLD_FREE)
     pooled = pe[pe.model == "POOLED"].iloc[0]
     assert pooled.n_pairs > 0 and pooled.mean_diff > 0   # grounding reduces |log ratio|
-    ms = stats.model_summary(L, "all", "vignette_naive", bands=["tight", "reference_envelope"])
-    assert {"pct_tight", "pct_reference_envelope"} <= set(ms.columns)
+    ms = stats.model_summary(L, "all", "vignette_naive", bands=["tight", "broad"])
+    assert {"pct_tight", "pct_broad"} <= set(ms.columns)
     # `all` is the nearest of a set that includes Nielsen: never worse than Nielsen
     nz = stats.model_summary(L, "nielsen", "vignette_naive").set_index("model")
     assert (ms.set_index("model").median_fold_error <= nz.median_fold_error + 1e-12).all()
@@ -81,10 +81,10 @@ def test_figure_registry_and_output_paths():
     assert engine_for(f1, ["nielsen"], "bands", DEFAULT_BANDS, False) == "legacy"
     assert engine_for(f1, ["nielsen", "all"], "bands", DEFAULT_BANDS, True) == "grid"
     assert engine_for(f1, ["all"], "distribution", DEFAULT_BANDS, False) == "grid"
-    assert engine_for(f1, ["all"], "bands", ["tight", "reference_envelope"], False) == "grid"
+    assert engine_for(f1, ["all"], "bands", ["broad"], False) == "grid"
     a = out_stem("o", f1, ["nielsen"], "bands", DEFAULT_BANDS)
     b = out_stem("o", f1, ["nielsen", "all"], "distribution", DEFAULT_BANDS)
-    c = out_stem("o", f1, ["nielsen"], "bands", ["tight", "reference_envelope"])
+    c = out_stem("o", f1, ["nielsen"], "bands", ["broad"])
     assert len({a, b, c}) == 3 and a.endswith("fig01_naive_vignette_bars__nielsen__bands")
 
 

@@ -58,14 +58,16 @@ def test_response_equal_to_nielsen_for_hydrocodone():
     assert close(ratios["geomean"], 1.147)
 
 
-def test_reference_agreement_guarantee():
-    """A response copying the Nielsen factors always passes the reference-agreement
-    band (and its own conversion's envelope) when scored under non_nielsen."""
+def test_copying_nielsen_is_within_broad_under_non_nielsen():
+    """A response copying the Nielsen factors is always within the broad band
+    (and the 1.5-fold reference-agreement k) when scored under non_nielsen:
+    broad is wider than the largest disagreement between current standards."""
     from analysis.revision.reference_comparison import scored_conversions
     from analysis.revision.rescore import _parse_sources
     from analysis.revision.tolerances import band_bounds, reference_agreement_k
 
     k = reference_agreement_k()
+    lo_b, hi_b = band_bounds("broad", "x", "1", "y")
     n_checked = 0
     for r in scored_conversions("results").itertuples(index=False):
         froms, doses = _parse_sources(r.from_opioid, r.from_dose)
@@ -76,7 +78,6 @@ def test_reference_agreement_guarantee():
             continue
         ratio = 1.0 / ref
         assert 1 / k - 1e-9 <= ratio <= k + 1e-9, (r.conversion, ratio, k)
-        lo, hi = band_bounds("reference_envelope", r.from_opioid, r.from_dose, r.to_opioid)
-        assert lo - 1e-9 <= ratio <= hi + 1e-9, (r.conversion, ratio, lo, hi)
+        assert lo_b <= ratio <= hi_b, (r.conversion, ratio)
         n_checked += 1
     assert n_checked == 59

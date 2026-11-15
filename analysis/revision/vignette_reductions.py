@@ -19,7 +19,10 @@ standard); per scenario x condition x model, plus POOLED rows:
                             exactly, 1 = not applied)
   empty_median_ratio        median empty-prompt answer / unreduced target
   implied_factor_vs_empty   median text answer / median empty answer (same model,
-                            condition): the model's own implied reduction
+                            condition): the model's own implied reduction; POOLED =
+                            median over models of that factor
+  pooled_median_text_over_empty  (POOLED) pooled text median / pooled empty median
+  n_models_factor_within_5pct    (POOLED) models whose own factor is within 5% of k
 
     python -m analysis.revision.vignette_reductions
 writes results_revision/vignette_reduction_check.csv
@@ -74,10 +77,24 @@ def build(long=None) -> pd.DataFrame:
         e_all = stats.responses(long, "nielsen", ec)
         for sk, k in red.items():
             t, e = t_all[t_all.scenario_key == sk], e_all[e_all.scenario_key == sk]
-            for m, g in list(t.groupby("model")) + [("POOLED", t)]:
-                ee = e if m == "POOLED" else e[e.model == m]
-                rows.append({"scenario_key": sk, "requested_factor": k, "condition": tc, "model": m,
-                             **_row(g, ee, k)})
+            per_model = []
+            for m, g in t.groupby("model"):
+                r = {"scenario_key": sk, "requested_factor": k, "condition": tc, "model": m,
+                     **_row(g, e[e.model == m], k)}
+                per_model.append(r)
+                rows.append(r)
+            pooled = {"scenario_key": sk, "requested_factor": k, "condition": tc, "model": "POOLED", **_row(t, e, k)}
+            # POOLED implied factor = median over models of each model's own factor
+            # (text median / its empty median). The ratio of the two pooled medians
+            # is kept separately: it mixes models answering different clusters and
+            # can be far from any model's own factor (carpenter amputation, Nielsen:
+            # pooled medians 20 / 80 = 0.25, median model factor 0.75).
+            pooled["pooled_median_text_over_empty"] = pooled["implied_factor_vs_empty"]
+            f = pd.Series([r["implied_factor_vs_empty"] for r in per_model], dtype=float)
+            f = f[np.isfinite(f)]
+            pooled["implied_factor_vs_empty"] = float(f.median()) if len(f) else np.nan
+            pooled["n_models_factor_within_5pct"] = int(((f / k - 1).abs() <= 0.05).sum())
+            rows.append(pooled)
         t = t_all[t_all.scenario_key.isin(red)]
         e = e_all[e_all.scenario_key.isin(red)]
         if len(t):

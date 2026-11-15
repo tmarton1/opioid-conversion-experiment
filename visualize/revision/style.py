@@ -7,8 +7,7 @@ Shared styling for the revision figures (matplotlib).
   map, from the all-standards rankings), the same for every score, so panels
   for different scores line up and the color gradient runs in sequence.
 - Ratio axes: log scale, ticks labeled as fold values, overdosing to the right.
-- Bands: fixed-width bands are shaded and labeled; per-conversion bands
-  (reference_envelope) cannot be one region, so they are named in the legend.
+- Bands: tight and broad (author decision 2026-11-15) are shaded and labeled.
 """
 from __future__ import annotations
 
@@ -29,7 +28,7 @@ INK = "#2b2b2a"
 MUTED = "#6b6a65"
 GRID = "#e4e3df"
 SURFACE = "#ffffff"
-BAND_FILL = {"tight": "#d6e9d6", "broad": "#eef5ee", "reference_agreement": "#e4e9f4"}
+BAND_FILL = {"tight": "#d6e9d6", "broad": "#eef5ee"}
 FOLD_TICKS = [0.25, 0.5, 1, 2, 4]          # band edges are labeled on the shading itself
 DPI = 300
 
@@ -86,7 +85,9 @@ def fold_axis(ax, axis="x", lim=(0.2, 5.0), ticks=FOLD_TICKS):
 
 def shade_bands(ax, axis="x", bands=("tight", "broad"), label=True):
     """Shade fixed-width bands (widest first) and mark 1x."""
-    fixed = [b for b in bands if b in BANDS and not BANDS[b].per_conversion]
+    # only accuracy bands on the score's reference can be shaded on a ratio axis
+    fixed = [b for b in bands if b in BANDS and not BANDS[b].per_conversion
+             and BANDS[b].anchor == "expected" and BANDS[b].kind == "band"]
     fixed.sort(key=lambda b: -np.log(BANDS[b].bounds("x", "1", "y")[1]))
     span = ax.axvspan if axis == "x" else ax.axhspan
     line = ax.axvline if axis == "x" else ax.axhline

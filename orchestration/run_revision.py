@@ -15,7 +15,7 @@ Steps (each overwrites its own outputs; safe to rerun):
   bands        analysis/revision/tolerances.py → results_revision/references/band_justification*.csv
   analyses     Phase 3 modules (PHASE3_MODULES) and the clinical-reduction check
                → results_revision/*.csv
-  report       example figures E1-E7 and the private differences report
+  report       example figures E1-E8 and the private differences report
                (orchestration/build_differences_report.py)
 
 Figures for any score/view/bands: python -m orchestration.build_figures (Phase 2).
@@ -123,7 +123,8 @@ def step_report(args):
     # message when revision_private/ is absent); regenerates figures E1-E7
     if not os.path.isdir("revision_private"):
         print("revision_private/ absent: building the example figures only")
-        for mod in ("visualize.revision.examples_scores", "visualize.revision.examples_references"):
+        for mod in ("visualize.revision.examples_scores", "visualize.revision.examples_references",
+                    "visualize.revision.examples_safety"):
             _run([PY, "-m", mod])
         return
     _run([PY, "orchestration/build_differences_report.py"])

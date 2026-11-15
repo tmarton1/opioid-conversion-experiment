@@ -60,7 +60,7 @@ def test_dummy_score_flows_through_to_csv_and_figure():
         png = outs[0][0]
         assert png.endswith("fig01_naive_vignette_bars__nielsen+dummy_double__distribution.png")
         assert os.path.getsize(png) > 10_000
-        outs = compose.build(11, ["dummy_double"], "bands", bands=["tight", "reference_envelope"],
+        outs = compose.build(11, ["dummy_double"], "bands", bands=["broad"],
                              out_dir=os.path.join(tmp, "figs"), long=long)
         assert os.path.exists(outs[0][0])
     finally:

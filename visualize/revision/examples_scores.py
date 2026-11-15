@@ -6,7 +6,7 @@ distribution). Prototypes for the authors to iterate on.
   E1   Figure 1 as a comparison grid: rows = view, columns = score
        (naive text vignettes).
   E2a  Figure 11 (reference-grounding effect) in the same grid, text vignettes:
-       one bands row per registered band (BANDS), then the distribution row
+       one bands row per main band (MAIN_BANDS), then the distribution row
        annotated with median fold error (naive -> Nielsen).
   E2b  The same for random doses.
   E3   Ranking shifts across the three scores (slope chart), vignettes and
@@ -37,7 +37,7 @@ from matplotlib.patches import Patch  # noqa: E402
 
 from analysis.revision import stats  # noqa: E402
 from analysis.revision.conditions import CONDITIONS  # noqa: E402
-from analysis.revision.tolerances import BANDS, reference_agreement_k, scored_spreads  # noqa: E402
+from analysis.revision.tolerances import BANDS, MAIN_BANDS, reference_agreement_k, scored_spreads  # noqa: E402
 from visualize.revision import panels as P  # noqa: E402
 
 SCORE_LIST = ["nielsen", "all", "non_nielsen"]
@@ -132,7 +132,7 @@ def build_e2(long, which: str) -> list[str]:
     else:
         panel = P.Panel("sequence", ("rd_naive", "rd_nielsen"), title="Random doses")
         tag, name = "E2b", "random doses"
-    bands = list(BANDS)                      # every registered band
+    bands = list(MAIN_BANDS)                 # tight and broad (author decision 2026-11-15)
     row_h = 0.24 * len(models) + 1.0
     nrow = len(bands) + 1
     fig, axes = plt.subplots(nrow, 3, figsize=(15.5, nrow * row_h + 1.6), squeeze=False)
@@ -274,7 +274,6 @@ def tolerance_curve(d: pd.DataFrame) -> np.ndarray:
 
 def build_e4(long) -> list[str]:
     models = S.model_order()
-    k_agree = reference_agreement_k()
     spreads = scored_spreads()
     fig, axes = plt.subplots(2, 3, figsize=(14.5, 8.6), squeeze=False, sharey=True)
     for r, (cond, lab) in enumerate(EXPERIMENTS):
@@ -284,8 +283,7 @@ def build_e4(long) -> list[str]:
             ax = axes[r][c]
             ax.axvspan(1.0, 1.7, color=S.BAND_FILL["broad"], lw=0, zorder=0)
             ax.axvspan(1.0, 1.15, color=S.BAND_FILL["tight"], lw=0, zorder=0)
-            for v, name, ls, y in [(1.15, "tight 1.15×", "-", 101.5), (1.7, "broad 1.7×", "-", 101.5),
-                                   (k_agree, f"ref. agreement {k_agree:.2g}×", ":", 106.5)]:
+            for v, name, ls, y in [(1.15, "tight 1.15×", "-", 101.5), (1.7, "broad 1.7×", "-", 101.5)]:
                 ax.axvline(v, color=S.MUTED, lw=0.9, ls=ls, zorder=1)
                 ax.text(v, y, name, rotation=0, fontsize=6.3, color=S.MUTED,
                         ha="center" if name.startswith("ref") else ("right" if v < 1.3 else "left"),
@@ -306,7 +304,7 @@ def build_e4(long) -> list[str]:
             ax.set_title(f"{lab}, naive — {S.score_title(sc)}", loc="left", pad=24, fontsize=9)
             cov = stats.coverage(long, sc, cond)
             ax.text(0.98, 0.04, f"n = {cov['n_responses']:,} responses, {cov['n_items']} {P._item_word(cond)}\n"
-                    f"reference envelope (per conversion): median {env.median():.2g}×, max {env.max():.2g}×",
+                    f"spread between standards (per conversion): median {env.median():.2g}×, max {env.max():.2g}×",
                     transform=ax.transAxes, ha="right", va="bottom", fontsize=6.3, color=S.MUTED,
                     bbox=dict(facecolor="white", edgecolor="none", alpha=0.85, pad=1.5), zorder=5)
             if r == 1:
@@ -319,8 +317,7 @@ def build_e4(long) -> list[str]:
                  x=0.01, ha="left", fontsize=10.5, fontweight="bold", color=S.INK)
     hs = [Line2D([0], [0], color=S.color(m), lw=2, label=S.short(m)) for m in models]
     hs += [Patch(color=S.BAND_FILL["tight"], label="tight (fold error ≤ 1.15×)"),
-           Patch(color=S.BAND_FILL["broad"], label="broad (fold error ≤ 1.7×)"),
-           Line2D([0], [0], color=S.MUTED, ls=":", label="reference-agreement band k")]
+           Patch(color=S.BAND_FILL["broad"], label="broad (fold error ≤ 1.7×)")]
     bottom = _legend_bottom(fig, hs, 6)
     fig.tight_layout(rect=(0, bottom, 1, 1 - 0.45 / fig.get_figheight()), h_pad=2.5, w_pad=2.0)
     return S.save(fig, os.path.join(out_dir(), "E4_tolerance_curves_three_scores"))

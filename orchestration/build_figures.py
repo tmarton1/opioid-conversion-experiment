@@ -5,7 +5,7 @@ Build any selection of figures under any scores, views and bands.
         --views bands,distribution --compare
     python -m orchestration.build_figures --figures all --scores nielsen --views bands   # reproduction
     python -m orchestration.build_figures --figures 11 --scores nielsen,non_nielsen \
-        --views bands --bands tight,broad,reference_agreement,reference_envelope --compare
+        --views bands --bands broad --compare
     python -m orchestration.build_figures --list
 
 Scores, bands, figures and conditions come from their registries

@@ -27,7 +27,7 @@ from visualize.revision import style as S
 from analysis.revision import stats
 from analysis.revision.scores import SCORES
 from analysis.revision.tolerances import BANDS, DEFAULT_BANDS
-from visualize.revision.panels import DRAW, Panel, n_rows, sequence_bands
+from visualize.revision.panels import DRAW, Panel, band_axis_label, n_rows, sequence_bands
 from visualize.revision.registry import FIGURES, FigureSpec
 
 ADAPTER_ROOT = os.path.join("results_revision", "figure_inputs")
@@ -85,7 +85,7 @@ def build_grid(spec: FigureSpec, scores, view, bands, long=None, out_dir=None) -
                 ax.set_title(S.score_title(sc), loc="left", pad=14)
             if first:
                 ax.text(-0.02 if p.kind != "precision" else 0.0, 1.0 + (0.12 if r == 0 else 0.06),
-                        p.title + ("" if band is None else f" — {BANDS[band].label}"),
+                        p.title + ("" if band is None else f" — {band_axis_label(band)}"),
                         transform=ax.transAxes, fontsize=8.2, fontweight="bold", color=S.MUTED,
                         ha="right" if p.kind != "precision" else "left", va="bottom")
     seen, hs = set(), []

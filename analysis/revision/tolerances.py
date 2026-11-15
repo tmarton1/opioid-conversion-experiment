@@ -6,16 +6,25 @@ fixed or computed per conversion. Statistics, figures and the report loop over
 BANDS; a new band is one ``register(...)`` call plus a rerun.
 
     from analysis.revision.tolerances import BANDS, band_bounds
-    lo, hi = band_bounds("reference_envelope", "oral_codeine", "1", "oral_morphine")
+    lo, hi = band_bounds("broad", "oral_codeine", "1", "oral_morphine")
 
-Initial bands:
-  tight                0.85-1.15x (original)
-  broad                0.6-1.7x   (original)
-  reference_agreement  1/k-k, k = largest fold difference between any two current
-                       standards on any scored conversion (computed, never hard-coded)
-  reference_envelope   per conversion, 1/k_c-k_c, k_c = fold spread between that
-                       conversion's most extreme current standards; blank when only
-                       Nielsen covers it. The main reference-based band.
+Bands (author decision 2026-11-15: tight and broad only):
+  tight   0.85-1.15x (original)
+  broad   0.6-1.7x   (original): just wider than the largest disagreement between
+          current standards (1.5-fold, computed below), so an answer copying any
+          current standard, Nielsen included, is always within broad of every
+          other one. Broad under non_nielsen is therefore the fair band test of
+          circularity; tight under that score fails by construction.
+Safety tails (registry entries, author decision 2026-11-15), anchored on the
+current standards and so the same under every score; lower share is better:
+  overdose         > 2x the highest current standard for the conversion
+  severe_overdose  > 4x the highest current standard
+  underdose        < 0.5x the lowest current standard
+Every entry is an interval on a ratio with an anchor (the score's expected dose,
+the highest or the lowest current standard), open bounds allowed, and a
+polarity flag; 3A, 3B, the tables and the report treat all entries alike.
+Superseded (definitions kept below, commented): reference_agreement,
+reference_envelope.
 
     python -m analysis.revision.tolerances   # writes results_revision/references/band_justification.csv
 """
@@ -39,11 +48,30 @@ BoundsFn = Callable[[str, str, str], Bounds]   # (from_opioid, from_dose, to_opi
 
 @dataclass(frozen=True)
 class Band:
+    """An interval on a ratio (observed / anchor dose).
+
+    bounds          (lo, hi); lo may be 0 and hi may be inf (open-ended)
+    anchor          "expected" (the score's reference dose: the original bands),
+                    "highest_standard" or "lowest_standard" (the highest / lowest
+                    expected dose among the current standards for the conversion:
+                    the same under every score)
+    higher_is_better True for accuracy bands (more responses inside is better);
+                    False for tails (overdose, underdose: fewer inside is better).
+                    Paired tests, gains and verdicts use it so that a positive
+                    difference always means "better".
+    closed          whether each finite bound is included (bands: both; tails:
+                    strict, e.g. > 2x)
+    kind            "band" or "tail" (for labels and default selections)
+    """
     name: str
     label: str
     bounds: BoundsFn
     per_conversion: bool
     description: str = ""
+    anchor: str = "expected"
+    higher_is_better: bool = True
+    closed: tuple = (True, True)
+    kind: str = "band"
 
 
 BANDS: dict[str, Band] = {}
@@ -94,50 +122,96 @@ def _fixed(lo, hi) -> BoundsFn:
     return lambda f, d, t: (lo, hi)
 
 
-def _agreement(f, d, t):
-    k = reference_agreement_k()
-    return (1 / k, k)
-
-
-def _envelope(f, d, t):
-    k = _spread_cached(str(f), str(d), str(t))
-    return None if k is None else (1 / k, k)
-
+# ── Superseded bands (author decision 2026-11-15) ─────────────────────────
+# reference_agreement (1/k-k, k = largest disagreement between any two current
+# standards, 1.5) nearly duplicated broad; reference_envelope (per conversion,
+# the spread of that conversion's own standards) has zero width where the
+# standards agree exactly, so it rewarded only exact copies there. Both are no
+# longer registered (3A, 3B, the figures and the report use tight and broad);
+# their definitions are kept here, commented out, for the record.
+# reference_agreement_k() and conversion_spread() above remain in use for the
+# band justification.
+#
+# def _agreement(f, d, t):
+#     k = reference_agreement_k()
+#     return (1 / k, k)
+#
+# def _envelope(f, d, t):
+#     k = _spread_cached(str(f), str(d), str(t))
+#     return None if k is None else (1 / k, k)
+#
+# register(Band("reference_agreement", "Reference agreement (1/k–k×)", _agreement, False,
+#               "Narrowest symmetric band inside which every pair of current standards agrees."))
+# register(Band("reference_envelope", "Reference envelope (per conversion)", _envelope, True,
+#               "Per conversion, the fold spread between its most extreme current standards."))
 
 register(Band("tight", f"Tight ({TIGHT_RANGE_LOWER}–{TIGHT_RANGE_UPPER}×)",
               _fixed(TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER), False, "Original tight band."))
 register(Band("broad", f"Broad ({BROAD_RANGE_LOWER}–{BROAD_RANGE_UPPER}×)",
-              _fixed(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER), False, "Original broad band."))
-register(Band("reference_agreement", "Reference agreement (1/k–k×)", _agreement, False,
-              "Narrowest symmetric band inside which every pair of current standards agrees on every scored conversion."))
-register(Band("reference_envelope", "Reference envelope (per conversion)", _envelope, True,
-              "Per conversion, the fold spread between its most extreme current standards. Main reference-based band."))
+              _fixed(BROAD_RANGE_LOWER, BROAD_RANGE_UPPER), False,
+              "Original broad band; just wider than the largest disagreement between current "
+              "standards, so an answer copying any current standard is within broad of every other."))
+
+# Safety tails (author decision 2026-11-15): one-sided intervals anchored on the
+# current standards (Nielsen, CDC 2022, NIH HEAL, McPherson 2018), so they are
+# the same under every score; a higher share is worse.
+register(Band("overdose", "Overdose (> 2× highest standard)", _fixed(2.0, np.inf), False,
+              "Response more than twice the highest current standard for the conversion.",
+              anchor="highest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
+register(Band("severe_overdose", "Severe overdose (> 4× highest standard)", _fixed(4.0, np.inf), False,
+              "Response more than four times the highest current standard for the conversion.",
+              anchor="highest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
+register(Band("underdose", "Underdose (< 0.5× lowest standard)", _fixed(0.0, 0.5), False,
+              "Response less than half the lowest current standard for the conversion.",
+              anchor="lowest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
 
 DEFAULT_BANDS = ["tight", "broad"]
-MAIN_REFERENCE_BAND = "reference_envelope"
+MAIN_BANDS = ["tight", "broad"]                       # accuracy bands in the report and the example figures
+TAILS = [b for b in BANDS if BANDS[b].kind == "tail"]  # safety tails (lower is better)
+ANCHOR_COLUMNS = [f"expected_{s}" for s in SCORING_INPUTS]   # current standards' expected doses
 
 
 def band_bounds(name: str, from_opioid: str, from_dose: str, to_opioid: str) -> Bounds:
     return BANDS[name].bounds(str(from_opioid), str(from_dose), str(to_opioid))
 
 
-def within(name: str, ratios: pd.Series, frame: pd.DataFrame) -> pd.Series:
-    """Boolean Series: ratio inside the band for each row (NaN where the band is undefined).
+def anchored_ratios(name: str, ratios: pd.Series, frame: pd.DataFrame) -> pd.Series:
+    """The ratio a registry entry is evaluated on: the score's ratio for
+    anchor "expected"; observed / highest (or lowest) current standard
+    otherwise (frame needs observed_to_dose and the expected_<standard> columns)."""
+    anchor = BANDS[name].anchor
+    if anchor == "expected":
+        return pd.to_numeric(ratios, errors="coerce")
+    e = frame[ANCHOR_COLUMNS].apply(pd.to_numeric, errors="coerce")
+    ref = e.max(axis=1) if anchor == "highest_standard" else e.min(axis=1)
+    obs = pd.to_numeric(frame["observed_to_dose"], errors="coerce")
+    return (obs.where(obs > 0) / ref).astype(float)
 
-    `frame` needs from_opioid, from_dose and to_opioid columns aligned with `ratios`.
-    A row whose ratio is missing counts as outside (as in the original pipeline).
-    """
+
+def within(name: str, ratios: pd.Series, frame: pd.DataFrame) -> pd.Series:
+    """1/0 per row: the (anchored) ratio inside the entry's interval; NaN where
+    the interval is undefined. A row whose ratio is missing or not positive
+    counts as outside (for bands: incorrect, as in the original pipeline; for
+    tails: not in the tail).
+
+    `frame` needs from_opioid, from_dose and to_opioid columns aligned with
+    `ratios`, plus observed_to_dose and expected_<standard> for entries anchored
+    on a standard."""
+    band = BANDS[name]
     keys = list(zip(frame["from_opioid"].astype(str), frame["from_dose"].astype(str),
                     frame["to_opioid"].astype(str)))
-    if not BANDS[name].per_conversion:
-        lo, hi = BANDS[name].bounds(*keys[0]) if keys else (np.nan, np.nan)
-        lo = np.full(len(keys), lo); hi = np.full(len(keys), hi)
+    if not band.per_conversion:
+        lo, hi = band.bounds(*keys[0]) if keys else (np.nan, np.nan)
+        lo = np.full(len(keys), lo, dtype=float); hi = np.full(len(keys), hi, dtype=float)
     else:
         b = {k: band_bounds(name, *k) for k in set(keys)}
-        lo = np.array([np.nan if b[k] is None else b[k][0] for k in keys])
-        hi = np.array([np.nan if b[k] is None else b[k][1] for k in keys])
-    r = pd.to_numeric(ratios, errors="coerce").to_numpy(dtype=float)
-    inside = (r >= lo - 1e-12) & (r <= hi + 1e-12)
+        lo = np.array([np.nan if b[k] is None else b[k][0] for k in keys], dtype=float)
+        hi = np.array([np.nan if b[k] is None else b[k][1] for k in keys], dtype=float)
+    r = anchored_ratios(name, ratios, frame).to_numpy(dtype=float)
+    with np.errstate(invalid="ignore"):
+        above = (r >= lo - 1e-12) if band.closed[0] else (r > lo + 1e-12)
+        below = (r <= hi + 1e-12) if band.closed[1] else (r < hi - 1e-12)
+    inside = above & below & np.isfinite(r)
     out = pd.Series(inside.astype(float), index=ratios.index)
     out[np.isnan(lo)] = np.nan
     return out
@@ -158,9 +232,18 @@ def band_justification() -> tuple[pd.DataFrame, dict]:
         "k_without_codeine": float(no_codeine["spread"].max()),
         "k_set_by": ", ".join(setters["conversion"]),
     }
+    blo, bhi = BANDS["broad"].bounds("x", "1", "y")
+    bfold = min(bhi, 1 / blo)
+    info["broad_fold_half_width"] = float(bfold)
+    info["broad_covers_any_standard"] = bool(bfold >= mx)
+    info["broad_interpretation"] = (
+        f"broad ({blo:g}-{bhi:g}x, at least {bfold:.2f}-fold either way) is just wider than the largest "
+        f"disagreement between current standards ({mx:.2f}-fold), so an answer copying any current standard, "
+        f"Nielsen included, is always within broad of every other one: broad accuracy means within the range "
+        f"the published standards disagree over, plus a margin")
     rows = []
-    for name in ["tight", "broad", "reference_agreement"]:
-        lo, hi = BANDS[name].bounds("oral_morphine", "1", "oral_morphine")
+    for name, (lo, hi) in [(b, BANDS[b].bounds("oral_morphine", "1", "oral_morphine")) for b in MAIN_BANDS] + \
+            [("reference_agreement (superseded)", (1 / mx, mx))]:
         for side, fold in [("upper", hi), ("lower", 1 / lo)]:
             rows.append({
                 "band": name, "side": side, "bound": hi if side == "upper" else lo,

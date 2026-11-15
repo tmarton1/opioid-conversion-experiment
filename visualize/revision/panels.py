@@ -60,6 +60,12 @@ def n_rows(panel: Panel, view: str, bands) -> int:
 
 # ── helpers ──────────────────────────────────────────────────────────────
 
+def band_axis_label(b):
+    """'% within <band>' for accuracy bands; '% <tail> (lower is better)' for tails."""
+    band = BANDS[b]
+    return f"% within {band.label}" if band.higher_is_better else f"% {band.label} (lower is better)"
+
+
 def _rows(ax, models, show_labels):
     ax.set_ylim(len(models) - 0.5, -0.5)
     ax.set_yticks(range(len(models)))
@@ -110,7 +116,7 @@ def accuracy_bands(ax, long, score, panel, bands, models, show_labels=True):
     S.clean_axes(ax)
     _coverage_note(ax, int(summ.n_responses.sum()), int(summ.n_items.max()), _item_word(cond))
     return [Patch(facecolor="#555555", alpha=a, hatch="////" if BANDS[b].per_conversion else None,
-                  edgecolor="white", label=f"% within {BANDS[b].label}") for b, a in zip(bands, alphas)]
+                  edgecolor="white", label=band_axis_label(b)) for b, a in zip(bands, alphas)]
 
 
 def _violin(ax, y, logs, c, width=0.42):

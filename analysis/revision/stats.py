@@ -22,7 +22,7 @@ counts pooled over the item's responses, as in comparison_*.csv) or
 
     from analysis.revision import stats
     long = stats.load_long()
-    stats.model_summary(long, "non_nielsen", "vignette_naive", bands=["tight", "reference_envelope"])
+    stats.model_summary(long, "non_nielsen", "vignette_naive", bands=["tight", "broad"])
     stats.paired_effect(long, "nielsen", "rd_naive", "rd_nielsen", outcome="median_abs_log_ratio")
     stats.rank_models(long, "all", "rd_naive", bands=("tight", "broad"))
 """
@@ -39,7 +39,7 @@ from scipy.stats import wilcoxon
 from analysis.prefix import harmonize
 from analysis.revision.conditions import CONDITIONS, select
 from analysis.revision.scores import SCORES
-from analysis.revision.tolerances import BANDS, within
+from analysis.revision.tolerances import ANCHOR_COLUMNS, BANDS, within
 from common.models import CONSISTENT_MODELS
 
 LONG_CSV = os.path.join("results_revision", "responses_long.csv")
@@ -109,7 +109,8 @@ def responses(long: pd.DataFrame, score: str, condition: str, subset: str = "all
     d["log_ratio"] = np.where(ok, np.log(r.where(ok, 1.0)), np.nan)
     d["fold_error"] = np.exp(np.abs(d["log_ratio"]))
     frame = pd.DataFrame({"from_opioid": d["from_opioid"], "from_dose": d["conv_dose"],
-                          "to_opioid": d["to_opioid"]}, index=d.index)
+                          "to_opioid": d["to_opioid"], "observed_to_dose": d["observed_to_dose"],
+                          **{c: d[c] for c in ANCHOR_COLUMNS if c in d.columns}}, index=d.index)
     for b in bands:
         d[f"in_{b}"] = within(b, r.where(ok), frame)
     d.attrs.update(score=score, condition=condition, subset=subset)
@@ -205,6 +206,46 @@ def coverage(long, score, condition, subset="all") -> dict:
     return {"n_responses": int(len(d)), "n_items": int(d[c.item].nunique())}
 
 
+# ── helpers for the overdose exceedance curve (E8) and gross-error counts ─
+# The safety tails themselves (overdose, severe_overdose, underdose) are
+# registry entries in analysis/revision/tolerances.py, anchored on the current
+# standards, and flow through model_summary / paired_effect like any band.
+SAFETY = {"overdose_x": 2.0, "severe_overdose_x": 4.0, "underdose_x": 0.5, "gross_error_x": 10.0}
+EXCEEDANCE_MULTIPLES = tuple(np.round(np.exp(np.linspace(0, np.log(10), 61)), 6))
+
+
+def dose_ratios(d: pd.DataFrame) -> pd.DataFrame:
+    """observed / highest and observed / lowest current standard per response."""
+    e = d[[c for c in ANCHOR_COLUMNS if c in d.columns]].apply(pd.to_numeric, errors="coerce")
+    obs = pd.to_numeric(d["observed_to_dose"], errors="coerce")
+    obs = obs.where(obs > 0)
+    return pd.DataFrame({"to_highest": obs / e.max(axis=1), "to_lowest": obs / e.min(axis=1)}, index=d.index)
+
+
+def gross_error_count(long, condition, subset="all") -> pd.DataFrame:
+    """Per model + POOLED: responses >= 10x the highest current standard
+    (likely unit or decimal errors; reported as a count in the text)."""
+    d = responses(long, "nielsen", condition, subset)
+    th = dose_ratios(d)["to_highest"]
+    rows = [{"model": m, "n_ge_10x_highest": int((th[g.index] >= SAFETY["gross_error_x"]).sum())} for m, g in d.groupby("model")]
+    rows.append({"model": "POOLED", "n_ge_10x_highest": int((th >= SAFETY["gross_error_x"]).sum())})
+    return pd.DataFrame(rows)
+
+
+def overdose_exceedance(long, condition, subset="all", multiples=EXCEEDANCE_MULTIPLES) -> pd.DataFrame:
+    """Share of responses above each multiple of the highest current standard
+    (per model and POOLED), for the overdose exceedance curve."""
+    d = responses(long, "nielsen", condition, subset)
+    d = d.assign(_th=dose_ratios(d)["to_highest"])
+    rows = []
+    for m, g in list(d.groupby("model")) + [("POOLED", d)]:
+        th = g["_th"].to_numpy()
+        for k in multiples:
+            rows.append({"condition": condition, "subset": subset, "model": m, "multiple_of_highest": float(k),
+                         "pct_above": 100 * float(np.mean(th > k)) if len(th) else np.nan})
+    return pd.DataFrame(rows)
+
+
 # ── paired tests ─────────────────────────────────────────────────────────
 
 def _wilcoxon(diffs: pd.Series):
@@ -223,15 +264,16 @@ def _wilcoxon(diffs: pd.Series):
 
 def paired_items(long, score, cond_a, cond_b, subset="all", outcome="tight") -> pd.DataFrame:
     """Model x item outcome under two conditions on the same items.
-    diff = b - a for band outcomes (positive = more within the band under b);
-    for the threshold-free outcome diff = a - b (positive = smaller error
-    under b), so a positive diff always means b is better."""
+    diff = b - a for accuracy bands (positive = more within the band under b);
+    a - b for tails (lower share is better) and for the threshold-free
+    outcome (smaller error under b), so a positive diff always means b is better."""
     bands = [] if outcome == THRESHOLD_FREE else [outcome]
     col = THRESHOLD_FREE if outcome == THRESHOLD_FREE else f"prop_{outcome}"
     a = item_table(long, score, cond_a, subset, bands)[["model", "item", "ome", col]]
     b = item_table(long, score, cond_b, subset, bands)[["model", "item", col]]
     m = a.merge(b, on=["model", "item"], suffixes=("_a", "_b"))
-    m["diff"] = (m[f"{col}_a"] - m[f"{col}_b"]) if outcome == THRESHOLD_FREE else (m[f"{col}_b"] - m[f"{col}_a"])
+    lower_better = outcome == THRESHOLD_FREE or not BANDS[outcome].higher_is_better
+    m["diff"] = (m[f"{col}_a"] - m[f"{col}_b"]) if lower_better else (m[f"{col}_b"] - m[f"{col}_a"])
     return m
 
 
@@ -258,6 +300,8 @@ def rank_models(long, score, condition, subset="all", bands=("tight", "broad")):
     (``result_df``, ``pairs_df``)."""
     from analysis.model_ranking import ModelRanking
     b1, b2 = _band_list(bands)
+    if not (BANDS[b1].higher_is_better and BANDS[b2].higher_is_better):
+        raise ValueError("CMH ranking ranks on accuracy bands (higher share better), not on tails")
     c = CONDITIONS[condition]
     cells = cell_table(long, score, condition, subset, [b1, b2])
     cells = cells.dropna(subset=[f"in_{b1}", f"in_{b2}"])

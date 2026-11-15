@@ -47,7 +47,7 @@ import pandas as pd  # noqa: E402
 from scipy.stats import spearmanr  # noqa: E402
 
 from analysis.revision.scores import SCORES  # noqa: E402
-from analysis.revision.tolerances import BANDS  # noqa: E402
+from analysis.revision.tolerances import BANDS, MAIN_BANDS  # noqa: E402
 from common.config import FIGURES_DIR  # noqa: E402
 from common.models import CONSISTENT_MODELS  # noqa: E402
 
@@ -93,6 +93,32 @@ class Stats(dict):
         return self[key]["value"]
 
 
+DISPLAY_NAMES = {
+    "anthropic/claude-3.5-sonnet:20241022": "Claude 3.5 Sonnet", "google/gemini-2.5-pro": "Gemini 2.5 Pro",
+    "google/gemini-2.5-flash": "Gemini 2.5 Flash", "openai/gpt-4.1": "GPT-4.1", "openai/gpt-4.1-mini": "GPT-4.1 mini",
+    "openai/gpt-3.5-turbo": "GPT-3.5 Turbo", "deepseek/deepseek-chat": "DeepSeek Chat",
+    "mistralai/mistral-large-2407": "Mistral Large", "mistralai/mixtral-8x22b-instruct": "Mixtral 8x22B",
+    "qwen/qwen-2.5-72b-instruct": "Qwen 2.5 72B", "meta-llama/llama-3.3-70b-instruct": "Llama 3.3 70B",
+    "ai21/jamba-large-1.7": "Jamba Large 1.7", "cohere/command-r-plus-08-2024": "Command R+",
+}
+
+
+def mname(m):
+    """Display name for a model ID."""
+    return DISPLAY_NAMES.get(m, m.split("/")[-1])
+
+
+def ordinal(x):
+    n = int(round(x))
+    suf = "th" if 10 <= n % 100 <= 20 else {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suf}"
+
+
+def and_list(items):
+    items = list(items)
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
 def pfmt(p):
     if p is None:
         return "n/a"
@@ -136,6 +162,7 @@ def sec_general(S):
     S.add("n_pairs", int(f["n_opioid_pairs"]), "figures_nielsen/figure_stats.json", "random-dose opioid pairs", "d")
     S.add("n_scores", len(SCORES), "analysis/revision/scores.py", "registered scores", "d")
     S.add("n_bands", len(BANDS), "analysis/revision/tolerances.py", "registered bands", "d")
+    S.add("main_bands", ", ".join(MAIN_BANDS), "analysis/revision/tolerances.py MAIN_BANDS", "bands in the main tables and example figures")
     for k in ("tight_lower_x", "tight_upper_x", "broad_lower_x", "broad_upper_x"):
         S.add(k, float(f[k]), "common/config.py via figure_stats", k, "g")
     S.add("n_reduction_scenarios", len(reduction_scenarios()), "analysis/revision/vignette_targets.py", "scenarios whose text asks for a clinical dose reduction", "d")
@@ -143,8 +170,10 @@ def sec_general(S):
     S.add("reduction_list", ", ".join(f"{k} (×{v:g})" for k, v in reduction_scenarios().items()), "analysis/revision/vignette_targets.py", "reduction scenarios and factors")
     from analysis.revision import stats as st
     from analysis.revision.model_agreement import AGREE
-    S.add("over_x", st.OVERDOSE, "analysis/revision/stats.py OVERDOSE", "overdose threshold (x expected)", "g")
+    S.add("over_x", st.SAFETY["overdose_x"], "analysis/revision/stats.py SAFETY", "overdose threshold (x highest standard; also x expected in the supplementary table)", "g")
     S.add("under_x", "½" if st.UNDERDOSE == 0.5 else f"{st.UNDERDOSE:g}", "analysis/revision/stats.py UNDERDOSE", "underdose threshold (x expected)")
+    S.add("severe_x", st.SAFETY["severe_overdose_x"], "analysis/revision/stats.py SAFETY", "severe overdose threshold (x highest standard)", "g")
+    S.add("gross_x", st.SAFETY["gross_error_x"], "analysis/revision/stats.py SAFETY", "gross error count threshold (x highest standard)", "g")
     S.add("exact_x", 1, "analysis/revision/scores.py (an answer equal to a standard scores 1x)", "ratio of an exact match", "d")
     S.add("agree_pct", round(100 * (np.exp(AGREE) - 1)), "analysis/revision/model_agreement.py AGREE", "agreement / match tolerance (%)", "d")
     S.add("disagree_pct", round(100 * (float(f["tight_upper_x"]) - 1)), "common/config.py TIGHT_RANGE_UPPER",
@@ -172,7 +201,7 @@ def sec_references(S):
           "study agents (excl. oral morphine) with at least one standard besides Nielsen", "d")
     S.add("ref_n_outside_broad", len(json.loads(h["conversions_outside_broad_all"])), src,
           "conversions outside the broad band under any standard (all CDC 2016 tramadol)")
-    S.add("ref_nielsen_outliers", ", ".join(a.replace("_", " ") for a in json.loads(h["nielsen_lone_outlier_agents"])),
+    S.add("ref_nielsen_outliers", and_list(a.replace("_", " ") for a in json.loads(h["nielsen_lone_outlier_agents"])),
           src, "agents where Nielsen is the lone outlier")
     b = pd.read_csv(f"{RR}/references/band_justification_summary.csv").iloc[0]
     src = f"{RR}/references/band_justification_summary.csv"
@@ -180,13 +209,15 @@ def sec_references(S):
     S.add("ref_disagree_p95", b.disagreement_p95, src, "95th percentile of that spread", fold)
     S.add("ref_disagree_max", b.disagreement_max, src, "maximum of that spread (= k of reference_agreement)", fold)
     S.add("ref_k_without_codeine", b.k_without_codeine, src, "k without codeine", fold)
+    S.add("ref_broad_fold", b.broad_fold_half_width, src, "broad band's fold half-width (narrower side)", fold)
+    S.add("ref_broad_interpretation", b.broad_interpretation, src, "what broad accuracy means, from the band justification")
     bj = pd.read_csv(f"{RR}/references/band_justification.csv")
     src = f"{RR}/references/band_justification.csv"
     t = bj[bj.band == "tight"]
     S.add("ref_tight_pctile_upper", t[t.side == "upper"].percentile_of_disagreement.iloc[0], src,
-          "percentile of the disagreement distribution at the tight upper bound", ".0f")
+          "percentile of the disagreement distribution at the tight upper bound", ordinal)
     S.add("ref_tight_pctile_lower", t[t.side == "lower"].percentile_of_disagreement.iloc[0], src,
-          "percentile at the tight lower bound", ".0f")
+          "percentile at the tight lower bound", ordinal)
 
 
 # ── Section 1a: published vs new baseline ────────────────────────────────
@@ -258,9 +289,14 @@ def sec_headlines(S, tables, long):
             S.add(f"h_low_{exp}_tight_{sc}", f[key], src_fs.replace("<score>", sc), f"mean naive tight % ({exp}), {sc}")
         for exp, cond in [("vig", "vignette_naive"), ("rd", "rd_naive")]:
             r = ds[(ds.score == sc) & (ds.condition == cond) & (ds.model == "POOLED")].iloc[0]
-            S.add(f"h_low_{exp}_mfe_{sc}", r.median_fold_error, f"{RR}/distribution_summary.csv", f"median fold error, naive {exp}, {sc}", fold)
-            S.add(f"h_low_{exp}_env_{sc}", r.pct_reference_envelope, f"{RR}/distribution_summary.csv",
-                  f"% within reference_envelope, naive {exp}, {sc} (mean over models)")
+            S.add(f"h_low_{exp}_mfe_{sc}", r.mean_model_median_fold_error, f"{RR}/distribution_summary.csv",
+                  f"median fold error (mean of per-model medians), naive {exp}, {sc}", fold)
+            S.add(f"h_low_{exp}_mfe_pooled_{sc}", r.median_fold_error, f"{RR}/distribution_summary.csv",
+                  f"median fold error (pooled over responses), naive {exp}, {sc}", fold)
+            S.add(f"h_low_{exp}_log2_{sc}", r.median_log2_ratio, f"{RR}/distribution_summary.csv",
+                  f"median signed log2 ratio (pooled over responses; negative = underdosing), naive {exp}, {sc}", "+.2f")
+            S.add(f"h_low_{exp}_broad_{sc}", r.pct_broad, f"{RR}/distribution_summary.csv",
+                  f"% within broad, naive {exp}, {sc} (mean over models)")
         sh = _precision_shares(long, sc)
         S.add(f"h_prec_correct_{sc}", sh.get("correct", 0), "responses_long.csv via visualize/revision/panels.precision_cells",
               f"vignettes naive: % cells correct (mean ratio within tight), {sc}; precision from Nielsen CV")
@@ -270,7 +306,7 @@ def sec_headlines(S, tables, long):
             S.add(f"h_ome_{exp}_tight_ome_{sc}", f[a], src_fs.replace("<score>", sc), f"tight gain, OME, {exp}, {sc}", pp)
             S.add(f"h_ome_{exp}_tight_nonome_{sc}", f[b], src_fs.replace("<score>", sc), f"tight gain, opioid to opioid, {exp}, {sc}", pp)
         for exp, e in [("vig", "vignette"), ("rd", "random_dose")]:
-            for out, tag in [("reference_envelope", "env"), ("median_fold_error", "mfe")]:
+            for out, tag in [("broad", "broad"), ("median_fold_error", "mfe")]:
                 for sub in ("ome", "nonome"):
                     r = _circ(circ, e, sub, sc, out)
                     fmtx = (lambda x: f"{x:+.2f}") if out == "median_fold_error" else pp
@@ -290,9 +326,10 @@ def sec_headlines(S, tables, long):
             S.add(f"verdict_ome_{exp}_{sc}", verdict_change(gb_ome - gb_non, g_ome - g_non, True,
                   reversed_=(g_ome - g_non) <= 0), "rule",
                   f"'grounding helps OME more' ({exp}, tight) under {sc}: OME minus opioid-to-opioid gain vs nielsen")
-            e_ome, e_non = S.v(f"h_ome_{exp}_env_ome_{sc}"), S.v(f"h_ome_{exp}_env_nonome_{sc}")
-            S.add(f"verdict_ome_env_{exp}_{sc}", "holds" if (e_ome is not None and e_non is not None and e_ome > e_non) else "does not hold",
-                  "rule", f"OME gain > opioid-to-opioid gain on reference_envelope ({exp}), {sc}")
+            for tag in ("broad", "mfe"):
+                e_ome, e_non = S.v(f"h_ome_{exp}_{tag}_ome_{sc}"), S.v(f"h_ome_{exp}_{tag}_nonome_{sc}")
+                S.add(f"verdict_ome_{tag}_{exp}_{sc}", "holds" if (e_ome is not None and e_non is not None and e_ome > e_non)
+                      else "does not hold", "rule", f"OME gain > opioid-to-opioid gain on {tag} ({exp}), {sc}")
         c, w = S.v(f"h_prec_correct_{sc}"), S.v(f"h_prec_pw_{sc}")
         cb, wb = S.v("h_prec_correct_nielsen"), S.v("h_prec_pw_nielsen")
         S.add(f"verdict_prec_{sc}", verdict_change(wb - cb, w - c, True, reversed_=w <= c), "rule",
@@ -303,8 +340,9 @@ def sec_headlines(S, tables, long):
                      f'{S[f"h_ome_vig_tight_ome_{sc}"]["display"]} / {S[f"h_ome_vig_tight_nonome_{sc}"]["display"]}',
                      f'{S[f"h_ome_rd_tight_ome_{sc}"]["display"]} / {S[f"h_ome_rd_tight_nonome_{sc}"]["display"]}'))
     tables["headlines"] = _html_table(
-        ["Score", "Naive tight %, vignettes", "Naive tight %, random doses", "Median fold error, vignettes",
-         "Median fold error, random doses", "Correct % (vignettes)", "Precise but wrong %",
+        ["Score", "Naive tight %, vignettes", "Naive tight %, random doses",
+         "Median fold error, vignettes (mean of per-model medians)",
+         "Median fold error, random doses (mean of per-model medians)", "Correct % (vignettes)", "Precise but wrong %",
          "Tight gain OME / opioid-to-opioid, vignettes (pp)", "Same, random doses (pp)"], rows)
 
 
@@ -328,10 +366,10 @@ def sec_rankings(S, tables):
             d = d[d.index.isin(CONSISTENT_MODELS)]
             top = d.abs().sort_values(ascending=False).head(2)
             S.add(f"rank_movers_{exp}_{sc}", "; ".join(
-                f"{m.split('/')[-1]} ({'down' if d[m] > 0 else 'up'} {abs(d[m]):.0f} places)" for m in top.index),
+                f"{mname(m)} ({'down' if d[m] > 0 else 'up'} {abs(d[m]):.0f} places)" for m in top.index),
                   f"results_<score>/{f}", f"models whose position (by mean tight accuracy) moves most, {exp}, nielsen → {sc}")
         for m in [x for x in base.index if x in CONSISTENT_MODELS]:
-            rows.append((EXP_LABEL["vignette" if exp == "vig" else "random_dose"], m.split("/")[-1],
+            rows.append((EXP_LABEL["vignette" if exp == "vig" else "random_dose"], mname(m),
                          *[f"{100 * rk[sc].loc[m, 'mean_tight_prop']:.1f} ({int(rk[sc].loc[m, 'adjusted_rank'])})" for sc in SCORE_ORDER]))
     tables["rankings"] = _html_table(["Experiment", "Model", *[f"{SCORES[s].label}: tight % (CMH rank)" for s in SCORE_ORDER]], rows)
 
@@ -401,41 +439,86 @@ def sec_circularity(S, tables):
                     surv = "survives" if (r.gain > 0 and p is not None and p < THRESHOLDS["alpha"]) else \
                         ("reversed" if r.gain < 0 and p is not None and p < THRESHOLDS["alpha"] else "does not survive")
                     S.add(f"verdict_{k}", surv, "rule", f"grounding gain on {out} ({exp}, {sub}, {sc}): positive and p < alpha")
-                    if sub in ("all", "disagree") and sc in MAIN_SCORES:
-                        rows.append((EXP_LABEL[e], sub, SCORES[sc].label, out, S[f"{k}_before"]["display"],
+                    if sub in ("all", "disagree") and sc in MAIN_SCORES and (isf or out in MAIN_BANDS):
+                        olab = "median fold error (mean of per-model medians)" if isf else out
+                        rows.append((EXP_LABEL[e], sub, SCORES[sc].label, olab, S[f"{k}_before"]["display"],
                                      S[f"{k}_after"]["display"], S[f"{k}_gain"]["display"],
                                      S.get(f"{k}_band_p", S[f"{k}_tf_p"])["display"], surv))
     tables["circularity"] = _html_table(["Experiment", "Subset", "Score", "Outcome", "Naive", "Grounded", "Gain", "p", "Verdict"], rows)
     # headline verdict: fair tests under non_nielsen
-    fair = [S.v(f"verdict_circ_{x}_all_non_nielsen_{o}") for x in ("vig", "rd") for o in ("median_fold_error", "reference_envelope")]
+    fair = [S.v(f"verdict_circ_{x}_all_non_nielsen_{o}") for x in ("vig", "rd") for o in ("median_fold_error", "broad")]
     S.add("verdict_circularity_overall", "survives" if all(v == "survives" for v in fair) else
           ("partly survives" if any(v == "survives" for v in fair) else "does not survive"), "rule",
-          "grounding gain under non_nielsen on the fair tests (median fold error, reference_envelope), both experiments")
+          "grounding gain under non_nielsen on the fair tests (median fold error, broad), both experiments")
 
 
-# ── Section 6: extreme errors ────────────────────────────────────────────
+# ── Section 6: safety tails (dose terms) and extreme errors ─────────────
+SAFETY_CONDS = ["vignette_naive", "vignette_nielsen", "vignette_nielsen_units", "rd_naive", "rd_nielsen",
+                "eu_4h_nielsen", "eu_4h_nielsen_units"]
+
+
 def sec_extremes(S, tables):
+    """Safety tails are registry entries (overdose, severe_overdose, underdose;
+    anchored on the current standards; lower is better): read from
+    distribution_summary.csv like tight and broad. Nielsen-score rows (the
+    tails do not depend on the score; other scores cover fewer conversions)."""
+    from analysis.revision.conditions import CONDITIONS
+    from analysis.revision.tolerances import TAILS
     ds = pd.read_csv(f"{RR}/distribution_summary.csv")
+    src = f"{RR}/distribution_summary.csv"
+    nz = ds[ds.score == "nielsen"]
     rows = []
-    for cond in ["vignette_naive", "rd_naive", "vignette_nielsen", "rd_nielsen", "eu_4h_nielsen", "eu_4h_nielsen_units"]:
+    for cond in SAFETY_CONDS:
+        r = nz[(nz.condition == cond) & (nz.model == "POOLED")].iloc[0]
+        for tail, tag in [("overdose", "over"), ("severe_overdose", "severe"), ("underdose", "under")]:
+            S.add(f"safe_{cond}_{tag}", r[f"pct_{tail}"], src,
+                  f"% {BANDS[tail].label}, {cond} (mean over models; anchored on the current standards)")
+        S.add(f"safe_{cond}_ge10", int(r.n_ge_10x_highest), src, f"responses >= 10x the highest standard, {cond}", "d")
+        S.add(f"safe_{cond}_n", int(r.n_responses), src, f"responses, {cond}", ",d")
+        rows.append((CONDITIONS[cond].label, S[f"safe_{cond}_over"]["display"], S[f"safe_{cond}_severe"]["display"],
+                     S[f"safe_{cond}_under"]["display"], S[f"safe_{cond}_n"]["display"]))
+    tables["safety"] = _html_table(["Condition (mean over models)", "Overdose: % > 2× highest standard",
+                                    "Severe: % > 4× highest", "Underdose: % < ½× lowest standard", "Responses"], rows)
+    rows = []
+    for m in [x for x in DISPLAY_NAMES if x in set(nz.model)]:
+        vals = []
+        for cond in ("vignette_naive", "rd_naive", "rd_nielsen"):
+            r = nz[(nz.condition == cond) & (nz.model == m)].iloc[0]
+            vals += [f"{r[f'pct_{t}']:.1f}" for t in ("overdose", "severe_overdose", "underdose")]
+        rows.append((mname(m), *vals))
+    hdr = []
+    for lab in ("Vignettes naive", "Random doses naive", "Random doses, Nielsen"):
+        hdr += [f"{lab}: > 2×", "> 4×", "< ½×"]
+    tables["safety_models"] = _html_table(["Model", *hdr], rows)
+    # grounding effect on the tails (3B; polarity-aware: gain > 0 = fewer in the tail)
+    c = pd.read_csv(f"{RR}/circularity.csv")
+    rows = []
+    for exp, e in [("vig", "vignette"), ("rd", "random_dose")]:
+        for tail in TAILS:
+            r = _circ(c, e, "all", "nielsen", tail)
+            k = f"circ_{exp}_all_nielsen_{tail}"
+            rows.append((EXP_LABEL[e], BANDS[tail].label, S[f"{k}_before"]["display"], S[f"{k}_after"]["display"],
+                         S[f"{k}_gain"]["display"], S[f"{k}_band_p"]["display"], S[f"{k}_nsig"]["display"],
+                         S[f"verdict_{k}"]["display"]))
+    tables["safety_grounding"] = _html_table(["Experiment", "Tail (lower is better)", "Naive %", "Nielsen supplied %",
+                                              "Reduction (pp)", "Pooled p", "Models significantly better", "Verdict"], rows)
+    # supplementary: > 2x / < 0.5x of the score's expected dose (DZ 7's literal question)
+    rows = []
+    for cond in SAFETY_CONDS:
         vals = []
         for sc in SCORE_ORDER:
             r = ds[(ds.score == sc) & (ds.condition == cond) & (ds.model == "POOLED")]
             if not len(r):
                 vals += ["n/a", "n/a"]; continue
             r = r.iloc[0]
-            S.add(f"ext_{cond}_over_{sc}", r.pct_over_2x, f"{RR}/distribution_summary.csv", f"% > 2x, {cond}, {sc}")
-            S.add(f"ext_{cond}_under_{sc}", r.pct_under_half, f"{RR}/distribution_summary.csv", f"% < 0.5x, {cond}, {sc}")
+            S.add(f"ext_{cond}_over_{sc}", r.pct_over_2x, src, f"% > 2x the score's expected dose (pooled over responses), {cond}, {sc}")
+            S.add(f"ext_{cond}_under_{sc}", r.pct_under_half, src, f"% < 0.5x the score's expected dose (pooled over responses), {cond}, {sc}")
             vals += [S[f"ext_{cond}_over_{sc}"]["display"], S[f"ext_{cond}_under_{sc}"]["display"]]
-        spread = max(abs(S.v(f"ext_{cond}_{x}_{a}") - S.v(f"ext_{cond}_{x}_{b}")) for x in ("over", "under")
-                     for a in SCORE_ORDER for b in SCORE_ORDER if f"ext_{cond}_{x}_{a}" in S and f"ext_{cond}_{x}_{b}" in S)
-        S.add(f"verdict_ext_{cond}", "score-independent" if spread < THRESHOLDS["material_pp"] else "score-dependent",
-              "rule", f"extreme-error rates for {cond} differ by < material_pp across scores")
-        rows.append((cond, *vals))
+        rows.append((CONDITIONS[cond].label, *vals))
     hdr = []
-    for s in SCORE_ORDER:
-        hdr += [f"{SCORES[s].label}: > 2×", f"< ½×"]
-    tables["extremes"] = _html_table(["Condition", *hdr], rows)
+    for s_ in SCORE_ORDER:
+        hdr += [f"{SCORES[s_].label}: > 2×", "< ½×"]
+    tables["extremes"] = _html_table(["Condition (pooled over responses)", *hdr], rows)
 
 
 # ── Section 7: agreement and recall ──────────────────────────────────────
@@ -500,6 +583,30 @@ def sec_di2(S, tables):
                                        [(a, b, c, "yes" if ok else "no") for a, b, c, ok in claims])
 
 
+# ── Vignettes: all 20 scenarios vs the 16 same-conversion scenarios ─────
+def sec_vig16(S, tables, long):
+    from analysis.revision import stats as st
+    rows = []
+    for sc in SCORE_ORDER:
+        vals = []
+        for sub, tag in (("all", "20"), ("same_conversion", "16")):
+            n = st.model_summary(long, sc, "vignette_naive", sub, ["tight", "broad"])
+            g = st.model_summary(long, sc, "vignette_nielsen", sub, ["tight", "broad"], average="cell")
+            n0 = st.model_summary(long, sc, "vignette_naive", sub, ["tight", "broad"], average="cell")
+            src = "results_revision/responses_long.csv via analysis/revision/stats.py"
+            S.add(f"v{tag}_tight_{sc}", n.pct_tight.mean(), src, f"naive vignette tight % ({tag} scenarios), {sc}")
+            S.add(f"v{tag}_broad_{sc}", n.pct_broad.mean(), src, f"naive vignette broad % ({tag} scenarios), {sc}")
+            S.add(f"v{tag}_mfe_{sc}", n.median_fold_error.mean(), src, f"naive median fold error, mean of per-model medians ({tag}), {sc}", fold)
+            S.add(f"v{tag}_gain_{sc}", g.pct_tight.mean() - n0.pct_tight.mean(), src, f"grounding gain, tight pp, cell average ({tag}), {sc}", pp)
+            S.add(f"v{tag}_gain_broad_{sc}", g.pct_broad.mean() - n0.pct_broad.mean(), src, f"grounding gain, broad pp ({tag}), {sc}", pp)
+        for k in ("tight", "broad", "mfe", "gain", "gain_broad"):
+            vals.append(f'{S[f"v20_{k}_{sc}"]["display"]} / {S[f"v16_{k}_{sc}"]["display"]}')
+        rows.append((SCORES[sc].label, *vals))
+    tables["vig_20_16"] = _html_table(["Score (20 / 16 scenarios)", "Naive tight %", "Naive broad %",
+                                       "Naive median fold error (mean of per-model medians)",
+                                       "Grounding gain, tight (pp)", "Grounding gain, broad (pp)"], rows)
+
+
 # ── Section 8a: empty prompts ────────────────────────────────────────────
 def sec_empty(S, tables):
     from scipy.stats import wilcoxon
@@ -539,14 +646,27 @@ def sec_empty(S, tables):
     S.add("verdict_fig10_consistent", "unchanged" if all((S.v(f"emp_all_p_{k}") or 1) >= THRESHOLDS["alpha"] for k in ("rd_empty", "empty_text", "rd_text"))
           else "changed", "rule", "figure 10 claim: no significant pooled difference between formats")
     rc = pd.read_csv(f"{RR}/vignette_reduction_check.csv")
+    rc = rc[rc.model == "POOLED"]
+    conds = ("vignette_naive", "vignette_nielsen", "vignette_nielsen_units")
     rows = []
-    for sk in rc.scenario_key.unique():
+    for sk in [x for x in rc.scenario_key.unique() if not x.startswith("ALL")] + ["ALL_REDUCTION_SCENARIOS"]:
+        g = rc[rc.scenario_key == sk].set_index("condition")
+        lab = "All four scenarios" if sk.startswith("ALL") else sk
+        k = "" if sk.startswith("ALL") else f"{g.requested_factor.iloc[0]:g}"
+        vals = []
+        for c in conds:
+            vals += [f"{g.loc[c, 'pct_tight_reduced']:.1f}", f"{g.loc[c, 'pct_tight_unreduced']:.1f}"]
+        rows.append((lab, k, *vals))
         if sk.startswith("ALL"):
-            continue
-        g = rc[(rc.scenario_key == sk) & (rc.model == "POOLED")].set_index("condition")
-        rows.append((sk, f"{g.requested_factor.iloc[0]:g}", *[f"{g.loc[c, 'implied_factor_vs_empty']:.2f}" for c in
-                                                            ("vignette_naive", "vignette_nielsen", "vignette_nielsen_units")]))
-    tables["reductions"] = _html_table(["Scenario", "Requested factor", "Implied factor: naive", "With Nielsen", "Nielsen + units"], rows)
+            for c, t in zip(conds, ("naive", "nielsen", "units")):
+                S.add(f"red_{t}_reduced", g.loc[c, "pct_tight_reduced"], f"{RR}/vignette_reduction_check.csv",
+                      f"text answers within tight of the reduced target, four scenarios, {t}")
+                S.add(f"red_{t}_unreduced", g.loc[c, "pct_tight_unreduced"], f"{RR}/vignette_reduction_check.csv",
+                      f"text answers within tight of the unreduced target, four scenarios, {t}")
+    tables["reductions"] = _html_table(["Scenario", "Requested factor",
+                                        "Naive: % tight of reduced", "% tight of unreduced",
+                                        "Nielsen: % tight of reduced", "% tight of unreduced",
+                                        "Nielsen + units: % tight of reduced", "% tight of unreduced"], rows)
     w = pd.read_csv("results_nielsen/wilcoxon_nielsen_effect_empty_vignettes.csv")
     r = w[w.model == "POOLED"].iloc[0]
     S.add("emp_grounding_p", r.tight_p, "results_nielsen/wilcoxon_nielsen_effect_empty_vignettes.csv", "grounding on empty prompts, pooled tight p", pfmt)
@@ -579,12 +699,14 @@ def compute():
     sec_extremes(S, tables)
     sec_agreement(S)
     sec_di2(S, tables)
+    sec_vig16(S, tables, long)
     sec_empty(S, tables)
     return S, tables
 
 
 def build_figures():
-    for mod in ("visualize.revision.examples_scores", "visualize.revision.examples_references"):
+    for mod in ("visualize.revision.examples_scores", "visualize.revision.examples_references",
+                "visualize.revision.examples_safety"):
         path = os.path.join(*mod.split(".")) + ".py"
         if os.path.exists(path):
             subprocess.run([sys.executable, "-m", mod], check=True)

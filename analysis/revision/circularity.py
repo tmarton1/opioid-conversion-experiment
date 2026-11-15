@@ -17,8 +17,9 @@ counts of models with a significant effect).
   before / after  per-model value under naive / Nielsen prompts (bands: % within,
                   mean over cells, as the batch means; fold error: median over
                   responses). ALL_MODELS: mean over the 13 models.
-  gain            bands: after - before (pp); median fold error: before - after
-                  (positive = grounding helps in both cases).
+  gain            accuracy bands: after - before (pp); tails (overdose,
+                  severe_overdose, underdose; lower is better) and median fold
+                  error: before - after. Positive = grounding helps in every case.
   band_*          Wilcoxon on the item proportion within the band (NaN for the
                   median-fold-error outcome); tf_* Wilcoxon on the item's median
                   |log ratio| (threshold-free; the same for every outcome row of a
@@ -79,7 +80,10 @@ def build(long: pd.DataFrame) -> pd.DataFrame:
                              "n_responses_naive": int(ma.loc[sel, "n_responses"].sum()),
                              "n_responses_grounded": int(mb.loc[sel, "n_responses"].sum()),
                              "before": before, "after": after,
-                             "gain": (before - after) if band is None else (after - before)}
+                             # gain > 0 = grounding helps: fold error and tails (lower is
+                             # better) fall; accuracy bands rise (polarity from the registry)
+                             "gain": (before - after) if (band is None or not BANDS[band].higher_is_better)
+                             else (after - before)}
                         if band is not None:
                             r.update(band_n_pairs=int(bp.loc[pm, "n_pairs"]), band_mean_diff=bp.loc[pm, "mean_diff"],
                                      band_p=bp.loc[pm, "p"])
