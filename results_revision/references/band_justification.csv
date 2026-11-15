@@ -1,0 +1,7 @@
+band,side,bound,fold_half_width,disagreement_median,disagreement_p95,disagreement_max,percentile_of_disagreement,relation
+tight,upper,1.15,1.15,1.1999999999999997,1.4,1.4999999999999998,32.20338983050847,narrower than the median disagreement
+tight,lower,0.85,1.1764705882352942,1.1999999999999997,1.4,1.4999999999999998,44.06779661016949,narrower than the median disagreement
+broad,upper,1.7,1.7,1.1999999999999997,1.4,1.4999999999999998,100.0,at or wider than the maximum disagreement
+broad,lower,0.6,1.6666666666666667,1.1999999999999997,1.4,1.4999999999999998,100.0,at or wider than the maximum disagreement
+reference_agreement,upper,1.4999999999999998,1.4999999999999998,1.1999999999999997,1.4,1.4999999999999998,100.0,at or wider than the maximum disagreement
+reference_agreement,lower,0.6666666666666667,1.4999999999999998,1.1999999999999997,1.4,1.4999999999999998,100.0,at or wider than the maximum disagreement

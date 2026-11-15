@@ -56,3 +56,27 @@ def test_response_equal_to_nielsen_for_hydrocodone():
     assert close(gm, 0.872)
     assert close(ratios["consensus"], 1 / gm)
     assert close(ratios["consensus"], 1.147)
+
+
+def test_reference_agreement_guarantee():
+    """A response copying the Nielsen factors always passes the reference-agreement
+    band (and its own conversion's envelope) when scored under non_nielsen."""
+    from analysis.revision.reference_comparison import scored_conversions
+    from analysis.revision.rescore import _parse_sources
+    from analysis.revision.tolerances import band_bounds, reference_agreement_k
+
+    k = reference_agreement_k()
+    n_checked = 0
+    for r in scored_conversions("results").itertuples(index=False):
+        froms, doses = _parse_sources(r.from_opioid, r.from_dose)
+        expected = {s: standard_ratio(s, froms, doses, r.to_opioid)
+                    for s in ("nielsen", "cdc_2022", "nih_heal", "mcpherson_2018")}
+        ref, _ = SCORES["non_nielsen"].fn(1.0, expected)  # the answer equals Nielsen's dose
+        if ref is None:
+            continue
+        ratio = 1.0 / ref
+        assert 1 / k - 1e-9 <= ratio <= k + 1e-9, (r.conversion, ratio, k)
+        lo, hi = band_bounds("reference_envelope", r.from_opioid, r.from_dose, r.to_opioid)
+        assert lo - 1e-9 <= ratio <= hi + 1e-9, (r.conversion, ratio, lo, hi)
+        n_checked += 1
+    assert n_checked == 59

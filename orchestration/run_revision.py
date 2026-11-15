@@ -11,6 +11,7 @@ Steps (each overwrites its own outputs; safe to rerun):
                RESULTS_DIR=results_<score> (Nielsen: the raw CSVs copied into
                results_nielsen/), then generate_summaries.py into figures_<score>/
   references   analysis/revision/reference_comparison.py → results_revision/references/
+  bands        analysis/revision/tolerances.py → results_revision/references/band_justification*.csv
 
 Never calls any model API. Writes results_revision/run_log.json with the git
 commit, timestamp and the SHA-256 of every reference JSON file.
@@ -77,10 +78,15 @@ def step_references(args):
     _run([PY, "-m", "analysis.revision.reference_comparison", "--raw-dir", RAW_DIR])
 
 
+def step_bands(args):
+    _run([PY, "-m", "analysis.revision.tolerances"])
+
+
 STEPS = {
     "rescore": step_rescore,
     "pipeline": step_pipeline,
     "references": step_references,
+    "bands": step_bands,
 }
 
 
