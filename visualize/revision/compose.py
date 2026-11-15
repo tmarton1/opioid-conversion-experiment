@@ -97,9 +97,14 @@ def build_grid(spec: FigureSpec, scores, view, bands, long=None, out_dir=None) -
     who = " vs ".join(S.score_label(s) for s in scores)
     fig.suptitle(f"Figure {spec.num}. {spec.title} — {view_txt}; scored against {who}",
                  x=0.01, ha="left", fontsize=10.5, fontweight="bold", color=S.INK)
-    fig.legend(handles=hs, loc="lower center", ncol=min(len(hs), 5), frameon=False, fontsize=7.2,
+    ncol = min(len(hs), 5)
+    fig.legend(handles=hs, loc="lower center", ncol=ncol, frameon=False, fontsize=7.2,
                bbox_to_anchor=(0.5, 0.0))
-    fig.tight_layout(rect=(0, 0.05, 1, 0.96), h_pad=2.2, w_pad=(4.5 if annot else 3.0))
+    # reserve room for the legend (about 0.2 in per legend row) and the x labels
+    legend_rows = -(-len(hs) // ncol) if hs else 0
+    bottom = (0.35 + 0.2 * legend_rows) / fig.get_figheight()
+    top = 1 - 0.45 / fig.get_figheight()
+    fig.tight_layout(rect=(0, bottom, 1, top), h_pad=2.2, w_pad=(4.5 if annot else 3.0))
     from common.config import FIGURES_DIR
     out_dir = out_dir or os.path.join(FIGURES_DIR, "revision")
     return S.save(fig, out_stem(out_dir, spec, scores, view, bands))
@@ -141,7 +146,7 @@ def adapt_inputs(score: str, long=None) -> str:
     ]:
         sc = pd.read_csv(os.path.join(f"results_{score}", fname))
         nz = pd.read_csv(os.path.join("results_nielsen", fname))
-        for k in keys[2:]:
+        for k in [k for k in keys if k.startswith(("include_", "ask_", "explain_"))]:
             sc[k] = sc[k].astype(bool); nz[k] = nz[k].astype(bool)
         nz = nz[keys + ncols + [ecol]].rename(columns={ecol: "_exp_n"})
         out = sc.drop(columns=[c for c in ncols if c in sc.columns]).merge(nz, on=keys, how="left")
@@ -160,7 +165,8 @@ def _coverage_text(spec, score, long) -> str:
         n = sum(stats.coverage(long, score, c, s)["n_responses"] for c, s in p.cond_subsets())
         k = max(stats.coverage(long, score, c, s)["n_items"] for c, s in p.cond_subsets())
         parts.append(f"{p.title}: {n:,} responses, {k} conversion items")
-    return (f"<b>{SCORES[score].title_suffix.strip(' —')}</b>. Scored: " + "; ".join(parts) +
+    head = SCORES[score].title_suffix.strip(" —")
+    return (f"<b>{head[0].upper() + head[1:]}</b>. Scored: " + "; ".join(parts) +
             ". Conversions no standard in this score covers are excluded.")
 
 
@@ -199,7 +205,8 @@ def build_legacy(spec: FigureSpec, score: str, out_dir=None, long=None) -> list[
     if suffix:
         for p in fig.select({"type": Plot}):
             if p.title is not None and p.title.text:
-                p.title.text = p.title.text + suffix
+                # second line, so long titles are not clipped at the plot width
+                p.title.text = p.title.text + "\n" + suffix.strip(" —")
         long = stats.load_long() if long is None else long
         width = max([getattr(p, "width", 900) or 900 for p in fig.select({"type": Plot})] + [600])
         fig = column(fig, Div(text=f"<p style='font-size:12px;color:#555'>{_coverage_text(spec, score, long)}</p>",

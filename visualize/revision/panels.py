@@ -68,9 +68,12 @@ def _rows(ax, models, show_labels):
         ax.axhline(y + 0.5, color=S.GRID, lw=0.5, zorder=0)
 
 
-def _coverage_note(ax, n_resp, n_items, item_word):
-    ax.text(1.0, -0.06, f"n = {n_resp:,} responses, {n_items} {item_word}", transform=ax.transAxes,
-            fontsize=6.3, color=S.MUTED, ha="right", va="top")
+def _coverage_note(ax, n_resp, n_items, item_word, above=False):
+    """Responses and items scored, under the axis (or above it when the panel
+    has an x-axis label)."""
+    ax.text(1.0, 1.01 if above else -0.06, f"n = {n_resp:,} responses, {n_items} {item_word}",
+            transform=ax.transAxes, fontsize=6.3, color=S.MUTED, ha="right",
+            va="bottom" if above else "top")
 
 
 def _item_word(cond):
@@ -258,7 +261,11 @@ def precision_cells(long, score, cond, subset="all", band="tight") -> pd.DataFra
     else:
         nz = nz.assign(_v=pd.to_numeric(nz["observed_to_dose"], errors="coerce")
                        / pd.to_numeric(nz["from_dose"], errors="coerce"))
-    cv = nz.groupby(keys)["_v"].agg(lambda s: s.std() / s.mean() if s.mean() else np.nan).rename("cv")
+    # CV over positive answers (sample SD / mean), as the pipeline's observed_*_cv
+    def _cv(v):
+        v = v[v > 0]
+        return v.std() / v.mean() if len(v) and v.mean() else np.nan
+    cv = nz.groupby(keys)["_v"].agg(_cv).rename("cv")
     d = stats.responses(long, score, cond, subset)
     agg = d.groupby(keys).agg(mean_ratio=("ratio", "mean"), from_opioid=("from_opioid", "first"),
                               conv_dose=("conv_dose", "first"), to_opioid=("to_opioid", "first"))
@@ -321,7 +328,7 @@ def precision_distribution(ax, long, score, panel, bands, models, show_labels=Tr
     ax.set_ylabel("Mean ratio to reference", fontsize=7.5) if show_labels else None
     S.clean_axes(ax, keep=("bottom", "left"))
     _coverage_note(ax, int(len(stats.responses(long, score, cond, panel.subset))),
-                   int(cells[CONDITIONS[cond].item].nunique()), _item_word(cond))
+                   int(cells[CONDITIONS[cond].item].nunique()), _item_word(cond), above=True)
     return [Line2D([0], [0], ls="none", marker="o", color=S.color(m), label=S.short(m)) for m in models]
 
 
