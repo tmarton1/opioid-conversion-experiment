@@ -126,6 +126,34 @@ def verdict_change(base, new, higher_is_better, material=THRESHOLDS["material_pp
     return "strengthened" if better else "weakened"
 
 
+# ── General counts (so that no number is typed into the prose) ───────────
+def sec_general(S):
+    from analysis.revision.vignette_targets import reduction_scenarios, same_conversion_scenarios
+    f = _figstats("nielsen")
+    S.add("n_models", len(CONSISTENT_MODELS), "common/models.py CONSISTENT_MODELS", "models analyzed", "d")
+    S.add("n_scenarios", int(f["n_vignette_scenarios"]), "figures_nielsen/figure_stats.json", "vignette scenarios", "d")
+    S.add("n_wordings", int(f["n_vignette_wordings"]), "figures_nielsen/figure_stats.json", "wordings per scenario", "d")
+    S.add("n_pairs", int(f["n_opioid_pairs"]), "figures_nielsen/figure_stats.json", "random-dose opioid pairs", "d")
+    S.add("n_scores", len(SCORES), "analysis/revision/scores.py", "registered scores", "d")
+    S.add("n_bands", len(BANDS), "analysis/revision/tolerances.py", "registered bands", "d")
+    for k in ("tight_lower_x", "tight_upper_x", "broad_lower_x", "broad_upper_x"):
+        S.add(k, float(f[k]), "common/config.py via figure_stats", k, "g")
+    S.add("n_reduction_scenarios", len(reduction_scenarios()), "analysis/revision/vignette_targets.py", "scenarios whose text asks for a clinical dose reduction", "d")
+    S.add("n_same_conversion_scenarios", len(same_conversion_scenarios()), "analysis/revision/vignette_targets.py", "scenarios where text and empty prompts ask the same conversion", "d")
+    S.add("reduction_list", ", ".join(f"{k} (×{v:g})" for k, v in reduction_scenarios().items()), "analysis/revision/vignette_targets.py", "reduction scenarios and factors")
+    from analysis.revision import stats as st
+    from analysis.revision.model_agreement import AGREE
+    S.add("over_x", st.OVERDOSE, "analysis/revision/stats.py OVERDOSE", "overdose threshold (x expected)", "g")
+    S.add("under_x", "½" if st.UNDERDOSE == 0.5 else f"{st.UNDERDOSE:g}", "analysis/revision/stats.py UNDERDOSE", "underdose threshold (x expected)")
+    S.add("exact_x", 1, "analysis/revision/scores.py (an answer equal to a standard scores 1x)", "ratio of an exact match", "d")
+    S.add("agree_pct", round(100 * (np.exp(AGREE) - 1)), "analysis/revision/model_agreement.py AGREE", "agreement / match tolerance (%)", "d")
+    S.add("disagree_pct", round(100 * (float(f["tight_upper_x"]) - 1)), "common/config.py TIGHT_RANGE_UPPER",
+          "a standard 'differs' from Nielsen if more than this % away (the tight band)", "d")
+    sm = pd.read_csv(f"{RR}/standard_matches.csv")
+    S.add("n_perm", int(sm.loc[sm.row_type == "summary", "n_perm"].dropna().iloc[0]), f"{RR}/standard_matches.csv",
+          "permutations of the chance baseline", ",d")
+
+
 # ── Section 1: standards ─────────────────────────────────────────────────
 def sec_references(S):
     h = pd.read_csv(f"{RR}/references/headline.csv").set_index("key")["value"]
@@ -537,6 +565,7 @@ def compute():
     S, tables = Stats(), {}
     for k, v in THRESHOLDS.items():
         S.add(f"thr_{k}", v, "orchestration/build_differences_report.py THRESHOLDS", f"verdict threshold {k}", "g")
+    sec_general(S)
     sec_references(S)
     sec_baseline(S, tables)
     sec_headlines(S, tables, long)
@@ -568,12 +597,11 @@ def fill(template, S, tables):
             return tables.get(k[6:], f"<p class='missing'>[missing table {k[6:]}]</p>")
         if k.startswith("figure:"):
             name = k[7:]
-            files = sorted(f for f in os.listdir(EXAMPLES) if f.startswith(name + "_") and f.endswith(".png")) \
-                if os.path.isdir(EXAMPLES) else []
+            pat = re.compile(rf"^{re.escape(name)}[a-z]?_.*\.png$")   # E2 matches E2a_..., E2b_...
+            files = sorted(f for f in os.listdir(EXAMPLES) if pat.match(f)) if os.path.isdir(EXAMPLES) else []
             if not files:
                 missing.add(k)
                 return f"<p class='missing'>[missing figure {name}]</p>"
-            rel = os.path.relpath(os.path.join(EXAMPLES, files[0]), PRIVATE)
             return "".join(f"<img src='{os.path.relpath(os.path.join(EXAMPLES, f), PRIVATE)}' alt='{name}'>" for f in files)
         if k not in S:
             missing.add(k)
