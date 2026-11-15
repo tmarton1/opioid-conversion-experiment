@@ -32,6 +32,7 @@ import pandas as pd
 import numpy as np
 from scipy.stats import wilcoxon, spearmanr
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR
 
 TIGHT = "tight(0.85,1.15)"
 BROAD = "broad(0.6,1.7)"
@@ -229,7 +230,7 @@ class CrossExperimentMatched:
 
     # ── save all ───────────────────────────────────────────────
 
-    def save(self, results_dir: str = "results"):
+    def save(self, results_dir: str = RESULTS_DIR):
         """Save all three CSVs to the results directory."""
         import os
         os.makedirs(results_dir, exist_ok=True)

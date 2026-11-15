@@ -64,6 +64,7 @@ from scipy.stats import norm
 from statsmodels.stats.multitest import multipletests
 
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR
 
 
 class ModelRanking:
@@ -449,9 +450,9 @@ def build_all_rankings() -> list["ModelRanking"]:
 
     Returns a list of ModelRanking objects (already built).
     """
-    VIGNETTE_CSV = "results/reworded_vignettes_model_analysis.csv"
-    PAIR_CSV = "results/pair_model_analysis.csv"
-    EXPLAIN_PAIR_CSV = "results/explain_units_pair_model_analysis.csv"
+    VIGNETTE_CSV = f"{RESULTS_DIR}/reworded_vignettes_model_analysis.csv"
+    PAIR_CSV = f"{RESULTS_DIR}/pair_model_analysis.csv"
+    EXPLAIN_PAIR_CSV = f"{RESULTS_DIR}/explain_units_pair_model_analysis.csv"
 
     specs = [
         {
@@ -459,35 +460,35 @@ def build_all_rankings() -> list["ModelRanking"]:
             "filters": {"include_nielsen": False, "explain_units": False},
             "unit_col": "scenario_key",
             "label": "Naive Vignettes",
-            "output": "results/ranking_naive_vignettes.csv",
+            "output": f"{RESULTS_DIR}/ranking_naive_vignettes.csv",
         },
         {
             "csv_path": VIGNETTE_CSV,
             "filters": {"include_nielsen": True, "explain_units": True},
             "unit_col": "scenario_key",
             "label": "Vignettes + Nielsen + Explain Units",
-            "output": "results/ranking_vignettes_nielsen_units.csv",
+            "output": f"{RESULTS_DIR}/ranking_vignettes_nielsen_units.csv",
         },
         {
             "csv_path": PAIR_CSV,
             "filters": {"include_nielsen": False, "include_examples": False},
             "unit_col": "opioid_pair",
             "label": "Naive Random Doses",
-            "output": "results/ranking_naive_random_doses.csv",
+            "output": f"{RESULTS_DIR}/ranking_naive_random_doses.csv",
         },
         {
             "csv_path": PAIR_CSV,
             "filters": {"include_nielsen": True, "include_examples": False},
             "unit_col": "opioid_pair",
             "label": "Random Doses + Nielsen",
-            "output": "results/ranking_random_doses_nielsen.csv",
+            "output": f"{RESULTS_DIR}/ranking_random_doses_nielsen.csv",
         },
         {
             "csv_path": EXPLAIN_PAIR_CSV,
             "filters": {"explain_units": True},
             "unit_col": "opioid_pair",
             "label": "Random Doses + Nielsen + Explain Units",
-            "output": "results/ranking_random_doses_nielsen_units.csv",
+            "output": f"{RESULTS_DIR}/ranking_random_doses_nielsen_units.csv",
         },
     ]
 

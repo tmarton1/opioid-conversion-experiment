@@ -26,6 +26,7 @@ Run from the repository root:
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common.config import RESULTS_DIR
 
 import argparse
 import importlib
@@ -82,7 +83,7 @@ def run_pair_experiment():
         {"include_nielsen": True, "include_examples": True},
     ]
 
-    output_csv = "results/experiment_results.csv"
+    output_csv = f"{RESULTS_DIR}/experiment_results.csv"
 
     print("── Running OME opioid pair experiment ──")
     exp_ome = Experiment(
@@ -138,7 +139,7 @@ def run_explain_units_experiment():
          "ask_for_units": True, "explain_units": False},
     ]
 
-    output_csv = "results/explain_units_experiment_results.csv"
+    output_csv = f"{RESULTS_DIR}/explain_units_experiment_results.csv"
 
     print("── Running explain-units experiment ──")
     exp = Experiment(
@@ -188,7 +189,7 @@ def run_vignette_experiment():
          "ask_for_units": True, "explain_units": True},
     ]
 
-    output_csv = "results/reworded_vignettes_results.csv"
+    output_csv = f"{RESULTS_DIR}/reworded_vignettes_results.csv"
 
     print(f"── Running vignette experiment: {len(vignette_ids)} vignettes ──")
     exp = ScenarioExperiment(
@@ -249,7 +250,7 @@ def run_empty_vignette_experiment():
          "ask_for_units": True, "explain_units": True},
     ]
 
-    output_csv = "results/reworded_vignettes_results.csv"
+    output_csv = f"{RESULTS_DIR}/reworded_vignettes_results.csv"
 
     print(f"── Running empty-vignette experiment: {len(empty_vignette_ids)} vignettes ──")
     exp = ScenarioExperiment(

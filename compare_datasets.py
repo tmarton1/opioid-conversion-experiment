@@ -1,9 +1,10 @@
+from common.config import RESULTS_DIR
 import pandas as pd
 import json
 
 # Load both files
-vig = pd.read_csv('results/reworded_vignettes_results.csv')
-scen = pd.read_csv('results/scenario_experiment_results.csv')
+vig = pd.read_csv(f'{RESULTS_DIR}/reworded_vignettes_results.csv')
+scen = pd.read_csv(f'{RESULTS_DIR}/scenario_experiment_results.csv')
 
 print('REWORDED_VIGNETTES_RESULTS.CSV:')
 print(f'Total rows: {len(vig):,}')

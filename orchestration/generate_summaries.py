@@ -25,6 +25,7 @@ Run from the repository root:
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common.config import FIGURES_DIR
 
 import argparse
 import asyncio
@@ -58,11 +59,11 @@ async def run_tables():
     importlib.reload(visualize.summary_tables)
     from visualize.summary_tables import SummaryTablesBuilder
 
-    os.makedirs("summary_w_figures", exist_ok=True)
+    os.makedirs(FIGURES_DIR, exist_ok=True)
     builder = SummaryTablesBuilder()
     await builder.save(
-        "summary_w_figures/accuracy_summary_tables.html",
-        "summary_w_figures/accuracy_summary_tables.pdf",
+        f"{FIGURES_DIR}/accuracy_summary_tables.html",
+        f"{FIGURES_DIR}/accuracy_summary_tables.pdf",
     )
     print("✓ Summary tables saved")
 
@@ -78,7 +79,7 @@ async def run_figures():
     importlib.reload(visualize.comprehensive_figures)
     from visualize.comprehensive_figures import ComprehensiveFigureBuilder
 
-    os.makedirs("summary_w_figures", exist_ok=True)
+    os.makedirs(FIGURES_DIR, exist_ok=True)
     cfb = ComprehensiveFigureBuilder()
     await cfb.save_all()
     print("✓ Comprehensive figures saved")
@@ -93,7 +94,7 @@ async def run_pdf():
     importlib.reload(visualize.comprehensive_figures)
     from visualize.comprehensive_figures import ComprehensiveFigureBuilder
 
-    os.makedirs("summary_w_figures", exist_ok=True)
+    os.makedirs(FIGURES_DIR, exist_ok=True)
     cfb = ComprehensiveFigureBuilder()
     await cfb.save_annotated_pdf()
     print("✓ Annotated PDF saved")

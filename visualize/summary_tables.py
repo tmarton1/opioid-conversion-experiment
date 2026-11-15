@@ -12,6 +12,7 @@ Usage
     )
 """
 
+from common.config import RESULTS_DIR
 import os
 import pandas as pd
 import numpy as np
@@ -25,63 +26,63 @@ class SummaryTablesBuilder:
 
     COMPARISON_SPECS = [
         {
-            "csv": "results/comparison_text_vs_empty.csv",
+            "csv": f"{RESULTS_DIR}/comparison_text_vs_empty.csv",
             "title": "Vignette Text vs Empty (no clinical context)",
             "a_label": "text",
             "b_label": "empty",
             "hold_constant": ["include_nielsen", "explain_units"],
         },
         {
-            "csv": "results/comparison_nielsen_effect_vignettes.csv",
+            "csv": f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes.csv",
             "title": "Effect of Nielsen Reference — Vignettes (All)",
             "a_label": "nielsen",
             "b_label": "naive",
             "hold_constant": ["has_vignette_text", "explain_units"],
         },
         {
-            "csv": "results/comparison_nielsen_effect_vignettes_ome.csv",
+            "csv": f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_ome.csv",
             "title": "Effect of Nielsen Reference — Vignettes (Oral Morphine Only)",
             "a_label": "nielsen",
             "b_label": "naive",
             "hold_constant": ["has_vignette_text", "explain_units"],
         },
         {
-            "csv": "results/comparison_nielsen_effect_vignettes_nonome.csv",
+            "csv": f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_nonome.csv",
             "title": "Effect of Nielsen Reference — Vignettes (Non–Oral Morphine)",
             "a_label": "nielsen",
             "b_label": "naive",
             "hold_constant": ["has_vignette_text", "explain_units"],
         },
         {
-            "csv": "results/comparison_units_effect_vignettes.csv",
+            "csv": f"{RESULTS_DIR}/comparison_units_effect_vignettes.csv",
             "title": "Effect of Explaining Units — Vignettes",
             "a_label": "explain_units",
             "b_label": "no_units",
             "hold_constant": ["has_vignette_text", "include_nielsen"],
         },
         {
-            "csv": "results/comparison_nielsen_effect_random_dose.csv",
+            "csv": f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose.csv",
             "title": "Effect of Nielsen Reference — Random Doses (All)",
             "a_label": "nielsen",
             "b_label": "naive",
             "hold_constant": ["include_examples"],
         },
         {
-            "csv": "results/comparison_nielsen_effect_random_dose_ome.csv",
+            "csv": f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose_ome.csv",
             "title": "Effect of Nielsen Reference — Random Doses (Oral Morphine Only)",
             "a_label": "nielsen",
             "b_label": "naive",
             "hold_constant": ["include_examples"],
         },
         {
-            "csv": "results/comparison_nielsen_effect_random_dose_nonome.csv",
+            "csv": f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose_nonome.csv",
             "title": "Effect of Nielsen Reference — Random Doses (Non–Oral Morphine)",
             "a_label": "nielsen",
             "b_label": "naive",
             "hold_constant": ["include_examples"],
         },
         {
-            "csv": "results/comparison_units_effect_random_dose.csv",
+            "csv": f"{RESULTS_DIR}/comparison_units_effect_random_dose.csv",
             "title": "Effect of Explaining Units — Random Doses",
             "a_label": "explain_units",
             "b_label": "no_units",
@@ -90,11 +91,11 @@ class SummaryTablesBuilder:
     ]
 
     RANKING_CSVS = [
-        ("results/ranking_naive_vignettes.csv", "Model Ranking: Naive Vignettes"),
-        ("results/ranking_vignettes_nielsen_units.csv", "Model Ranking: Vignettes + Nielsen + Explain Units"),
-        ("results/ranking_naive_random_doses.csv", "Model Ranking: Naive Random Doses"),
-        ("results/ranking_random_doses_nielsen.csv", "Model Ranking: Random Doses + Nielsen"),
-        ("results/ranking_random_doses_nielsen_units.csv", "Model Ranking: Random Doses + Nielsen + Explain Units"),
+        (f"{RESULTS_DIR}/ranking_naive_vignettes.csv", "Model Ranking: Naive Vignettes"),
+        (f"{RESULTS_DIR}/ranking_vignettes_nielsen_units.csv", "Model Ranking: Vignettes + Nielsen + Explain Units"),
+        (f"{RESULTS_DIR}/ranking_naive_random_doses.csv", "Model Ranking: Naive Random Doses"),
+        (f"{RESULTS_DIR}/ranking_random_doses_nielsen.csv", "Model Ranking: Random Doses + Nielsen"),
+        (f"{RESULTS_DIR}/ranking_random_doses_nielsen_units.csv", "Model Ranking: Random Doses + Nielsen + Explain Units"),
     ]
 
     CSS = """

@@ -1,6 +1,7 @@
+from common.config import RESULTS_DIR
 import pandas as pd
 
-df = pd.read_csv('results/gemini_diagnostic_results.csv')
+df = pd.read_csv(f'{RESULTS_DIR}/gemini_diagnostic_results.csv')
 print(f"Total rows: {len(df)}")
 print(f"  Success: {(df['status']=='success').sum()}")
 print(f"  Error:   {(df['status']=='error').sum()}")

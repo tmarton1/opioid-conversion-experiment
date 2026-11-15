@@ -21,8 +21,12 @@ from typing import Optional
 
 # ── Config ───────────────────────────────────────────────────────────
 
-RESULTS_DIR = Path(__file__).resolve().parent.parent / "results"
-FIGURES_DIR = Path(__file__).resolve().parent.parent / "raw_figures"
+from common import config as _cfg
+
+# Output locations come from common.config (env-settable). FIGURES_DIR here is
+# the raw-figures directory, where statistical_methods.html is written.
+RESULTS_DIR = Path(__file__).resolve().parent.parent / _cfg.RESULTS_DIR
+FIGURES_DIR = Path(__file__).resolve().parent.parent / _cfg.RAW_FIGURES_DIR
 
 GITHUB_REPO = "https://github.com/tmarton1/opioid-conversion-experiment"
 GITHUB_BRANCH = "main"
@@ -35,7 +39,7 @@ def _gh(path: str, line: int | None = None) -> str:
     return url
 
 def _gh_csv(filename: str) -> str:
-    return _gh(f"results/{filename}")
+    return _gh(f"{_cfg.RESULTS_DIR}/{filename}")
 
 def _gh_code(path: str, line: int | None = None) -> str:
     return _gh(path, line)

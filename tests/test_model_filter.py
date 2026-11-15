@@ -4,11 +4,12 @@ import pandas as pd
 from analysis.model_ranking import ModelRanking
 from analysis.per_model_wilcoxon import compute_per_model_wilcoxon
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR
 
 
 def test_ranking_restricted_to_consistent_models():
     r = ModelRanking(
-        csv_path="results/pair_model_analysis.csv",
+        csv_path=f"{RESULTS_DIR}/pair_model_analysis.csv",
         filters={"include_nielsen": False, "include_examples": False},
         unit_col="opioid_pair",
         label="Naive Random Doses",
@@ -18,7 +19,7 @@ def test_ranking_restricted_to_consistent_models():
 
 
 def test_wilcoxon_restricted_to_consistent_models():
-    src = "results/comparison_nielsen_effect_random_dose.csv"
+    src = f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose.csv"
     raw = pd.read_csv(src)
     assert set(raw["model"]) - set(CONSISTENT_MODELS), "fixture should contain extra models"
     w = compute_per_model_wilcoxon(src)

@@ -32,6 +32,7 @@ from bokeh.palettes import Greys256
 from bokeh.resources import INLINE
 
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR, FIGURES_DIR
 from visualize.visualization_config import (
     MODEL_COLOR_DICT, get_ranked_model_order, get_model_order,
     normalize_model_name, convert_to_pdf_auto_size, convert_to_png_auto_size,
@@ -1599,7 +1600,7 @@ class ComprehensiveFigureBuilder:
     performance-based sorting.
     """
 
-    def __init__(self, results_dir: str = "results", figures_dir: str = "summary_w_figures/pub_figures"):
+    def __init__(self, results_dir: str = RESULTS_DIR, figures_dir: str = f"{FIGURES_DIR}/pub_figures"):
         self.results_dir = results_dir
         self.figures_dir = figures_dir
         os.makedirs(figures_dir, exist_ok=True)

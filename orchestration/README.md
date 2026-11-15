@@ -54,6 +54,23 @@ Production scripts that replace the experiment-running and analysis cells in the
 
 ---
 
+## Output directories
+
+All results and figure paths come from `common/config.py` and can be redirected with environment variables, so a run against another reference score never mixes outputs with the original ones:
+
+| Variable | Default | Holds |
+|---|---|---|
+| `RESULTS_DIR` | `results` | input and derived CSVs |
+| `FIGURES_DIR` | `summary_w_figures` | publication figures (`pub_figures/`), `figure_stats.json`, summary tables, annotated PDF |
+| `RAW_FIGURES_DIR` | `raw_figures` | intermediate figures, `statistical_methods.html` |
+
+```bash
+RESULTS_DIR=results_nielsen FIGURES_DIR=figures_nielsen RAW_FIGURES_DIR=raw_figures_nielsen \
+    python orchestration/run_analysis.py
+```
+
+---
+
 ## Usage
 
 Run all scripts from the **repository root**:

@@ -13,6 +13,7 @@ Each random-dose panel plots from_dose vs derived coefficient (obs/from),
 with a dashed line at the expected coefficient.
 """
 
+from common.config import RESULTS_DIR, RAW_FIGURES_DIR
 import os
 import numpy as np
 import pandas as pd
@@ -200,9 +201,9 @@ def _plot_vignette(ax, vr: pd.DataFrame, ex: dict, panel_letter: str):
 # ── Main build ───────────────────────────────────────────────────────
 
 def build_consistency_figure(
-    results_csv: str = "results/experiment_results.csv",
-    vignette_csv: str = "results/reworded_vignettes_results.csv",
-    output_dir: str = "raw_figures",
+    results_csv: str = f"{RESULTS_DIR}/experiment_results.csv",
+    vignette_csv: str = f"{RESULTS_DIR}/reworded_vignettes_results.csv",
+    output_dir: str = RAW_FIGURES_DIR,
 ):
     """Build the 2×3 consistency illustration figure and save PNG + PDF."""
     raw = pd.read_csv(results_csv)

@@ -1,8 +1,9 @@
+from common.config import RESULTS_DIR
 import pandas as pd
 
 # Load both datasets
-pairs_df = pd.read_csv('results/pair_model_analysis.csv')
-vignettes_df = pd.read_csv('results/reworded_vignettes_model_analysis.csv')
+pairs_df = pd.read_csv(f'{RESULTS_DIR}/pair_model_analysis.csv')
+vignettes_df = pd.read_csv(f'{RESULTS_DIR}/reworded_vignettes_model_analysis.csv')
 
 # Get unique opioid pairs from each
 pairs_opioids = pairs_df[['from_opioid', 'to_opioid']].drop_duplicates().sort_values(['from_opioid', 'to_opioid'])

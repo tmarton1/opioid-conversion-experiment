@@ -31,6 +31,7 @@ Usage:
 
 from __future__ import annotations
 
+from common.config import FIGURES_DIR
 import argparse
 import mimetypes
 import os
@@ -68,12 +69,12 @@ def collect_files() -> list[tuple[Path, str]]:
                  "accuracy_summary_tables.pdf",
                  "accuracy_summary_tables.html",
                  "figure_stats.json"]:
-        p = REPO_ROOT / "summary_w_figures" / name
+        p = REPO_ROOT / FIGURES_DIR / name
         if p.exists():
             files.append((p, ""))
 
     # Individual publication figures (PNG + PDF + HTML)
-    pub = REPO_ROOT / "summary_w_figures" / "pub_figures"
+    pub = REPO_ROOT / FIGURES_DIR / "pub_figures"
     if pub.exists():
         for f in sorted(pub.iterdir()):
             if f.suffix in {".png", ".pdf", ".html"}:

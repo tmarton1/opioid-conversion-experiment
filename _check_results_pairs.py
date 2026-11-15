@@ -1,3 +1,4 @@
+from common.config import RESULTS_DIR
 import pandas as pd
 import json
 
@@ -12,7 +13,7 @@ def get_priority(opioid):
 print("=" * 70)
 print("1. Random-dose experiment (experiment_results.csv)")
 print("=" * 70)
-rd = pd.read_csv('results/experiment_results.csv')
+rd = pd.read_csv(f'{RESULTS_DIR}/experiment_results.csv')
 rd_pairs = rd[['from_opioid', 'to_opioid']].drop_duplicates().sort_values(['from_opioid', 'to_opioid'])
 print(f"Total directed pairs: {len(rd_pairs)}")
 all_ops = sorted(set(rd_pairs['from_opioid']) | set(rd_pairs['to_opioid']))
@@ -63,7 +64,7 @@ for o in sorted(oneway_only):
 print("\n" + "=" * 70)
 print("2. Explain-units experiment (explain_units_experiment_results.csv)")
 print("=" * 70)
-eu = pd.read_csv('results/explain_units_experiment_results.csv')
+eu = pd.read_csv(f'{RESULTS_DIR}/explain_units_experiment_results.csv')
 eu_pairs = eu[['from_opioid', 'to_opioid']].drop_duplicates().sort_values(['from_opioid', 'to_opioid'])
 print(f"Total directed pairs: {len(eu_pairs)}")
 eu_ops = sorted(set(eu_pairs['from_opioid']) | set(eu_pairs['to_opioid']))
@@ -78,7 +79,7 @@ for _, r in eu_pairs.iterrows():
 print("\n" + "=" * 70)
 print("3. Vignette experiment (reworded_vignettes_results.csv)")
 print("=" * 70)
-vig = pd.read_csv('results/reworded_vignettes_results.csv')
+vig = pd.read_csv(f'{RESULTS_DIR}/reworded_vignettes_results.csv')
 vig_pairs = vig[['from_opioid', 'to_opioid']].drop_duplicates().sort_values(['from_opioid', 'to_opioid'])
 print(f"Total directed pairs: {len(vig_pairs)}")
 vig_ops = sorted(set(vig_pairs['from_opioid']) | set(vig_pairs['to_opioid']))

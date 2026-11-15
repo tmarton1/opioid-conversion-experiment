@@ -1,3 +1,4 @@
+from common.config import RESULTS_DIR
 import pandas as pd
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, LabelSet, HoverTool, FactorRange, Legend, LegendItem
@@ -8,8 +9,8 @@ EXCLUDE_MODEL = "anthropic/claude-3-haiku-20240307"
 
 class ExplainUnitsVisualizer:
     def __init__(self,
-                 batch_means_csv="results/model_batch_means.csv",
-                 batch_means_explain_units_csv="results/model_batch_means_explain_units.csv",
+                 batch_means_csv=f"{RESULTS_DIR}/model_batch_means.csv",
+                 batch_means_explain_units_csv=f"{RESULTS_DIR}/model_batch_means_explain_units.csv",
                  models=None):
         # Load data
         self.df_ome = pd.read_csv(batch_means_csv)

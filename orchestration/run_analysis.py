@@ -41,6 +41,7 @@ Run from the repository root:
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common.config import RESULTS_DIR
 
 import argparse
 
@@ -60,11 +61,11 @@ def _parse_args():
 
 # ── constants ──────────────────────────────────────────────────────────────
 
-PAIR_CSV         = "results/pair_model_analysis.csv"
-EXPLAIN_CSV      = "results/explain_units_pair_model_analysis.csv"
-VIGNETTE_CSV     = "results/reworded_vignettes_model_analysis.csv"
-BATCH_MEANS_RD   = "results/model_batch_means.csv"
-BATCH_MEANS_VIG  = "results/model_batch_means_vignettes.csv"
+PAIR_CSV         = f"{RESULTS_DIR}/pair_model_analysis.csv"
+EXPLAIN_CSV      = f"{RESULTS_DIR}/explain_units_pair_model_analysis.csv"
+VIGNETTE_CSV     = f"{RESULTS_DIR}/reworded_vignettes_model_analysis.csv"
+BATCH_MEANS_RD   = f"{RESULTS_DIR}/model_batch_means.csv"
+BATCH_MEANS_VIG  = f"{RESULTS_DIR}/model_batch_means_vignettes.csv"
 
 
 # ── 1. Processing pipeline ─────────────────────────────────────────────────
@@ -84,34 +85,34 @@ def run_processing():
 
     print("── Processing random-dose results ──")
     processing_pipeline(
-        input_csv="results/experiment_results.csv",
-        output_csv="results/experiment_results_by_ome.csv",
+        input_csv=f"{RESULTS_DIR}/experiment_results.csv",
+        output_csv=f"{RESULTS_DIR}/experiment_results_by_ome.csv",
         variable_model_csv=PAIR_CSV,
-        consensus_csv="results/opioid_pair_consensus.csv",
+        consensus_csv=f"{RESULTS_DIR}/opioid_pair_consensus.csv",
         mode="pair",
     )
 
     print("── Processing explain-units results ──")
     processing_pipeline(
-        input_csv="results/explain_units_experiment_results.csv",
-        output_csv="results/explain_units_experiment_results_by_ome.csv",
+        input_csv=f"{RESULTS_DIR}/explain_units_experiment_results.csv",
+        output_csv=f"{RESULTS_DIR}/explain_units_experiment_results_by_ome.csv",
         variable_model_csv=EXPLAIN_CSV,
-        consensus_csv="results/explain_units_opioid_pair_consensus.csv",
+        consensus_csv=f"{RESULTS_DIR}/explain_units_opioid_pair_consensus.csv",
         mode="pair",
     )
 
     print("── Processing vignette results ──")
     processing_pipeline(
-        input_csv="results/reworded_vignettes_results.csv",
-        output_csv="results/reworded_vignettes_results_by_ome.csv",
+        input_csv=f"{RESULTS_DIR}/reworded_vignettes_results.csv",
+        output_csv=f"{RESULTS_DIR}/reworded_vignettes_results_by_ome.csv",
         variable_model_csv=VIGNETTE_CSV,
-        consensus_csv="results/reworded_vignettes_model_consensus.csv",
+        consensus_csv=f"{RESULTS_DIR}/reworded_vignettes_model_consensus.csv",
         mode="vignette",
     )
 
     ScenarioModelResult.process_all_combinations(
         vignette_results_csv=VIGNETTE_CSV,
-        output_file="results/reworded_scenarios_model_analysis.csv",
+        output_file=f"{RESULTS_DIR}/reworded_scenarios_model_analysis.csv",
         verbose=True,
     )
     print("✓ Processing complete")
@@ -143,7 +144,7 @@ def run_batch_means():
         {"explain_units": True,  "batch_name": "4hours_units_explained"},
     ]
     ModelBatchMeansBuilder(EXPLAIN_CSV).save_means_df(
-        eu_combos, "results/model_batch_means_explain_units.csv"
+        eu_combos, f"{RESULTS_DIR}/model_batch_means_explain_units.csv"
     )
 
     print("── Building vignette batch means ──")
@@ -174,7 +175,7 @@ def run_batch_means():
                  "batch_name": f"{hvt_label}_{ome_label}_explain"},
             ]
     ModelBatchMeansBuilder(VIGNETTE_CSV).save_means_df(
-        tve_combos, "results/model_batch_means_text_vs_empty.csv"
+        tve_combos, f"{RESULTS_DIR}/model_batch_means_text_vs_empty.csv"
     )
     print("✓ Batch means complete")
 
@@ -196,7 +197,7 @@ def run_comparisons():
             group_a_label="text", group_b_label="empty",
             unit_col="scenario_key",
             hold_constant=["include_nielsen", "explain_units"],
-            output="results/comparison_text_vs_empty.csv",
+            output=f"{RESULTS_DIR}/comparison_text_vs_empty.csv",
         ),
         dict(
             csv_path=VIGNETTE_CSV,
@@ -204,7 +205,7 @@ def run_comparisons():
             group_a_label="nielsen", group_b_label="naive",
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "explain_units"],
-            output="results/comparison_nielsen_effect_vignettes.csv",
+            output=f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes.csv",
         ),
         dict(
             csv_path=VIGNETTE_CSV,
@@ -213,7 +214,7 @@ def run_comparisons():
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "explain_units"],
             filters={"ome": True},
-            output="results/comparison_nielsen_effect_vignettes_ome.csv",
+            output=f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_ome.csv",
         ),
         dict(
             csv_path=VIGNETTE_CSV,
@@ -222,7 +223,7 @@ def run_comparisons():
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "explain_units"],
             filters={"ome": False},
-            output="results/comparison_nielsen_effect_vignettes_nonome.csv",
+            output=f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_nonome.csv",
         ),
         dict(
             csv_path=VIGNETTE_CSV,
@@ -230,7 +231,7 @@ def run_comparisons():
             group_a_label="explain_units", group_b_label="no_units",
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "include_nielsen"],
-            output="results/comparison_units_effect_vignettes.csv",
+            output=f"{RESULTS_DIR}/comparison_units_effect_vignettes.csv",
         ),
         # ── Random-dose contrasts ───────────────────────────────────────
         dict(
@@ -239,7 +240,7 @@ def run_comparisons():
             group_a_label="nielsen", group_b_label="naive",
             unit_col="opioid_pair",
             hold_constant=["include_examples"],
-            output="results/comparison_nielsen_effect_random_dose.csv",
+            output=f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose.csv",
         ),
         dict(
             csv_path=PAIR_CSV,
@@ -248,7 +249,7 @@ def run_comparisons():
             unit_col="opioid_pair",
             hold_constant=["include_examples"],
             filters={"ome": True},
-            output="results/comparison_nielsen_effect_random_dose_ome.csv",
+            output=f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose_ome.csv",
         ),
         dict(
             csv_path=PAIR_CSV,
@@ -257,14 +258,14 @@ def run_comparisons():
             unit_col="opioid_pair",
             hold_constant=["include_examples"],
             filters={"ome": False},
-            output="results/comparison_nielsen_effect_random_dose_nonome.csv",
+            output=f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose_nonome.csv",
         ),
         dict(
             csv_path=EXPLAIN_CSV,
             group_col="explain_units", group_a_value=True, group_b_value=False,
             group_a_label="explain_units", group_b_label="no_units",
             unit_col="opioid_pair",
-            output="results/comparison_units_effect_random_dose.csv",
+            output=f"{RESULTS_DIR}/comparison_units_effect_random_dose.csv",
         ),
     ]
 
@@ -289,18 +290,18 @@ def run_wilcoxon():
     from analysis.per_model_wilcoxon import compute_per_model_wilcoxon
 
     comparison_pairs = [
-        ("results/comparison_text_vs_empty.csv",                    "results/wilcoxon_text_vs_empty.csv"),
-        ("results/comparison_nielsen_effect_vignettes.csv",         "results/wilcoxon_nielsen_effect_vignettes.csv"),
-        ("results/comparison_nielsen_effect_vignettes_ome.csv",     "results/wilcoxon_nielsen_effect_vignettes_ome.csv"),
-        ("results/comparison_nielsen_effect_vignettes_nonome.csv",  "results/wilcoxon_nielsen_effect_vignettes_nonome.csv"),
-        ("results/comparison_units_effect_vignettes.csv",           "results/wilcoxon_units_effect_vignettes.csv"),
-        ("results/comparison_nielsen_effect_random_dose.csv",       "results/wilcoxon_nielsen_effect_random_dose.csv"),
-        ("results/comparison_nielsen_effect_random_dose_ome.csv",   "results/wilcoxon_nielsen_effect_random_dose_ome.csv"),
-        ("results/comparison_nielsen_effect_random_dose_nonome.csv","results/wilcoxon_nielsen_effect_random_dose_nonome.csv"),
-        ("results/comparison_units_effect_random_dose.csv",         "results/wilcoxon_units_effect_random_dose.csv"),
-        ("results/comparison_dosing_unit_effect.csv",               "results/wilcoxon_dosing_unit_effect.csv"),
-        ("results/comparison_ome_vs_nonome_naive_permodel.csv",     "results/wilcoxon_ome_vs_nonome_naive_permodel.csv"),
-        ("results/comparison_ome_vs_nonome_nielsen_permodel.csv",   "results/wilcoxon_ome_vs_nonome_nielsen_permodel.csv"),
+        (f"{RESULTS_DIR}/comparison_text_vs_empty.csv",                    f"{RESULTS_DIR}/wilcoxon_text_vs_empty.csv"),
+        (f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes.csv",         f"{RESULTS_DIR}/wilcoxon_nielsen_effect_vignettes.csv"),
+        (f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_ome.csv",     f"{RESULTS_DIR}/wilcoxon_nielsen_effect_vignettes_ome.csv"),
+        (f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_nonome.csv",  f"{RESULTS_DIR}/wilcoxon_nielsen_effect_vignettes_nonome.csv"),
+        (f"{RESULTS_DIR}/comparison_units_effect_vignettes.csv",           f"{RESULTS_DIR}/wilcoxon_units_effect_vignettes.csv"),
+        (f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose.csv",       f"{RESULTS_DIR}/wilcoxon_nielsen_effect_random_dose.csv"),
+        (f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose_ome.csv",   f"{RESULTS_DIR}/wilcoxon_nielsen_effect_random_dose_ome.csv"),
+        (f"{RESULTS_DIR}/comparison_nielsen_effect_random_dose_nonome.csv",f"{RESULTS_DIR}/wilcoxon_nielsen_effect_random_dose_nonome.csv"),
+        (f"{RESULTS_DIR}/comparison_units_effect_random_dose.csv",         f"{RESULTS_DIR}/wilcoxon_units_effect_random_dose.csv"),
+        (f"{RESULTS_DIR}/comparison_dosing_unit_effect.csv",               f"{RESULTS_DIR}/wilcoxon_dosing_unit_effect.csv"),
+        (f"{RESULTS_DIR}/comparison_ome_vs_nonome_naive_permodel.csv",     f"{RESULTS_DIR}/wilcoxon_ome_vs_nonome_naive_permodel.csv"),
+        (f"{RESULTS_DIR}/comparison_ome_vs_nonome_nielsen_permodel.csv",   f"{RESULTS_DIR}/wilcoxon_ome_vs_nonome_nielsen_permodel.csv"),
     ]
 
     for comp_csv, wilc_csv in comparison_pairs:
@@ -319,8 +320,8 @@ def run_text_effects():
     from analysis.text_effect import TextEffectDifference
 
     print("── Computing text effect differences ──")
-    diff = TextEffectDifference("results/model_batch_means_text_vs_empty.csv")
-    diff.save("results/text_effect_differences.csv")
+    diff = TextEffectDifference(f"{RESULTS_DIR}/model_batch_means_text_vs_empty.csv")
+    diff.save(f"{RESULTS_DIR}/text_effect_differences.csv")
     print("✓ Text effects complete")
 
 
@@ -340,7 +341,7 @@ def run_ome_comparisons():
             group_a_label="ome", group_b_label="non_ome",
             unit_col="opioid_pair",
             filters={"include_nielsen": False, "include_examples": False},
-            output="results/comparison_ome_vs_nonome_naive.csv",
+            output=f"{RESULTS_DIR}/comparison_ome_vs_nonome_naive.csv",
         ),
         dict(
             csv_path=PAIR_CSV,
@@ -348,7 +349,7 @@ def run_ome_comparisons():
             group_a_label="ome", group_b_label="non_ome",
             unit_col="opioid_pair",
             filters={"include_nielsen": True, "include_examples": False},
-            output="results/comparison_ome_vs_nonome_nielsen.csv",
+            output=f"{RESULTS_DIR}/comparison_ome_vs_nonome_nielsen.csv",
         ),
     ]
     # Per-model versions (no hold_constant, so each model-unit row is tested directly)
@@ -400,11 +401,11 @@ def run_dosing_comparison():
     merged["tight_diff"] = merged[f"{tight_col}_4h"] - merged[f"{tight_col}_daily"]
     merged["broad_diff"] = merged[f"{broad_col}_4h"] - merged[f"{broad_col}_daily"]
 
-    output = "results/comparison_dosing_unit_effect.csv"
+    output = f"{RESULTS_DIR}/comparison_dosing_unit_effect.csv"
     merged.to_csv(output, index=False)
     print(f"  → {output}")
 
-    compute_per_model_wilcoxon(output, output_csv="results/wilcoxon_dosing_unit_effect.csv")
+    compute_per_model_wilcoxon(output, output_csv=f"{RESULTS_DIR}/wilcoxon_dosing_unit_effect.csv")
     print("✓ Dosing comparison complete")
 
 
@@ -422,7 +423,7 @@ def run_cross_experiment():
         pair_csv=PAIR_CSV,
         vignette_csv=VIGNETTE_CSV,
     )
-    cem.save("results")
+    cem.save(RESULTS_DIR)
     print("✓ Cross-experiment analysis complete")
 
 
@@ -437,10 +438,10 @@ def run_icc():
 
     print("── Running ICC analysis ──")
     icc = ICCAnalysis(
-        results_csv="results/reworded_vignettes_results.csv",
+        results_csv=f"{RESULTS_DIR}/reworded_vignettes_results.csv",
         filters={"include_nielsen": False, "explain_units": False},
     )
-    icc.save("results/icc_analysis.csv")
+    icc.save(f"{RESULTS_DIR}/icc_analysis.csv")
     print("✓ ICC analysis complete")
 
 
@@ -455,8 +456,8 @@ def run_kendall_w():
 
     print("── Running Kendall's W ──")
     compute_kendall_w_for_scenarios(
-        results_csv="results/reworded_vignettes_results.csv",
-        output_csv="results/kendall_w_vignettes.csv",
+        results_csv=f"{RESULTS_DIR}/reworded_vignettes_results.csv",
+        output_csv=f"{RESULTS_DIR}/kendall_w_vignettes.csv",
         filters={"include_nielsen": False},
     )
     print("✓ Kendall's W complete")
@@ -473,9 +474,9 @@ def run_variance_stats():
 
     print("── Computing variance–ICC Spearman stats ──")
     compute_variance_icc_spearman(
-        icc_csv="results/icc_analysis.csv",
+        icc_csv=f"{RESULTS_DIR}/icc_analysis.csv",
         vignette_model_csv=VIGNETTE_CSV,
-        output_csv="results/variance_icc_spearman.csv",
+        output_csv=f"{RESULTS_DIR}/variance_icc_spearman.csv",
     )
     print("✓ Variance–ICC stats complete")
 
@@ -492,9 +493,9 @@ def run_grid_tests():
 
     print("── Running grid independence tests ──")
     compute_grid_independence_tests(
-        icc_csv="results/icc_analysis.csv",
+        icc_csv=f"{RESULTS_DIR}/icc_analysis.csv",
         vignette_model_csv=VIGNETTE_CSV,
-        output_csv="results/grid_independence_tests.csv",
+        output_csv=f"{RESULTS_DIR}/grid_independence_tests.csv",
     )
     print("✓ Grid independence tests complete")
 
@@ -515,7 +516,7 @@ def run_profiles():
     compute_random_dose_profile(
         PAIR_CSV,
         naive_filter={"include_nielsen": False, "include_examples": False},
-        output_csv="results/performance_profile_random_doses.csv",
+        output_csv=f"{RESULTS_DIR}/performance_profile_random_doses.csv",
     )
 
     print("── Computing vignette performance profile ──")
@@ -523,7 +524,7 @@ def run_profiles():
         VIGNETTE_CSV,
         naive_filter={"include_nielsen": False, "explain_units": False,
                       "has_vignette_text": True},
-        output_csv="results/performance_profile_vignettes.csv",
+        output_csv=f"{RESULTS_DIR}/performance_profile_vignettes.csv",
     )
     print("✓ Performance profiles complete")
 
@@ -545,7 +546,7 @@ def run_cv_chi2():
         broad_col="broad(0.6,1.7)",
         cv_bins=[0, 0.1, 0.5, float("inf")],
         cv_bin_labels=["<0.1", "0.1–0.5", "≥0.5"],
-        output_csv="results/cv_accuracy_chi2.csv",
+        output_csv=f"{RESULTS_DIR}/cv_accuracy_chi2.csv",
         naive_filter={"include_nielsen": False, "include_examples": False},
     )
     print("✓ CV chi-square tests complete")

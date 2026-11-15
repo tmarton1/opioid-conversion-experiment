@@ -1,8 +1,9 @@
 """Find and remove duplicate morphine→morphine pairs for gpt-3.5-turbo and gpt-4.1-mini."""
+from common.config import RESULTS_DIR
 import pandas as pd
 
 # ── Check experiment_results.csv (raw data) ──
-raw = pd.read_csv("results/experiment_results.csv")
+raw = pd.read_csv(f"{RESULTS_DIR}/experiment_results.csv")
 print("=== Raw experiment_results.csv columns (first 10) ===")
 print(list(raw.columns[:15]))
 
@@ -24,7 +25,7 @@ for model_short in ["gpt-3.5-turbo", "gpt-4.1-mini"]:
     print(morph[cols_to_show].drop_duplicates().to_string(index=False))
 
 # ── Check pair_model_analysis.csv ──
-pair = pd.read_csv("results/pair_model_analysis.csv")
+pair = pd.read_csv(f"{RESULTS_DIR}/pair_model_analysis.csv")
 for model_short in ["gpt-3.5-turbo", "gpt-4.1-mini"]:
     mdf = pair[pair["model"].str.contains(model_short)]
     morph = mdf[mdf["opioid_pair"].str.contains("morphine.*morphine", na=False)]

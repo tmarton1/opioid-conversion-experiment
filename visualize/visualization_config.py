@@ -10,6 +10,7 @@ import pandas as pd
 from bokeh.palettes import Spectral11
 from playwright.async_api import async_playwright
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR
 
 
 # Model name aliases (maps non-prefixed names to canonical names)
@@ -53,7 +54,7 @@ _RANKING_CSV_NAMES = [
 
 def _collect_ranking_ranks() -> Dict[str, List[float]]:
     """Read adjusted_rank from the canonical ranking CSVs and return per-model lists."""
-    results_dir = os.path.join(os.path.dirname(__file__), "..", "results")
+    results_dir = os.path.join(os.path.dirname(__file__), "..", RESULTS_DIR)
     ranks: Dict[str, List[float]] = {}
     for name in _RANKING_CSV_NAMES:
         path = os.path.join(results_dir, name)

@@ -22,14 +22,14 @@ import sys
 
 # Allow running directly from the repo root
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common.config import RESULTS_DIR, FIGURES_DIR
 
 import numpy as np
 import pandas as pd
 from scipy.stats import chi2_contingency, wilcoxon as _wilcoxon, spearmanr
 
 
-RESULTS_DIR = "results"
-OUTPUT_PATH = "summary_w_figures/figure_stats.json"
+OUTPUT_PATH = f"{FIGURES_DIR}/figure_stats.json"
 
 
 def _read(name: str) -> pd.DataFrame | None:
@@ -581,7 +581,7 @@ def compute_stats() -> dict:
 
 
 def run():
-    os.makedirs("summary_w_figures", exist_ok=True)
+    os.makedirs(FIGURES_DIR, exist_ok=True)
     print("── Extracting figure stats ──")
     stats = compute_stats()
 

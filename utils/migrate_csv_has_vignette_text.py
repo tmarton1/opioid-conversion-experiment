@@ -1,9 +1,10 @@
 """One-time migration: add has_vignette_text column to results CSVs."""
+from common.config import RESULTS_DIR
 import csv
 
 CSV_FILES = [
-    "results/reworded_vignettes_results.csv",
-    "results/scenario_experiment_results.csv",
+    f"{RESULTS_DIR}/reworded_vignettes_results.csv",
+    f"{RESULTS_DIR}/scenario_experiment_results.csv",
 ]
 
 for csv_file in CSV_FILES:

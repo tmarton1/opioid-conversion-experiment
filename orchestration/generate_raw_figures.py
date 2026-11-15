@@ -53,8 +53,8 @@ import sys
 
 # Allow running directly from the repo root
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common.config import RESULTS_DIR, RAW_FIGURES_DIR
 
-RAW_FIGURES_DIR = "raw_figures"
 
 PAIR_BATCH_COMBINATIONS = [
     {"ome": None, "include_nielsen": False, "name": "all_n0"},
@@ -113,9 +113,9 @@ async def run_pair_batches():
 
         try:
             batch = OpioidPairBatch.from_filter_specs(
-                experiment_results_csv="results/experiment_results_by_ome.csv",
-                variable_model_csv="results/pair_model_analysis.csv",
-                consensus_csv="results/opioid_pair_consensus.csv",
+                experiment_results_csv=f"{RESULTS_DIR}/experiment_results_by_ome.csv",
+                variable_model_csv=f"{RESULTS_DIR}/pair_model_analysis.csv",
+                consensus_csv=f"{RESULTS_DIR}/opioid_pair_consensus.csv",
                 filter_specs=[filter_spec],
             )
 
@@ -155,9 +155,9 @@ async def run_vignette_batch():
     os.makedirs(RAW_FIGURES_DIR, exist_ok=True)
 
     batch = VignetteBatch.from_filter_specs(
-        experiment_results_csv="results/reworded_vignettes_results_by_ome.csv",
-        variable_model_csv="results/reworded_vignettes_model_analysis.csv",
-        consensus_csv="results/reworded_vignettes_model_consensus.csv",
+        experiment_results_csv=f"{RESULTS_DIR}/reworded_vignettes_results_by_ome.csv",
+        variable_model_csv=f"{RESULTS_DIR}/reworded_vignettes_model_analysis.csv",
+        consensus_csv=f"{RESULTS_DIR}/reworded_vignettes_model_consensus.csv",
         filter_specs=VIGNETTE_FILTER_SPECS,
     )
 
@@ -178,7 +178,7 @@ async def run_model_comparison():
     os.makedirs(RAW_FIGURES_DIR, exist_ok=True)
 
     builder = ModelComparisonFigureBuilder(
-        batch_means_csv="results/model_batch_means.csv",
+        batch_means_csv=f"{RESULTS_DIR}/model_batch_means.csv",
     )
     await builder.save(
         os.path.join(RAW_FIGURES_DIR, "model_comparison_bar.html"),
@@ -200,8 +200,8 @@ async def run_explain_units():
     os.makedirs(RAW_FIGURES_DIR, exist_ok=True)
 
     vis = ExplainUnitsVisualizer(
-        batch_means_csv="results/model_batch_means.csv",
-        batch_means_explain_units_csv="results/model_batch_means_explain_units.csv",
+        batch_means_csv=f"{RESULTS_DIR}/model_batch_means.csv",
+        batch_means_explain_units_csv=f"{RESULTS_DIR}/model_batch_means_explain_units.csv",
         models=CONSISTENT_MODELS,
     )
     await vis.save(
@@ -218,8 +218,8 @@ async def run_icc():
     from visualize.icc_visualizer import save_icc_figures
 
     await save_icc_figures(
-        icc_csv="results/icc_analysis.csv",
-        kendall_csv="results/kendall_w_vignettes.csv",
+        icc_csv=f"{RESULTS_DIR}/icc_analysis.csv",
+        kendall_csv=f"{RESULTS_DIR}/kendall_w_vignettes.csv",
         figures_dir=RAW_FIGURES_DIR,
     )
     print("✓ icc_heatmap / icc_bubble_grid / kendall_w_summary")
@@ -232,7 +232,7 @@ async def run_scenario_strips():
     from visualize.scenario_strip_visualizer import save_all_scenario_strips
 
     await save_all_scenario_strips(
-        results_csv="results/reworded_vignettes_results.csv",
+        results_csv=f"{RESULTS_DIR}/reworded_vignettes_results.csv",
         figures_dir=RAW_FIGURES_DIR,
     )
     print("✓ scenario_strips (all scenarios)")
@@ -245,8 +245,8 @@ def run_consistency():
     from visualize.consistency_figure import build_consistency_figure
 
     build_consistency_figure(
-        results_csv="results/experiment_results.csv",
-        vignette_csv="results/reworded_vignettes_results.csv",
+        results_csv=f"{RESULTS_DIR}/experiment_results.csv",
+        vignette_csv=f"{RESULTS_DIR}/reworded_vignettes_results.csv",
         output_dir=RAW_FIGURES_DIR,
     )
     print("✓ consistency_examples")

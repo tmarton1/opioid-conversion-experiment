@@ -1,8 +1,9 @@
+from common.config import RESULTS_DIR
 import pandas as pd
 
 # Load the model analysis files
-reworded_scenarios = pd.read_csv('results/reworded_scenarios_model_analysis.csv')
-reworded_vignettes = pd.read_csv('results/reworded_vignettes_model_analysis.csv')
+reworded_scenarios = pd.read_csv(f'{RESULTS_DIR}/reworded_scenarios_model_analysis.csv')
+reworded_vignettes = pd.read_csv(f'{RESULTS_DIR}/reworded_vignettes_model_analysis.csv')
 
 print('REWORDED_SCENARIOS_MODEL_ANALYSIS.CSV:')
 print(f'Total rows: {len(reworded_scenarios):,}')

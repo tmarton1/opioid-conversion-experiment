@@ -5,11 +5,12 @@ Run from the repo root: python utils/check_models.py
 
 import pandas as pd
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR
 
 
 def check_completeness(
-    pair_csv: str = "results/pair_model_analysis.csv",
-    vignette_csv: str = "results/reworded_vignettes_model_analysis.csv",
+    pair_csv: str = f"{RESULTS_DIR}/pair_model_analysis.csv",
+    vignette_csv: str = f"{RESULTS_DIR}/reworded_vignettes_model_analysis.csv",
     reference_model: str = "anthropic/claude-3.5-sonnet:20241022",
 ):
     pair_df = pd.read_csv(pair_csv)

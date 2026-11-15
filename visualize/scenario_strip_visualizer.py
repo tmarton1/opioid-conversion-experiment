@@ -29,6 +29,7 @@ from bokeh.models import (
 )
 
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR, RAW_FIGURES_DIR
 from analysis.kendall_w import kendall_w as _kendall_w
 from visualize.visualization_config import (
     get_ranked_model_order, convert_to_pdf_auto_size, convert_to_png_auto_size,
@@ -241,8 +242,8 @@ def scenario_vignette_strip(
 
 
 async def save_all_scenario_strips(
-    results_csv: str = "results/reworded_vignettes_results.csv",
-    figures_dir: str = "raw_figures",
+    results_csv: str = f"{RESULTS_DIR}/reworded_vignettes_results.csv",
+    figures_dir: str = RAW_FIGURES_DIR,
     filters: dict = None,
 ):
     """
@@ -252,7 +253,7 @@ async def save_all_scenario_strips(
     vignette_colors = _load_vignette_colors()
 
     # Determine scenario order (by mean ICC from icc_analysis.csv if available)
-    icc_path = os.path.join("results", "icc_analysis.csv")
+    icc_path = os.path.join(RESULTS_DIR, "icc_analysis.csv")
     if os.path.exists(icc_path):
         icc_df = pd.read_csv(icc_path)
         scenario_order = (
@@ -283,7 +284,7 @@ async def save_all_scenario_strips(
 
     # Save Kendall's W results
     w_df = pd.DataFrame(w_results)
-    w_csv = os.path.join("results", "kendall_w_vignettes.csv")
+    w_csv = os.path.join(RESULTS_DIR, "kendall_w_vignettes.csv")
     w_df.to_csv(w_csv, index=False)
     print(f"\nSaved Kendall's W results to {w_csv}")
 

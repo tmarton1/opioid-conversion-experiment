@@ -30,6 +30,7 @@ from bokeh.palettes import RdYlGn11
 from bokeh.transform import transform
 
 from common.models import CONSISTENT_MODELS
+from common.config import RESULTS_DIR, RAW_FIGURES_DIR
 from visualize.visualization_config import (
     MODEL_COLOR_DICT, get_ranked_model_order, normalize_model_name,
     convert_to_pdf_auto_size, convert_to_png_auto_size,
@@ -1317,9 +1318,9 @@ def kendall_w_summary(
 # ═══════════════════════════════════════════════════════════════════
 
 async def save_icc_figures(
-    icc_csv: str = "results/icc_analysis.csv",
-    kendall_csv: str = "results/kendall_w_vignettes.csv",
-    figures_dir: str = "raw_figures",
+    icc_csv: str = f"{RESULTS_DIR}/icc_analysis.csv",
+    kendall_csv: str = f"{RESULTS_DIR}/kendall_w_vignettes.csv",
+    figures_dir: str = RAW_FIGURES_DIR,
 ):
     """Save all ICC figures as HTML + PDF + PNG."""
     os.makedirs(figures_dir, exist_ok=True)
