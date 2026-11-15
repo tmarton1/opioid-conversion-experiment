@@ -166,6 +166,10 @@ def sec_references(S):
                  ("conversions_outside_tight_all", "conversions outside tight under at least one standard (incl. CDC 2016)"),
                  ("conversions_outside_tight_current", "conversions outside tight under at least one current standard")]:
         S.add(f"ref_{k}", int(h[k]), src, d)
+    ba = pd.read_csv(f"{RR}/references/by_agent.csv")
+    st_ = ba[ba.study_agent.astype(bool) & (ba.opioid_route != "oral_morphine")]
+    S.add("ref_n_study_agents_with_alternative", int((st_.n_standards_all > 1).sum()), f"{RR}/references/by_agent.csv",
+          "study agents (excl. oral morphine) with at least one standard besides Nielsen", "d")
     S.add("ref_n_outside_broad", len(json.loads(h["conversions_outside_broad_all"])), src,
           "conversions outside the broad band under any standard (all CDC 2016 tramadol)")
     S.add("ref_nielsen_outliers", ", ".join(a.replace("_", " ") for a in json.loads(h["nielsen_lone_outlier_agents"])),
