@@ -1,0 +1,14 @@
+model,n_obs,correct,precise_wrong,other_wrong,dose_dep_neg,dose_dep_pos
+ai21/jamba-large-1.7,40,0.175,0.225,0.35,0.2,0.05
+anthropic/claude-3.5-sonnet:20241022,40,0.15,0.35,0.275,0.125,0.1
+cohere/command-r-plus-08-2024,40,0.025,0.175,0.5,0.225,0.075
+deepseek/deepseek-chat,40,0.225,0.225,0.45,0.05,0.05
+google/gemini-2.5-flash,40,0.35,0.175,0.4,0.025,0.05
+google/gemini-2.5-pro,40,0.375,0.45,0.075,0.05,0.05
+meta-llama/llama-3.3-70b-instruct,40,0.15,0.125,0.575,0.15,0.0
+mistralai/mistral-large-2407,40,0.175,0.225,0.35,0.225,0.025
+mistralai/mixtral-8x22b-instruct,40,0.1,0.25,0.35,0.275,0.025
+openai/gpt-3.5-turbo,40,0.05,0.075,0.3,0.55,0.025
+openai/gpt-4.1,40,0.25,0.4,0.275,0.025,0.05
+openai/gpt-4.1-mini,40,0.15,0.1,0.35,0.4,0.0
+qwen/qwen-2.5-72b-instruct,40,0.175,0.25,0.375,0.15,0.05

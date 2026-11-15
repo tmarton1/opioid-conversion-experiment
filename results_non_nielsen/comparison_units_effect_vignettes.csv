@@ -1,0 +1,514 @@
+model,scenario_key,explain_units_n,explain_units_tight,explain_units_broad,no_units_n,no_units_tight,no_units_broad,explain_units_tight_prop,explain_units_broad_prop,no_units_tight_prop,no_units_broad_prop,tight_diff,tight_p_a_better,tight_p_b_better,broad_diff,broad_p_a_better,broad_p_b_better,has_vignette_text,include_nielsen,ome,tight_p_a_better_bonf,tight_p_b_better_bonf,broad_p_a_better_bonf,broad_p_b_better_bonf,tight_result,broad_result,tight_result_uncorrected,broad_result_uncorrected
+ai21/jamba-large-1.7,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-female-bunionectomy,27,27,27,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-female-renal-colic,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-hip-fracture,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-hip-fracture,28,0,0,28,0,3,0.0,0.0,0.0,0.10714285714285714,0.0,1.0,1.0,-0.10714285714285714,1.0,0.11818181818181817,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-ankle-replacement,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-ankle-replacement,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-ankle-surgery,28,11,28,28,21,28,0.39285714285714285,1.0,0.75,1.0,-0.35714285714285715,0.9986933566674058,0.007145013709542209,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,no_units sig. better,n.s.
+ai21/jamba-large-1.7,middle-aged-carpenter-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-carpenter-amputation,28,0,28,28,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1.3074133236616722e-16,1.0,True,True,False,1.0,1.0,6.707030350384378e-14,1.0,n.s.,explain_units sig. better,n.s.,explain_units sig. better
+ai21/jamba-large-1.7,middle-aged-female-cancer,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-female-cancer,28,14,14,28,2,2,0.5,0.5,0.07142857142857142,0.07142857142857142,0.4285714285714286,0.00038999485742872536,0.9999740977338605,0.4285714285714286,0.00038999485742872536,0.9999740977338605,True,True,False,0.2000673618609361,1.0,0.2000673618609361,1.0,n.s.,n.s.,explain_units sig. better,explain_units sig. better
+ai21/jamba-large-1.7,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-female-shoulder-pain,28,19,28,28,28,28,0.6785714285714286,1.0,1.0,1.0,-0.3214285714285714,1.0,0.0009116854288885365,0.0,1.0,1.0,True,True,False,1.0,0.46769462501981923,1.0,1.0,n.s.,n.s.,no_units sig. better,n.s.
+ai21/jamba-large-1.7,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-man-knee-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-man-knee-amputation,17,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-woman-cancer-surgery,7,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,0.0002913752913752914,False,True,False,1.0,1.0,1.0,0.14947552447552448,n.s.,n.s.,n.s.,no_units sig. better
+ai21/jamba-large-1.7,middle-aged-woman-cancer-surgery,19,0,0,21,0,7,0.0,0.0,0.0,0.3333333333333333,0.0,1.0,1.0,-0.3333333333333333,1.0,0.006237006237006236,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+ai21/jamba-large-1.7,pediatric-burn-patient,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,pediatric-burn-patient,12,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,teen-pelvic-fracture,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,teen-pelvic-fracture,28,28,28,28,27,28,1.0,1.0,0.9642857142857143,1.0,0.0357142857142857,0.5,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,young-man-car-accident,28,0,28,28,0,21,0.0,1.0,0.0,0.75,0.0,1.0,1.0,0.25,0.005105438401775804,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+ai21/jamba-mini-1.7,adult-male-dog-bite,28,7,28,28,18,18,0.25,1.0,0.6428571428571429,0.6428571428571429,-0.3928571428571429,0.9994738332629353,0.003313583149670117,0.3571428571428571,0.00036855368401877015,1.0,True,True,True,1.0,1.0,0.1890680399016291,1.0,n.s.,n.s.,no_units sig. better,explain_units sig. better
+ai21/jamba-mini-1.7,elderly-female-bunionectomy,28,21,21,28,21,21,0.75,0.75,0.75,0.75,0.0,0.6207592986500474,0.6207592986500474,0.0,0.6207592986500474,0.6207592986500474,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,elderly-female-renal-colic,28,21,21,28,21,21,0.75,0.75,0.75,0.75,0.0,0.6207592986500474,0.6207592986500474,0.0,0.6207592986500474,0.6207592986500474,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,elderly-hip-fracture,28,0,0,28,7,7,0.0,0.0,0.25,0.25,-0.25,1.0,0.005105438401775804,-0.25,1.0,0.005105438401775804,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,no_units sig. better,no_units sig. better
+ai21/jamba-mini-1.7,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-ankle-replacement,28,7,7,28,7,7,0.25,0.25,0.25,0.25,0.0,0.6207592986500474,0.6207592986500474,0.0,0.6207592986500474,0.6207592986500474,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-carpenter-amputation,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-female-cancer,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-female-shoulder-pain,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-man-knee-amputation,17,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,middle-aged-woman-cancer-surgery,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,pediatric-burn-patient,7,0,0,28,0,21,0.0,0.0,0.0,0.75,0.0,1.0,1.0,-0.75,1.0,0.0005103710004580252,True,True,True,1.0,1.0,1.0,0.26182032323496696,n.s.,n.s.,n.s.,no_units sig. better
+ai21/jamba-mini-1.7,teen-pelvic-fracture,28,0,7,28,0,0,0.0,0.25,0.0,0.0,0.0,1.0,1.0,0.25,0.005105438401775805,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+ai21/jamba-mini-1.7,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-mini-1.7,young-man-car-accident,28,0,7,28,0,0,0.0,0.25,0.0,0.0,0.0,1.0,1.0,0.25,0.005105438401775805,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+anthropic/claude-3.5-sonnet:20241022,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-female-renal-colic,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-hip-fracture,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-ankle-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-ankle-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-carpenter-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-carpenter-amputation,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-female-cancer,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-female-cancer,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-man-knee-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-man-knee-amputation,28,0,28,28,0,22,0.0,1.0,0.0,0.7857142857142857,0.0,1.0,1.0,0.2142857142857143,0.01160326909494501,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+anthropic/claude-3.5-sonnet:20241022,middle-aged-woman-cancer-surgery,7,7,7,7,0,7,1.0,1.0,0.0,1.0,1.0,0.0002913752913752914,1.0,0.0,1.0,1.0,False,True,False,0.14947552447552448,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,n.s.
+anthropic/claude-3.5-sonnet:20241022,middle-aged-woman-cancer-surgery,28,28,28,28,27,28,1.0,1.0,0.9642857142857143,1.0,0.0357142857142857,0.5,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,pediatric-burn-patient,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,pediatric-burn-patient,28,0,28,28,0,18,0.0,1.0,0.0,0.6428571428571429,0.0,1.0,1.0,0.3571428571428571,0.00036855368401877015,1.0,True,True,True,1.0,1.0,0.1890680399016291,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+anthropic/claude-3.5-sonnet:20241022,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,teen-pelvic-fracture,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-female-bunionectomy,27,27,27,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-female-pancreatic-carcinoma,27,0,27,27,0,27,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-female-renal-colic,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-female-renal-colic,25,0,18,28,0,13,0.0,0.72,0.0,0.4642857142857143,0.0,1.0,1.0,0.25571428571428567,0.053423877058729974,0.9854895173877884,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-hip-fracture,7,6,7,7,0,7,0.8571428571428571,1.0,0.0,1.0,0.8571428571428571,0.002331002331002331,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,n.s.
+cohere/command-r-plus-08-2024,elderly-hip-fracture,27,8,9,28,10,18,0.2962962962962963,0.3333333333333333,0.35714285714285715,0.6428571428571429,-0.06084656084656087,0.7784392990684136,0.4237702207161404,-0.3095238095238096,0.9951686856668256,0.020913993901788386,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+cohere/command-r-plus-08-2024,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-hip-replacement,27,27,27,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,elderly-male-abdominal-surgery,26,26,26,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-ankle-replacement,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-ankle-replacement,27,0,9,28,0,20,0.0,0.3333333333333333,0.0,0.7142857142857143,0.0,1.0,1.0,-0.380952380952381,0.9991591249582863,0.004932083002150648,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+cohere/command-r-plus-08-2024,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-ankle-surgery,28,0,28,27,0,27,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-carpenter-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-carpenter-amputation,25,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-female-cancer,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-female-cancer,28,2,4,28,6,6,0.07142857142857142,0.14285714285714285,0.21428571428571427,0.21428571428571427,-0.14285714285714285,0.974472807991121,0.1257794369892039,-0.07142857142857142,0.8522681653954235,0.3643673373878585,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-female-shoulder-pain,7,4,4,7,7,7,0.5714285714285714,0.5714285714285714,1.0,1.0,-0.4285714285714286,1.0,0.09615384615384615,-0.4285714285714286,1.0,0.09615384615384615,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-female-shoulder-pain,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-man-knee-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-man-knee-amputation,26,0,7,28,0,8,0.0,0.2692307692307692,0.0,0.2857142857142857,0.0,1.0,1.0,-0.01648351648351648,0.6687439386624137,0.5674975754649654,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,middle-aged-woman-cancer-surgery,7,0,7,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0002913752913752914,1.0,False,True,False,1.0,1.0,0.14947552447552448,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+cohere/command-r-plus-08-2024,middle-aged-woman-cancer-surgery,28,0,22,28,0,28,0.0,0.7857142857142857,0.0,1.0,0.0,1.0,1.0,-0.2142857142857143,1.0,0.011603269094945008,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+cohere/command-r-plus-08-2024,pediatric-burn-patient,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,pediatric-burn-patient,28,0,0,28,0,9,0.0,0.0,0.0,0.32142857142857145,0.0,1.0,1.0,-0.32142857142857145,1.0,0.0009116854288885363,True,True,True,1.0,1.0,1.0,0.4676946250198191,n.s.,n.s.,n.s.,no_units sig. better
+cohere/command-r-plus-08-2024,teen-pelvic-fracture,7,0,1,7,0,0,0.0,0.14285714285714285,0.0,0.0,0.0,1.0,1.0,0.14285714285714285,0.5,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,teen-pelvic-fracture,28,8,12,28,7,14,0.2857142857142857,0.42857142857142855,0.25,0.5,0.0357142857142857,0.4999999999999999,0.7264236849688388,-0.07142857142857145,0.7890829715851847,0.39453650548032365,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+cohere/command-r-plus-08-2024,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-female-renal-colic,7,2,7,7,5,6,0.2857142857142857,1.0,0.7142857142857143,0.8571428571428571,-0.4285714285714286,0.9854312354312355,0.14306526806526806,0.1428571428571429,0.5,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-hip-fracture,28,18,28,28,16,26,0.6428571428571429,1.0,0.5714285714285714,0.9285714285714286,0.07142857142857151,0.39238677644880987,0.7939435272926026,0.0714285714285714,0.24545454545454543,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-ankle-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-ankle-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-carpenter-amputation,7,0,7,7,0,4,0.0,1.0,0.0,0.5714285714285714,0.0,1.0,1.0,0.4285714285714286,0.09615384615384616,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-carpenter-amputation,28,0,21,28,0,24,0.0,0.75,0.0,0.8571428571428571,0.0,1.0,1.0,-0.1071428571428571,0.9114728990753266,0.2513401185444069,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-female-cancer,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-female-cancer,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-man-knee-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-man-knee-amputation,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-woman-cancer-surgery,7,0,1,7,0,1,0.0,0.14285714285714285,0.0,0.14285714285714285,0.0,1.0,1.0,0.0,0.7692307692307692,0.7692307692307692,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,middle-aged-woman-cancer-surgery,28,12,25,28,11,28,0.42857142857142855,0.8928571428571429,0.39285714285714285,1.0,0.0357142857142857,0.5,0.7062586784731144,-0.1071428571428571,1.0,0.11818181818181818,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,pediatric-burn-patient,7,0,7,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0002913752913752914,1.0,False,True,True,1.0,1.0,0.14947552447552448,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+deepseek/deepseek-chat,pediatric-burn-patient,28,0,28,28,1,5,0.0,1.0,0.03571428571428571,0.17857142857142858,-0.03571428571428571,1.0,0.5,0.8214285714285714,3.1029624858456665e-11,1.0,True,True,True,1.0,1.0,1.591819755238827e-08,1.0,n.s.,explain_units sig. better,n.s.,explain_units sig. better
+deepseek/deepseek-chat,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,teen-pelvic-fracture,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+deepseek/deepseek-chat,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-female-renal-colic,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-hip-fracture,28,0,7,28,0,7,0.0,0.25,0.0,0.25,0.0,1.0,1.0,0.0,0.6207592986500474,0.6207592986500474,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-ankle-replacement,7,7,7,7,6,6,1.0,1.0,0.8571428571428571,0.8571428571428571,0.1428571428571429,0.5,1.0,0.1428571428571429,0.5,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-ankle-replacement,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-ankle-surgery,28,7,28,28,0,28,0.25,1.0,0.0,1.0,0.25,0.005105438401775805,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,n.s.
+google/gemini-2.5-flash,middle-aged-carpenter-amputation,7,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,0.0002913752913752914,False,True,False,1.0,1.0,1.0,0.14947552447552448,n.s.,n.s.,n.s.,no_units sig. better
+google/gemini-2.5-flash,middle-aged-carpenter-amputation,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-female-cancer,7,0,0,7,0,6,0.0,0.0,0.0,0.8571428571428571,0.0,1.0,1.0,-0.8571428571428571,1.0,0.0023310023310023306,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+google/gemini-2.5-flash,middle-aged-female-cancer,28,0,0,28,0,7,0.0,0.0,0.0,0.25,0.0,1.0,1.0,-0.25,1.0,0.005105438401775804,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+google/gemini-2.5-flash,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-man-knee-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-man-knee-amputation,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-woman-cancer-surgery,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-woman-cancer-surgery,28,0,28,28,21,28,0.0,1.0,0.75,1.0,-0.75,1.0,8.791727043229388e-10,0.0,1.0,1.0,True,True,False,1.0,4.510155973176676e-07,1.0,1.0,no_units sig. better,n.s.,no_units sig. better,n.s.
+google/gemini-2.5-flash,pediatric-burn-patient,7,0,0,7,0,1,0.0,0.0,0.0,0.14285714285714285,0.0,1.0,1.0,-0.14285714285714285,1.0,0.5,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,pediatric-burn-patient,28,0,14,28,0,14,0.0,0.5,0.0,0.5,0.0,1.0,1.0,0.0,0.6052037322179039,0.6052037322179039,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,teen-pelvic-fracture,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-female-bunionectomy,28,28,28,26,26,26,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-female-renal-colic,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-female-renal-colic,27,0,27,27,0,27,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-hip-fracture,7,0,7,6,0,6,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-hip-fracture,27,27,27,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-ankle-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-ankle-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-carpenter-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-carpenter-amputation,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-female-cancer,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-female-cancer,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-man-knee-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-man-knee-amputation,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-woman-cancer-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,middle-aged-woman-cancer-surgery,28,1,28,28,1,28,0.03571428571428571,1.0,0.03571428571428571,1.0,0.0,0.7545454545454545,0.7545454545454546,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,pediatric-burn-patient,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,pediatric-burn-patient,28,0,28,28,0,26,0.0,1.0,0.0,0.9285714285714286,0.0,1.0,1.0,0.0714285714285714,0.24545454545454543,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,teen-pelvic-fracture,28,0,28,28,0,27,0.0,1.0,0.0,0.9642857142857143,0.0,1.0,1.0,0.0357142857142857,0.5,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,young-man-car-accident,26,0,26,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-female-renal-colic,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-female-renal-colic,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,28,0,26,28,0,28,0.0,0.9285714285714286,0.0,1.0,0.0,1.0,1.0,-0.0714285714285714,1.0,0.24545454545454545,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-replacement,28,26,27,28,9,16,0.9285714285714286,0.9642857142857143,0.32142857142857145,0.5714285714285714,0.6071428571428572,2.0040741795041397e-06,0.9999999345016335,0.3928571428571429,0.00047052505904372625,0.9999801884185666,True,True,False,0.0010280900540856237,1.0,0.24137935528943155,1.0,explain_units sig. better,n.s.,explain_units sig. better,explain_units sig. better
+meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-surgery,28,0,25,28,0,28,0.0,0.8928571428571429,0.0,1.0,0.0,1.0,1.0,-0.1071428571428571,1.0,0.11818181818181818,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-carpenter-amputation,7,0,7,7,0,6,0.0,1.0,0.0,0.8571428571428571,0.0,1.0,1.0,0.1428571428571429,0.5,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-carpenter-amputation,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-female-cancer,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-female-cancer,28,18,18,28,15,15,0.6428571428571429,0.6428571428571429,0.5357142857142857,0.5357142857142857,0.1071428571428572,0.2937413215268857,0.8613934109999013,0.1071428571428572,0.2937413215268857,0.8613934109999013,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-man-knee-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-man-knee-amputation,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-woman-cancer-surgery,7,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,0.0002913752913752914,False,True,False,1.0,1.0,1.0,0.14947552447552448,n.s.,n.s.,n.s.,no_units sig. better
+meta-llama/llama-3.3-70b-instruct,middle-aged-woman-cancer-surgery,28,4,27,28,1,28,0.14285714285714285,0.9642857142857143,0.03571428571428571,1.0,0.10714285714285714,0.17581475128644938,0.9742710120068611,-0.0357142857142857,1.0,0.5,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,pediatric-burn-patient,7,0,7,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0002913752913752914,1.0,False,True,True,1.0,1.0,0.14947552447552448,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+meta-llama/llama-3.3-70b-instruct,pediatric-burn-patient,28,0,28,28,0,7,0.0,1.0,0.0,0.25,0.0,1.0,1.0,0.75,8.791727043229388e-10,1.0,True,True,True,1.0,1.0,4.510155973176676e-07,1.0,n.s.,explain_units sig. better,n.s.,explain_units sig. better
+meta-llama/llama-3.3-70b-instruct,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,teen-pelvic-fracture,28,28,28,28,21,28,1.0,1.0,0.75,1.0,0.25,0.005105438401775804,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,n.s.
+meta-llama/llama-3.3-70b-instruct,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-female-renal-colic,7,0,2,7,0,7,0.0,0.2857142857142857,0.0,1.0,0.0,1.0,1.0,-0.7142857142857143,1.0,0.01048951048951049,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+mistralai/mistral-large-2407,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-hip-fracture,28,0,28,28,0,14,0.0,1.0,0.0,0.5,0.0,1.0,1.0,0.5,6.911016779100019e-06,1.0,True,True,False,1.0,1.0,0.0035453516076783096,1.0,n.s.,explain_units sig. better,n.s.,explain_units sig. better
+mistralai/mistral-large-2407,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-ankle-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-ankle-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-ankle-surgery,28,6,28,28,0,28,0.21428571428571427,1.0,0.0,1.0,0.21428571428571427,0.011603269094945008,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,n.s.
+mistralai/mistral-large-2407,middle-aged-carpenter-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-carpenter-amputation,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-female-cancer,7,1,1,7,7,7,0.14285714285714285,0.14285714285714285,1.0,1.0,-0.8571428571428572,1.0,0.002331002331002331,-0.8571428571428572,1.0,0.002331002331002331,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,no_units sig. better,no_units sig. better
+mistralai/mistral-large-2407,middle-aged-female-cancer,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-man-knee-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-man-knee-amputation,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-woman-cancer-surgery,7,0,2,7,0,7,0.0,0.2857142857142857,0.0,1.0,0.0,1.0,1.0,-0.7142857142857143,1.0,0.01048951048951049,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+mistralai/mistral-large-2407,middle-aged-woman-cancer-surgery,28,14,28,28,14,28,0.5,1.0,0.5,1.0,0.0,0.6052037322179039,0.6052037322179039,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,pediatric-burn-patient,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,pediatric-burn-patient,28,0,0,28,0,28,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,1.3074133236616722e-16,True,True,True,1.0,1.0,1.0,6.707030350384378e-14,n.s.,no_units sig. better,n.s.,no_units sig. better
+mistralai/mistral-large-2407,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,teen-pelvic-fracture,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-female-renal-colic,7,1,5,7,0,0,0.14285714285714285,0.7142857142857143,0.0,0.0,0.14285714285714285,0.5,1.0,0.7142857142857143,0.01048951048951049,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+mistralai/mixtral-8x22b-instruct,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-hip-fracture,7,1,7,7,7,7,0.14285714285714285,1.0,1.0,1.0,-0.8571428571428572,1.0,0.002331002331002331,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,no_units sig. better,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-hip-fracture,28,1,28,28,0,28,0.03571428571428571,1.0,0.0,1.0,0.03571428571428571,0.5,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-ankle-replacement,7,7,7,7,6,6,1.0,1.0,0.8571428571428571,0.8571428571428571,0.1428571428571429,0.5,1.0,0.1428571428571429,0.5,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-ankle-replacement,28,28,28,28,27,27,1.0,1.0,0.9642857142857143,0.9642857142857143,0.0357142857142857,0.5,1.0,0.0357142857142857,0.5,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-carpenter-amputation,7,0,5,7,0,7,0.0,0.7142857142857143,0.0,1.0,0.0,1.0,1.0,-0.2857142857142857,1.0,0.23076923076923078,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-carpenter-amputation,28,0,6,28,0,14,0.0,0.21428571428571427,0.0,0.5,0.0,1.0,1.0,-0.2857142857142857,0.9944270216556175,0.02481084364087794,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+mistralai/mixtral-8x22b-instruct,middle-aged-female-cancer,7,1,1,7,0,0,0.14285714285714285,0.14285714285714285,0.0,0.0,0.14285714285714285,0.5,1.0,0.14285714285714285,0.5,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-female-cancer,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-man-knee-amputation,7,0,6,7,0,5,0.0,0.8571428571428571,0.0,0.7142857142857143,0.0,1.0,1.0,0.1428571428571428,0.5000000000000001,0.9038461538461539,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-man-knee-amputation,28,0,21,28,0,21,0.0,0.75,0.0,0.75,0.0,1.0,1.0,0.0,0.6207592986500474,0.6207592986500474,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-woman-cancer-surgery,7,0,3,7,5,5,0.0,0.42857142857142855,0.7142857142857143,0.7142857142857143,-0.7142857142857143,1.0,0.01048951048951049,-0.28571428571428575,0.9487179487179487,0.29603729603729606,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,no_units sig. better,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-woman-cancer-surgery,28,9,28,28,26,26,0.32142857142857145,1.0,0.9285714285714286,0.9285714285714286,-0.6071428571428572,0.9999999345016335,2.0040741795041392e-06,0.0714285714285714,0.24545454545454543,1.0,True,True,False,1.0,0.0010280900540856235,1.0,1.0,no_units sig. better,n.s.,no_units sig. better,n.s.
+mistralai/mixtral-8x22b-instruct,pediatric-burn-patient,7,0,2,7,0,0,0.0,0.2857142857142857,0.0,0.0,0.0,1.0,1.0,0.2857142857142857,0.23076923076923078,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,pediatric-burn-patient,28,0,0,28,1,1,0.0,0.0,0.03571428571428571,0.03571428571428571,-0.03571428571428571,1.0,0.5,-0.03571428571428571,1.0,0.5,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,teen-pelvic-fracture,28,23,28,28,28,28,0.8214285714285714,1.0,1.0,1.0,-0.1785714285714286,1.0,0.02572898799313893,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,no_units sig. better,n.s.
+mistralai/mixtral-8x22b-instruct,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-female-pancreatic-carcinoma,7,0,6,7,0,1,0.0,0.8571428571428571,0.0,0.14285714285714285,0.0,1.0,1.0,0.7142857142857142,0.01456876456876457,0.9997086247086248,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+openai/gpt-3.5-turbo,elderly-female-pancreatic-carcinoma,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-female-renal-colic,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-female-renal-colic,28,5,5,28,0,4,0.17857142857142858,0.17857142857142858,0.0,0.14285714285714285,0.17857142857142858,0.02572898799313893,1.0,0.035714285714285726,0.5,0.7656139642821109,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,n.s.
+openai/gpt-3.5-turbo,elderly-hip-fracture,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-hip-fracture,28,22,28,28,19,28,0.7857142857142857,1.0,0.6785714285714286,1.0,0.1071428571428571,0.27357631503116125,0.8865212399973106,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-hip-replacement,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-hip-replacement,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-ankle-replacement,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-ankle-replacement,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-ankle-surgery,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-ankle-surgery,28,0,15,28,0,24,0.0,0.5357142857142857,0.0,0.8571428571428571,0.0,1.0,1.0,-0.3214285714285714,0.9985055909489942,0.009317342922177388,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+openai/gpt-3.5-turbo,middle-aged-carpenter-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-carpenter-amputation,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-female-cancer,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-female-cancer,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-female-shoulder-pain,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-female-shoulder-pain,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-man-knee-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-man-knee-amputation,28,0,14,28,0,28,0.0,0.5,0.0,1.0,0.0,1.0,1.0,-0.5,1.0,6.911016779100017e-06,True,True,False,1.0,1.0,1.0,0.0035453516076783087,n.s.,no_units sig. better,n.s.,no_units sig. better
+openai/gpt-3.5-turbo,middle-aged-woman-cancer-surgery,7,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,0.0002913752913752914,False,True,False,1.0,1.0,1.0,0.14947552447552448,n.s.,n.s.,n.s.,no_units sig. better
+openai/gpt-3.5-turbo,middle-aged-woman-cancer-surgery,28,1,1,28,0,28,0.03571428571428571,0.03571428571428571,0.0,1.0,0.03571428571428571,0.5,1.0,-0.9642857142857143,1.0,3.791498638618849e-15,True,True,False,1.0,1.0,1.0,1.94503880161147e-12,n.s.,no_units sig. better,n.s.,no_units sig. better
+openai/gpt-3.5-turbo,pediatric-burn-patient,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,pediatric-burn-patient,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,teen-pelvic-fracture,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,teen-pelvic-fracture,28,0,25,28,0,28,0.0,0.8928571428571429,0.0,1.0,0.0,1.0,1.0,-0.1071428571428571,1.0,0.11818181818181818,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-female-renal-colic,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-hip-fracture,28,11,28,28,7,28,0.39285714285714285,1.0,0.25,1.0,0.14285714285714285,0.1955623341021438,0.9241877191728648,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-hip-replacement,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-ankle-replacement,7,7,7,7,3,3,1.0,1.0,0.42857142857142855,0.42857142857142855,0.5714285714285714,0.03496503496503496,1.0,0.5714285714285714,0.03496503496503496,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,explain_units sig. better
+openai/gpt-4.1,middle-aged-ankle-replacement,28,9,9,28,8,8,0.32142857142857145,0.32142857142857145,0.2857142857142857,0.2857142857142857,0.035714285714285754,0.5000000000000001,0.7190603130999333,0.035714285714285754,0.5000000000000001,0.7190603130999333,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-carpenter-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-carpenter-amputation,28,0,28,28,0,23,0.0,1.0,0.0,0.8214285714285714,0.0,1.0,1.0,0.1785714285714286,0.025728987993138937,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+openai/gpt-4.1,middle-aged-female-cancer,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-female-cancer,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-man-knee-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-man-knee-amputation,28,0,27,28,0,28,0.0,0.9642857142857143,0.0,1.0,0.0,1.0,1.0,-0.0357142857142857,1.0,0.5,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-woman-cancer-surgery,7,0,2,7,0,1,0.0,0.2857142857142857,0.0,0.14285714285714285,0.0,1.0,1.0,0.14285714285714285,0.49999999999999994,0.9038461538461539,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,middle-aged-woman-cancer-surgery,28,0,28,28,2,21,0.0,1.0,0.07142857142857142,0.75,-0.07142857142857142,1.0,0.24545454545454543,0.25,0.005105438401775804,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+openai/gpt-4.1,pediatric-burn-patient,7,0,7,7,0,2,0.0,1.0,0.0,0.2857142857142857,0.0,1.0,1.0,0.7142857142857143,0.01048951048951049,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+openai/gpt-4.1,pediatric-burn-patient,28,0,28,28,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1.3074133236616722e-16,1.0,True,True,True,1.0,1.0,6.707030350384378e-14,1.0,n.s.,explain_units sig. better,n.s.,explain_units sig. better
+openai/gpt-4.1,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,teen-pelvic-fracture,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-female-renal-colic,7,0,2,7,0,1,0.0,0.2857142857142857,0.0,0.14285714285714285,0.0,1.0,1.0,0.14285714285714285,0.49999999999999994,0.9038461538461539,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-female-renal-colic,28,0,27,28,0,24,0.0,0.9642857142857143,0.0,0.8571428571428571,0.0,1.0,1.0,0.1071428571428572,0.17581475128644944,0.9742710120068611,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-hip-fracture,28,0,3,28,1,13,0.0,0.10714285714285714,0.03571428571428571,0.4642857142857143,-0.03571428571428571,1.0,0.5,-0.35714285714285715,0.9996100051425713,0.00333509937363447,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+openai/gpt-4.1-mini,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-hip-replacement,28,27,28,28,28,28,0.9642857142857143,1.0,1.0,1.0,-0.0357142857142857,1.0,0.5,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-ankle-replacement,7,4,4,7,2,2,0.5714285714285714,0.5714285714285714,0.2857142857142857,0.2857142857142857,0.2857142857142857,0.29603729603729606,0.9487179487179487,0.2857142857142857,0.29603729603729606,0.9487179487179487,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-ankle-replacement,28,11,11,28,12,12,0.39285714285714285,0.39285714285714285,0.42857142857142855,0.42857142857142855,-0.0357142857142857,0.7062586784731144,0.5,-0.0357142857142857,0.7062586784731144,0.5,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-carpenter-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-carpenter-amputation,28,0,0,28,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-female-cancer,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-female-cancer,28,23,23,28,17,17,0.8214285714285714,0.8214285714285714,0.6071428571428571,0.6071428571428571,0.2142857142857143,0.06896383006794354,0.9817092917550082,0.2142857142857143,0.06896383006794354,0.9817092917550082,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-female-shoulder-pain,7,7,7,7,0,0,1.0,1.0,0.0,0.0,1.0,0.0002913752913752914,1.0,1.0,0.0002913752913752914,1.0,False,True,False,0.14947552447552448,1.0,0.14947552447552448,1.0,n.s.,n.s.,explain_units sig. better,explain_units sig. better
+openai/gpt-4.1-mini,middle-aged-female-shoulder-pain,28,25,25,28,14,14,0.8928571428571429,0.8928571428571429,0.5,0.5,0.3928571428571429,0.0014944090510058794,0.9998466653269092,0.3928571428571429,0.0014944090510058794,0.9998466653269092,True,True,False,0.7666318431660161,1.0,0.7666318431660161,1.0,n.s.,n.s.,explain_units sig. better,explain_units sig. better
+openai/gpt-4.1-mini,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-man-knee-amputation,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,middle-aged-man-knee-amputation,28,0,28,28,0,20,0.0,1.0,0.0,0.7142857142857143,0.0,1.0,1.0,0.2857142857142857,0.0021880450293324874,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+openai/gpt-4.1-mini,middle-aged-woman-cancer-surgery,7,0,7,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0002913752913752914,1.0,False,True,False,1.0,1.0,0.14947552447552448,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+openai/gpt-4.1-mini,middle-aged-woman-cancer-surgery,28,2,23,28,13,27,0.07142857142857142,0.8214285714285714,0.4642857142857143,0.9642857142857143,-0.3928571428571429,0.9999285861599493,0.0009422019542173027,-0.1428571428571429,0.988396730905055,0.09635758248410853,True,True,False,1.0,0.48334960251347625,1.0,1.0,n.s.,n.s.,no_units sig. better,n.s.
+openai/gpt-4.1-mini,pediatric-burn-patient,7,0,7,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0002913752913752914,1.0,False,True,True,1.0,1.0,0.14947552447552448,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+openai/gpt-4.1-mini,pediatric-burn-patient,28,0,28,28,0,1,0.0,1.0,0.0,0.03571428571428571,0.0,1.0,1.0,0.9642857142857143,3.791498638618849e-15,1.0,True,True,True,1.0,1.0,1.94503880161147e-12,1.0,n.s.,explain_units sig. better,n.s.,explain_units sig. better
+openai/gpt-4.1-mini,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,teen-pelvic-fracture,28,0,21,28,0,19,0.0,0.75,0.0,0.6785714285714286,0.0,1.0,1.0,0.0714285714285714,0.384026893064741,0.8123296901060675,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1-mini,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,adult-male-dog-bite,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,adult-male-dog-bite,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-female-bunionectomy,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-female-bunionectomy,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-female-pancreatic-carcinoma,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-female-pancreatic-carcinoma,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-female-renal-colic,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-female-renal-colic,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-hip-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-hip-replacement,28,26,28,28,14,28,0.9285714285714286,1.0,0.5,1.0,0.4285714285714286,0.00038999485742872536,0.9999740977338605,0.0,1.0,1.0,True,True,True,0.2000673618609361,1.0,1.0,1.0,n.s.,n.s.,explain_units sig. better,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-male-abdominal-surgery,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-male-abdominal-surgery,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-ankle-replacement,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-ankle-replacement,28,23,28,28,22,28,0.8214285714285714,1.0,0.7857142857142857,1.0,0.0357142857142857,0.4999999999999999,0.7486598814555931,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-ankle-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-ankle-surgery,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-carpenter-amputation,7,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-carpenter-amputation,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-female-cancer,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-female-cancer,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-female-shoulder-pain,7,7,7,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-female-shoulder-pain,28,28,28,28,28,28,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-man-chronic-back-pain,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-man-chronic-back-pain,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-man-knee-amputation,7,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,0.0002913752913752914,False,True,False,1.0,1.0,1.0,0.14947552447552448,n.s.,n.s.,n.s.,no_units sig. better
+qwen/qwen-2.5-72b-instruct,middle-aged-man-knee-amputation,28,19,22,28,25,28,0.6785714285714286,0.7857142857142857,0.8928571428571429,1.0,-0.2142857142857143,0.9899849542386204,0.0505373968134022,-0.2142857142857143,1.0,0.011603269094945008,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,no_units sig. better
+qwen/qwen-2.5-72b-instruct,middle-aged-woman-cancer-surgery,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-woman-cancer-surgery,28,7,28,28,0,0,0.25,1.0,0.0,0.0,0.25,0.005105438401775805,1.0,1.0,1.3074133236616722e-16,1.0,True,True,False,1.0,1.0,6.707030350384378e-14,1.0,n.s.,explain_units sig. better,explain_units sig. better,explain_units sig. better
+qwen/qwen-2.5-72b-instruct,pediatric-burn-patient,7,0,7,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,0.0002913752913752914,1.0,False,True,True,1.0,1.0,0.14947552447552448,1.0,n.s.,n.s.,n.s.,explain_units sig. better
+qwen/qwen-2.5-72b-instruct,pediatric-burn-patient,28,0,0,28,0,12,0.0,0.0,0.0,0.42857142857142855,0.0,1.0,1.0,-0.42857142857142855,1.0,5.448184894190514e-05,True,True,True,1.0,1.0,1.0,0.027949188507197336,n.s.,no_units sig. better,n.s.,no_units sig. better
+qwen/qwen-2.5-72b-instruct,teen-pelvic-fracture,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,teen-pelvic-fracture,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,young-adult-sickle-cell-crisis,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,young-adult-sickle-cell-crisis,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,young-man-car-accident,7,0,7,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,young-man-car-accident,28,0,28,28,0,28,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
