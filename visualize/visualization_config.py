@@ -69,6 +69,9 @@ def _collect_ranking_ranks() -> Dict[str, List[float]]:
 
 def _build_ranked_color_dict() -> Dict[str, str]:
     """
+    Not used for MODEL_COLOR_DICT any more (colours are a fixed map, below);
+    kept to document how the published colours were derived.
+
     Assign rainbow colours based on the average of each model's adjusted
     rank across three conditions:
       1. Vignettes + Nielsen + explain-units
@@ -105,7 +108,27 @@ def _hue_color(index: int, total: int) -> str:
     return f"#{int(r*255):02x}{int(g*255):02x}{int(b*255):02x}"
 
 
-MODEL_COLOR_DICT = _build_ranked_color_dict()
+# Fixed model-to-colour map: colours follow the model, never its rank, so
+# they stay the same in every figure (old and new, any score) when the model
+# order changes. Each model keeps its published colour: these are the values
+# _build_ranked_color_dict() gave with the published ranking CSVs in results/
+# (summary_w_figures/pub_figures). Models not listed fall back to the
+# callers' default colour.
+MODEL_COLOR_DICT: Dict[str, str] = {
+    "google/gemini-2.5-pro":                "#e54040",
+    "anthropic/claude-3.5-sonnet:20241022": "#e58c40",
+    "openai/gpt-4.1":                       "#e5d840",
+    "deepseek/deepseek-chat":               "#a5e540",
+    "openai/gpt-4.1-mini":                  "#59e540",
+    "mistralai/mistral-large-2407":         "#40e573",
+    "google/gemini-2.5-flash":              "#40e5bf",
+    "qwen/qwen-2.5-72b-instruct":           "#40bfe5",
+    "mistralai/mixtral-8x22b-instruct":     "#4073e5",
+    "meta-llama/llama-3.3-70b-instruct":    "#5940e5",
+    "ai21/jamba-large-1.7":                 "#a540e5",
+    "cohere/command-r-plus-08-2024":        "#e540d8",
+    "openai/gpt-3.5-turbo":                 "#e5408c",
+}
 
 # Range thresholds and weighting epsilon — canonical definitions live in
 # common/config.py; imported here for backward compatibility.
