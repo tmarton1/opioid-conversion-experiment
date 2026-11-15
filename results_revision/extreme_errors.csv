@@ -1,0 +1,144 @@
+score,experiment,condition,condition_label,role,model,n_responses,pct_over_2x,pct_under_half,pct_extreme_total
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,ai21/jamba-large-1.7,560,14.28571429,18.57142857,32.85714286
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,anthropic/claude-3.5-sonnet:20241022,560,6.785714286,0,6.785714286
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,cohere/command-r-plus-08-2024,554,16.24548736,26.89530686,43.14079422
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,deepseek/deepseek-chat,560,6.428571429,12.14285714,18.57142857
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,google/gemini-2.5-flash,560,1.25,21.25,22.5
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,google/gemini-2.5-pro,559,0,7.871198569,7.871198569
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,meta-llama/llama-3.3-70b-instruct,560,8.571428571,13.57142857,22.14285714
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,mistralai/mistral-large-2407,560,2.5,2.321428571,4.821428571
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,mistralai/mixtral-8x22b-instruct,560,11.07142857,16.96428571,28.03571429
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,openai/gpt-3.5-turbo,560,1.428571429,24.64285714,26.07142857
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,openai/gpt-4.1,560,0,7.321428571,7.321428571
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,openai/gpt-4.1-mini,560,5.714285714,6.964285714,12.67857143
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,qwen/qwen-2.5-72b-instruct,506,6.126482213,16.2055336,22.33201581
+nielsen,vignette,vignette_naive,"Vignettes, naive",main,POOLED,7219,6.178141017,13.40905943,19.58720044
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,ai21/jamba-large-1.7,553,6.50994575,19.1681736,25.67811935
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,anthropic/claude-3.5-sonnet:20241022,560,0.1785714286,0,0.1785714286
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,cohere/command-r-plus-08-2024,558,12.72401434,18.8172043,31.54121864
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,deepseek/deepseek-chat,560,0,4.464285714,4.464285714
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,google/gemini-2.5-flash,560,0,20,20
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,google/gemini-2.5-pro,557,0,0.5385996409,0.5385996409
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,meta-llama/llama-3.3-70b-instruct,560,5.535714286,14.64285714,20.17857143
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,mistralai/mistral-large-2407,560,0,7.5,7.5
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,mistralai/mixtral-8x22b-instruct,560,6.071428571,2.678571429,8.75
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,openai/gpt-3.5-turbo,560,25.71428571,10.17857143,35.89285714
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,openai/gpt-4.1,560,0,9.821428571,9.821428571
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,openai/gpt-4.1-mini,560,2.5,20.89285714,23.39285714
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,qwen/qwen-2.5-72b-instruct,560,2.857142857,0.1785714286,3.035714286
+nielsen,vignette,vignette_nielsen,"Vignettes, Nielsen",main,POOLED,7268,4.77435333,9.906439185,14.68079252
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,ai21/jamba-large-1.7,523,7.839388145,12.81070746,20.6500956
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,anthropic/claude-3.5-sonnet:20241022,560,0,0,0
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,cohere/command-r-plus-08-2024,545,12.47706422,24.03669725,36.51376147
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,deepseek/deepseek-chat,560,0.1785714286,1.071428571,1.25
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,google/gemini-2.5-flash,560,0,21.25,21.25
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,google/gemini-2.5-pro,556,0,0,0
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,meta-llama/llama-3.3-70b-instruct,560,6.607142857,12.14285714,18.75
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,mistralai/mistral-large-2407,560,0,10,10
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,mistralai/mixtral-8x22b-instruct,560,1.071428571,9.107142857,10.17857143
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,openai/gpt-3.5-turbo,560,28.57142857,17.85714286,46.42857143
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,openai/gpt-4.1,560,0,3.571428571,3.571428571
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,openai/gpt-4.1-mini,560,0.7142857143,15.35714286,16.07142857
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,qwen/qwen-2.5-72b-instruct,560,0,5,5
+nielsen,vignette,vignette_nielsen_units,"Vignettes, Nielsen + units",main,POOLED,7224,4.388150609,10.13289037,14.52104097
+nielsen,random_dose,rd_naive,"Random doses, naive",main,ai21/jamba-large-1.7,753,27.22443559,8.366533865,35.59096946
+nielsen,random_dose,rd_naive,"Random doses, naive",main,anthropic/claude-3.5-sonnet:20241022,796,21.98492462,3.266331658,25.25125628
+nielsen,random_dose,rd_naive,"Random doses, naive",main,cohere/command-r-plus-08-2024,753,4.648074369,57.50332005,62.15139442
+nielsen,random_dose,rd_naive,"Random doses, naive",main,deepseek/deepseek-chat,753,12.21779548,19.92031873,32.13811421
+nielsen,random_dose,rd_naive,"Random doses, naive",main,google/gemini-2.5-flash,940,9.14893617,12.87234043,22.0212766
+nielsen,random_dose,rd_naive,"Random doses, naive",main,google/gemini-2.5-pro,763,2.49017038,4.718217562,7.208387942
+nielsen,random_dose,rd_naive,"Random doses, naive",main,meta-llama/llama-3.3-70b-instruct,753,28.81806109,10.09296149,38.91102258
+nielsen,random_dose,rd_naive,"Random doses, naive",main,mistralai/mistral-large-2407,796,22.11055276,13.5678392,35.67839196
+nielsen,random_dose,rd_naive,"Random doses, naive",main,mistralai/mixtral-8x22b-instruct,793,17.15006305,42.37074401,59.52080706
+nielsen,random_dose,rd_naive,"Random doses, naive",main,openai/gpt-3.5-turbo,1316,16.41337386,21.96048632,38.37386018
+nielsen,random_dose,rd_naive,"Random doses, naive",main,openai/gpt-4.1,796,11.05527638,7.035175879,18.09045226
+nielsen,random_dose,rd_naive,"Random doses, naive",main,openai/gpt-4.1-mini,1565,25.36741214,2.875399361,28.2428115
+nielsen,random_dose,rd_naive,"Random doses, naive",main,qwen/qwen-2.5-72b-instruct,731,19.97264022,10.80711354,30.77975376
+nielsen,random_dose,rd_naive,"Random doses, naive",main,POOLED,11508,17.27493917,15.79770594,33.07264512
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,ai21/jamba-large-1.7,402,1.243781095,22.3880597,23.6318408
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,anthropic/claude-3.5-sonnet:20241022,422,0,0,0
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,cohere/command-r-plus-08-2024,422,4.739336493,22.51184834,27.25118483
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,deepseek/deepseek-chat,422,0,0.7109004739,0.7109004739
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,google/gemini-2.5-flash,1240,0.1612903226,0.08064516129,0.2419354839
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,google/gemini-2.5-pro,416,0,0.2403846154,0.2403846154
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,meta-llama/llama-3.3-70b-instruct,422,1.421800948,9.71563981,11.13744076
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,mistralai/mistral-large-2407,422,0,4.028436019,4.028436019
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,mistralai/mixtral-8x22b-instruct,422,0.9478672986,7.819905213,8.767772512
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,openai/gpt-3.5-turbo,1508,22.81167109,14.72148541,37.5331565
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,openai/gpt-4.1,422,0,4.265402844,4.265402844
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,openai/gpt-4.1-mini,1774,3.382187148,1.352874859,4.735062007
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,qwen/qwen-2.5-72b-instruct,400,3.5,0.5,4
+nielsen,random_dose,rd_nielsen,"Random doses, Nielsen",main,POOLED,8694,5.233494364,6.291695422,11.52518979
+nielsen,random_dose,rd_nielsen_examples,"Random doses, Nielsen + examples",main,openai/gpt-3.5-turbo,650,23.38461538,17.07692308,40.46153846
+nielsen,random_dose,rd_nielsen_examples,"Random doses, Nielsen + examples",main,openai/gpt-4.1-mini,648,0.462962963,5.24691358,5.709876543
+nielsen,random_dose,rd_nielsen_examples,"Random doses, Nielsen + examples",main,POOLED,1298,11.94144838,11.17103236,23.11248074
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,ai21/jamba-large-1.7,500,0.8,89.6,90.4
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,anthropic/claude-3.5-sonnet:20241022,500,4,9.4,13.4
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,cohere/command-r-plus-08-2024,500,39,13.2,52.2
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,deepseek/deepseek-chat,500,2,87.4,89.4
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,google/gemini-2.5-flash,500,2.4,60.8,63.2
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,google/gemini-2.5-pro,444,0.2252252252,0.2252252252,0.4504504505
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,meta-llama/llama-3.3-70b-instruct,498,5.220883534,59.437751,64.65863454
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,mistralai/mistral-large-2407,500,2,51.4,53.4
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,mistralai/mixtral-8x22b-instruct,500,30.6,24.8,55.4
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,openai/gpt-3.5-turbo,500,16.6,65.4,82
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,openai/gpt-4.1,500,0.2,33,33.2
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,openai/gpt-4.1-mini,500,0,90,90
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,qwen/qwen-2.5-72b-instruct,498,16.66666667,53.41365462,70.08032129
+nielsen,explain_units,eu_4h_nielsen,"mg/4 h, Nielsen",main,POOLED,6440,9.285714286,49.50310559,58.78881988
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,ai21/jamba-large-1.7,500,0.4,75,75.4
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,anthropic/claude-3.5-sonnet:20241022,500,0,0,0
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,cohere/command-r-plus-08-2024,500,0.8,61.6,62.4
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,deepseek/deepseek-chat,500,0.2,13,13.2
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,google/gemini-2.5-flash,500,1,37.2,38.2
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,google/gemini-2.5-pro,443,0,1.128668172,1.128668172
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,meta-llama/llama-3.3-70b-instruct,495,52.52525253,22.42424242,74.94949495
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,mistralai/mistral-large-2407,500,0,24.2,24.2
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,mistralai/mixtral-8x22b-instruct,500,4.2,7.8,12
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,openai/gpt-3.5-turbo,500,14.8,61.4,76.2
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,openai/gpt-4.1,500,1.2,0,1.2
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,openai/gpt-4.1-mini,500,1.4,9.4,10.8
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,qwen/qwen-2.5-72b-instruct,497,1.609657948,24.94969819,26.55935614
+nielsen,explain_units,eu_4h_nielsen_units,"mg/4 h, Nielsen + units explained",main,POOLED,6435,6.02952603,26.23154623,32.26107226
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,ai21/jamba-large-1.7,140,0,17.85714286,17.85714286
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,anthropic/claude-3.5-sonnet:20241022,140,9.285714286,1.428571429,10.71428571
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,cohere/command-r-plus-08-2024,140,7.142857143,37.85714286,45
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,deepseek/deepseek-chat,140,5.714285714,42.85714286,48.57142857
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,google/gemini-2.5-flash,140,1.428571429,15,16.42857143
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,google/gemini-2.5-pro,137,3.649635036,11.67883212,15.32846715
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,meta-llama/llama-3.3-70b-instruct,140,0.7142857143,5,5.714285714
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,mistralai/mistral-large-2407,140,5,2.857142857,7.857142857
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,mistralai/mixtral-8x22b-instruct,140,7.142857143,30,37.14285714
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,openai/gpt-3.5-turbo,140,5,30,35
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,openai/gpt-4.1,140,5,8.571428571,13.57142857
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,openai/gpt-4.1-mini,140,2.142857143,10.71428571,12.85714286
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,qwen/qwen-2.5-72b-instruct,140,10,20,30
+nielsen,vignette,vignette_empty_naive,"Empty vignettes, naive",supplementary_empty_prompts,POOLED,1817,4.788112273,17.99669785,22.78481013
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,ai21/jamba-large-1.7,140,5,30,35
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,anthropic/claude-3.5-sonnet:20241022,140,0,0,0
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,cohere/command-r-plus-08-2024,140,15,25,40
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,deepseek/deepseek-chat,140,0,11.42857143,11.42857143
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,google/gemini-2.5-flash,140,0.7142857143,10,10.71428571
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,google/gemini-2.5-pro,139,0,0,0
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,meta-llama/llama-3.3-70b-instruct,140,10,15.71428571,25.71428571
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,mistralai/mistral-large-2407,140,0,5,5
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,mistralai/mixtral-8x22b-instruct,140,5,10.71428571,15.71428571
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,openai/gpt-3.5-turbo,140,19.28571429,25,44.28571429
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,openai/gpt-4.1,140,0,10.71428571,10.71428571
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,openai/gpt-4.1-mini,140,5,23.57142857,28.57142857
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,qwen/qwen-2.5-72b-instruct,140,5,5,10
+nielsen,vignette,vignette_empty_nielsen,"Empty vignettes, Nielsen",supplementary_empty_prompts,POOLED,1819,5.002748763,13.24903793,18.2517867
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,ai21/jamba-large-1.7,140,5,30,35
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,anthropic/claude-3.5-sonnet:20241022,140,0,0,0
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,cohere/command-r-plus-08-2024,140,10,27.14285714,37.14285714
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,deepseek/deepseek-chat,140,0,4.285714286,4.285714286
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,google/gemini-2.5-flash,140,0,15,15
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,google/gemini-2.5-pro,139,0,0,0
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,meta-llama/llama-3.3-70b-instruct,140,12.14285714,12.85714286,25
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,mistralai/mistral-large-2407,140,0,16.42857143,16.42857143
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,mistralai/mixtral-8x22b-instruct,140,0.7142857143,13.57142857,14.28571429
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,openai/gpt-3.5-turbo,140,15.71428571,25,40.71428571
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,openai/gpt-4.1,140,0,3.571428571,3.571428571
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,openai/gpt-4.1-mini,140,0,10.71428571,10.71428571
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,qwen/qwen-2.5-72b-instruct,140,5,5,10
+nielsen,vignette,vignette_empty_nielsen_units,"Empty vignettes, Nielsen + units",supplementary_empty_prompts,POOLED,1819,3.738317757,12.5893348,16.32765256
