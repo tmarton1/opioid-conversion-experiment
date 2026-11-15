@@ -1,0 +1,161 @@
+metric,experiment,subset,value,note
+vignette_file_position,vignette,elderly-female-chronic-bowel-obstruction,12,plan number 10; 1-based position of the scenario in resources/original_vignettes.json (vignette_id v46)
+vignette_file_position,vignette,elderly-male-abdominal-surgery,13,plan number 11; 1-based position of the scenario in resources/original_vignettes.json (vignette_id v50)
+vignette_file_position,vignette,middle-aged-female-cancer,20,plan number 20; 1-based position of the scenario in resources/original_vignettes.json (vignette_id v78)
+n_responses,vignette,all,7219,summed over 13 models
+n_items,vignette,all,20,
+mean_pct_tight,vignette,all,28.804945054945055,mean over 13 models of per-model % (mean over items)
+mean_pct_broad,vignette,all,66.78113553113553,mean over 13 models of per-model % (mean over items)
+n_responses,vignette,no_di2,6133,summed over 13 models
+n_items,vignette,no_di2,17,
+mean_pct_tight,vignette,no_di2,28.36134453781512,mean over 13 models of per-model % (mean over items)
+mean_pct_broad,vignette,no_di2,66.7528549881491,mean over 13 models of per-model % (mean over items)
+n_responses,vignette,di2,1086,summed over 13 models
+n_items,vignette,di2,3,
+mean_pct_tight,vignette,di2,31.318681318681318,mean over 13 models of per-model % (mean over items)
+mean_pct_broad,vignette,di2,66.94139194139194,mean over 13 models of per-model % (mean over items)
+change_pp_tight_without_minus_with,vignette,no_di2_vs_all,-0.44360051712993354,"percentage points, mean over models"
+max_abs_model_change_pp_tight,vignette,no_di2_vs_all,7.279411764705877,openai/gpt-4.1
+model_change_pp_tight,vignette,ai21/jamba-large-1.7,-5.220588235294116,"without minus with, per model"
+model_change_pp_tight,vignette,anthropic/claude-3.5-sonnet:20241022,4.327731092436977,"without minus with, per model"
+model_change_pp_tight,vignette,cohere/command-r-plus-08-2024,-2.142857142857139,"without minus with, per model"
+model_change_pp_tight,vignette,deepseek/deepseek-chat,0.850840336134457,"without minus with, per model"
+model_change_pp_tight,vignette,google/gemini-2.5-flash,0.0,"without minus with, per model"
+model_change_pp_tight,vignette,google/gemini-2.5-pro,-2.363445378151262,"without minus with, per model"
+model_change_pp_tight,vignette,meta-llama/llama-3.3-70b-instruct,-2.4054621848739437,"without minus with, per model"
+model_change_pp_tight,vignette,mistralai/mistral-large-2407,-2.857142857142861,"without minus with, per model"
+model_change_pp_tight,vignette,mistralai/mixtral-8x22b-instruct,2.9936974789915993,"without minus with, per model"
+model_change_pp_tight,vignette,openai/gpt-3.5-turbo,4.3802521008403374,"without minus with, per model"
+model_change_pp_tight,vignette,openai/gpt-4.1,-7.279411764705877,"without minus with, per model"
+model_change_pp_tight,vignette,openai/gpt-4.1-mini,0.07352941176471006,"without minus with, per model"
+model_change_pp_tight,vignette,qwen/qwen-2.5-72b-instruct,3.876050420168067,"without minus with, per model"
+change_pp_broad_without_minus_with,vignette,no_di2_vs_all,-0.028280542986436785,"percentage points, mean over models"
+max_abs_model_change_pp_broad,vignette,no_di2_vs_all,5.892857142857125,anthropic/claude-3.5-sonnet:20241022
+model_change_pp_broad,vignette,ai21/jamba-large-1.7,-1.8697478991596554,"without minus with, per model"
+model_change_pp_broad,vignette,anthropic/claude-3.5-sonnet:20241022,5.892857142857125,"without minus with, per model"
+model_change_pp_broad,vignette,cohere/command-r-plus-08-2024,2.888655462184879,"without minus with, per model"
+model_change_pp_broad,vignette,deepseek/deepseek-chat,0.5042016806722742,"without minus with, per model"
+model_change_pp_broad,vignette,google/gemini-2.5-flash,-1.17647058823529,"without minus with, per model"
+model_change_pp_broad,vignette,google/gemini-2.5-pro,-0.9663865546218631,"without minus with, per model"
+model_change_pp_broad,vignette,meta-llama/llama-3.3-70b-instruct,1.9222689075630228,"without minus with, per model"
+model_change_pp_broad,vignette,mistralai/mistral-large-2407,-1.4915966386554516,"without minus with, per model"
+model_change_pp_broad,vignette,mistralai/mixtral-8x22b-instruct,0.7773109243697363,"without minus with, per model"
+model_change_pp_broad,vignette,openai/gpt-3.5-turbo,-2.40546218487394,"without minus with, per model"
+model_change_pp_broad,vignette,openai/gpt-4.1,-3.907563025210081,"without minus with, per model"
+model_change_pp_broad,vignette,openai/gpt-4.1-mini,-0.5777310924369772,"without minus with, per model"
+model_change_pp_broad,vignette,qwen/qwen-2.5-72b-instruct,0.04201680672267827,"without minus with, per model"
+spearman_rho_mean_tight_accuracy,vignette,all_vs_no_di2,0.8705267192145757,13 models; with vs without DI 2 items
+spearman_rho_cmh_adjusted_rank,vignette,all_vs_no_di2,0.8782940760181307,"13 models; CMH adjusted rank (tight, broad)"
+spearman_rho_di2_only_vs_no_di2_mean_tight,vignette,di2_vs_no_di2,0.33703481769087884,agreement between model orderings on DI 2 items alone and on the rest
+n_responses,random_dose,all,11508,summed over 13 models
+n_items,random_dose,all,49,
+mean_pct_tight,random_dose,all,19.509694759500867,mean over 13 models of per-model % (mean over items)
+mean_pct_broad,random_dose,all,56.753185251259694,mean over 13 models of per-model % (mean over items)
+n_responses,random_dose,no_di2,9218,summed over 13 models
+n_items,random_dose,no_di2,42,
+mean_pct_tight,random_dose,no_di2,19.325890167627737,mean over 13 models of per-model % (mean over items)
+mean_pct_broad,random_dose,no_di2,58.617619621421525,mean over 13 models of per-model % (mean over items)
+n_responses,random_dose,di2,2290,summed over 13 models
+n_items,random_dose,di2,7,
+mean_pct_tight,random_dose,di2,20.612522310739624,mean over 13 models of per-model % (mean over items)
+mean_pct_broad,random_dose,di2,45.56657903028871,mean over 13 models of per-model % (mean over items)
+change_pp_tight_without_minus_with,random_dose,no_di2_vs_all,-0.18380459187313036,"percentage points, mean over models"
+max_abs_model_change_pp_tight,random_dose,no_di2_vs_all,2.9426155382788046,openai/gpt-4.1
+model_change_pp_tight,random_dose,ai21/jamba-large-1.7,0.810009718172978,"without minus with, per model"
+model_change_pp_tight,random_dose,anthropic/claude-3.5-sonnet:20241022,-1.331808120073429,"without minus with, per model"
+model_change_pp_tight,random_dose,cohere/command-r-plus-08-2024,1.1466634272756728,"without minus with, per model"
+model_change_pp_tight,random_dose,deepseek/deepseek-chat,-1.1855968577907365,"without minus with, per model"
+model_change_pp_tight,random_dose,google/gemini-2.5-flash,-1.1918954583428238,"without minus with, per model"
+model_change_pp_tight,random_dose,google/gemini-2.5-pro,-1.5995594708603917,"without minus with, per model"
+model_change_pp_tight,random_dose,meta-llama/llama-3.3-70b-instruct,-0.049589677140698285,"without minus with, per model"
+model_change_pp_tight,random_dose,mistralai/mistral-large-2407,1.1079189612352813,"without minus with, per model"
+model_change_pp_tight,random_dose,mistralai/mixtral-8x22b-instruct,1.9901670985854647,"without minus with, per model"
+model_change_pp_tight,random_dose,openai/gpt-3.5-turbo,0.7118950939548974,"without minus with, per model"
+model_change_pp_tight,random_dose,openai/gpt-4.1,-2.9426155382788046,"without minus with, per model"
+model_change_pp_tight,random_dose,openai/gpt-4.1-mini,-0.33991146692005714,"without minus with, per model"
+model_change_pp_tight,random_dose,qwen/qwen-2.5-72b-instruct,0.48486259583198077,"without minus with, per model"
+change_pp_broad_without_minus_with,random_dose,no_di2_vs_all,1.8644343701618311,"percentage points, mean over models"
+max_abs_model_change_pp_broad,random_dose,no_di2_vs_all,4.087497300507508,mistralai/mistral-large-2407
+model_change_pp_broad,random_dose,ai21/jamba-large-1.7,3.8953069322967124,"without minus with, per model"
+model_change_pp_broad,random_dose,anthropic/claude-3.5-sonnet:20241022,2.8465338516358827,"without minus with, per model"
+model_change_pp_broad,random_dose,cohere/command-r-plus-08-2024,3.834494115106363,"without minus with, per model"
+model_change_pp_broad,random_dose,deepseek/deepseek-chat,2.304226055501566,"without minus with, per model"
+model_change_pp_broad,random_dose,google/gemini-2.5-flash,-0.3196502140601609,"without minus with, per model"
+model_change_pp_broad,random_dose,google/gemini-2.5-pro,-0.6560204342873845,"without minus with, per model"
+model_change_pp_broad,random_dose,meta-llama/llama-3.3-70b-instruct,0.9336937155814624,"without minus with, per model"
+model_change_pp_broad,random_dose,mistralai/mistral-large-2407,4.087497300507508,"without minus with, per model"
+model_change_pp_broad,random_dose,mistralai/mixtral-8x22b-instruct,3.708088982719527,"without minus with, per model"
+model_change_pp_broad,random_dose,openai/gpt-3.5-turbo,1.164935224735892,"without minus with, per model"
+model_change_pp_broad,random_dose,openai/gpt-4.1,0.1256276320051768,"without minus with, per model"
+model_change_pp_broad,random_dose,openai/gpt-4.1-mini,0.7814983064458829,"without minus with, per model"
+model_change_pp_broad,random_dose,qwen/qwen-2.5-72b-instruct,1.5314153439153486,"without minus with, per model"
+spearman_rho_mean_tight_accuracy,random_dose,all_vs_no_di2,0.9780219780219779,13 models; with vs without DI 2 items
+spearman_rho_cmh_adjusted_rank,random_dose,all_vs_no_di2,0.9491525423728815,"13 models; CMH adjusted rank (tight, broad)"
+spearman_rho_di2_only_vs_no_di2_mean_tight,random_dose,di2_vs_no_di2,0.7197802197802198,agreement between model orderings on DI 2 items alone and on the rest
+n_responses,vignette,v10_elderly-female-chronic-bowel-obstruction,364,"13 models, text vignettes, naive"
+pct_tight,vignette,v10_elderly-female-chronic-bowel-obstruction,26.373626373626376,
+pct_broad,vignette,v10_elderly-female-chronic-bowel-obstruction,90.10989010989012,
+expected_over_from_dose,vignette,v10_elderly-female-chronic-bowel-obstruction,0.34814814814814815,Nielsen-expected output per unit input
+modal_response_over_input,vignette,v10_elderly-female-chronic-bowel-obstruction,0.5,232/364 = 63.7%
+modal_response_share_pct,vignette,v10_elderly-female-chronic-bowel-obstruction,63.73626373626374,
+pct_ge_2x_expected,vignette,v10_elderly-female-chronic-bowel-obstruction,1.6483516483516485,ratio >= 2
+pct_gt_2x_expected,vignette,v10_elderly-female-chronic-bowel-obstruction,1.6483516483516485,ratio > 2
+pct_le_half_expected,vignette,v10_elderly-female-chronic-bowel-obstruction,0.0,ratio <= 0.5
+pct_ratio_2_to_1_oral_to_iv,vignette,v10_elderly-female-chronic-bowel-obstruction,63.73626373626373,response = oral dose / 2 (2:1 oral:parenteral)
+pct_ratio_3_to_1_oral_to_iv,vignette,v10_elderly-female-chronic-bowel-obstruction,15.384615384615385,response = oral dose / 3
+nielsen_implied_oral_to_iv_ratio,vignette,v10_elderly-female-chronic-bowel-obstruction,2.872340425531915,Nielsen expected gives oral:IV ratio of this size
+n_responses,vignette,v11_elderly-male-abdominal-surgery,364,"13 models, text vignettes, naive"
+pct_tight,vignette,v11_elderly-male-abdominal-surgery,34.34065934065934,
+pct_broad,vignette,v11_elderly-male-abdominal-surgery,67.58241758241759,
+expected_over_from_dose,vignette,v11_elderly-male-abdominal-surgery,4.7,Nielsen-expected output per unit input
+modal_response_over_input,vignette,v11_elderly-male-abdominal-surgery,3.0,121/364 = 33.2%
+modal_response_share_pct,vignette,v11_elderly-male-abdominal-surgery,33.24175824175824,
+pct_ge_2x_expected,vignette,v11_elderly-male-abdominal-surgery,17.032967032967033,ratio >= 2
+pct_gt_2x_expected,vignette,v11_elderly-male-abdominal-surgery,17.032967032967033,ratio > 2
+pct_le_half_expected,vignette,v11_elderly-male-abdominal-surgery,13.461538461538462,ratio <= 0.5
+nielsen_factor_morphine_per_methadone,vignette,v11_elderly-male-abdominal-surgery,4.7,
+pct_matching_methadone_factor,vignette,v11_3:1,33.24175824175824,response within 2% of 3.0 mg oral morphine per mg methadone
+pct_matching_methadone_factor,vignette,v11_4:1,31.868131868131865,response within 2% of 4.0 mg oral morphine per mg methadone
+pct_matching_methadone_factor,vignette,v11_4.7 (Nielsen),0.0,response within 2% of 4.7 mg oral morphine per mg methadone
+pct_matching_methadone_factor,vignette,v11_8:1,1.9230769230769231,response within 2% of 8.0 mg oral morphine per mg methadone
+pct_matching_methadone_factor,vignette,v11_10:1,8.791208791208792,response within 2% of 10.0 mg oral morphine per mg methadone
+pct_matching_methadone_factor,vignette,v11_12:1,0.0,response within 2% of 12.0 mg oral morphine per mg methadone
+pct_matching_methadone_factor,vignette,v11_20:1,0.0,response within 2% of 20.0 mg oral morphine per mg methadone
+pct_matching_no_listed_factor,vignette,v11_other,24.175824175824175,
+response_over_input_quantile,vignette,v11_q0.1,2.0,
+response_over_input_quantile,vignette,v11_q0.25,3.0,
+response_over_input_quantile,vignette,v11_q0.5,4.0,
+response_over_input_quantile,vignette,v11_q0.75,4.0,
+response_over_input_quantile,vignette,v11_q0.9,10.0,
+n_responses,vignette,v20_middle-aged-female-cancer,358,"13 models, text vignettes, naive"
+pct_tight,vignette,v20_middle-aged-female-cancer,33.798882681564244,
+pct_broad,vignette,v20_middle-aged-female-cancer,43.85474860335196,
+expected_over_from_dose,vignette,v20_middle-aged-female-cancer,1.8518518518518519,Nielsen-expected output per unit input
+modal_response_over_input,vignette,v20_middle-aged-female-cancer,2.083,112/358 = 31.3%
+modal_response_share_pct,vignette,v20_middle-aged-female-cancer,31.28491620111732,
+pct_ge_2x_expected,vignette,v20_middle-aged-female-cancer,40.22346368715084,ratio >= 2
+pct_gt_2x_expected,vignette,v20_middle-aged-female-cancer,40.22346368715084,ratio > 2
+pct_le_half_expected,vignette,v20_middle-aged-female-cancer,0.0,ratio <= 0.5
+refusal_check_n_responses,vignette,all,21711,"text vignettes, 13 models, all conditions (raw results/reworded_vignettes_results.csv); random-dose responses have no stored text, so the check covers vignettes only"
+refusal_check_unparsed_responses,vignette,all,0,
+refusal_pattern_decline,vignette,all,0,regex (case-insensitive): \b(?:cannot|can't|can not|unable to|not able to|won't|refuse|decline|i'm sorry|i am sorry|sorry)\b
+refusal_pattern_consult,vignette,all,0,regex (case-insensitive): \b(?:consult|seek (?:medical|professional)|medical professional|healthcare (?:provider|professional)|physician|clinician|pharmacist|specialist|palliative)\b
+refusal_pattern_no_dict,vignette,all,2690,regex (case-insensitive): ^(?!\s*\{)
+refusal_pattern_no_dict,vignette,deepseek/deepseek-chat|naive,23,count by model|condition
+refusal_pattern_no_dict,vignette,deepseek/deepseek-chat|nielsen,14,count by model|condition
+refusal_pattern_no_dict,vignette,deepseek/deepseek-chat|nielsen_units,26,count by model|condition
+refusal_pattern_no_dict,vignette,google/gemini-2.5-flash|naive,91,count by model|condition
+refusal_pattern_no_dict,vignette,google/gemini-2.5-flash|nielsen,49,count by model|condition
+refusal_pattern_no_dict,vignette,google/gemini-2.5-flash|nielsen_units,119,count by model|condition
+refusal_pattern_no_dict,vignette,google/gemini-2.5-pro|naive,555,count by model|condition
+refusal_pattern_no_dict,vignette,google/gemini-2.5-pro|nielsen,552,count by model|condition
+refusal_pattern_no_dict,vignette,google/gemini-2.5-pro|nielsen_units,555,count by model|condition
+refusal_pattern_no_dict,vignette,mistralai/mistral-large-2407|naive,98,count by model|condition
+refusal_pattern_no_dict,vignette,mistralai/mistral-large-2407|nielsen,250,count by model|condition
+refusal_pattern_no_dict,vignette,mistralai/mistral-large-2407|nielsen_units,284,count by model|condition
+refusal_pattern_no_dict,vignette,mistralai/mixtral-8x22b-instruct|nielsen_units,72,count by model|condition
+refusal_pattern_no_dict,vignette,openai/gpt-4.1-mini|nielsen,1,count by model|condition
+refusal_pattern_no_dict,vignette,openai/gpt-4.1-mini|nielsen_units,1,count by model|condition
+letter_claim_change_pp,draft_letter,claim,<1,value stated in the draft response letter
+letter_claim_rho,draft_letter,claim,0.87,value stated in the draft response letter
+letter_claim_v20_pct_ge_2x,draft_letter,claim,40,value stated in the draft response letter
