@@ -9,9 +9,14 @@ Steps (each overwrites its own outputs; safe to rerun):
   rescore      analysis/revision/rescore.py → results_<score>/, results_revision/responses_long.csv
   pipeline     for every registered score: orchestration/run_analysis.py with
                RESULTS_DIR=results_<score> (Nielsen: the raw CSVs copied into
-               results_nielsen/), then generate_summaries.py into figures_<score>/
+               results_nielsen/, empty-vignette prompts scored against the
+               conversion they ask for), then generate_summaries.py into figures_<score>/
   references   analysis/revision/reference_comparison.py → results_revision/references/
   bands        analysis/revision/tolerances.py → results_revision/references/band_justification*.csv
+  analyses     Phase 3 modules (PHASE3_MODULES) and the clinical-reduction check
+               → results_revision/*.csv
+
+Figures for any score/view/bands: python -m orchestration.build_figures (Phase 2).
 
 Never calls any model API. Writes results_revision/run_log.json with the git
 commit, timestamp and the SHA-256 of every reference JSON file.
@@ -90,11 +95,33 @@ def step_bands(args):
     _run([PY, "-m", "analysis.revision.tolerances"])
 
 
+# Phase 3 analyses (each module writes its own CSVs to results_revision/),
+# plus the clinical-reduction check for the vignette decisions.
+PHASE3_MODULES = [
+    "analysis.revision.vignette_reductions",
+    "analysis.revision.distribution_metrics",   # 3A
+    "analysis.revision.circularity",            # 3B
+    "analysis.revision.di2_subset",             # 3C
+    "analysis.revision.model_agreement",        # 3D
+    "analysis.revision.standard_matches",       # 3E
+    "analysis.revision.units_vignette_split",   # 3F
+]
+
+
+def step_analyses(args):
+    for mod in PHASE3_MODULES:
+        path = os.path.join(*mod.split(".")) + ".py"
+        if not os.path.exists(path):
+            raise SystemExit(f"{path} missing")
+        _run([PY, "-m", mod])
+
+
 STEPS = {
     "rescore": step_rescore,
     "pipeline": step_pipeline,
     "references": step_references,
     "bands": step_bands,
+    "analyses": step_analyses,
 }
 
 
