@@ -89,6 +89,17 @@ def compute_kendall_w_for_scenarios(
     # Consistent models only
     df = df[df["model"].isin(set(CONSISTENT_MODELS))]
 
+    # Same preprocessing as the original computation in
+    # visualize/scenario_strip_visualizer.py (commit 627ab4f), which produced
+    # results/kendall_w_vignettes.csv: text vignettes only, valid doses, and
+    # log_ratio derived here because the raw results CSV does not carry it.
+    if "has_vignette_text" in df.columns:
+        df = df[df["has_vignette_text"] == True]  # noqa: E712
+    df = df[df["observed_to_dose"].notna() & (df["observed_to_dose"] > 0)]
+    df = df[df["expected_to_dose"].notna() & (df["expected_to_dose"] > 0)]
+    if "log_ratio" not in df.columns:
+        df = df.assign(log_ratio=np.log(df["observed_to_dose"] / df["expected_to_dose"]))
+
     scenarios = sorted(df["scenario_key"].unique())
     rows = []
 
@@ -122,11 +133,12 @@ def compute_kendall_w_for_scenarios(
                 j = vid_idx[r["vignette_id"]]
                 matrix[i, j] = r["log_ratio"]
 
-        # Drop vignettes with any NaN
-        valid_cols = ~np.isnan(matrix).any(axis=0)
-        matrix = matrix[:, valid_cols]
+        # Drop models (judges) missing any vignette, as the original
+        # computation did; dropping vignettes instead changes W.
+        valid_rows = ~np.isnan(matrix).any(axis=1)
+        matrix = matrix[valid_rows, :]
 
-        if matrix.shape[1] < 2:
+        if matrix.shape[0] < 2 or matrix.shape[1] < 2:
             rows.append({
                 "scenario_key": scenario_key,
                 "kendall_w": np.nan,

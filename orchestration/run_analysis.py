@@ -586,9 +586,11 @@ _SECTION_FNS = {
     "rankings":        run_rankings,
 }
 
+# "wilcoxon" runs after "ome_comparisons" and "dosing", which write two of
+# its input comparison CSVs (on a clean run they would otherwise be skipped).
 _ALL_ORDER = [
-    "processing", "batch_means", "comparisons", "wilcoxon",
-    "text_effects", "ome_comparisons", "dosing", "cross_experiment",
+    "processing", "batch_means", "comparisons",
+    "text_effects", "ome_comparisons", "dosing", "wilcoxon", "cross_experiment",
     "icc", "kendall_w", "variance", "grid", "profiles", "cv_chi2",
     "rankings",
 ]
