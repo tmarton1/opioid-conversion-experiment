@@ -1,10 +1,9 @@
 {
-  "git_commit": "1607c43e4195c6ba81b69bda421351512b0e186e",
+  "git_commit": "ae0ea119aea3c879bebffa93258762b5bf9dbcb8",
   "working_tree_modified": false,
-  "timestamp": "2026-11-14T19:40:36",
+  "timestamp": "2026-11-14T19:43:24",
   "steps": [
-    "rescore",
-    "references"
+    "pipeline"
   ],
   "scores": [
     "nielsen",
