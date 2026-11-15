@@ -211,7 +211,9 @@ def coverage(long, score, condition, subset="all") -> dict:
 # registry entries in analysis/revision/tolerances.py, anchored on the current
 # standards, and flow through model_summary / paired_effect like any band.
 SAFETY = {"overdose_x": 2.0, "severe_overdose_x": 4.0, "underdose_x": 0.5, "gross_error_x": 10.0}
-EXCEEDANCE_MULTIPLES = tuple(np.round(np.exp(np.linspace(0, np.log(10), 61)), 6))
+# log grid 1x-10x plus the exact tail thresholds, so the curve at 2x and 4x equals the
+# pooled overdose and severe-overdose rates (strict >, same 1e-12 tolerance as tolerances.within)
+EXCEEDANCE_MULTIPLES = tuple(sorted(set(np.round(np.exp(np.linspace(0, np.log(10), 61)), 6)) | {2.0, 4.0}))
 
 
 def dose_ratios(d: pd.DataFrame) -> pd.DataFrame:
@@ -242,7 +244,7 @@ def overdose_exceedance(long, condition, subset="all", multiples=EXCEEDANCE_MULT
         th = g["_th"].to_numpy()
         for k in multiples:
             rows.append({"condition": condition, "subset": subset, "model": m, "multiple_of_highest": float(k),
-                         "pct_above": 100 * float(np.mean(th > k)) if len(th) else np.nan})
+                         "pct_above": 100 * float(np.mean(th > k + 1e-12)) if len(th) else np.nan})
     return pd.DataFrame(rows)
 
 

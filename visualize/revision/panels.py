@@ -67,7 +67,7 @@ def band_axis_label(b):
 
 
 def _rows(ax, models, show_labels):
-    ax.set_ylim(len(models) - 0.5, -0.5)
+    ax.set_ylim(len(models) - 0.5, -0.7)  # headroom so the first row clears the band labels
     ax.set_yticks(range(len(models)))
     ax.set_yticklabels([S.short(m) for m in models] if show_labels else [], fontsize=7.5)
     for y in range(len(models) - 1):

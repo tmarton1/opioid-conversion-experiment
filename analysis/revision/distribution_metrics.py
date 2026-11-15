@@ -165,19 +165,23 @@ def build_wilcoxon(long) -> pd.DataFrame:
     return df
 
 
-def main() -> None:
-    long = stats.load_long()
-    summary = build_summary(long)
-    write_csv(summary, "distribution_summary.csv")
-    write_csv(build_extreme(summary), "extreme_errors.csv")
-    write_csv(build_wilcoxon(long), "wilcoxon_threshold_free.csv")
+def build_exceedance(long) -> pd.DataFrame:
     exc = []
     for cond in MAIN + SUPP:
         c = CONDITIONS[cond]
         e = stats.overdose_exceedance(long, cond)
         e.insert(0, "role", role(cond)); e.insert(0, "condition_label", c.label); e.insert(0, "experiment", c.experiment)
         exc.append(e)
-    write_csv(pd.concat(exc, ignore_index=True), "safety_exceedance.csv")
+    return pd.concat(exc, ignore_index=True)
+
+
+def main() -> None:
+    long = stats.load_long()
+    summary = build_summary(long)
+    write_csv(summary, "distribution_summary.csv")
+    write_csv(build_extreme(summary), "extreme_errors.csv")
+    write_csv(build_wilcoxon(long), "wilcoxon_threshold_free.csv")
+    write_csv(build_exceedance(long), "safety_exceedance.csv")
     print("wrote distribution_summary.csv, extreme_errors.csv, wilcoxon_threshold_free.csv, safety_exceedance.csv")
 
 
