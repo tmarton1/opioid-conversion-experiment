@@ -116,7 +116,9 @@ def save(fig, path_stem: str) -> list[str]:
     for ext in ("png", "pdf"):
         p = f"{path_stem}.{ext}"
         tmp = f"{path_stem}.tmp.{ext}"
-        fig.savefig(tmp, dpi=DPI, bbox_inches="tight")
+        # no creation date in the PDF, so reruns give byte-identical files
+        meta = {"CreationDate": None} if ext == "pdf" else {}
+        fig.savefig(tmp, dpi=DPI, bbox_inches="tight", metadata=meta)
         os.replace(tmp, p)
         out.append(p)
     plt.close(fig)
