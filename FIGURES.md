@@ -659,3 +659,72 @@ performance (§1, §8) is measured.
 | `nielsen_by_ome_combined` | `model_batch_means_vignettes.csv`, `model_batch_means.csv`, `wilcoxon_nielsen_effect_vignettes_ome.csv`, `wilcoxon_nielsen_effect_vignettes_nonome.csv`, `wilcoxon_nielsen_effect_random_dose_ome.csv`, `wilcoxon_nielsen_effect_random_dose_nonome.csv` |
 | `explain_units_full_treatment` | `pair_model_analysis.csv`, `explain_units_pair_model_analysis.csv`, `comparison_units_effect_random_dose.csv`, `wilcoxon_units_effect_random_dose.csv`, `comparison_dosing_unit_effect.csv`, `wilcoxon_dosing_unit_effect.csv` |
 | `nielsen_units_ranked` | `ranking_random_doses_nielsen_units.csv`, `ranking_vignettes_nielsen_units.csv` |
+
+---
+
+## Revision framework: any figure under any score, view and bands
+
+Added for the JMIR revision (branch `revision-2026-11`). Score and view are
+parameters, not separate code paths.
+
+```
+python -m orchestration.build_figures --figures 1,11 --scores nielsen,all,non_nielsen \
+    --views bands,distribution --compare
+python -m orchestration.build_figures --figures 11 --scores nielsen,non_nielsen --views bands \
+    --bands tight,broad,reference_agreement,reference_envelope --compare
+python -m orchestration.build_figures --figures all --scores nielsen --views bands   # reproduces the 15 figures
+python -m orchestration.build_figures --list
+```
+
+**Parameters (all from registries; a new entry needs no other code change)**
+
+| Parameter | Registry | Values |
+|---|---|---|
+| score | `analysis/revision/scores.py` | `nielsen`, `all`, `non_nielsen`, `geomean` (geometric mean of standards) |
+| view | — | `bands` (proportion within bands), `distribution` (observed / reference on a log fold axis) |
+| bands | `analysis/revision/tolerances.py` | `tight`, `broad` (default), `reference_agreement`, `reference_envelope` |
+| condition, subset | `analysis/revision/conditions.py` | e.g. `vignette_naive`, `rd_nielsen`, `eu_4h_nielsen_units`; subsets `all`, `ome`, `nonome`, `matched`, `matched_same_conversion`, `same_conversion`, `reduction`, `di2`, `no_di2` |
+| figure | `visualize/revision/registry.py` | figures 1–15: rescorable 1, 2, 3, 8–15; score-independent 4–7 (Nielsen, bands view only) |
+
+**Engines** (`visualize/revision/compose.py`)
+
+- *legacy*: one score, bands view, default bands. The original Bokeh builder
+  in `visualize/comprehensive_figures.py` runs on `results_<score>/`; titles get
+  the score's suffix on a second line and a coverage note (responses and
+  conversion items scored). With `nielsen` this is exactly the published code
+  path; `--scores nielsen --views bands` is pixel-identical to
+  `figures_nielsen/pub_figures/`. Figures 2, 3 and 9 under a rescored score read
+  model-analysis CSVs from an adapter (`results_revision/figure_inputs/<score>/`,
+  not committed): precision (CV, observed means, dose-dependence regression)
+  from `results_nielsen/`, band accuracy from `results_<score>/`, and an
+  effective expected value so that the plotted ratio is the cell's mean ratio
+  under the score (an identity under Nielsen).
+- *grid*: matplotlib panels from `results_revision/responses_long.csv` for the
+  distribution view, multi-score comparisons (`--compare`: one column per
+  score, shared axes and model order) and non-default bands. Panel kinds
+  (`visualize/revision/panels.py`): `accuracy` (one condition), `sequence`
+  (conditions in order, e.g. naive → Nielsen; one sub-row per band in the
+  bands view), `precision` (CV from the Nielsen responses vs accuracy under the
+  score).
+
+**Statistics** (`analysis/revision/stats.py`) take the same parameters:
+response, cell, item and model tables for any score, condition, subset and
+bands; `model_summary(average="item")` reproduces the rankings' accuracy and
+`average="cell"` the batch means; `paired_effect(..., outcome=<band> |
+"median_abs_log_ratio")` gives per-model and pooled Wilcoxon tests (band
+proportion or threshold-free), paired on the conversion item;
+`rank_models(..., bands=(b1, b2))` gives the CMH ranking on any two bands.
+Under Nielsen these reproduce the pipeline's rankings, batch means and
+random-dose Wilcoxon tests (`tests/test_framework.py`).
+
+**Styling.** Model colors are the fixed map `MODEL_COLOR_DICT` and the global
+model order is `MODEL_RANK_ORDER` (its key order), both computed once from the
+all-standards rankings in `results_all/` (`visualize/visualization_config.py`),
+the same in every figure under every score and view; ranked bar charts still
+sort by their own ranking. Ratio axes are log scale with fold-value ticks; the
+tight and broad bands are shaded and labeled; the score is named in every
+panel heading and title.
+
+**Output paths** encode figure, scores, view and (if not default) bands:
+`$FIGURES_DIR/revision/figNN_<slug>/figNN_<slug>__<score[+score]>__<view>[__<bands>].{png,pdf[,html]}`
+(PNG at 300 dpi for grid figures).

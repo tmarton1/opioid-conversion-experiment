@@ -64,6 +64,13 @@ def _parse_args():
 PAIR_CSV         = f"{RESULTS_DIR}/pair_model_analysis.csv"
 EXPLAIN_CSV      = f"{RESULTS_DIR}/explain_units_pair_model_analysis.csv"
 VIGNETTE_CSV     = f"{RESULTS_DIR}/reworded_vignettes_model_analysis.csv"
+# Comparisons involving empty prompts keep all scenarios (author decision
+# 2026-11-14); as a robustness check each is also written with the suffix
+# _same_conversion, restricted to the scenarios where the text and the empty
+# prompt ask for the same conversion (the four scenarios whose text asks for a
+# clinical dose reduction are dropped; analysis/revision/vignette_targets.py).
+SAME_CONV = "_same_conversion"
+VIGNETTE_SAME_CONV_CSV = f"{RESULTS_DIR}/reworded_vignettes_model_analysis_same_conversion.csv"
 BATCH_MEANS_RD   = f"{RESULTS_DIR}/model_batch_means.csv"
 BATCH_MEANS_VIG  = f"{RESULTS_DIR}/model_batch_means_vignettes.csv"
 
@@ -182,7 +189,22 @@ def run_batch_means():
     ModelBatchMeansBuilder(VIGNETTE_CSV).save_means_df(
         tve_combos, f"{RESULTS_DIR}/model_batch_means_text_vs_empty.csv"
     )
+    ModelBatchMeansBuilder(_write_same_conversion_vignettes()).save_means_df(
+        tve_combos, f"{RESULTS_DIR}/model_batch_means_text_vs_empty{SAME_CONV}.csv"
+    )
     print("✓ Batch means complete")
+
+
+def _write_same_conversion_vignettes() -> str:
+    """Vignette model analysis restricted to same-conversion scenarios."""
+    import pandas as pd
+    from analysis.revision.vignette_targets import same_conversion_scenarios
+    df = pd.read_csv(VIGNETTE_CSV)
+    df = df[df["scenario_key"].isin(same_conversion_scenarios())]
+    tmp = VIGNETTE_SAME_CONV_CSV + ".tmp"
+    df.to_csv(tmp, index=False)
+    os.replace(tmp, VIGNETTE_SAME_CONV_CSV)
+    return VIGNETTE_SAME_CONV_CSV
 
 
 # ── 3. Accuracy comparisons ────────────────────────────────────────────────
@@ -194,8 +216,12 @@ def run_comparisons():
     """
     from analysis.accuracy_comparison import AccuracyComparison
 
+    same_conv_csv = _write_same_conversion_vignettes()
     specs = [
         # ── Vignette contrasts ──────────────────────────────────────────
+        # Nielsen-effect and units-effect tests use text vignettes only
+        # (author decision 2026-11-14), like the bars (batch means) and the
+        # rankings; the empty-vignette controls enter only text vs empty.
         dict(
             csv_path=VIGNETTE_CSV,
             group_col="has_vignette_text", group_a_value=True, group_b_value=False,
@@ -205,11 +231,20 @@ def run_comparisons():
             output=f"{RESULTS_DIR}/comparison_text_vs_empty.csv",
         ),
         dict(
+            csv_path=same_conv_csv,
+            group_col="has_vignette_text", group_a_value=True, group_b_value=False,
+            group_a_label="text", group_b_label="empty",
+            unit_col="scenario_key",
+            hold_constant=["include_nielsen", "explain_units"],
+            output=f"{RESULTS_DIR}/comparison_text_vs_empty{SAME_CONV}.csv",
+        ),
+        dict(
             csv_path=VIGNETTE_CSV,
             group_col="include_nielsen", group_a_value=True, group_b_value=False,
             group_a_label="nielsen", group_b_label="naive",
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "explain_units"],
+            filters={"has_vignette_text": True},
             output=f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes.csv",
         ),
         dict(
@@ -218,7 +253,7 @@ def run_comparisons():
             group_a_label="nielsen", group_b_label="naive",
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "explain_units"],
-            filters={"ome": True},
+            filters={"ome": True, "has_vignette_text": True},
             output=f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_ome.csv",
         ),
         dict(
@@ -227,7 +262,7 @@ def run_comparisons():
             group_a_label="nielsen", group_b_label="naive",
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "explain_units"],
-            filters={"ome": False},
+            filters={"ome": False, "has_vignette_text": True},
             output=f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_nonome.csv",
         ),
         dict(
@@ -236,7 +271,19 @@ def run_comparisons():
             group_a_label="explain_units", group_b_label="no_units",
             unit_col="scenario_key",
             hold_constant=["has_vignette_text", "include_nielsen"],
+            filters={"has_vignette_text": True},
             output=f"{RESULTS_DIR}/comparison_units_effect_vignettes.csv",
+        ),
+        # Supplementary: grounding effect on the empty-vignette prompts
+        # (scored against the conversion they ask for).
+        dict(
+            csv_path=VIGNETTE_CSV,
+            group_col="include_nielsen", group_a_value=True, group_b_value=False,
+            group_a_label="nielsen", group_b_label="naive",
+            unit_col="scenario_key",
+            hold_constant=["explain_units"],
+            filters={"has_vignette_text": False},
+            output=f"{RESULTS_DIR}/comparison_nielsen_effect_empty_vignettes.csv",
         ),
         # ── Random-dose contrasts ───────────────────────────────────────
         dict(
@@ -296,6 +343,8 @@ def run_wilcoxon():
 
     comparison_pairs = [
         (f"{RESULTS_DIR}/comparison_text_vs_empty.csv",                    f"{RESULTS_DIR}/wilcoxon_text_vs_empty.csv"),
+        (f"{RESULTS_DIR}/comparison_text_vs_empty{SAME_CONV}.csv",         f"{RESULTS_DIR}/wilcoxon_text_vs_empty{SAME_CONV}.csv"),
+        (f"{RESULTS_DIR}/comparison_nielsen_effect_empty_vignettes.csv",   f"{RESULTS_DIR}/wilcoxon_nielsen_effect_empty_vignettes.csv"),
         (f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes.csv",         f"{RESULTS_DIR}/wilcoxon_nielsen_effect_vignettes.csv"),
         (f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_ome.csv",     f"{RESULTS_DIR}/wilcoxon_nielsen_effect_vignettes_ome.csv"),
         (f"{RESULTS_DIR}/comparison_nielsen_effect_vignettes_nonome.csv",  f"{RESULTS_DIR}/wilcoxon_nielsen_effect_vignettes_nonome.csv"),
@@ -327,6 +376,8 @@ def run_text_effects():
     print("── Computing text effect differences ──")
     diff = TextEffectDifference(f"{RESULTS_DIR}/model_batch_means_text_vs_empty.csv")
     diff.save(f"{RESULTS_DIR}/text_effect_differences.csv")
+    diff = TextEffectDifference(f"{RESULTS_DIR}/model_batch_means_text_vs_empty{SAME_CONV}.csv")
+    diff.save(f"{RESULTS_DIR}/text_effect_differences{SAME_CONV}.csv")
     print("✓ Text effects complete")
 
 
@@ -435,11 +486,11 @@ def run_cross_experiment():
     from analysis.cross_experiment_matched import CrossExperimentMatched
 
     print("── Running cross-experiment matched analysis ──")
-    cem = CrossExperimentMatched(
-        pair_csv=PAIR_CSV,
-        vignette_csv=VIGNETTE_CSV,
-    )
+    cem = CrossExperimentMatched(pair_csv=PAIR_CSV, vignette_csv=VIGNETTE_CSV)
     cem.save(RESULTS_DIR)
+    # robustness: matched conversions from same-conversion scenarios only
+    cem = CrossExperimentMatched(pair_csv=PAIR_CSV, vignette_csv=_write_same_conversion_vignettes())
+    cem.save(RESULTS_DIR, suffix=SAME_CONV)
     print("✓ Cross-experiment analysis complete")
 
 

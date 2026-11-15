@@ -29,7 +29,7 @@ def test_nearest_and_geometric_mean_rules():
     assert S.SCORES["all"].fn(None, e)[0] == 100.0
 
 
-def test_dummy_score_flows_through_to_csv():
+def test_dummy_score_flows_through_to_csv_and_figure():
     dummy = S.Score(name="dummy_double", label="Dummy", title_suffix=" — dummy",
                     fn=lambda obs, exp: ((2 * exp["nielsen"], "nielsen") if exp.get("nielsen") else (None, None)),
                     variance_valid=True)
@@ -44,6 +44,25 @@ def test_dummy_score_flows_through_to_csv():
         assert "ratio_dummy_double" in L.columns
         m = L["ratio_nielsen"].notna()
         assert np.allclose(L.loc[m, "ratio_dummy_double"], L.loc[m, "ratio_nielsen"] / 2)
+
+        # ...and to statistics and a figure (Phase 2 framework), with no other code change
+        from analysis.revision import stats
+        from visualize.revision import compose
+        long = stats.prepare_long(L)
+        summ = stats.model_summary(long, "dummy_double", "rd_naive", bands=["tight"])
+        assert len(summ) == 13 and summ["pct_tight"].notna().all()
+        ref = stats.model_summary(long, "nielsen", "rd_naive", bands=["tight"]).set_index("model")
+        # halving every ratio doubles the median signed log2 ratio's distance by exactly -1
+        d = summ.set_index("model")["median_log2_ratio"] - ref["median_log2_ratio"]
+        assert np.allclose(d, -1.0)
+        outs = compose.build(1, ["nielsen", "dummy_double"], "distribution", compare=True,
+                             out_dir=os.path.join(tmp, "figs"), long=long)
+        png = outs[0][0]
+        assert png.endswith("fig01_naive_vignette_bars__nielsen+dummy_double__distribution.png")
+        assert os.path.getsize(png) > 10_000
+        outs = compose.build(11, ["dummy_double"], "bands", bands=["tight", "reference_envelope"],
+                             out_dir=os.path.join(tmp, "figs"), long=long)
+        assert os.path.exists(outs[0][0])
     finally:
         S.unregister("dummy_double")
         shutil.rmtree(tmp, ignore_errors=True)

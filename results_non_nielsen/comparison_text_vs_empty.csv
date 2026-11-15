@@ -11,10 +11,10 @@ ai21/jamba-large-1.7,elderly-female-pancreatic-carcinoma,28,0,28,7,0,7,0.0,1.0,0
 ai21/jamba-large-1.7,elderly-female-renal-colic,28,28,28,7,0,0,1.0,1.0,0.0,0.0,1.0,1.4870949896795608e-07,1.0,1.0,1.4870949896795608e-07,1.0,False,False,True,0.00011019373873525546,1.0,0.00011019373873525546,1.0,text sig. better,text sig. better,text sig. better,text sig. better
 ai21/jamba-large-1.7,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-ai21/jamba-large-1.7,elderly-hip-fracture,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-hip-fracture,28,28,28,7,0,7,1.0,1.0,0.0,1.0,1.0,1.4870949896795608e-07,1.0,0.0,1.0,1.0,False,False,False,0.00011019373873525546,1.0,1.0,1.0,text sig. better,n.s.,text sig. better,n.s.
 ai21/jamba-large-1.7,elderly-hip-fracture,28,0,3,7,0,0,0.0,0.10714285714285714,0.0,0.0,0.0,1.0,1.0,0.10714285714285714,0.5005347593582888,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,elderly-hip-fracture,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-ai21/jamba-large-1.7,elderly-hip-replacement,28,0,28,7,0,6,0.0,1.0,0.0,0.8571428571428571,0.0,1.0,1.0,0.1428571428571429,0.2,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,elderly-hip-replacement,28,0,28,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1.4870949896795608e-07,1.0,False,False,True,1.0,1.0,0.00011019373873525546,1.0,n.s.,text sig. better,n.s.,text sig. better
 ai21/jamba-large-1.7,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,elderly-male-abdominal-surgery,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -23,10 +23,10 @@ ai21/jamba-large-1.7,elderly-male-abdominal-surgery,28,28,28,7,7,7,1.0,1.0,1.0,1
 ai21/jamba-large-1.7,middle-aged-ankle-replacement,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,middle-aged-ankle-replacement,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,middle-aged-ankle-replacement,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-ai21/jamba-large-1.7,middle-aged-ankle-surgery,28,11,18,7,0,7,0.39285714285714285,0.6428571428571429,0.0,1.0,0.39285714285714285,0.051468952430805466,1.0,-0.3571428571428571,1.0,0.07148465615389647,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+ai21/jamba-large-1.7,middle-aged-ankle-surgery,28,11,18,7,0,0,0.39285714285714285,0.6428571428571429,0.0,0.0,0.39285714285714285,0.051468952430805466,1.0,0.6428571428571429,0.002892102335928809,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,text sig. better
 ai21/jamba-large-1.7,middle-aged-ankle-surgery,28,21,28,7,0,7,0.75,1.0,0.0,1.0,0.75,0.0005103710004580252,1.0,0.0,1.0,1.0,True,False,True,0.3781849113393967,1.0,1.0,1.0,n.s.,n.s.,text sig. better,n.s.
 ai21/jamba-large-1.7,middle-aged-ankle-surgery,28,11,28,7,0,7,0.39285714285714285,1.0,0.0,1.0,0.39285714285714285,0.051468952430805466,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-ai21/jamba-large-1.7,middle-aged-carpenter-amputation,28,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,False,False,False,1.0,1.0,1.0,0.00011019373873525546,n.s.,empty sig. better,n.s.,empty sig. better
+ai21/jamba-large-1.7,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 ai21/jamba-large-1.7,middle-aged-carpenter-amputation,28,0,28,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1.4870949896795608e-07,1.0,True,True,False,1.0,1.0,0.00011019373873525546,1.0,n.s.,text sig. better,n.s.,text sig. better
 ai21/jamba-large-1.7,middle-aged-female-cancer,28,0,0,7,7,7,0.0,0.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-1.0,1.0,1.4870949896795608e-07,False,False,False,1.0,0.00011019373873525546,1.0,0.00011019373873525546,empty sig. better,empty sig. better,empty sig. better,empty sig. better
@@ -69,8 +69,8 @@ anthropic/claude-3.5-sonnet:20241022,elderly-female-renal-colic,28,0,5,7,7,7,0.0
 anthropic/claude-3.5-sonnet:20241022,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 anthropic/claude-3.5-sonnet:20241022,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 anthropic/claude-3.5-sonnet:20241022,elderly-hip-fracture,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-anthropic/claude-3.5-sonnet:20241022,elderly-hip-fracture,28,28,28,7,0,7,1.0,1.0,0.0,1.0,1.0,1.4870949896795608e-07,1.0,0.0,1.0,1.0,True,False,False,0.00011019373873525546,1.0,1.0,1.0,text sig. better,n.s.,text sig. better,n.s.
-anthropic/claude-3.5-sonnet:20241022,elderly-hip-fracture,28,28,28,7,0,7,1.0,1.0,0.0,1.0,1.0,1.4870949896795608e-07,1.0,0.0,1.0,1.0,True,True,False,0.00011019373873525546,1.0,1.0,1.0,text sig. better,n.s.,text sig. better,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-hip-fracture,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+anthropic/claude-3.5-sonnet:20241022,elderly-hip-fracture,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 anthropic/claude-3.5-sonnet:20241022,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 anthropic/claude-3.5-sonnet:20241022,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 anthropic/claude-3.5-sonnet:20241022,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -125,9 +125,9 @@ cohere/command-r-plus-08-2024,elderly-female-pancreatic-carcinoma,27,0,27,7,0,7,
 cohere/command-r-plus-08-2024,elderly-female-renal-colic,28,1,7,7,7,7,0.03571428571428571,0.25,1.0,1.0,-0.9642857142857143,1.0,1.1896759917436484e-06,-0.75,1.0,0.0005103710004580252,False,False,True,1.0,0.0008815499098820434,1.0,0.3781849113393967,empty sig. better,n.s.,empty sig. better,empty sig. better
 cohere/command-r-plus-08-2024,elderly-female-renal-colic,28,0,13,7,0,7,0.0,0.4642857142857143,0.0,1.0,0.0,1.0,1.0,-0.5357142857142857,1.0,0.011527960359995957,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
 cohere/command-r-plus-08-2024,elderly-female-renal-colic,25,0,18,7,0,7,0.0,0.72,0.0,1.0,0.0,1.0,1.0,-0.28,1.0,0.14281656731601114,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-cohere/command-r-plus-08-2024,elderly-hip-fracture,28,18,28,7,7,7,0.6428571428571429,1.0,1.0,1.0,-0.3571428571428571,1.0,0.07148465615389647,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-cohere/command-r-plus-08-2024,elderly-hip-fracture,28,10,18,7,0,7,0.35714285714285715,0.6428571428571429,0.0,1.0,0.35714285714285715,0.07148465615389647,1.0,-0.3571428571428571,1.0,0.07148465615389647,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-cohere/command-r-plus-08-2024,elderly-hip-fracture,27,8,9,7,6,7,0.2962962962962963,0.3333333333333333,0.8571428571428571,1.0,-0.5608465608465608,0.9993620362494274,0.011802329385591833,-0.6666666666666667,1.0,0.0021265458352417717,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,empty sig. better
+cohere/command-r-plus-08-2024,elderly-hip-fracture,28,18,28,7,0,7,0.6428571428571429,1.0,0.0,1.0,0.6428571428571429,0.002892102335928809,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,text sig. better,n.s.
+cohere/command-r-plus-08-2024,elderly-hip-fracture,28,10,18,7,0,0,0.35714285714285715,0.6428571428571429,0.0,0.0,0.35714285714285715,0.07148465615389647,1.0,0.6428571428571429,0.002892102335928809,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,text sig. better
+cohere/command-r-plus-08-2024,elderly-hip-fracture,27,8,9,7,0,6,0.2962962962962963,0.3333333333333333,0.0,0.8571428571428571,0.2962962962962963,0.1222763855264019,1.0,-0.5238095238095237,0.9988038179676765,0.01887309428777072,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
 cohere/command-r-plus-08-2024,elderly-hip-replacement,28,24,24,7,1,1,0.8571428571428571,0.8571428571428571,0.14285714285714285,0.14285714285714285,0.7142857142857142,0.0007985700094579242,0.9999821548601239,0.7142857142857142,0.0007985700094579242,0.9999821548601239,False,False,True,0.5917403770083218,1.0,0.5917403770083218,1.0,n.s.,n.s.,text sig. better,text sig. better
 cohere/command-r-plus-08-2024,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 cohere/command-r-plus-08-2024,elderly-hip-replacement,27,27,27,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -182,9 +182,9 @@ deepseek/deepseek-chat,elderly-female-pancreatic-carcinoma,28,0,28,7,0,7,0.0,1.0
 deepseek/deepseek-chat,elderly-female-renal-colic,28,0,6,7,4,6,0.0,0.21428571428571427,0.5714285714285714,0.8571428571428571,-0.5714285714285714,1.0,0.0006684491978609625,-0.6428571428571428,0.9998822220768174,0.0032781521952496245,False,False,True,1.0,0.49532085561497324,1.0,1.0,n.s.,n.s.,empty sig. better,empty sig. better
 deepseek/deepseek-chat,elderly-female-renal-colic,28,0,28,7,5,6,0.0,1.0,0.7142857142857143,0.8571428571428571,-0.7142857142857143,1.0,6.468863205106089e-05,0.1428571428571429,0.2,1.0,True,False,True,1.0,0.04793427634983612,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
 deepseek/deepseek-chat,elderly-female-renal-colic,28,0,28,7,2,7,0.0,1.0,0.2857142857142857,1.0,-0.2857142857142857,1.0,0.03529411764705882,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
-deepseek/deepseek-chat,elderly-hip-fracture,28,16,27,7,7,7,0.5714285714285714,0.9642857142857143,1.0,1.0,-0.4285714285714286,1.0,0.03645717463848721,-0.0357142857142857,1.0,0.8,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
-deepseek/deepseek-chat,elderly-hip-fracture,28,16,26,7,0,7,0.5714285714285714,0.9285714285714286,0.0,1.0,0.5714285714285714,0.007493174233997371,1.0,-0.0714285714285714,1.0,0.6352941176470588,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,text sig. better,n.s.
-deepseek/deepseek-chat,elderly-hip-fracture,28,18,28,7,0,7,0.6428571428571429,1.0,0.0,1.0,0.6428571428571429,0.002892102335928809,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,text sig. better,n.s.
+deepseek/deepseek-chat,elderly-hip-fracture,28,16,27,7,0,7,0.5714285714285714,0.9642857142857143,0.0,1.0,0.5714285714285714,0.007493174233997371,1.0,-0.0357142857142857,1.0,0.8,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,text sig. better,n.s.
+deepseek/deepseek-chat,elderly-hip-fracture,28,16,26,7,7,7,0.5714285714285714,0.9285714285714286,1.0,1.0,-0.4285714285714286,1.0,0.03645717463848721,-0.0714285714285714,1.0,0.6352941176470588,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
+deepseek/deepseek-chat,elderly-hip-fracture,28,18,28,7,7,7,0.6428571428571429,1.0,1.0,1.0,-0.3571428571428571,1.0,0.07148465615389647,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 deepseek/deepseek-chat,elderly-hip-replacement,28,24,28,7,7,7,0.8571428571428571,1.0,1.0,1.0,-0.1428571428571429,1.0,0.391042780748663,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 deepseek/deepseek-chat,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 deepseek/deepseek-chat,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -239,9 +239,9 @@ google/gemini-2.5-flash,elderly-female-pancreatic-carcinoma,28,0,28,7,0,7,0.0,1.
 google/gemini-2.5-flash,elderly-female-renal-colic,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-flash,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-flash,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-google/gemini-2.5-flash,elderly-hip-fracture,28,7,14,7,7,7,0.25,0.5,1.0,1.0,-0.75,1.0,0.0005103710004580252,-0.5,1.0,0.01729194053999393,False,False,False,1.0,0.3781849113393967,1.0,1.0,n.s.,n.s.,empty sig. better,empty sig. better
-google/gemini-2.5-flash,elderly-hip-fracture,28,0,7,7,0,7,0.0,0.25,0.0,1.0,0.0,1.0,1.0,-0.75,1.0,0.0005103710004580252,True,False,False,1.0,1.0,1.0,0.3781849113393967,n.s.,n.s.,n.s.,empty sig. better
-google/gemini-2.5-flash,elderly-hip-fracture,28,0,7,7,0,7,0.0,0.25,0.0,1.0,0.0,1.0,1.0,-0.75,1.0,0.0005103710004580252,True,True,False,1.0,1.0,1.0,0.3781849113393967,n.s.,n.s.,n.s.,empty sig. better
+google/gemini-2.5-flash,elderly-hip-fracture,28,7,14,7,0,7,0.25,0.5,0.0,1.0,0.25,0.17607799515801872,1.0,-0.5,1.0,0.01729194053999393,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
+google/gemini-2.5-flash,elderly-hip-fracture,28,0,7,7,7,7,0.0,0.25,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-0.75,1.0,0.0005103710004580252,True,False,False,1.0,0.00011019373873525546,1.0,0.3781849113393967,empty sig. better,n.s.,empty sig. better,empty sig. better
+google/gemini-2.5-flash,elderly-hip-fracture,28,0,7,7,7,7,0.0,0.25,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-0.75,1.0,0.0005103710004580252,True,True,False,1.0,0.00011019373873525546,1.0,0.3781849113393967,empty sig. better,n.s.,empty sig. better,empty sig. better
 google/gemini-2.5-flash,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-flash,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-flash,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -251,7 +251,7 @@ google/gemini-2.5-flash,elderly-male-abdominal-surgery,28,28,28,7,7,7,1.0,1.0,1.
 google/gemini-2.5-flash,middle-aged-ankle-replacement,28,0,7,7,0,0,0.0,0.25,0.0,0.0,0.0,1.0,1.0,0.25,0.17607799515801872,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-flash,middle-aged-ankle-replacement,28,0,0,7,6,6,0.0,0.0,0.8571428571428571,0.8571428571428571,-0.8571428571428571,1.0,4.312575470070726e-06,-0.8571428571428571,1.0,4.312575470070726e-06,True,False,False,1.0,0.003195618423322408,1.0,0.003195618423322408,empty sig. better,empty sig. better,empty sig. better,empty sig. better
 google/gemini-2.5-flash,middle-aged-ankle-replacement,28,0,0,7,7,7,0.0,0.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-1.0,1.0,1.4870949896795608e-07,True,True,False,1.0,0.00011019373873525546,1.0,0.00011019373873525546,empty sig. better,empty sig. better,empty sig. better,empty sig. better
-google/gemini-2.5-flash,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-flash,middle-aged-ankle-surgery,28,0,28,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1.4870949896795608e-07,1.0,False,False,True,1.0,1.0,0.00011019373873525546,1.0,n.s.,text sig. better,n.s.,text sig. better
 google/gemini-2.5-flash,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-flash,middle-aged-ankle-surgery,28,7,28,7,0,7,0.25,1.0,0.0,1.0,0.25,0.17607799515801872,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-flash,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -297,8 +297,8 @@ google/gemini-2.5-pro,elderly-female-renal-colic,28,4,21,7,0,5,0.142857142857142
 google/gemini-2.5-pro,elderly-female-renal-colic,27,0,27,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,elderly-female-renal-colic,27,0,27,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,elderly-hip-fracture,28,10,28,7,7,7,0.35714285714285715,1.0,1.0,1.0,-0.6428571428571428,1.0,0.002892102335928809,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
-google/gemini-2.5-pro,elderly-hip-fracture,28,28,28,6,0,6,1.0,1.0,0.0,1.0,1.0,7.435474948397803e-07,1.0,0.0,1.0,1.0,True,False,False,0.0005509686936762772,1.0,1.0,1.0,text sig. better,n.s.,text sig. better,n.s.
-google/gemini-2.5-pro,elderly-hip-fracture,27,27,27,7,0,7,1.0,1.0,0.0,1.0,1.0,1.8588687370994508e-07,1.0,0.0,1.0,1.0,True,True,False,0.0001377421734190693,1.0,1.0,1.0,text sig. better,n.s.,text sig. better,n.s.
+google/gemini-2.5-pro,elderly-hip-fracture,28,28,28,6,6,6,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+google/gemini-2.5-pro,elderly-hip-fracture,27,27,27,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,elderly-hip-replacement,27,27,27,6,6,6,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -308,7 +308,7 @@ google/gemini-2.5-pro,elderly-male-abdominal-surgery,28,28,28,7,7,7,1.0,1.0,1.0,
 google/gemini-2.5-pro,middle-aged-ankle-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,middle-aged-ankle-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,middle-aged-ankle-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-google/gemini-2.5-pro,middle-aged-ankle-surgery,28,28,28,7,0,0,1.0,1.0,0.0,0.0,1.0,1.4870949896795608e-07,1.0,1.0,1.4870949896795608e-07,1.0,False,False,True,0.00011019373873525546,1.0,0.00011019373873525546,1.0,text sig. better,text sig. better,text sig. better,text sig. better
+google/gemini-2.5-pro,middle-aged-ankle-surgery,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 google/gemini-2.5-pro,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -353,9 +353,9 @@ meta-llama/llama-3.3-70b-instruct,elderly-female-pancreatic-carcinoma,28,0,28,7,
 meta-llama/llama-3.3-70b-instruct,elderly-female-renal-colic,28,7,7,7,7,7,0.25,0.25,1.0,1.0,-0.75,1.0,0.0005103710004580252,-0.75,1.0,0.0005103710004580252,False,False,True,1.0,0.3781849113393967,1.0,0.3781849113393967,n.s.,n.s.,empty sig. better,empty sig. better
 meta-llama/llama-3.3-70b-instruct,elderly-female-renal-colic,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 meta-llama/llama-3.3-70b-instruct,elderly-female-renal-colic,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,28,3,20,7,7,7,0.10714285714285714,0.7142857142857143,1.0,1.0,-0.8928571428571429,1.0,1.784513987615473e-05,-0.2857142857142857,1.0,0.13205849636851405,False,False,False,1.0,0.013223248648230655,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
-meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,28,0,26,7,0,7,0.0,0.9285714285714286,0.0,1.0,0.0,1.0,1.0,-0.0714285714285714,1.0,0.6352941176470588,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,28,3,20,7,0,7,0.10714285714285714,0.7142857142857143,0.0,1.0,0.10714285714285714,0.5005347593582888,1.0,-0.2857142857142857,1.0,0.13205849636851405,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,28,0,28,7,7,7,0.0,1.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,0.0,1.0,1.0,True,False,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
+meta-llama/llama-3.3-70b-instruct,elderly-hip-fracture,28,0,26,7,7,7,0.0,0.9285714285714286,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-0.0714285714285714,1.0,0.6352941176470588,True,True,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
 meta-llama/llama-3.3-70b-instruct,elderly-hip-replacement,28,0,28,7,7,7,0.0,1.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,0.0,1.0,1.0,False,False,True,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
 meta-llama/llama-3.3-70b-instruct,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 meta-llama/llama-3.3-70b-instruct,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -365,10 +365,10 @@ meta-llama/llama-3.3-70b-instruct,elderly-male-abdominal-surgery,28,28,28,7,7,7,
 meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-replacement,28,0,26,7,0,7,0.0,0.9285714285714286,0.0,1.0,0.0,1.0,1.0,-0.0714285714285714,1.0,0.6352941176470588,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-replacement,28,9,16,7,7,7,0.32142857142857145,0.5714285714285714,1.0,1.0,-0.6785714285714286,1.0,0.0017012366681934178,-0.4285714285714286,1.0,0.03645717463848721,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,empty sig. better
 meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-replacement,28,26,27,7,7,7,0.9285714285714286,0.9642857142857143,1.0,1.0,-0.0714285714285714,1.0,0.6352941176470588,-0.0357142857142857,1.0,0.8,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-surgery,28,0,21,7,0,0,0.0,0.75,0.0,0.0,0.0,1.0,1.0,0.75,0.0005103710004580252,1.0,False,False,True,1.0,1.0,0.3781849113393967,1.0,n.s.,n.s.,n.s.,text sig. better
+meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-surgery,28,0,21,7,0,7,0.0,0.75,0.0,1.0,0.0,1.0,1.0,-0.25,1.0,0.17607799515801872,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 meta-llama/llama-3.3-70b-instruct,middle-aged-ankle-surgery,28,0,25,7,0,7,0.0,0.8928571428571429,0.0,1.0,0.0,1.0,1.0,-0.1071428571428571,1.0,0.5005347593582888,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-meta-llama/llama-3.3-70b-instruct,middle-aged-carpenter-amputation,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+meta-llama/llama-3.3-70b-instruct,middle-aged-carpenter-amputation,28,0,28,7,7,7,0.0,1.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,0.0,1.0,1.0,False,False,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
 meta-llama/llama-3.3-70b-instruct,middle-aged-carpenter-amputation,28,0,0,7,0,6,0.0,0.0,0.0,0.8571428571428571,0.0,1.0,1.0,-0.8571428571428571,1.0,4.312575470070726e-06,True,False,False,1.0,1.0,1.0,0.003195618423322408,n.s.,empty sig. better,n.s.,empty sig. better
 meta-llama/llama-3.3-70b-instruct,middle-aged-carpenter-amputation,28,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,True,True,False,1.0,1.0,1.0,0.00011019373873525546,n.s.,empty sig. better,n.s.,empty sig. better
 meta-llama/llama-3.3-70b-instruct,middle-aged-female-cancer,28,2,2,7,7,7,0.07142857142857142,0.07142857142857142,1.0,1.0,-0.9285714285714286,1.0,5.353541962846419e-06,-0.9285714285714286,1.0,5.353541962846419e-06,False,False,False,1.0,0.003966974594469197,1.0,0.003966974594469197,empty sig. better,empty sig. better,empty sig. better,empty sig. better
@@ -410,9 +410,9 @@ mistralai/mistral-large-2407,elderly-female-pancreatic-carcinoma,28,0,28,7,0,7,0
 mistralai/mistral-large-2407,elderly-female-renal-colic,28,0,14,7,1,7,0.0,0.5,0.14285714285714285,1.0,-0.14285714285714285,1.0,0.2,-0.5,1.0,0.01729194053999393,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
 mistralai/mistral-large-2407,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mistral-large-2407,elderly-female-renal-colic,28,0,28,7,0,2,0.0,1.0,0.0,0.2857142857142857,0.0,1.0,1.0,0.7142857142857143,6.468863205106089e-05,1.0,True,True,True,1.0,1.0,0.04793427634983612,1.0,n.s.,text sig. better,n.s.,text sig. better
-mistralai/mistral-large-2407,elderly-hip-fracture,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-mistralai/mistral-large-2407,elderly-hip-fracture,28,0,14,7,0,7,0.0,0.5,0.0,1.0,0.0,1.0,1.0,-0.5,1.0,0.01729194053999393,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
-mistralai/mistral-large-2407,elderly-hip-fracture,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,elderly-hip-fracture,28,28,28,7,1,7,1.0,1.0,0.14285714285714285,1.0,0.8571428571428572,4.312575470070726e-06,1.0,0.0,1.0,1.0,False,False,False,0.003195618423322408,1.0,1.0,1.0,text sig. better,n.s.,text sig. better,n.s.
+mistralai/mistral-large-2407,elderly-hip-fracture,28,0,14,7,7,7,0.0,0.5,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-0.5,1.0,0.01729194053999393,True,False,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,empty sig. better
+mistralai/mistral-large-2407,elderly-hip-fracture,28,0,28,7,7,7,0.0,1.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,0.0,1.0,1.0,True,True,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
 mistralai/mistral-large-2407,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mistral-large-2407,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mistral-large-2407,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -425,7 +425,7 @@ mistralai/mistral-large-2407,middle-aged-ankle-replacement,28,28,28,7,7,7,1.0,1.
 mistralai/mistral-large-2407,middle-aged-ankle-surgery,28,21,28,7,0,7,0.75,1.0,0.0,1.0,0.75,0.0005103710004580252,1.0,0.0,1.0,1.0,False,False,True,0.3781849113393967,1.0,1.0,1.0,n.s.,n.s.,text sig. better,n.s.
 mistralai/mistral-large-2407,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mistral-large-2407,middle-aged-ankle-surgery,28,6,28,7,0,7,0.21428571428571427,1.0,0.0,1.0,0.21428571428571427,0.23210281179920647,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-mistralai/mistral-large-2407,middle-aged-carpenter-amputation,28,6,22,7,0,7,0.21428571428571427,0.7857142857142857,0.0,1.0,0.21428571428571427,0.23210281179920647,1.0,-0.2142857142857143,1.0,0.23210281179920647,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mistral-large-2407,middle-aged-carpenter-amputation,28,6,22,7,0,6,0.21428571428571427,0.7857142857142857,0.0,0.8571428571428571,0.21428571428571427,0.23210281179920647,1.0,-0.0714285714285714,0.8239220048419813,0.568251711646333,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mistral-large-2407,middle-aged-carpenter-amputation,28,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,True,False,False,1.0,1.0,1.0,0.00011019373873525546,n.s.,empty sig. better,n.s.,empty sig. better
 mistralai/mistral-large-2407,middle-aged-carpenter-amputation,28,0,0,7,0,7,0.0,0.0,0.0,1.0,0.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,True,True,False,1.0,1.0,1.0,0.00011019373873525546,n.s.,empty sig. better,n.s.,empty sig. better
 mistralai/mistral-large-2407,middle-aged-female-cancer,28,21,21,7,7,7,0.75,0.75,1.0,1.0,-0.25,1.0,0.17607799515801872,-0.25,1.0,0.17607799515801872,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -467,9 +467,9 @@ mistralai/mixtral-8x22b-instruct,elderly-female-pancreatic-carcinoma,28,0,28,7,0
 mistralai/mixtral-8x22b-instruct,elderly-female-renal-colic,28,24,28,7,7,7,0.8571428571428571,1.0,1.0,1.0,-0.1428571428571429,1.0,0.391042780748663,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mixtral-8x22b-instruct,elderly-female-renal-colic,28,0,28,7,0,0,0.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1.4870949896795608e-07,1.0,True,False,True,1.0,1.0,0.00011019373873525546,1.0,n.s.,text sig. better,n.s.,text sig. better
 mistralai/mixtral-8x22b-instruct,elderly-female-renal-colic,28,0,28,7,1,5,0.0,1.0,0.14285714285714285,0.7142857142857143,-0.14285714285714285,1.0,0.2,0.2857142857142857,0.03529411764705882,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,text sig. better
-mistralai/mixtral-8x22b-instruct,elderly-hip-fracture,28,14,14,7,0,0,0.5,0.5,0.0,0.0,0.5,0.01729194053999393,1.0,0.5,0.01729194053999393,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,text sig. better,text sig. better
+mistralai/mixtral-8x22b-instruct,elderly-hip-fracture,28,14,14,7,0,7,0.5,0.5,0.0,1.0,0.5,0.01729194053999393,1.0,-0.5,1.0,0.01729194053999393,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,text sig. better,empty sig. better
 mistralai/mixtral-8x22b-instruct,elderly-hip-fracture,28,0,28,7,7,7,0.0,1.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,0.0,1.0,1.0,True,False,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
-mistralai/mixtral-8x22b-instruct,elderly-hip-fracture,28,1,28,7,1,7,0.03571428571428571,1.0,0.14285714285714285,1.0,-0.10714285714285714,0.9647058823529412,0.36470588235294116,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,elderly-hip-fracture,28,1,28,7,7,7,0.03571428571428571,1.0,1.0,1.0,-0.9642857142857143,1.0,1.1896759917436484e-06,0.0,1.0,1.0,True,True,False,1.0,0.0008815499098820434,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
 mistralai/mixtral-8x22b-instruct,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mixtral-8x22b-instruct,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mixtral-8x22b-instruct,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -483,8 +483,8 @@ mistralai/mixtral-8x22b-instruct,middle-aged-ankle-surgery,28,7,28,7,0,7,0.25,1.
 mistralai/mixtral-8x22b-instruct,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mixtral-8x22b-instruct,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mixtral-8x22b-instruct,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-mistralai/mixtral-8x22b-instruct,middle-aged-carpenter-amputation,28,0,14,7,0,7,0.0,0.5,0.0,1.0,0.0,1.0,1.0,-0.5,1.0,0.01729194053999393,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
-mistralai/mixtral-8x22b-instruct,middle-aged-carpenter-amputation,28,0,6,7,0,5,0.0,0.21428571428571427,0.0,0.7142857142857143,0.0,1.0,1.0,-0.5,0.9983020349407838,0.020660210691618133,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
+mistralai/mixtral-8x22b-instruct,middle-aged-carpenter-amputation,28,0,14,7,0,6,0.0,0.5,0.0,0.8571428571428571,0.0,1.0,1.0,-0.3571428571428571,0.9884720396400041,0.09798766305996563,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+mistralai/mixtral-8x22b-instruct,middle-aged-carpenter-amputation,28,0,6,7,0,0,0.0,0.21428571428571427,0.0,0.0,0.0,1.0,1.0,0.21428571428571427,0.23210281179920647,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mixtral-8x22b-instruct,middle-aged-female-cancer,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 mistralai/mixtral-8x22b-instruct,middle-aged-female-cancer,28,28,28,7,0,0,1.0,1.0,0.0,0.0,1.0,1.4870949896795608e-07,1.0,1.0,1.4870949896795608e-07,1.0,True,False,False,0.00011019373873525546,1.0,0.00011019373873525546,1.0,text sig. better,text sig. better,text sig. better,text sig. better
 mistralai/mixtral-8x22b-instruct,middle-aged-female-cancer,28,28,28,7,1,1,1.0,1.0,0.14285714285714285,0.14285714285714285,0.8571428571428572,4.312575470070726e-06,1.0,0.8571428571428572,4.312575470070726e-06,1.0,True,True,False,0.003195618423322408,1.0,0.003195618423322408,1.0,text sig. better,text sig. better,text sig. better,text sig. better
@@ -537,8 +537,8 @@ openai/gpt-3.5-turbo,middle-aged-ankle-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.
 openai/gpt-3.5-turbo,middle-aged-ankle-replacement,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-3.5-turbo,middle-aged-ankle-replacement,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-3.5-turbo,middle-aged-ankle-surgery,28,28,28,7,0,0,1.0,1.0,0.0,0.0,1.0,1.4870949896795608e-07,1.0,1.0,1.4870949896795608e-07,1.0,False,False,True,0.00011019373873525546,1.0,0.00011019373873525546,1.0,text sig. better,text sig. better,text sig. better,text sig. better
-openai/gpt-3.5-turbo,middle-aged-ankle-surgery,28,0,24,7,0,0,0.0,0.8571428571428571,0.0,0.0,0.0,1.0,1.0,0.8571428571428571,4.90741346594255e-05,1.0,True,False,True,1.0,1.0,0.0363639337826343,1.0,n.s.,text sig. better,n.s.,text sig. better
-openai/gpt-3.5-turbo,middle-aged-ankle-surgery,28,0,15,7,0,0,0.0,0.5357142857142857,0.0,0.0,0.0,1.0,1.0,0.5357142857142857,0.011527960359995957,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,text sig. better
+openai/gpt-3.5-turbo,middle-aged-ankle-surgery,28,0,24,7,0,7,0.0,0.8571428571428571,0.0,1.0,0.0,1.0,1.0,-0.1428571428571429,1.0,0.391042780748663,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-3.5-turbo,middle-aged-ankle-surgery,28,0,15,7,0,7,0.0,0.5357142857142857,0.0,1.0,0.0,1.0,1.0,-0.4642857142857143,1.0,0.025361512791991107,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
 openai/gpt-3.5-turbo,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-3.5-turbo,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-3.5-turbo,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -582,8 +582,8 @@ openai/gpt-4.1,elderly-female-renal-colic,28,7,28,7,0,7,0.25,1.0,0.0,1.0,0.25,0.
 openai/gpt-4.1,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1,elderly-hip-fracture,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-openai/gpt-4.1,elderly-hip-fracture,28,7,28,7,0,7,0.25,1.0,0.0,1.0,0.25,0.17607799515801872,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-openai/gpt-4.1,elderly-hip-fracture,28,11,28,7,0,7,0.39285714285714285,1.0,0.0,1.0,0.39285714285714285,0.051468952430805466,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+openai/gpt-4.1,elderly-hip-fracture,28,7,28,7,7,7,0.25,1.0,1.0,1.0,-0.75,1.0,0.0005103710004580252,0.0,1.0,1.0,True,False,False,1.0,0.3781849113393967,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
+openai/gpt-4.1,elderly-hip-fracture,28,11,28,7,7,7,0.39285714285714285,1.0,1.0,1.0,-0.6071428571428572,1.0,0.004732531095156234,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
 openai/gpt-4.1,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -593,7 +593,7 @@ openai/gpt-4.1,elderly-male-abdominal-surgery,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0
 openai/gpt-4.1,middle-aged-ankle-replacement,28,15,28,7,7,7,0.5357142857142857,1.0,1.0,1.0,-0.4642857142857143,1.0,0.025361512791991107,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
 openai/gpt-4.1,middle-aged-ankle-replacement,28,8,8,7,3,3,0.2857142857142857,0.2857142857142857,0.42857142857142855,0.42857142857142855,-0.14285714285714285,0.8800137407577047,0.38071713668782303,-0.14285714285714285,0.8800137407577047,0.38071713668782303,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1,middle-aged-ankle-replacement,28,9,9,7,7,7,0.32142857142857145,0.32142857142857145,1.0,1.0,-0.6785714285714286,1.0,0.0017012366681934178,-0.6785714285714286,1.0,0.0017012366681934178,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,empty sig. better
-openai/gpt-4.1,middle-aged-ankle-surgery,28,7,28,7,0,0,0.25,1.0,0.0,0.0,0.25,0.17607799515801872,1.0,1.0,1.4870949896795608e-07,1.0,False,False,True,1.0,1.0,0.00011019373873525546,1.0,n.s.,text sig. better,n.s.,text sig. better
+openai/gpt-4.1,middle-aged-ankle-surgery,28,7,28,7,7,7,0.25,1.0,1.0,1.0,-0.75,1.0,0.0005103710004580252,0.0,1.0,1.0,False,False,True,1.0,0.3781849113393967,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
 openai/gpt-4.1,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1,middle-aged-carpenter-amputation,28,0,7,7,0,0,0.0,0.25,0.0,0.0,0.0,1.0,1.0,0.25,0.17607799515801872,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -638,9 +638,9 @@ openai/gpt-4.1-mini,elderly-female-pancreatic-carcinoma,28,0,28,7,0,7,0.0,1.0,0.
 openai/gpt-4.1-mini,elderly-female-renal-colic,28,21,28,7,0,7,0.75,1.0,0.0,1.0,0.75,0.0005103710004580252,1.0,0.0,1.0,1.0,False,False,True,0.3781849113393967,1.0,1.0,1.0,n.s.,n.s.,text sig. better,n.s.
 openai/gpt-4.1-mini,elderly-female-renal-colic,28,0,24,7,0,1,0.0,0.8571428571428571,0.0,0.14285714285714285,0.0,1.0,1.0,0.7142857142857142,0.0007985700094579242,0.9999821548601239,True,False,True,1.0,1.0,0.5917403770083218,1.0,n.s.,n.s.,n.s.,text sig. better
 openai/gpt-4.1-mini,elderly-female-renal-colic,28,0,27,7,0,2,0.0,0.9642857142857143,0.0,0.2857142857142857,0.0,1.0,1.0,0.6785714285714286,0.0003665689149560117,0.9999956874245299,True,True,True,1.0,1.0,0.2716275659824047,1.0,n.s.,n.s.,n.s.,text sig. better
-openai/gpt-4.1-mini,elderly-hip-fracture,28,0,12,7,0,7,0.0,0.42857142857142855,0.0,1.0,0.0,1.0,1.0,-0.5714285714285714,1.0,0.007493174233997371,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
-openai/gpt-4.1-mini,elderly-hip-fracture,28,1,13,7,0,7,0.03571428571428571,0.4642857142857143,0.0,1.0,0.03571428571428571,0.8,1.0,-0.5357142857142857,1.0,0.011527960359995957,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,empty sig. better
-openai/gpt-4.1-mini,elderly-hip-fracture,28,0,3,7,0,7,0.0,0.10714285714285714,0.0,1.0,0.0,1.0,1.0,-0.8928571428571429,1.0,1.784513987615473e-05,True,True,False,1.0,1.0,1.0,0.013223248648230655,n.s.,empty sig. better,n.s.,empty sig. better
+openai/gpt-4.1-mini,elderly-hip-fracture,28,0,12,7,7,7,0.0,0.42857142857142855,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-0.5714285714285714,1.0,0.007493174233997371,False,False,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,empty sig. better
+openai/gpt-4.1-mini,elderly-hip-fracture,28,1,13,7,7,7,0.03571428571428571,0.4642857142857143,1.0,1.0,-0.9642857142857143,1.0,1.1896759917436484e-06,-0.5357142857142857,1.0,0.011527960359995957,True,False,False,1.0,0.0008815499098820434,1.0,1.0,empty sig. better,n.s.,empty sig. better,empty sig. better
+openai/gpt-4.1-mini,elderly-hip-fracture,28,0,3,7,7,7,0.0,0.10714285714285714,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,-0.8928571428571429,1.0,1.784513987615473e-05,True,True,False,1.0,0.00011019373873525546,1.0,0.013223248648230655,empty sig. better,empty sig. better,empty sig. better,empty sig. better
 openai/gpt-4.1-mini,elderly-hip-replacement,28,21,28,7,7,7,0.75,1.0,1.0,1.0,-0.25,1.0,0.17607799515801872,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1-mini,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1-mini,elderly-hip-replacement,28,27,28,7,7,7,0.9642857142857143,1.0,1.0,1.0,-0.0357142857142857,1.0,0.8,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -650,7 +650,7 @@ openai/gpt-4.1-mini,elderly-male-abdominal-surgery,28,28,28,7,7,7,1.0,1.0,1.0,1.
 openai/gpt-4.1-mini,middle-aged-ankle-replacement,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1-mini,middle-aged-ankle-replacement,28,12,12,7,2,2,0.42857142857142855,0.42857142857142855,0.2857142857142857,0.2857142857142857,0.14285714285714285,0.4056401051673576,0.8697340479320457,0.14285714285714285,0.4056401051673576,0.8697340479320457,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1-mini,middle-aged-ankle-replacement,28,11,11,7,4,4,0.39285714285714285,0.39285714285714285,0.5714285714285714,0.5714285714285714,-0.17857142857142855,0.8993080547013022,0.33209879664273445,-0.17857142857142855,0.8993080547013022,0.33209879664273445,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-openai/gpt-4.1-mini,middle-aged-ankle-surgery,28,8,27,7,0,0,0.2857142857142857,0.9642857142857143,0.0,0.0,0.2857142857142857,0.13205849636851405,1.0,0.9642857142857143,1.1896759917436484e-06,1.0,False,False,True,1.0,1.0,0.0008815499098820434,1.0,n.s.,text sig. better,n.s.,text sig. better
+openai/gpt-4.1-mini,middle-aged-ankle-surgery,28,8,27,7,0,7,0.2857142857142857,0.9642857142857143,0.0,1.0,0.2857142857142857,0.13205849636851405,1.0,-0.0357142857142857,1.0,0.8,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1-mini,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1-mini,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 openai/gpt-4.1-mini,middle-aged-carpenter-amputation,28,14,25,7,0,0,0.5,0.8928571428571429,0.0,0.0,0.5,0.01729194053999393,1.0,0.8928571428571429,1.784513987615473e-05,1.0,False,False,False,1.0,1.0,0.013223248648230655,1.0,n.s.,text sig. better,text sig. better,text sig. better
@@ -695,9 +695,9 @@ qwen/qwen-2.5-72b-instruct,elderly-female-pancreatic-carcinoma,28,0,28,7,0,7,0.0
 qwen/qwen-2.5-72b-instruct,elderly-female-renal-colic,28,11,28,7,7,7,0.39285714285714285,1.0,1.0,1.0,-0.6071428571428572,1.0,0.004732531095156234,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
 qwen/qwen-2.5-72b-instruct,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 qwen/qwen-2.5-72b-instruct,elderly-female-renal-colic,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,13,13,13,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,13,13,13,7,0,7,1.0,1.0,0.0,1.0,1.0,1.2899896800825593e-05,1.0,0.0,1.0,1.0,False,False,False,0.009558823529411764,1.0,1.0,1.0,text sig. better,n.s.,text sig. better,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,28,0,28,7,7,7,0.0,1.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,0.0,1.0,1.0,True,False,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
+qwen/qwen-2.5-72b-instruct,elderly-hip-fracture,28,0,28,7,7,7,0.0,1.0,1.0,1.0,-1.0,1.0,1.4870949896795608e-07,0.0,1.0,1.0,True,True,False,1.0,0.00011019373873525546,1.0,1.0,empty sig. better,n.s.,empty sig. better,n.s.
 qwen/qwen-2.5-72b-instruct,elderly-hip-replacement,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 qwen/qwen-2.5-72b-instruct,elderly-hip-replacement,28,14,28,7,7,7,0.5,1.0,1.0,1.0,-0.5,1.0,0.01729194053999393,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,empty sig. better,n.s.
 qwen/qwen-2.5-72b-instruct,elderly-hip-replacement,28,26,28,7,7,7,0.9285714285714286,1.0,1.0,1.0,-0.0714285714285714,1.0,0.6352941176470588,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
@@ -707,7 +707,7 @@ qwen/qwen-2.5-72b-instruct,elderly-male-abdominal-surgery,28,28,28,7,7,7,1.0,1.0
 qwen/qwen-2.5-72b-instruct,middle-aged-ankle-replacement,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 qwen/qwen-2.5-72b-instruct,middle-aged-ankle-replacement,28,22,28,7,7,7,0.7857142857142857,1.0,1.0,1.0,-0.2142857142857143,1.0,0.23210281179920647,0.0,1.0,1.0,True,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 qwen/qwen-2.5-72b-instruct,middle-aged-ankle-replacement,28,23,28,7,7,7,0.8214285714285714,1.0,1.0,1.0,-0.1785714285714286,1.0,0.302742797998965,0.0,1.0,1.0,True,True,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
-qwen/qwen-2.5-72b-instruct,middle-aged-ankle-surgery,28,28,28,7,7,7,1.0,1.0,1.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
+qwen/qwen-2.5-72b-instruct,middle-aged-ankle-surgery,28,28,28,7,0,0,1.0,1.0,0.0,0.0,1.0,1.4870949896795608e-07,1.0,1.0,1.4870949896795608e-07,1.0,False,False,True,0.00011019373873525546,1.0,0.00011019373873525546,1.0,text sig. better,text sig. better,text sig. better,text sig. better
 qwen/qwen-2.5-72b-instruct,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,False,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 qwen/qwen-2.5-72b-instruct,middle-aged-ankle-surgery,28,0,28,7,0,7,0.0,1.0,0.0,1.0,0.0,1.0,1.0,0.0,1.0,1.0,True,True,True,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.
 qwen/qwen-2.5-72b-instruct,middle-aged-carpenter-amputation,28,0,0,7,0,0,0.0,0.0,0.0,0.0,0.0,1.0,1.0,0.0,1.0,1.0,False,False,False,1.0,1.0,1.0,1.0,n.s.,n.s.,n.s.,n.s.

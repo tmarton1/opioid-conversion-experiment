@@ -28,6 +28,9 @@ Deviations from the plan (recorded in REVISION_STATUS.md):
     with blank values.
   * The prompt and response text columns are not copied into results_<score>/
     (the pipeline does not read them); the raw files in results/ keep them.
+  * Empty-vignette prompts in the four scenarios whose text asks for a clinical
+    dose reduction are scored against the unreduced conversion they ask for
+    (author decision 2026-11-14; analysis/revision/vignette_targets.py).
 """
 from __future__ import annotations
 
@@ -39,6 +42,7 @@ import numpy as np
 import pandas as pd
 
 from analysis.revision.scores import SCORES, SCORING_INPUTS, rescored_names
+from analysis.revision.vignette_targets import load_raw
 from resources.reference_data import REFERENCES
 
 RAW_FILES = {
@@ -133,7 +137,9 @@ def rescore(raw_dir: str = "results", out_root: str = ".", revision_dir: str = "
     scores = scores or rescored_names()
     long_parts, coverage = [], []
     for experiment, fname in RAW_FILES.items():
-        raw = pd.read_csv(os.path.join(raw_dir, fname), low_memory=False)
+        # empty-vignette prompts scored against the conversion they ask for
+        # (clinical dose reduction removed; analysis/revision/vignette_targets.py)
+        raw = load_raw(raw_dir, fname)
         exp = expected_by_standard(raw)
         n_avail = exp[[f"expected_{s}" for s in SCORING_INPUTS]].notna().sum(axis=1)
         ratio_n = _ratio(raw["observed_to_dose"], exp["expected_nielsen"])

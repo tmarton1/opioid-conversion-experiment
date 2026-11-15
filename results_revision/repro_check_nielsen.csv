@@ -3,23 +3,28 @@ comparison_cross_empty_vs_text.csv,missing_in_new,
 comparison_cross_rd_vs_empty.csv,missing_in_new,
 comparison_cross_rd_vs_text.csv,missing_in_new,
 comparison_dosing_unit_effect.csv,different,after dropping 14 extra-model rows: rows 182 vs 261
+comparison_nielsen_effect_empty_vignettes.csv,missing_in_ref,
 comparison_nielsen_effect_pairs.csv,missing_in_new,
 comparison_nielsen_effect_random_dose.csv,different,after dropping 113 extra-model rows: rows 639 vs 750
 comparison_nielsen_effect_random_dose_nonome.csv,identical,
 comparison_nielsen_effect_random_dose_ome.csv,different,after dropping 47 extra-model rows: rows 249 vs 294
-comparison_nielsen_effect_vignettes.csv,different,after dropping 20 extra-model rows: rows 520 vs 540
-comparison_nielsen_effect_vignettes_nonome.csv,identical,
-comparison_nielsen_effect_vignettes_ome.csv,different,after dropping 11 extra-model rows: rows 286 vs 297
+comparison_nielsen_effect_vignettes.csv,different,after dropping 20 extra-model rows: rows 520 vs 280
+comparison_nielsen_effect_vignettes_nonome.csv,different,after dropping 9 extra-model rows: rows 234 vs 126
+comparison_nielsen_effect_vignettes_ome.csv,different,after dropping 11 extra-model rows: rows 286 vs 154
 comparison_ome_vs_nonome_naive.csv,identical,
 comparison_ome_vs_nonome_naive_permodel.csv,identical,
 comparison_ome_vs_nonome_nielsen.csv,identical,
 comparison_ome_vs_nonome_nielsen_permodel.csv,identical,
-comparison_text_vs_empty.csv,different,"empty_n: 3 cells, max |diff| 7; empty_tight: 3 cells, max |diff| 7; empty_broad: 3 cells, max |diff| 7; tight_p_b_better: 2 cells, max |diff| 0.196; broad_p_b_better: 1 cells, max |diff| 0.0131; tight_p_b_better_bonf: 1 cells, max |diff| 0.000114"
+comparison_text_vs_empty.csv,different,"empty_n: 3 cells, max |diff| 7; empty_tight: 108 cells, max |diff| 7; empty_broad: 43 cells, max |diff| 7; empty_tight_prop: 105 cells, max |diff| 1; empty_broad_prop: 40 cells, max |diff| 1; tight_diff: 105 cells, max |diff| 1"
+comparison_text_vs_empty_same_conversion.csv,missing_in_ref,
 comparison_units_effect_random_dose.csv,different,after dropping 15 extra-model rows: rows 195 vs 275
-comparison_units_effect_vignettes.csv,identical,
-cross_experiment_matched_means.csv,identical,
-cross_experiment_matched_spearman.csv,identical,
-cross_experiment_matched_wilcoxon.csv,identical,
+comparison_units_effect_vignettes.csv,different,after dropping 20 extra-model rows: rows 520 vs 280
+cross_experiment_matched_means.csv,different,"mean_tight: 9 cells, max |diff| 0.0909; mean_broad: 4 cells, max |diff| 0.0909"
+cross_experiment_matched_means_same_conversion.csv,missing_in_ref,
+cross_experiment_matched_spearman.csv,different,"spearman_rho: 26 cells, max |diff| 0.434; spearman_p: 26 cells, max |diff| 0.556"
+cross_experiment_matched_spearman_same_conversion.csv,missing_in_ref,
+cross_experiment_matched_wilcoxon.csv,different,"tight_diff: 18 cells, max |diff| 0.0909; tight_wilcoxon_stat: 15 cells, max |diff| 8; tight_wilcoxon_p: 17 cells, max |diff| 0.625; broad_diff: 8 cells, max |diff| 0.0909; broad_wilcoxon_stat: 8 cells, max |diff| 10; broad_wilcoxon_p: 8 cells, max |diff| 0.531"
+cross_experiment_matched_wilcoxon_same_conversion.csv,missing_in_ref,
 cv_accuracy_chi2.csv,identical,
 experiment_results_by_ome.csv,identical,
 explain_units_experiment_results_by_ome.csv,different,after dropping 750 extra-model rows: rows 9743 vs 13625
@@ -31,7 +36,8 @@ icc_analysis.csv,identical,
 kendall_w_vignettes.csv,identical,"same rows, different order"
 model_batch_means.csv,identical,
 model_batch_means_explain_units.csv,different,"after dropping 3 extra-model rows: columns differ (ref only [], new only ['has_vignette_text'])"
-model_batch_means_text_vs_empty.csv,identical,
+model_batch_means_text_vs_empty.csv,different,after dropping 9 extra-model rows: rows 234 vs 243
+model_batch_means_text_vs_empty_same_conversion.csv,missing_in_ref,
 model_batch_means_vignettes.csv,different,"after dropping 7 extra-model rows: columns differ (ref only [], new only ['has_vignette_text'])"
 opioid_pair_consensus.csv,identical,
 pair_model_analysis.csv,identical,
@@ -49,12 +55,14 @@ ranking_vignettes_nielsen_units.csv,expected_filter,"after dropping 1 extra-mode
 ranking_vignettes_nielsen_units_pairs.csv,expected_filter,"after dropping 13 extra-model rows: model_a: 24 cells; model_b: 24 cells; tight_p: 19 cells, max |diff| 0.289; broad_p: 36 cells, max |diff| 1; tight_p_bonf: 21 cells, max |diff| 0.961; broad_p_bonf: 28 cells, max |diff| 1"
 reworded_scenarios_model_analysis.csv,different,after dropping 60 extra-model rows: rows 1560 vs 1620
 reworded_vignettes_model_analysis.csv,different,after dropping 236 extra-model rows: rows 3893 vs 4129
-reworded_vignettes_model_consensus.csv,identical,
+reworded_vignettes_model_analysis_same_conversion.csv,missing_in_ref,
+reworded_vignettes_model_consensus.csv,different,"t_score_log: 12 cells, max |diff| 25.7; p_value_log: 12 cells, max |diff| 0.875; expected_to_dose: 12 cells, max |diff| 75"
 reworded_vignettes_results_by_ome.csv,different,after dropping 1648 extra-model rows: rows 27183 vs 28814
 scenario_experiment_results.csv,missing_in_new,
 scenario_experiment_results_by_ome.csv,missing_in_new,
 scenario_model_analysis.csv,missing_in_new,
-text_effect_differences.csv,identical,
+text_effect_differences.csv,different,"empty_tight: 97 cells, max |diff| 0.222; empty_broad: 74 cells, max |diff| 0.169; diff_tight: 97 cells, max |diff| 0.222; diff_broad: 74 cells, max |diff| 0.169"
+text_effect_differences_same_conversion.csv,missing_in_ref,
 text_effect_significance.csv,missing_in_new,
 variance_icc_spearman.csv,identical,
 vignette_model_analysis.csv,missing_in_new,
@@ -64,17 +72,19 @@ wilcoxon_cross_empty_vs_text.csv,missing_in_new,
 wilcoxon_cross_rd_vs_empty.csv,missing_in_new,
 wilcoxon_cross_rd_vs_text.csv,missing_in_new,
 wilcoxon_dosing_unit_effect.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 13 cells, max |diff| 0.375; tight_median: 1 cells, max |diff| 0.02; tight_mean: 14 cells, max |diff| 0.104; tight_n: 14 cells, max |diff| 51; broad_p: 13 cells, max |diff| 0.5; broad_median: 8 cells, max |diff| 0.1"
+wilcoxon_nielsen_effect_empty_vignettes.csv,missing_in_ref,
 wilcoxon_nielsen_effect_pairs.csv,missing_in_new,
 wilcoxon_nielsen_effect_random_dose.csv,expected_filter,"after dropping 3 extra-model rows: tight_median: 3 cells, max |diff| 0.0665; tight_mean: 3 cells, max |diff| 0.0383; tight_n: 3 cells, max |diff| 115; broad_median: 3 cells, max |diff| 0.0144; broad_mean: 3 cells, max |diff| 0.00742; broad_n: 3 cells, max |diff| 115"
 wilcoxon_nielsen_effect_random_dose_nonome.csv,expected_filter,"after dropping 3 extra-model rows: tight_mean: 1 cells, max |diff| 0.0614; tight_n: 1 cells, max |diff| 66; broad_mean: 1 cells, max |diff| 0.00896; broad_n: 1 cells, max |diff| 66"
 wilcoxon_nielsen_effect_random_dose_ome.csv,expected_filter,"after dropping 3 extra-model rows: tight_median: 3 cells, max |diff| 0.0278; tight_mean: 3 cells, max |diff| 0.0407; tight_n: 3 cells, max |diff| 49; broad_median: 2 cells, max |diff| 0.0317; broad_mean: 3 cells, max |diff| 0.0263; broad_n: 3 cells, max |diff| 49"
-wilcoxon_nielsen_effect_vignettes.csv,expected_filter,"after dropping 1 extra-model rows: tight_median: 1 cells, max |diff| 0.0714; tight_mean: 1 cells, max |diff| 0.00556; tight_n: 1 cells, max |diff| 20; broad_p: 1 cells, max |diff| 1.93e-07; broad_mean: 1 cells, max |diff| 0.00269; broad_n: 1 cells, max |diff| 20"
-wilcoxon_nielsen_effect_vignettes_nonome.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 1 cells, max |diff| 1.71e-06; tight_mean: 1 cells, max |diff| 0.00553; tight_n: 1 cells, max |diff| 9; broad_p: 1 cells, max |diff| 8.5e-05; broad_mean: 1 cells, max |diff| 0.000837; broad_n: 1 cells, max |diff| 9"
-wilcoxon_nielsen_effect_vignettes_ome.csv,expected_filter,"after dropping 1 extra-model rows: tight_mean: 1 cells, max |diff| 0.00559; tight_n: 1 cells, max |diff| 11; broad_p: 1 cells, max |diff| 1.78e-08; broad_mean: 1 cells, max |diff| 0.00557; broad_n: 1 cells, max |diff| 11"
+wilcoxon_nielsen_effect_vignettes.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 13 cells, max |diff| 0.104; tight_median: 11 cells, max |diff| 0.304; tight_mean: 14 cells, max |diff| 0.1; tight_n: 14 cells, max |diff| 280; broad_p: 14 cells, max |diff| 0.685; broad_median: 4 cells, max |diff| 0.286"
+wilcoxon_nielsen_effect_vignettes_nonome.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 14 cells, max |diff| 0.875; tight_median: 8 cells, max |diff| 0.179; tight_mean: 13 cells, max |diff| 0.224; tight_n: 14 cells, max |diff| 126; broad_p: 14 cells, max |diff| 0.75; broad_median: 5 cells, max |diff| 0.25"
+wilcoxon_nielsen_effect_vignettes_ome.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 13 cells, max |diff| 0.0441; tight_median: 11 cells, max |diff| 0.321; tight_mean: 14 cells, max |diff| 0.106; tight_n: 14 cells, max |diff| 154; broad_p: 14 cells, max |diff| 0.2; broad_median: 5 cells, max |diff| 0.5"
 wilcoxon_ome_vs_nonome_naive.csv,missing_in_new,
 wilcoxon_ome_vs_nonome_naive_permodel.csv,identical,
 wilcoxon_ome_vs_nonome_nielsen.csv,missing_in_new,
 wilcoxon_ome_vs_nonome_nielsen_permodel.csv,identical,
-wilcoxon_text_vs_empty.csv,identical,
+wilcoxon_text_vs_empty.csv,expected_filter,"tight_p: 14 cells, max |diff| 0.666; tight_mean: 14 cells, max |diff| 0.148; broad_p: 14 cells, max |diff| 0.576; broad_mean: 13 cells, max |diff| 0.05"
+wilcoxon_text_vs_empty_same_conversion.csv,missing_in_ref,
 wilcoxon_units_effect_random_dose.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 12 cells, max |diff| 0.723; tight_median: 9 cells, max |diff| 0.14; tight_mean: 14 cells, max |diff| 0.253; tight_n: 14 cells, max |diff| 50; broad_p: 13 cells, max |diff| 0.812; broad_median: 9 cells, max |diff| 0.08"
-wilcoxon_units_effect_vignettes.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 1 cells, max |diff| 0.00126; tight_mean: 1 cells, max |diff| 0.000337; tight_n: 1 cells, max |diff| 20; broad_p: 1 cells, max |diff| 0.0628; broad_mean: 1 cells, max |diff| 0.00208; broad_n: 1 cells, max |diff| 20"
+wilcoxon_units_effect_vignettes.csv,expected_filter,"after dropping 1 extra-model rows: tight_p: 12 cells, max |diff| 0.5; tight_mean: 14 cells, max |diff| 0.0339; tight_n: 14 cells, max |diff| 280; broad_p: 12 cells, max |diff| 0.75; broad_mean: 14 cells, max |diff| 0.075; broad_n: 14 cells, max |diff| 280"

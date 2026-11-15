@@ -101,21 +101,41 @@ def _is_ome(df: pd.DataFrame) -> pd.Series:
     return df["from_opioid"].eq("oral_morphine") | df["to_opioid"].eq("oral_morphine")
 
 
-def _matched_keys(df: pd.DataFrame) -> set:
+def _matched_keys(df: pd.DataFrame, same_conversion_only: bool = False) -> set:
     """(from, to, from unit, to unit) shared by naive random doses and the
     single-drug vignettes: the matched conversions of figure 10
-    (analysis/cross_experiment_matched.py)."""
+    (analysis/cross_experiment_matched.py). With ``same_conversion_only`` the
+    vignettes are limited to scenarios whose text and empty prompts ask for the
+    same conversion (robustness check, author decision 2026-11-14)."""
+    from analysis.revision.vignette_targets import same_conversion_scenarios
     key = ["from_opioid", "to_opioid", "from_opioid_unit", "to_opioid_unit"]
     rd = df[df["experiment"].eq("random_dose")][key].drop_duplicates()
     vg = df[df["experiment"].eq("vignette") & ~df["from_opioid"].astype(str).str.contains(",")]
+    if same_conversion_only:
+        vg = vg[vg["scenario_key"].isin(same_conversion_scenarios())]
     vg = vg[key].drop_duplicates()
     return set(map(tuple, rd.merge(vg, on=key)[key].to_numpy()))
 
 
-def _matched(df: pd.DataFrame) -> pd.Series:
-    keys = _matched_keys(df.attrs.get("full_long", df))
-    k = list(zip(df["from_opioid"], df["to_opioid"], df["from_opioid_unit"], df["to_opioid_unit"]))
-    return pd.Series([x in keys for x in k], index=df.index)
+def _matched_fn(same_conversion_only: bool):
+    def keep(df: pd.DataFrame) -> pd.Series:
+        from analysis.revision.vignette_targets import same_conversion_scenarios
+        keys = _matched_keys(df.attrs.get("full_long", df), same_conversion_only)
+        k = list(zip(df["from_opioid"], df["to_opioid"], df["from_opioid_unit"], df["to_opioid_unit"]))
+        m = pd.Series([x in keys for x in k], index=df.index)
+        if same_conversion_only and "scenario_key" in df.columns:
+            m &= ~df["experiment"].eq("vignette") | df["scenario_key"].isin(same_conversion_scenarios())
+        return m
+    return keep
+
+
+def _same_conversion(df: pd.DataFrame) -> pd.Series:
+    """Vignette scenarios whose text and empty prompts ask for the same
+    conversion (non-vignette rows kept)."""
+    from analysis.revision.vignette_targets import same_conversion_scenarios
+    if "scenario_key" not in df.columns:
+        return pd.Series(True, index=df.index)
+    return ~df["experiment"].eq("vignette") | df["scenario_key"].isin(same_conversion_scenarios())
 
 
 DI2_AGENTS = ("methadone", "buprenorphine", "transdermal_fentanyl")
@@ -130,7 +150,14 @@ def _di2(df: pd.DataFrame) -> pd.Series:
 register_subset(Subset("all", "All conversions", lambda d: pd.Series(True, index=d.index)))
 register_subset(Subset("ome", "Conversions involving oral morphine", _is_ome))
 register_subset(Subset("nonome", "Opioid-to-opioid conversions", lambda d: ~_is_ome(d)))
-register_subset(Subset("matched", "Conversions matched across experiments (figure 10)", _matched))
+register_subset(Subset("matched", "Conversions matched across experiments (figure 10)", _matched_fn(False)))
+register_subset(Subset("matched_same_conversion",
+                       "Matched conversions, scenarios where text and empty prompts ask the same conversion",
+                       _matched_fn(True)))
+register_subset(Subset("same_conversion", "Scenarios where text and empty prompts ask the same conversion",
+                       _same_conversion))
+register_subset(Subset("reduction", "Scenarios whose text asks for a clinical dose reduction",
+                       lambda d: ~_same_conversion(d)))
 register_subset(Subset("di2", "Methadone, buprenorphine and fentanyl-patch items", _di2))
 register_subset(Subset("no_di2", "Excluding methadone, buprenorphine and fentanyl-patch items",
                        lambda d: ~_di2(d)))

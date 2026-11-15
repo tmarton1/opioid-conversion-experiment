@@ -63,8 +63,16 @@ def step_pipeline(args):
         rdir = f"results_{score}"
         if score == "nielsen":
             os.makedirs(rdir, exist_ok=True)
+            from analysis.revision.vignette_targets import VIGNETTE_FILE, load_raw
             for f in RAW_FILES:
-                shutil.copy2(os.path.join(RAW_DIR, f), os.path.join(rdir, f))
+                if f == VIGNETTE_FILE:
+                    # empty-vignette prompts scored against the conversion they ask for
+                    df = load_raw(RAW_DIR, f)
+                    tmp = os.path.join(rdir, f + ".tmp")
+                    df.to_csv(tmp, index=False)
+                    os.replace(tmp, os.path.join(rdir, f))
+                else:
+                    shutil.copy2(os.path.join(RAW_DIR, f), os.path.join(rdir, f))
         elif not os.path.exists(os.path.join(rdir, RAW_FILES[0])):
             raise SystemExit(f"{rdir}/ missing: run the rescore step first")
         _run([PY, "orchestration/run_analysis.py"], env=_env(score))

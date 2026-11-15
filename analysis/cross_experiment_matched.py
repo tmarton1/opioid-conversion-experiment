@@ -230,19 +230,20 @@ class CrossExperimentMatched:
 
     # ── save all ───────────────────────────────────────────────
 
-    def save(self, results_dir: str = RESULTS_DIR):
-        """Save all three CSVs to the results directory."""
+    def save(self, results_dir: str = RESULTS_DIR, suffix: str = ""):
+        """Save all three CSVs to the results directory (``suffix`` is added
+        before .csv, e.g. "_same_conversion" for a robustness variant)."""
         import os
         os.makedirs(results_dir, exist_ok=True)
 
         means = self.build_means()
-        means_path = os.path.join(results_dir, "cross_experiment_matched_means.csv")
+        means_path = os.path.join(results_dir, f"cross_experiment_matched_means{suffix}.csv")
         means.to_csv(means_path, index=False)
         print(f"  → {means_path}  ({len(means)} rows, "
               f"{self.n_overlap} matched pairs)")
 
         wilc = self.build_wilcoxon()
-        wilc_path = os.path.join(results_dir, "cross_experiment_matched_wilcoxon.csv")
+        wilc_path = os.path.join(results_dir, f"cross_experiment_matched_wilcoxon{suffix}.csv")
         wilc.to_csv(wilc_path, index=False)
         for comp_a, comp_b in self.COMPARISONS:
             sub = wilc[(wilc["condition_a"] == comp_a)
@@ -255,7 +256,7 @@ class CrossExperimentMatched:
         print(f"  → {wilc_path}")
 
         spear = self.build_spearman()
-        spear_path = os.path.join(results_dir, "cross_experiment_matched_spearman.csv")
+        spear_path = os.path.join(results_dir, f"cross_experiment_matched_spearman{suffix}.csv")
         spear.to_csv(spear_path, index=False)
         for comp_a, comp_b in self.COMPARISONS:
             sub = spear[(spear["condition_a"] == comp_a)
