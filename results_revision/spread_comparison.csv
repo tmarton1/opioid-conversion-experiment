@@ -1,0 +1,70 @@
+experiment,item,n_other_standards,between_model_sd_log,model_range_fold,model_fold_sd,standards_fold_spread_current,standards_fold_spread_all,model_range_over_standards_current,model_range_over_standards_all,models_wider_than_standards_current,models_wider_than_standards_all
+random_dose,im_buprenorphine -> oral_morphine,0,0.910084306,21.94128274,2.484531985,,,,,,
+random_dose,iv_buprenorphine -> oral_morphine,0,1.106077952,44.17550908,3.022480802,,,,,,
+random_dose,iv_fentanyl -> oral_morphine,1,1.996717212,800.0834452,7.364839163,1.199760048,1.199760048,666.8695515,666.8695515,True,True
+random_dose,iv_hydromorphone -> iv_morphine,1,0.5599301214,9.977306997,1.75055017,1.166666667,1.166666667,8.551977426,8.551977426,True,True
+random_dose,iv_hydromorphone -> oral_hydrocodone,1,1.023786459,39.94505854,2.783715258,1.166666667,1.166666667,34.2386216,34.2386216,True,True
+random_dose,iv_hydromorphone -> oral_hydromorphone,1,0.2979558415,2.502273511,1.347102301,1.4,1.4,1.787338222,1.787338222,True,True
+random_dose,iv_hydromorphone -> oral_morphine,1,0.9010661611,21.41159995,2.462226843,1.4,1.4,15.29399996,15.29399996,True,True
+random_dose,iv_hydromorphone -> oral_oxycodone,1,0.8832517629,28.55576601,2.418752141,1.166666667,1.166666667,24.47637087,24.47637087,True,True
+random_dose,iv_hydromorphone -> oral_tramadol,0,0.81443428,16.76703025,2.257897973,,,,,,
+random_dose,iv_methadone -> oral_morphine,0,0.5654025293,9.998582846,1.760156154,,,,,,
+random_dose,iv_morphine -> iv_hydromorphone,1,0.283126044,3.320500971,1.327272446,1.166666667,1.166666667,2.846143689,2.846143689,True,True
+random_dose,iv_morphine -> oral_hydrocodone,1,0.7484449167,20.00112742,2.113710464,1,1,20.00112742,20.00112742,True,True
+random_dose,iv_morphine -> oral_hydromorphone,1,0.8672320009,20.0354042,2.380313022,1.2,1.2,16.69617017,16.69617017,True,True
+random_dose,iv_morphine -> oral_morphine,1,0.1587912776,1.748581208,1.172093279,1.2,1.2,1.457151006,1.457151006,True,True
+random_dose,iv_morphine -> oral_oxycodone,1,0.8311520466,16.66407753,2.295962273,1,1,16.66407753,16.66407753,True,True
+random_dose,iv_morphine -> oral_tramadol,0,0.6916200138,9.994416426,1.996947998,,,,,,
+random_dose,oral_codeine -> oral_morphine,3,0.5682723768,7.730100196,1.76521479,1.5,1.5,5.153400131,5.153400131,True,True
+random_dose,oral_hydrocodone -> iv_hydromorphone,1,0.4132117037,3.997861098,1.511665017,1.166666667,1.166666667,3.426738084,3.426738084,True,True
+random_dose,oral_hydrocodone -> iv_morphine,1,0.8233274609,19.34598541,2.27806742,1,1,19.34598541,19.34598541,True,True
+random_dose,oral_hydrocodone -> oral_hydromorphone,4,0.3326840287,2.500022622,1.394706542,1.2,1.25,2.083352185,2.000018098,True,True
+random_dose,oral_hydrocodone -> oral_morphine,4,0.6098791667,10.35520912,1.840209027,1.2,1.2,8.629340935,8.629340935,True,True
+random_dose,oral_hydrocodone -> oral_oxycodone,4,0.08978299,1.402635029,1.093936863,1.2,1.2,1.168862524,1.168862524,True,True
+random_dose,oral_hydrocodone -> oral_tramadol,3,0.4965039947,3.999990579,1.642967396,1.2,2,3.333325483,1.99999529,True,True
+random_dose,oral_hydromorphone -> iv_hydromorphone,1,0.3953430654,2.501528291,1.484893519,1.4,1.4,1.786805922,1.786805922,True,True
+random_dose,oral_hydromorphone -> iv_morphine,1,1.226851572,33.32508413,3.410474982,1.2,1.2,27.77090344,27.77090344,True,True
+random_dose,oral_hydromorphone -> oral_hydrocodone,4,0.7733658327,16.64767232,2.167047913,1.2,1.25,13.87306027,13.31813786,True,True
+random_dose,oral_hydromorphone -> oral_morphine,4,0.4586907716,7.443677178,1.582001427,1,1.25,7.443677178,5.954941742,True,True
+random_dose,oral_hydromorphone -> oral_oxycodone,4,0.6243801308,10.92659575,1.867088248,1.2,1.5,9.105496461,7.284397169,True,True
+random_dose,oral_hydromorphone -> oral_tramadol,3,0.7771647055,11.10605788,2.175295909,1,1.6,11.10605788,6.941286176,True,True
+random_dose,oral_methadone -> oral_morphine,2,1.085069129,100.0454611,2.959644409,1,1,100.0454611,100.0454611,True,True
+random_dose,oral_oxycodone -> iv_hydromorphone,1,0.3490148543,3.757865038,1.417670249,1.166666667,1.166666667,3.221027175,3.221027175,True,True
+random_dose,oral_oxycodone -> iv_morphine,1,0.5849990108,6.001635033,1.79498921,1,1,6.001635033,6.001635033,True,True
+random_dose,oral_oxycodone -> oral_hydrocodone,4,0.1964693791,1.875380433,1.217098052,1.2,1.2,1.562817027,1.562817027,True,True
+random_dose,oral_oxycodone -> oral_hydromorphone,4,0.1917220738,1.761934748,1.211333809,1.2,1.5,1.468278957,1.174623165,True,True
+random_dose,oral_oxycodone -> oral_morphine,4,0.1530761019,1.736825696,1.165413666,1.2,1.2,1.447354747,1.447354747,True,True
+random_dose,oral_oxycodone -> oral_tramadol,3,0.5410078888,7.50046991,1.717737278,1,2,7.50046991,3.750234955,True,True
+random_dose,oral_oxymorphone -> oral_morphine,4,0.5677844113,6.668258862,1.764353636,1.2,1.2,5.556882385,5.556882385,True,True
+random_dose,oral_tapentadol -> oral_morphine,3,0.6521783106,8.306204983,1.91971802,1.333333333,1.333333333,6.229653737,6.229653737,True,True
+random_dose,oral_tramadol -> iv_hydromorphone,0,0.7162594153,13.66345251,2.046762784,,,,,,
+random_dose,oral_tramadol -> iv_morphine,0,0.586486999,14.99888793,1.797662121,,,,,,
+random_dose,oral_tramadol -> oral_hydrocodone,3,0.7041651711,9.99730138,2.022157824,1.2,2,8.331084483,4.99865069,True,True
+random_dose,oral_tramadol -> oral_hydromorphone,3,0.6657115573,9.999544571,1.94587463,1,1.6,9.999544571,6.249715357,True,True
+random_dose,oral_tramadol -> oral_morphine,3,0.4553846627,5.000141418,1.576779795,1,2,5.000141418,2.500070709,True,True
+random_dose,oral_tramadol -> oral_oxycodone,3,0.3663767932,3.332912978,1.442498664,1,2,3.332912978,1.666456489,True,True
+random_dose,parenteral_nalbuphine -> oral_morphine,0,0.6919733429,13.33357257,1.997653702,,,,,,
+random_dose,sc_fentanyl -> oral_morphine,0,2.032636883,898.5724999,7.634190305,,,,,,
+random_dose,sublingual_buprenorphine -> oral_morphine,1,0.7474613518,20.02054406,2.111632514,1,1,20.02054406,20.02054406,True,True
+random_dose,transdermal_buprenorphine -> oral_morphine,1,1.352089685,77.31509145,3.865494765,1,1,77.31509145,77.31509145,True,True
+random_dose,transdermal_fentanyl -> oral_morphine,3,1.385910906,72.41279877,3.998466474,1.125,1.125,64.36693224,64.36693224,True,True
+vignette,adult-male-dog-bite,1,0.1777716347,2.309401077,1.194552496,1.2,1.2,1.924500897,1.924500897,True,True
+vignette,elderly-female-bunionectomy,3,0.6694398682,5,1.953142997,1,2,5,2.5,True,True
+vignette,elderly-female-chronic-bowel-obstruction,0,0.2196198616,2.064102564,1.245603139,,,,,,
+vignette,elderly-female-pancreatic-carcinoma,1,0.2473812021,2.222222222,1.280667213,1.2,1.2,1.851851852,1.851851852,True,True
+vignette,elderly-female-renal-colic,1,0.5359018374,6.777720856,1.708988777,1.373913043,1.373913043,4.933151256,4.933151256,True,True
+vignette,elderly-hip-fracture,4,0.3990406433,3.872983346,1.490394192,1.2,1.5,3.227486122,2.581988897,True,True
+vignette,elderly-hip-replacement,4,0.2107800444,2.078460969,1.234640759,1.2,1.2,1.732050808,1.732050808,True,True
+vignette,elderly-male-abdominal-surgery,2,0.8904080228,42.42640687,2.436123442,1,1,42.42640687,42.42640687,True,True
+vignette,middle-aged-ankle-replacement,1,0.5410633374,5.772694511,1.717832527,1,1,5.772694511,5.772694511,True,True
+vignette,middle-aged-ankle-surgery,4,0.2191201933,2.121320344,1.244980906,1.2,1.2,1.767766953,1.767766953,True,True
+vignette,middle-aged-carpenter-amputation,1,0.6718677651,10,1.957890788,1.199760048,1.199760048,8.335,8.335,True,True
+vignette,middle-aged-female-cancer,3,0.6061450734,8,1.833350328,1.125,1.25,7.111111111,6.4,True,True
+vignette,middle-aged-female-shoulder-pain,3,0.6207652385,10.95445115,1.860351109,1,2,10.95445115,5.477225575,True,True
+vignette,middle-aged-man-chronic-back-pain,4,0.4510416655,4,1.569946693,1.2,1.2,3.333333333,3.333333333,True,True
+vignette,middle-aged-man-knee-amputation,1,0.3661637676,2.5,1.442191408,1.4,1.4,1.785714286,1.785714286,True,True
+vignette,middle-aged-woman-cancer-surgery,1,0.330002119,3,1.390971076,1.222222222,1.222222222,2.454545455,2.454545455,True,True
+vignette,pediatric-burn-patient,1,0.4847008026,5,1.623689133,1.4,1.4,3.571428571,3.571428571,True,True
+vignette,teen-pelvic-fracture,1,0.5170322437,5.773502692,1.677043202,1.166666667,1.166666667,4.948716593,4.948716593,True,True
+vignette,young-adult-sickle-cell-crisis,1,0.5269667503,5.303300859,1.69378683,1.4,1.4,3.788072042,3.788072042,True,True
+vignette,young-man-car-accident,1,0.5157259544,5,1.674853928,1.199760048,1.199760048,4.1675,4.1675,True,True
