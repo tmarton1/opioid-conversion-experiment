@@ -39,14 +39,14 @@ performance_profile_random_doses.csv,identical,
 performance_profile_vignettes.csv,identical,
 ranking_naive_random_doses.csv,expected_filter,"after dropping 3 extra-model rows: raw_rank: 7 cells, max |diff| 3; adjusted_rank: 3 cells, max |diff| 1"
 ranking_naive_random_doses_pairs.csv,expected_filter,"after dropping 42 extra-model rows: idx_a: 21 cells, max |diff| 2; idx_b: 63 cells, max |diff| 3; tight_p_bonf: 34 cells, max |diff| 0.308; broad_p_bonf: 19 cells, max |diff| 0.121"
-ranking_naive_vignettes.csv,expected_filter,"after dropping 1 extra-model rows: n_total: 3 cells, max |diff| 7; n_tight: 3 cells, max |diff| 7; n_broad: 3 cells, max |diff| 7"
-ranking_naive_vignettes_pairs.csv,expected_filter,"after dropping 13 extra-model rows: tight_p: 20 cells, max |diff| 0.0283; broad_p: 8 cells, max |diff| 0.00692; tight_p_bonf: 39 cells, max |diff| 0.122; broad_p_bonf: 20 cells, max |diff| 0.0633; a_sig_better: 1 cells, max |diff| 1"
+ranking_naive_vignettes.csv,expected_filter,"after dropping 1 extra-model rows: n_total: 13 cells, max |diff| 147; n_tight: 13 cells, max |diff| 57; n_broad: 13 cells, max |diff| 114; mean_tight_prop: 13 cells, max |diff| 0.0225; mean_broad_prop: 13 cells, max |diff| 0.0364; raw_rank: 4 cells, max |diff| 1"
+ranking_naive_vignettes_pairs.csv,expected_filter,"after dropping 13 extra-model rows: model_a: 14 cells; model_b: 34 cells; tight_p: 60 cells, max |diff| 0.565; broad_p: 45 cells, max |diff| 1; tight_p_bonf: 48 cells, max |diff| 0.999; broad_p_bonf: 31 cells, max |diff| 1"
 ranking_random_doses_nielsen.csv,expected_filter,"after dropping 3 extra-model rows: raw_rank: 3 cells, max |diff| 2; adjusted_rank: 3 cells, max |diff| 1"
 ranking_random_doses_nielsen_pairs.csv,expected_filter,"after dropping 42 extra-model rows: idx_a: 3 cells, max |diff| 2; idx_b: 33 cells, max |diff| 2; tight_p_bonf: 24 cells, max |diff| 0.333; broad_p_bonf: 29 cells, max |diff| 0.0924"
 ranking_random_doses_nielsen_units.csv,expected_filter,"after dropping 1 extra-model rows: n_total: 13 cells, max |diff| 125; n_tight: 12 cells, max |diff| 125; n_broad: 12 cells, max |diff| 125; mean_tight_prop: 12 cells, max |diff| 0.203; mean_broad_prop: 12 cells, max |diff| 0.203; n_units: 13 cells, max |diff| 5"
 ranking_random_doses_nielsen_units_pairs.csv,expected_filter,"after dropping 13 extra-model rows: model_a: 36 cells; model_b: 48 cells; n_strata: 78 cells, max |diff| 5; tight_p: 23 cells, max |diff| 0.361; broad_p: 32 cells, max |diff| 1; tight_p_bonf: 19 cells, max |diff| 1"
-ranking_vignettes_nielsen_units.csv,extra_models_only,1 extra-model rows dropped from reference
-ranking_vignettes_nielsen_units_pairs.csv,expected_filter,"after dropping 13 extra-model rows: tight_p_bonf: 16 cells, max |diff| 0.0412; broad_p_bonf: 13 cells, max |diff| 0.0363"
+ranking_vignettes_nielsen_units.csv,expected_filter,"after dropping 1 extra-model rows: n_total: 13 cells, max |diff| 140; n_tight: 13 cells, max |diff| 111; n_broad: 13 cells, max |diff| 133; mean_tight_prop: 13 cells, max |diff| 0.0393; mean_broad_prop: 13 cells, max |diff| 0.0248; raw_rank: 4 cells, max |diff| 1"
+ranking_vignettes_nielsen_units_pairs.csv,expected_filter,"after dropping 13 extra-model rows: model_a: 24 cells; model_b: 24 cells; tight_p: 19 cells, max |diff| 0.289; broad_p: 36 cells, max |diff| 1; tight_p_bonf: 21 cells, max |diff| 0.961; broad_p_bonf: 28 cells, max |diff| 1"
 reworded_scenarios_model_analysis.csv,different,after dropping 60 extra-model rows: rows 1560 vs 1620
 reworded_vignettes_model_analysis.csv,different,after dropping 236 extra-model rows: rows 3893 vs 4129
 reworded_vignettes_model_consensus.csv,identical,

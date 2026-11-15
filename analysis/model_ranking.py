@@ -457,14 +457,19 @@ def build_all_rankings() -> list["ModelRanking"]:
     specs = [
         {
             "csv_path": VIGNETTE_CSV,
-            "filters": {"include_nielsen": False, "explain_units": False},
+            # Text vignettes only (author decision 2026-11-14): the
+            # empty-vignette controls (v82-v101) are analysed separately
+            # (text vs empty), as in the vignette batch means.
+            "filters": {"include_nielsen": False, "explain_units": False,
+                        "has_vignette_text": True},
             "unit_col": "scenario_key",
             "label": "Naive Vignettes",
             "output": f"{RESULTS_DIR}/ranking_naive_vignettes.csv",
         },
         {
             "csv_path": VIGNETTE_CSV,
-            "filters": {"include_nielsen": True, "explain_units": True},
+            "filters": {"include_nielsen": True, "explain_units": True,
+                        "has_vignette_text": True},
             "unit_col": "scenario_key",
             "label": "Vignettes + Nielsen + Explain Units",
             "output": f"{RESULTS_DIR}/ranking_vignettes_nielsen_units.csv",
