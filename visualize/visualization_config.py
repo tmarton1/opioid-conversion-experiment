@@ -44,7 +44,7 @@ MODEL_ORDER = [
     'deepseek/deepseek-chat'
 ]
 
-# Ranking CSVs used to determine the global model order (colors are a fixed map).
+# Ranking CSVs the frozen colors and model order were computed from (in results_all/).
 _RANKING_CSV_NAMES = [
     "ranking_vignettes_nielsen_units.csv",
     "ranking_random_doses_nielsen.csv",
@@ -53,12 +53,9 @@ _RANKING_CSV_NAMES = [
 
 
 def _collect_ranking_ranks() -> Dict[str, List[float]]:
-    """Read adjusted_rank from the canonical ranking CSVs and return per-model lists."""
-    # MODEL_ORDER_RESULTS_DIR (environment) fixes the global model order to one
-    # results directory whatever RESULTS_DIR is; the revision framework sets it
-    # to results_nielsen so every score's figures share one model order.
-    order_dir = os.environ.get("MODEL_ORDER_RESULTS_DIR", RESULTS_DIR)
-    results_dir = os.path.join(os.path.dirname(__file__), "..", order_dir)
+    """Read adjusted_rank from the canonical ranking CSVs and return per-model
+    lists (used only to derive the frozen colors and order; see below)."""
+    results_dir = os.path.join(os.path.dirname(__file__), "..", RESULTS_DIR)
     ranks: Dict[str, List[float]] = {}
     for name in _RANKING_CSV_NAMES:
         path = os.path.join(results_dir, name)
@@ -146,22 +143,22 @@ from common.config import (
     EPSILON_FOR_WEIGHT,
 )
 
+# Global model order (best first): the order of the frozen color map, i.e. the
+# average adjusted rank in the all-standards rankings in results_all/ from which
+# the colors were computed (decision 2026-11-14), so the color gradient runs in
+# sequence in legends and default orderings, under every score and view.
+# Figures that sort models by their own ranking (e.g. naive_performance_bars,
+# sorted by adjusted_rank) keep doing so.
+MODEL_RANK_ORDER: List[str] = list(MODEL_COLOR_DICT)
+
+
 def get_ranked_model_order() -> List[str]:
     """
-    Return models sorted by average adjusted rank (best first).
-    Averages across vignettes+nielsen+units, random_doses+nielsen,
-    and random_doses+nielsen+units.
-    Falls back to MODEL_ORDER if ranking CSVs are absent.
+    Return the fixed global model order (best first): MODEL_RANK_ORDER, the
+    rank order of the all-standards rankings the colors were computed from.
+    It no longer depends on RESULTS_DIR or on any score's rankings.
     """
-    ranks = _collect_ranking_ranks()
-
-    if not ranks:
-        return [m for m in MODEL_ORDER if m in CONSISTENT_MODELS]
-
-    avg_ranks = {m: sum(rs) / len(rs) for m, rs in ranks.items()}
-    consistent_set = set(CONSISTENT_MODELS)
-    avg_ranks = {m: r for m, r in avg_ranks.items() if m in consistent_set}
-    return sorted(avg_ranks, key=lambda m: avg_ranks[m])
+    return [m for m in MODEL_RANK_ORDER if m in CONSISTENT_MODELS]
 
 
 def normalize_model_name(model: str) -> str:

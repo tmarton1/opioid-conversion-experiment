@@ -38,8 +38,26 @@ def test_fixed_map_equals_rainbow_from_all_standards_rankings():
     code = ("import json, visualize.visualization_config as v; "
             "print(json.dumps(v._build_ranked_color_dict()))")
     env = dict(os.environ, RESULTS_DIR="results_all")
-    env.pop("MODEL_ORDER_RESULTS_DIR", None)
     out = subprocess.run([sys.executable, "-c", code], cwd=ROOT, env=env,
                          capture_output=True, text=True, check=True).stdout
     import json
     assert json.loads(out.strip().splitlines()[-1]) == _colors_under("results_nielsen")
+
+
+def test_global_order_follows_the_color_map_and_results_all_ranking():
+    """Model order = color-map order = average adjusted rank in results_all/,
+    whatever RESULTS_DIR is, so the color gradient runs in sequence."""
+    code = ("import json, visualize.visualization_config as v; "
+            "r = v._collect_ranking_ranks(); "
+            "a = {m: sum(x) / len(x) for m, x in r.items() if m in v.MODEL_COLOR_DICT}; "
+            "print(json.dumps([v.get_ranked_model_order(), list(v.MODEL_COLOR_DICT), "
+            "sorted(a, key=lambda m: a[m])]))")
+    import json
+    for d in ("results_all", "results_nielsen"):
+        env = dict(os.environ, RESULTS_DIR=d)
+        out = subprocess.run([sys.executable, "-c", code], cwd=ROOT, env=env,
+                             capture_output=True, text=True, check=True).stdout
+        order, colors, computed = json.loads(out.strip().splitlines()[-1])
+        assert order == colors
+        if d == "results_all":
+            assert order == computed

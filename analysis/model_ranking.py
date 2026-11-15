@@ -88,15 +88,23 @@ class ModelRanking:
 
     def __init__(
         self,
-        csv_path: str,
+        csv_path: str | None,
         filters: dict,
         unit_col: str,
         label: str = "",
+        df: pd.DataFrame | None = None,
+        range_cols: tuple[str, str] | None = None,
     ):
+        """``df`` (instead of ``csv_path``) and ``range_cols`` (two accuracy
+        proportion columns to rank on, instead of the tight(...)/broad(...)
+        columns) let the revision framework rank on any score and any pair of
+        registered bands; the defaults keep the original behaviour."""
         self.csv_path = csv_path
         self.filters = filters
         self.unit_col = unit_col
         self.label = label
+        self._df_in = df
+        self._range_cols = range_cols
         self.df_raw = self._load_and_filter()
         self._detect_range_cols()
 
@@ -105,7 +113,7 @@ class ModelRanking:
     # ------------------------------------------------------------------
 
     def _load_and_filter(self) -> pd.DataFrame:
-        df = pd.read_csv(self.csv_path)
+        df = self._df_in.copy() if self._df_in is not None else pd.read_csv(self.csv_path)
         # Restrict to the 13 consistently-run models before any test or summary.
         df = df[df["model"].isin(CONSISTENT_MODELS)]
         for col, val in self.filters.items():
@@ -114,6 +122,9 @@ class ModelRanking:
         return df
 
     def _detect_range_cols(self):
+        if self._range_cols is not None:
+            self.tight_col, self.broad_col = self._range_cols
+            return
         tight = [c for c in self.df_raw.columns if c.startswith("tight(")]
         broad = [c for c in self.df_raw.columns if c.startswith("broad(")]
         if not tight or not broad:
