@@ -52,6 +52,8 @@ PROTECTED = [
     "*legend*.md",
     "summary_w_figures/revision/examples/*.png",    # example figures with written titles and annotations
     "summary_w_figures/revision/examples/*.pdf",
+    "figures_revision/*/*.png",                     # final paper figures (model-written annotations)
+    "figures_revision/*/*.pdf",
     "summary_w_figures/revision/figures_appendix/*.png",       # Figures and appendix figures with written annotations
     "summary_w_figures/revision/figures_appendix/*.pdf",
 ]
