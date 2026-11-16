@@ -155,19 +155,36 @@ register(Band("broad", f"Broad ({BROAD_RANGE_LOWER}–{BROAD_RANGE_UPPER}×)",
 # Safety tails (author decision 2026-11-15): one-sided intervals anchored on the
 # current standards (Nielsen, CDC 2022, NIH HEAL, McPherson 2018), so they are
 # the same under every score; a higher share is worse.
-register(Band("overdose", "Overdose (> 2× highest standard)", _fixed(2.0, np.inf), False,
+# Main dose-based rates (author decision 34, 2026-11-15; supersede the 2x / 4x / 0.5x
+# tails as main measures). Bounds are the broad band's limits applied to the
+# highest / lowest current standard, so above_range == "outside broad, high side,
+# under the all-standards score" and below_range == "outside broad, low side"
+# (tests/test_tolerances.py). Four zones: within broad of Nielsen; outside it but
+# within broad of another current standard; above the range; below the range.
+register(Band("above_range", f"Answers above the range of published standards (> {BROAD_RANGE_UPPER:g}× highest)",
+              _fixed(BROAD_RANGE_UPPER, np.inf), False,
+              "Response more than the broad upper limit times the highest current standard for the conversion.",
+              anchor="highest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
+register(Band("below_range", f"Answers below the range of published standards (< {BROAD_RANGE_LOWER:g}× lowest)",
+              _fixed(0.0, BROAD_RANGE_LOWER), False,
+              "Response less than the broad lower limit times the lowest current standard for the conversion.",
+              anchor="lowest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
+# "Extreme errors" (decision 35), kept for the appendix exceedance curve only (decision 34): 2x / 4x / 0.5x.
+register(Band("overdose", "Extreme error, high (> 2× highest standard)", _fixed(2.0, np.inf), False,
               "Response more than twice the highest current standard for the conversion.",
               anchor="highest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
-register(Band("severe_overdose", "Severe overdose (> 4× highest standard)", _fixed(4.0, np.inf), False,
+register(Band("severe_overdose", "Extreme error, high (> 4× highest standard)", _fixed(4.0, np.inf), False,
               "Response more than four times the highest current standard for the conversion.",
               anchor="highest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
-register(Band("underdose", "Underdose (< 0.5× lowest standard)", _fixed(0.0, 0.5), False,
+register(Band("underdose", "Extreme error, low (< 0.5× lowest standard)", _fixed(0.0, 0.5), False,
               "Response less than half the lowest current standard for the conversion.",
               anchor="lowest_standard", higher_is_better=False, closed=(False, False), kind="tail"))
 
 DEFAULT_BANDS = ["tight", "broad"]
 MAIN_BANDS = ["tight", "broad"]                       # accuracy bands in the report and the example figures
 TAILS = [b for b in BANDS if BANDS[b].kind == "tail"]  # safety tails (lower is better)
+MAIN_RATES = ["below_range", "above_range"]           # main dose-based rates (decision 34)
+EXCEEDANCE_ONLY = ["overdose", "severe_overdose", "underdose"]   # appendix exceedance curve only
 ANCHOR_COLUMNS = [f"expected_{s}" for s in SCORING_INPUTS]   # current standards' expected doses
 
 

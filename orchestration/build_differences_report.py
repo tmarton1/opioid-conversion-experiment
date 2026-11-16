@@ -463,22 +463,23 @@ def sec_extremes(S, tables):
     distribution_summary.csv like tight and broad. Nielsen-score rows (the
     tails do not depend on the score; other scores cover fewer conversions)."""
     from analysis.revision.conditions import CONDITIONS
-    from analysis.revision.tolerances import TAILS
+    from analysis.revision.tolerances import TAILS, MAIN_RATES
     ds = pd.read_csv(f"{RR}/distribution_summary.csv")
     src = f"{RR}/distribution_summary.csv"
     nz = ds[ds.score == "nielsen"]
     rows = []
     for cond in SAFETY_CONDS:
         r = nz[(nz.condition == cond) & (nz.model == "POOLED")].iloc[0]
-        for tail, tag in [("overdose", "over"), ("severe_overdose", "severe"), ("underdose", "under")]:
+        for tail, tag in [("above_range", "above"), ("below_range", "below"),
+                          ("overdose", "over"), ("severe_overdose", "severe"), ("underdose", "under")]:
             S.add(f"safe_{cond}_{tag}", r[f"pct_{tail}"], src,
                   f"% {BANDS[tail].label}, {cond} (mean over models; anchored on the current standards)")
         S.add(f"safe_{cond}_ge10", int(r.n_ge_10x_highest), src, f"responses >= 10x the highest standard, {cond}", "d")
         S.add(f"safe_{cond}_n", int(r.n_responses), src, f"responses, {cond}", ",d")
-        rows.append((CONDITIONS[cond].label, S[f"safe_{cond}_over"]["display"], S[f"safe_{cond}_severe"]["display"],
-                     S[f"safe_{cond}_under"]["display"], S[f"safe_{cond}_n"]["display"]))
-    tables["safety"] = _html_table(["Condition (mean over models)", "Overdose: % > 2× highest standard",
-                                    "Severe: % > 4× highest", "Underdose: % < ½× lowest standard", "Responses"], rows)
+        rows.append((CONDITIONS[cond].label, S[f"safe_{cond}_below"]["display"], S[f"safe_{cond}_above"]["display"],
+                     S[f"safe_{cond}_n"]["display"]))
+    tables["safety"] = _html_table(["Condition (mean over models)", f"% {BANDS['below_range'].label}",
+                                    f"% {BANDS['above_range'].label}", "Responses"], rows)
     # ── tail tests: items within model, per model, pooled (results_revision/safety_tests_by_model.csv)
     tt = pd.read_csv(f"{RR}/safety_tests_by_model.csv")
     tsrc = f"{RR}/safety_tests_by_model.csv"
@@ -500,16 +501,17 @@ def sec_extremes(S, tables):
             S.add(f"{k}_ncells", int(r.n_cells_nonzero), tsrc, f"model x item pairs with any {tail} response, {a} -> {b}", "d")
             S.add(f"{k}_better", int(pm.sig_better.sum()), tsrc, f"models significantly fewer {tail} (item-level Wilcoxon p < 0.05), {a} -> {b}", "d")
             S.add(f"{k}_worse", int(pm.sig_worse.sum()), tsrc, f"models significantly more {tail} (item-level Wilcoxon p < 0.05), {a} -> {b}", "d")
-            rows.append((lab, BANDS[tail].label, S[f"{k}_a"]["display"], S[f"{k}_b"]["display"], S[f"{k}_diff"]["display"],
-                         S[f"{k}_p"]["display"], f"{S[f'{k}_ncells']['display']} of {S[f'{k}_npairs']['display']}",
-                         f"{S[f'{k}_better']['display']} / {S[f'{k}_worse']['display']}"))
+            if tail in MAIN_RATES:
+                rows.append((lab, BANDS[tail].label, S[f"{k}_a"]["display"], S[f"{k}_b"]["display"], S[f"{k}_diff"]["display"],
+                             S[f"{k}_p"]["display"], f"{S[f'{k}_ncells']['display']} of {S[f'{k}_npairs']['display']}",
+                             f"{S[f'{k}_better']['display']} / {S[f'{k}_worse']['display']}"))
     tables["safety_grounding"] = _html_table(
-        ["Comparison", "Tail (lower is better)", "Naive % (paired subset)", "Grounded % (paired subset)", "Reduction (pp)",
-         "Pooled p (model × item pairs)", "Pairs with any tail response", "Models significantly better / worse"], rows)
+        ["Comparison", "Measure (lower is better)", "Naive % (paired subset)", "Grounded % (paired subset)", "Reduction (pp)",
+         "Pooled p (model × item pairs)", "Pairs with any such answer", "Models significantly better / worse"], rows)
 
     # basis comparison (two decimals): mean over models vs paired subset, naive vignettes
     rv = nz[(nz.condition == "vignette_naive") & (nz.model == "POOLED")].iloc[0]
-    for tail, tag in (("overdose", "over"), ("severe_overdose", "severe")):
+    for tail, tag in (("above_range", "above"), ("below_range", "below"), ("overdose", "over"), ("severe_overdose", "severe")):
         S.add(f"basis_vig_naive_{tag}_models", rv[f"pct_{tail}"], src, f"% {tail}, naive vignettes, mean over models", ".2f")
         S.add(f"basis_vig_naive_{tag}_paired", S.v(f"tt_vn_{tail}_a"), tsrc, f"% {tail}, naive vignettes, paired subset", ".2f")
         S.add(f"basis_vig_naive_{tag}_cells", S.v(f"circ_vig_all_nielsen_{tail}_before"), f"{RR}/circularity.csv",
@@ -520,7 +522,7 @@ def sec_extremes(S, tables):
         if not len(g):
             return ""
         return " ↓" if bool(g.sig_better.iloc[0]) else (" ↑" if bool(g.sig_worse.iloc[0]) else "")
-    tails3 = ("overdose", "severe_overdose", "underdose")
+    tails3 = tuple(MAIN_RATES)
     for exp, conds in (("vig", [("vignette_naive", None), ("vignette_nielsen", "vignette_naive"), ("vignette_nielsen_units", "vignette_naive")]),
                        ("rd", [("rd_naive", None), ("rd_nielsen", "rd_naive")])):
         rows = []
@@ -532,7 +534,7 @@ def sec_extremes(S, tables):
             rows.append(("Mean over models" if m == "POOLED" else mname(m), *vals))
         hdr = []
         for cond, _ in conds:
-            hdr += [f"{CONDITIONS[cond].label}: > 2×", "> 4×", "< ½×"]
+            hdr += [f"{CONDITIONS[cond].label}: below the range", "above the range"]
         tables[f"safety_models_{exp}"] = _html_table(["Model", *hdr], rows)
 
     # ── extreme responses: descriptive counts and error classes (extreme_errors_classes.csv)
@@ -552,7 +554,7 @@ def sec_extremes(S, tables):
                          S[f"{k}_models"]["display"], S[f"{k}_cells"]["display"],
                          S[f"{k}_factor_inversion"]["display"], S[f"{k}_unit_error"]["display"], S[f"{k}_other"]["display"]))
     tables["extreme_classes"] = _html_table(
-        ["Condition", "Tail", "Responses (count)", "All responses", "Models", "Model × item cells",
+        ["Condition", "Extreme error", "Responses (count)", "All responses", "Models", "Model × item cells",
          "% factor inversion", "% unit error", "% other"], rows)
     rows = []
     cl_conds = ["vignette_naive", "vignette_nielsen", "vignette_nielsen_units", "rd_naive", "rd_nielsen"]
@@ -572,11 +574,12 @@ def sec_extremes(S, tables):
         r = nz[(nz.condition == cond) & (nz.model == g35)].iloc[0]
         S.add(f"g35_{cond}_over", r.pct_overdose, src, f"GPT-3.5 Turbo % > 2x highest standard, {cond} (mean over items)")
         S.add(f"g35_{cond}_severe", r.pct_severe_overdose, src, f"GPT-3.5 Turbo % > 4x highest standard, {cond} (mean over items)")
-    for tail, tag in (("overdose", "over"), ("severe_overdose", "severe")):
+        S.add(f"g35_{cond}_above", r.pct_above_range, src, f"GPT-3.5 Turbo % above the range of published standards, {cond} (mean over items)")
+    for tail, tag in (("above_range", "above"), ("overdose", "over"), ("severe_overdose", "severe")):
         r = tt[(tt.cond_a == "rd_naive") & (tt.cond_b == "rd_nielsen") & (tt.outcome == tail) & (tt.model == g35)].iloc[0]
         S.add(f"g35_rd_{tag}_p", r.p, tsrc, f"GPT-3.5 Turbo item-level Wilcoxon p, {tail}, rd naive -> Nielsen", pfmt)
-    S.add("verdict_g35_rd_rise_detectable", "yes" if min(S.v("g35_rd_over_p"), S.v("g35_rd_severe_p")) < THRESHOLDS["alpha"] else "no",
-          "rule", "GPT-3.5 Turbo random-dose overdose rise significant in its item-level test (either tail)")
+    S.add("verdict_g35_rd_rise_detectable", "yes" if min(S.v("g35_rd_above_p"), S.v("g35_rd_over_p"), S.v("g35_rd_severe_p")) < THRESHOLDS["alpha"] else "no",
+          "rule", "GPT-3.5 Turbo random-dose rise (above the range, > 2x or > 4x highest) significant in its item-level test")
     r = xc[(xc.condition == "rd_nielsen") & (xc.extreme == "severe_gt4x") & (xc.level == "model") & (xc.key == g35)].iloc[0]
     S.add("g35_rd_nielsen_sev_n", int(r.n_in_tail), xsrc, "GPT-3.5 Turbo responses > 4x highest, rd Nielsen", "d")
     S.add("g35_rd_nielsen_sev_cells", int(r.n_cells), xsrc, "GPT-3.5 Turbo opioid pairs with responses > 4x highest, rd Nielsen", "d")

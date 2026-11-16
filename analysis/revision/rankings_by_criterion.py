@@ -14,9 +14,10 @@ Broad is the headline ranking.
                    one-sided Cochran-Mantel-Haenszel tests over all model pairs
                    stratified by item, Bonferroni over the pairs, a model drops a
                    tier when any model above it is significantly better.
-  free_overdose    freedom from overdose: the same CMH ranking on the complement
-                   of the overdose tail (1 - share > 2x the highest current
-                   standard). Higher is better. The tail is anchored on the
+  free_above_range freedom from above-range answers (decision 34): the same CMH
+                   ranking on the complement of above_range (1 - share > 1.7x the
+                   highest current standard; it replaced free_overdose, > 2x).
+                   Higher is better. The tail is anchored on the
                    standards, so the same under every score; only the conversions
                    a score covers differ.
   median_fold_error  per item (the vignette scenario / the opioid pair) the model's
@@ -36,7 +37,7 @@ Broad is the headline ranking.
                    equal mean rank are tied (same ``order``).
 
 rankings_by_criterion.csv  one row per score x condition x criterion x model:
-    value (broad, free_overdose: mean % over items; median_fold_error: mean
+    value (broad, free_above_range: mean % over items; median_fold_error: mean
     within-item rank), median_fold_error_pooled (median fold error over all of the
     model's responses), order (1 = best by value; equal values share an order),
     tier (1 = best; models in one tier are tied), n_in_tier, tied (n_in_tier > 1),
@@ -65,7 +66,7 @@ from common.models import CONSISTENT_MODELS
 
 OUT = "results_revision"
 CONDS = ["vignette_naive", "rd_naive", "vignette_nielsen", "rd_nielsen"]
-CRITERIA = ["broad", "free_overdose", "median_fold_error"]
+CRITERIA = ["broad", "free_above_range", "median_fold_error"]
 ALPHA = 0.05
 CMH_RULE = "CMH one-sided, Bonferroni over model pairs (alpha 0.05); a model drops a tier below any model significantly better"
 NEMENYI_RULE = ("Nemenyi critical difference on mean within-item rank (alpha 0.05); a model drops a tier below any "
@@ -120,7 +121,7 @@ def _cmh_rows(r, score, cond, criterion, scale=100.0) -> list[dict]:
 
 def criterion_rows(long, score: str, cond: str) -> list[dict]:
     rows = _cmh_rows(stats.rank_models(long, score, cond, "all", bands=("broad",)), score, cond, "broad")
-    rows += _cmh_rows(stats.rank_models(long, score, cond, "all", bands=("overdose",)), score, cond, "free_overdose")
+    rows += _cmh_rows(stats.rank_models(long, score, cond, "all", bands=("above_range",)), score, cond, "free_above_range")
     d = stats.responses(long, score, cond)
     pooled = d.groupby("model")["fold_error"].median()
     nresp = d.groupby("model").size()

@@ -27,18 +27,19 @@ def test_round_number_rule_by_magnitude():
                                    False, True, True, False, False, False, False]
 
 
-def test_precedence_inversion_then_unit_then_standard_then_round():
-    flags = dict(factor_inversion=True, unit_error=True, standard_match=True, round_number=True)
+def test_precedence_inversion_then_unit_then_standard_then_other():
+    """Classes (decision 35): inversion > unit error > standard match > other;
+    round number is a flag, not a class."""
+    flags = dict(factor_inversion=True, unit_error=True, standard_match=True)
     assert T.primary_class(True, flags) == "factor_inversion"
     flags["factor_inversion"] = False
     assert T.primary_class(True, flags) == "unit_error"
     flags["unit_error"] = False
     assert T.primary_class(True, flags) == "standard_match"
     flags["standard_match"] = False
-    assert T.primary_class(True, flags) == "round_number"
-    flags["round_number"] = False
     assert T.primary_class(True, flags) == "other"
     assert T.primary_class(False, flags) == "no_usable_answer"
+    assert "round_number" not in T.CLASSES
 
 
 def test_standard_match_needs_a_standard_distinct_from_nielsen():
@@ -72,17 +73,19 @@ def test_unit_error_both_directions_and_extreme_breakdown_unchanged():
 
 def test_summary_row_counts_and_overlaps():
     g = pd.DataFrame({"model": ["a", "a", "b"], "condition": "c", "item": ["x", "y", "x"],
-                      "primary_class": ["factor_inversion", "round_number", "round_number"],
-                      "factor_inversion": [True, True, False], "unit_error": [False] * 3,
-                      "standard_match": [False] * 3, "round_number": [False, True, True],
-                      "n_classes_matched": [1, 2, 1]})
+                      "primary_class": ["factor_inversion", "other", "other"],
+                      "factor_inversion": [True, False, False], "unit_error": [True, False, False],
+                      "standard_match": [False] * 3, "is_round": [False, True, True],
+                      "n_classes_matched": [2, 0, 0]})
     tot = pd.DataFrame({"model": list("aaabbb"), "condition": "c", "item": list("xyzxyz"),
                         "outside_nielsen": [True, True, False, True, False, False],
                         "is_round": [False, True, True, True, False, False]})
     r = T._summ(g, tot, "nielsen", "c", "ALL", "ALL", "both")
     assert (r["n_outside_broad"], r["n_models"], r["n_cells"], r["n_cells_total"]) == (3, 2, 3, 6)
-    assert r["n_factor_inversion"] == 1 and r["n_round_number"] == 2 and np.isclose(r["pct_round_number"], 200 / 3)
-    assert r["n_any_factor_inversion"] == 2 and r["n_multi"] == 1 and r["n_factor_inversion_and_round_number"] == 1
+    assert r["n_factor_inversion"] == 1 and r["n_other"] == 2
+    assert r["n_identifiable_mechanism"] == 1 and np.isclose(r["pct_identifiable_mechanism"], 100 / 3)
+    assert r["n_round_number"] == 2 and np.isclose(r["pct_round_outside_broad"], 200 / 3)
+    assert r["n_any_unit_error"] == 1 and r["n_multi"] == 1 and r["n_factor_inversion_and_unit_error"] == 1
     assert r["n_within_broad"] == 3 and np.isclose(r["pct_round_within_broad"], 100 / 3)
 
 

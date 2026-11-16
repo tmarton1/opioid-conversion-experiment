@@ -6,8 +6,9 @@ from analysis.revision import tolerances as T
 
 
 def test_registry_and_fixed_bands():
-    assert list(T.BANDS) == ["tight", "broad", "overdose", "severe_overdose", "underdose"]  # 2026-11-15
-    assert T.TAILS == ["overdose", "severe_overdose", "underdose"]
+    assert list(T.BANDS) == ["tight", "broad", "above_range", "below_range", "overdose", "severe_overdose", "underdose"]
+    assert T.TAILS == ["above_range", "below_range", "overdose", "severe_overdose", "underdose"]
+    assert T.MAIN_RATES == ["below_range", "above_range"]
     assert T.MAIN_BANDS == ["tight", "broad"]
     assert T.band_bounds("tight", "oral_codeine", "1", "oral_morphine") == (0.85, 1.15)
     assert T.band_bounds("broad", "oral_codeine", "1", "oral_morphine") == (0.6, 1.7)
@@ -66,3 +67,20 @@ def test_tail_polarity_in_paired_tests():
     pe = stats.paired_effect(L, "nielsen", "rd_naive", "rd_nielsen", outcome="overdose").set_index("model")
     # grounding lowers the overdose share, and a positive diff means "better"
     assert pe.loc["POOLED", "mean_b"] < pe.loc["POOLED", "mean_a"] and pe.loc["POOLED", "mean_diff"] > 0
+
+
+def test_range_rates_equal_outside_broad_under_all_standards():
+    """above_range / below_range == outside broad on the high / low side under the
+    all-standards score (nearest current standard), for every usable answer in
+    the long table (unusable answers count as outside broad but are in no rate)."""
+    import numpy as np
+    from analysis.revision import stats
+    long = stats.load_long()
+    for cond in ("rd_naive", "rd_nielsen", "vignette_naive", "vignette_nielsen"):
+        d = stats.responses(long, "all", cond, "all", ["broad", "above_range", "below_range"])
+        ok = d["ratio"] > 0
+        d = d[ok]
+        high = (d["in_broad"] == 0) & (d["ratio"] > 1)
+        low = (d["in_broad"] == 0) & (d["ratio"] < 1)
+        assert np.array_equal(high.to_numpy(), (d["in_above_range"] == 1).to_numpy()), cond
+        assert np.array_equal(low.to_numpy(), (d["in_below_range"] == 1).to_numpy()), cond

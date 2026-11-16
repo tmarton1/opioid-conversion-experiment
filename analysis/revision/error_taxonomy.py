@@ -40,24 +40,24 @@ Classes (a heuristic reading of the numbers; the response is a bare dose):
                     where that standard itself differs from Nielsen by more than
                     10% (otherwise it is a match to Nielsen and cannot lie outside
                     broad). Nielsen is excluded as the reference.
-  round_number      the dose is a multiple of a round step set by its size,
-                    step = 5 x 10^(floor(log10 dose) - 1): 5 for 10-99, 50 for
-                    100-999, 0.5 for 1-9.99, 500 for 1000-9999, and so on. It
-                    is a class only when none of the classes above applies.
-                    Round answers are common among correct answers too, so each
-                    summary row reports ``pct_round_within_broad``, the share of
-                    round doses among the same group's responses within broad.
   other             none of the above.
+  round number      a descriptive flag, not a class (author decision 35): the
+                    dose is a multiple of a round step set by its size,
+                    step = 5 x 10^(floor(log10 dose) - 1): 5 for 10-99, 50 for
+                    100-999, 0.5 for 1-9.99, 500 for 1000-9999, and so on. Round
+                    answers are common among correct answers too, so each summary
+                    row reports ``pct_round_outside_broad`` next to
+                    ``pct_round_within_broad`` (same group, responses within broad).
   no_usable_answer  no positive dose.
 
 Precedence (one primary class per response): factor_inversion, unit_error,
-standard_match, round_number, other. Mechanism classes come first because each
+standard_match, other (decision 35). ``pct_identifiable_mechanism`` is the share
+of outside-broad responses in one of the three mechanism classes. Mechanism classes come first because each
 names a specific wrong operation on the prompt's own numbers (inversion before
 unit error as in extreme_breakdown); a match to another standard comes next
 because it is a defensible alternative reference rather than a slip, but it is
-a coincidence-prone 10% window; roundness is the weakest, purely descriptive
-feature and so is read last. Because overlaps occur (a round dose can also be an
-inversion), every response also carries the four flags independent of
+a coincidence-prone 10% window. Because overlaps occur, every response also
+carries the three class flags and the round-number flag independent of
 precedence (``is_*``), the number of classes it matches, and the summary
 reports, for each class, the count matching it at all (``n_any_*``), the
 responses matching two or more (``n_multi``) and each pair (``n_<a>_and_<b>``).
@@ -92,7 +92,7 @@ OUT = "results_revision"
 PRIMARY_SCORE = "nielsen"
 CONDS = ["vignette_naive", "vignette_nielsen", "vignette_nielsen_units",
          "rd_naive", "rd_nielsen", "eu_4h_nielsen", "eu_4h_nielsen_units"]
-FLAGS = ["factor_inversion", "unit_error", "standard_match", "round_number"]   # precedence order
+FLAGS = ["factor_inversion", "unit_error", "standard_match"]   # classes, precedence order (decision 35)
 CLASSES = FLAGS + ["other", "no_usable_answer"]
 DIRECTIONS = ("both", "below", "above")
 ROUND_FACTOR = 5.0
@@ -138,7 +138,7 @@ def standard_matches(row) -> list[str]:
 
 
 def primary_class(usable: bool, flags: dict) -> str:
-    """Precedence: factor_inversion, unit_error, standard_match, round_number, other."""
+    """Precedence: factor_inversion, unit_error, standard_match, other."""
     if not usable:
         return "no_usable_answer"
     for k in FLAGS:
@@ -197,7 +197,6 @@ def build(long: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame]
     out["factor_inversion"] = [bool(x) for x in inv_l]
     out["unit_error"] = [bool(x) for x in unit_l]
     out["standard_match"] = [bool(x) for x in std_l]
-    out["round_number"] = out["is_round"].to_numpy()
     out["matched_inversion"] = [";".join(sorted(set(x))) for x in inv_l]
     out["matched_unit"] = [";".join(sorted(set(x))) for x in unit_l]
     out["matched_standard"] = [";".join(x) for x in std_l]
@@ -214,8 +213,8 @@ def _responses_table(out: pd.DataFrame) -> pd.DataFrame:
             "expected_nielsen", "expected_cdc_2016", "expected_cdc_2022", "expected_nih_heal",
             "expected_mcpherson_2018",
             *[f"ratio_{s}" for s in names], *[f"outside_{s}" for s in names], *[f"direction_{s}" for s in names],
-            *FLAGS, "n_classes_matched", "primary_class", "matched_inversion", "matched_unit", "matched_standard"]
-    t = out[cols].rename(columns={f: f"is_{f}" for f in FLAGS})
+            *FLAGS, "is_round", "n_classes_matched", "primary_class", "matched_inversion", "matched_unit", "matched_standard"]
+    t = out[cols].rename(columns={**{f: f"is_{f}" for f in FLAGS}, "is_round": "is_round_number"})
     return t.sort_values(["condition", "experiment", "row_in_raw", "model"], kind="mergesort").reset_index(drop=True)
 
 
@@ -238,6 +237,12 @@ def _summ(g: pd.DataFrame, tot: pd.DataFrame, score: str, cond: str, level: str,
     row["n_multi"] = int((g["n_classes_matched"] >= 2).sum())
     for a, b in itertools.combinations(FLAGS, 2):
         row[f"n_{a}_and_{b}"] = int((g[a] & g[b]).sum())
+    row["n_identifiable_mechanism"] = int(sum(row[f"n_{k}"] for k in FLAGS))
+    row["pct_identifiable_mechanism"] = 100 * row["n_identifiable_mechanism"] / n if n else np.nan
+    row["n_round_number"] = int(g["is_round"].sum())
+    row["pct_round_outside_broad"] = 100 * row["n_round_number"] / n if n else np.nan
+    for k in FLAGS:
+        row[f"n_round_and_{k}"] = int((g["is_round"] & g[k]).sum())
     row["n_within_broad"] = len(inside)
     row["pct_round_within_broad"] = 100 * float(inside["is_round"].mean()) if len(inside) else np.nan
     return row
