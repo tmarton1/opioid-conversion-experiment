@@ -52,8 +52,8 @@ import pandas as pd
 from analysis.revision import stats
 from analysis.revision.conditions import CONDITIONS
 from analysis.revision.rescore import RAW_FILES, _factor, _parse_sources
+from analysis.revision.reported_set import REPORTED_SET
 from analysis.revision.scores import SCORING_INPUTS
-from analysis.revision.tolerances import TAILS
 from common.config import TIGHT_RANGE_LOWER, TIGHT_RANGE_UPPER
 
 OUT = "results_revision"
@@ -208,11 +208,16 @@ def classes(b: pd.DataFrame, long) -> pd.DataFrame:
 
 
 def tail_tests(long) -> pd.DataFrame:
+    """Paired tests for the reported set's tests and standard-anchored entries (Nielsen score; the entries
+    are score-independent). One item table per condition holds every entry."""
+    cfg = REPORTED_SET["safety_tests"]
+    tails = list(cfg["outcomes"])
+    tables = {c: stats.item_table(long, "nielsen", c, "all", tails) for c in {x for t in cfg["tests"] for x in t}}
     out = []
-    for a, b_ in TESTS:
-        for tail in TAILS:
-            e = stats.paired_effect(long, "nielsen", a, b_, "all", tail)
-            m = stats.paired_items(long, "nielsen", a, b_, "all", tail)
+    for a, b_ in cfg["tests"]:
+        for tail in tails:
+            e = stats.paired_effect(long, "nielsen", a, b_, "all", tail, tables=tables)
+            m = stats.paired_items(long, "nielsen", a, b_, "all", tail, tables=tables)
             nz = m[m[f"prop_{tail}_a"].gt(0) | m[f"prop_{tail}_b"].gt(0)]   # cells with any tail response
             cells = nz.groupby("model").size()
             e["n_cells_nonzero"] = e.model.map(cells).fillna(0).astype(int)

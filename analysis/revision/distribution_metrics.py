@@ -17,6 +17,11 @@ Writes (atomically, deterministic, no randomness):
   expected dose (the reviewer's literal question).
 
 Conventions
+  * Only the reported set is computed (analysis/revision/reported_set.py). Standard-anchored entries
+    (pct_above_range, pct_below_range, pct_overdose, pct_severe_overdose, pct_underdose, n_ge_10x_highest)
+    are score-independent: they are written once, on rows with score == "any", and are blank on the
+    per-score rows. The tight_* columns of wilcoxon_threshold_free.csv are filled for the Nielsen
+    score only.
   * Text vignettes are the vignette experiment; empty prompts are separate
     supplementary conditions (role = supplementary_empty_prompts).
   * subset "ome" = oral morphine is source or target (the pipeline's flag).
@@ -38,6 +43,8 @@ import pandas as pd
 from analysis.revision import stats
 from analysis.revision.conditions import CONDITIONS
 from analysis.revision.scores import SCORES
+from analysis.revision.reported_set import (ACCURACY, ANCHORED, ANCHORED_SOURCE_SCORE, ANY, REPORTED_SET,
+                                            conditions_for)
 from analysis.revision.tolerances import BANDS
 
 OUT = "results_revision"
@@ -45,6 +52,11 @@ MAIN = ["vignette_naive", "vignette_nielsen", "vignette_nielsen_units",
         "rd_naive", "rd_nielsen", "rd_nielsen_examples",
         "eu_4h_nielsen", "eu_4h_nielsen_units"]
 SUPP = ["vignette_empty_naive", "vignette_empty_nielsen", "vignette_empty_nielsen_units"]
+ORDER = MAIN + SUPP
+
+
+def _ordered(conds):
+    return [c for c in ORDER if c in set(conds)]
 
 
 def write_csv(df: pd.DataFrame, name: str) -> None:
@@ -69,7 +81,7 @@ def _dist(d: pd.DataFrame) -> dict:
 
 
 def summary_rows(long, score, cond) -> list[dict]:
-    bands = list(BANDS)
+    bands = list(ACCURACY)
     ms = stats.model_summary(long, score, cond, "all", bands, average="item")
     c = CONDITIONS[cond]
     base = {"experiment": c.experiment, "condition": cond, "condition_label": c.label,
@@ -79,8 +91,7 @@ def summary_rows(long, score, cond) -> list[dict]:
     d = stats.responses(long, score, cond, "all", bands)
     pooled = {**base, "model": "POOLED", **_dist(d), "n_items": int(d[c.item].nunique()),
               "median_fold_error_basis": "pooled_responses",
-              "mean_model_median_fold_error": float(ms["median_fold_error"].mean()),
-              "n_ge_10x_highest": int(stats.gross_error_count(long, cond).set_index("model").loc["POOLED", "n_ge_10x_highest"])}
+              "mean_model_median_fold_error": float(ms["median_fold_error"].mean())}
     for r in rows:
         r["median_fold_error_basis"] = "model_responses"
     for b in bands:
@@ -89,11 +100,25 @@ def summary_rows(long, score, cond) -> list[dict]:
     return rows
 
 
+def anchored_rows(long, cond) -> list[dict]:
+    """Score-independent entries for one condition (computed once, score "any")."""
+    ms = stats.model_summary(long, ANCHORED_SOURCE_SCORE, cond, "all", list(ANCHORED), average="item")
+    c = CONDITIONS[cond]
+    base = {"experiment": c.experiment, "condition": cond, "condition_label": c.label,
+            "role": role(cond), "score": ANY}
+    rows = [{**base, "model": r["model"], **{f"pct_{b}": r[f"pct_{b}"] for b in ANCHORED}} for _, r in ms.iterrows()]
+    pooled = {**base, "model": "POOLED", **{f"pct_{b}": float(ms[f"pct_{b}"].mean()) for b in ANCHORED},
+              "n_ge_10x_highest": int(stats.gross_error_count(long, cond).set_index("model").loc["POOLED", "n_ge_10x_highest"])}
+    return rows + [pooled]
+
+
 def build_summary(long) -> pd.DataFrame:
     rows = []
     for score in SCORES:
-        for cond in MAIN + SUPP:
+        for cond in _ordered(conditions_for(score)):
             rows += summary_rows(long, score, cond)
+    for cond in _ordered(REPORTED_SET["distribution_summary"]["anchored_conditions"]):
+        rows += anchored_rows(long, cond)
     cols = ["experiment", "condition", "condition_label", "role", "score", "model", "n_responses", "n_items",
             "median_fold_error", "median_fold_error_basis", "mean_model_median_fold_error",
             "median_log2_ratio", "iqr_log2_ratio"] + [f"pct_{b}" for b in BANDS] + \
@@ -142,32 +167,37 @@ def _paired(long, score, ca, sa, cb, sb, outcome) -> pd.DataFrame:
 
 def build_wilcoxon(long) -> pd.DataFrame:
     out = []
-    for score in SCORES:
+    w = REPORTED_SET["wilcoxon_threshold_free"]
+    grid = {tuple(x) for x in w["grid"]}
+    for score in [s for s in SCORES if s in w["scores"]]:
+        with_tight = score in w["tight_scores"]
         for name, label, ca, cb, subsets, rl in COMPARISONS:
-            for sub in subsets:
+            for sub in [x for x in subsets if (name, x) in grid]:
                 sa = sub                                   # dosing-unit: rd subset ome vs all eu items
                 sb = "all" if name == "dosing_unit" else sub
                 tf = _paired(long, score, ca, sa, cb, sb, stats.THRESHOLD_FREE).set_index("model")
-                ti = _paired(long, score, ca, sa, cb, sb, "tight").set_index("model")
+                ti = _paired(long, score, ca, sa, cb, sb, "tight").set_index("model") if with_tight else None
                 for model in tf.index:
-                    t, b = tf.loc[model], ti.loc[model]
+                    t = tf.loc[model]
+                    b = ti.loc[model] if with_tight else pd.Series(dtype=float)
                     out.append({"score": score, "comparison": name, "comparison_label": label, "role": rl,
                                 "cond_a": ca, "cond_b": cb, "subset": sub, "model": model,
                                 "n_pairs": int(t.n_pairs),
                                 "tf_mean_a": t.mean_a, "tf_mean_b": t.mean_b, "tf_median_diff": t.median_diff,
                                 "tf_mean_diff": t.mean_diff, "tf_p": t.p,
-                                "tight_n_pairs": int(b.n_pairs),
-                                "tight_mean_a": b.mean_a, "tight_mean_b": b.mean_b, "tight_median_diff": b.median_diff,
-                                "tight_mean_diff": b.mean_diff, "tight_p": b.p})
+                                "tight_n_pairs": int(b.n_pairs) if with_tight else np.nan,
+                                "tight_mean_a": b.get("mean_a", np.nan), "tight_mean_b": b.get("mean_b", np.nan),
+                                "tight_median_diff": b.get("median_diff", np.nan),
+                                "tight_mean_diff": b.get("mean_diff", np.nan), "tight_p": b.get("p", np.nan)})
     df = pd.DataFrame(out)
     df["tf_sig_005"] = df["tf_p"] < 0.05
-    df["tight_sig_005"] = df["tight_p"] < 0.05
+    df["tight_sig_005"] = (df["tight_p"] < 0.05).astype(object).where(df["tight_p"].notna(), np.nan)
     return df
 
 
 def build_exceedance(long) -> pd.DataFrame:
     exc = []
-    for cond in MAIN + SUPP:
+    for cond in _ordered(REPORTED_SET["safety_exceedance"]["conditions"]):
         c = CONDITIONS[cond]
         e = stats.overdose_exceedance(long, cond)
         e.insert(0, "role", role(cond)); e.insert(0, "condition_label", c.label); e.insert(0, "experiment", c.experiment)

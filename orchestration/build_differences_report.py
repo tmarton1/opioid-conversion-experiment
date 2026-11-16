@@ -46,6 +46,7 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from scipy.stats import spearmanr  # noqa: E402
 
+from analysis.revision.reported_set import ANCHORED, ANY, REPORTED_SET, accuracy_subsets  # noqa: E402
 from analysis.revision.scores import SCORES  # noqa: E402
 from analysis.revision.tolerances import BANDS, MAIN_BANDS  # noqa: E402
 from common.config import FIGURES_DIR  # noqa: E402
@@ -274,6 +275,11 @@ def _precision_shares(long, score):
 
 
 def _circ(c, exp, subset, score, outcome):
+    """ALL_MODELS row of circularity.csv. Standard-anchored outcomes are score-independent and stored once
+    under score "any" (asked for under nielsen, all or geomean); scored without Nielsen they are kept for
+    above / below range only."""
+    if outcome in ANCHORED and score in REPORTED_SET["circularity"]["anchored"]["any_from_scores"]:
+        score = ANY
     r = c[(c.experiment == exp) & (c.subset == subset) & (c.score == score) & (c.outcome == outcome) & (c.model == "ALL_MODELS")]
     return r.iloc[0] if len(r) else None
 
@@ -308,6 +314,8 @@ def sec_headlines(S, tables, long):
         for exp, e in [("vig", "vignette"), ("rd", "random_dose")]:
             for out, tag in [("broad", "broad"), ("median_fold_error", "mfe")]:
                 for sub in ("ome", "nonome"):
+                    if sub not in accuracy_subsets(sc):
+                        continue                # not in the reported set (geomean: all and disagree only)
                     r = _circ(circ, e, sub, sc, out)
                     fmtx = (lambda x: f"{x:+.2f}") if out == "median_fold_error" else pp
                     S.add(f"h_ome_{exp}_{tag}_{sub}_{sc}", None if r is None else r.gain, f"{RR}/circularity.csv",
@@ -327,6 +335,8 @@ def sec_headlines(S, tables, long):
                   reversed_=(g_ome - g_non) <= 0), "rule",
                   f"'grounding helps OME more' ({exp}, tight) under {sc}: OME minus opioid-to-opioid gain vs nielsen")
             for tag in ("broad", "mfe"):
+                if "ome" not in accuracy_subsets(sc):
+                    continue
                 e_ome, e_non = S.v(f"h_ome_{exp}_{tag}_ome_{sc}"), S.v(f"h_ome_{exp}_{tag}_nonome_{sc}")
                 S.add(f"verdict_ome_{tag}_{exp}_{sc}", "holds" if (e_ome is not None and e_non is not None and e_ome > e_non)
                       else "does not hold", "rule", f"OME gain > opioid-to-opioid gain on {tag} ({exp}), {sc}")
@@ -420,9 +430,13 @@ def sec_circularity(S, tables):
     rows = []
     for exp, e in [("vig", "vignette"), ("rd", "random_dose")]:
         for sub in ("all", "ome", "nonome", "disagree"):
-            for sc in SCORE_ORDER:
+            for sc0 in SCORE_ORDER:
                 for out in outcomes:
-                    r = _circ(c, e, sub, sc, out)
+                    # standard-anchored entries are score-independent: one set of keys, named score "any"
+                    sc = ANY if (out in ANCHORED and sc0 == "nielsen") else sc0
+                    if out in ANCHORED and sc0 in ("all", "geomean"):
+                        continue
+                    r = _circ(c, e, sub, sc0, out)
                     k = f"circ_{exp}_{sub}_{sc}_{out}"
                     if r is None:
                         continue
@@ -467,15 +481,16 @@ def sec_extremes(S, tables):
     ds = pd.read_csv(f"{RR}/distribution_summary.csv")
     src = f"{RR}/distribution_summary.csv"
     nz = ds[ds.score == "nielsen"]
+    an = ds[ds.score == ANY]            # standard-anchored entries: score-independent, stored once
     rows = []
     for cond in SAFETY_CONDS:
-        r = nz[(nz.condition == cond) & (nz.model == "POOLED")].iloc[0]
+        r = an[(an.condition == cond) & (an.model == "POOLED")].iloc[0]
         for tail, tag in [("above_range", "above"), ("below_range", "below"),
                           ("overdose", "over"), ("severe_overdose", "severe"), ("underdose", "under")]:
             S.add(f"safe_{cond}_{tag}", r[f"pct_{tail}"], src,
                   f"% {BANDS[tail].label}, {cond} (mean over models; anchored on the current standards)")
         S.add(f"safe_{cond}_ge10", int(r.n_ge_10x_highest), src, f"responses >= 10x the highest standard, {cond}", "d")
-        S.add(f"safe_{cond}_n", int(r.n_responses), src, f"responses, {cond}", ",d")
+        S.add(f"safe_{cond}_n", int(nz[(nz.condition == cond) & (nz.model == "POOLED")].iloc[0].n_responses), src, f"responses, {cond}", ",d")
         rows.append((CONDITIONS[cond].label, S[f"safe_{cond}_below"]["display"], S[f"safe_{cond}_above"]["display"],
                      S[f"safe_{cond}_n"]["display"]))
     tables["safety"] = _html_table(["Condition (mean over models)", f"% {BANDS['below_range'].label}",
@@ -533,11 +548,11 @@ def sec_extremes(S, tables):
         ["Prompt", "Items", "n items", "Above the range, % naive → Nielsen (pooled p; models better/worse)",
          "Below the range", "Within 0.6–1.7× of Nielsen"], rows)
     # basis comparison (two decimals): mean over models vs paired subset, naive vignettes
-    rv = nz[(nz.condition == "vignette_naive") & (nz.model == "POOLED")].iloc[0]
+    rv = an[(an.condition == "vignette_naive") & (an.model == "POOLED")].iloc[0]
     for tail, tag in (("above_range", "above"), ("below_range", "below"), ("overdose", "over"), ("severe_overdose", "severe")):
         S.add(f"basis_vig_naive_{tag}_models", rv[f"pct_{tail}"], src, f"% {tail}, naive vignettes, mean over models", ".2f")
         S.add(f"basis_vig_naive_{tag}_paired", S.v(f"tt_vn_{tail}_a"), tsrc, f"% {tail}, naive vignettes, paired subset", ".2f")
-        S.add(f"basis_vig_naive_{tag}_cells", S.v(f"circ_vig_all_nielsen_{tail}_before"), f"{RR}/circularity.csv",
+        S.add(f"basis_vig_naive_{tag}_cells", S.v(f"circ_vig_all_any_{tail}_before"), f"{RR}/circularity.csv",
               f"% {tail}, naive vignettes, circularity table (cell averages)", ".2f")
     # per-model tables: value (mean over items, distribution_summary) + per-model test marker
     def mark(m, a, b, tail):
@@ -552,7 +567,7 @@ def sec_extremes(S, tables):
         for m in [x for x in DISPLAY_NAMES if x in set(nz.model)] + ["POOLED"]:
             vals = []
             for cond, base in conds:
-                r = nz[(nz.condition == cond) & (nz.model == m)].iloc[0]
+                r = an[(an.condition == cond) & (an.model == m)].iloc[0]
                 vals += [f"{r[f'pct_{t}']:.1f}" + (mark(m, base, cond, t) if base else "") for t in tails3]
             rows.append(("Mean over models" if m == "POOLED" else mname(m), *vals))
         hdr = []
@@ -594,7 +609,7 @@ def sec_extremes(S, tables):
     # GPT-3.5 Turbo, random doses: overdoses rise with Nielsen supplied
     g35 = "openai/gpt-3.5-turbo"
     for cond in ("rd_naive", "rd_nielsen"):
-        r = nz[(nz.condition == cond) & (nz.model == g35)].iloc[0]
+        r = an[(an.condition == cond) & (an.model == g35)].iloc[0]
         S.add(f"g35_{cond}_over", r.pct_overdose, src, f"GPT-3.5 Turbo % > 2x highest standard, {cond} (mean over items)")
         S.add(f"g35_{cond}_severe", r.pct_severe_overdose, src, f"GPT-3.5 Turbo % > 4x highest standard, {cond} (mean over items)")
         S.add(f"g35_{cond}_above", r.pct_above_range, src, f"GPT-3.5 Turbo % above the range of published standards, {cond} (mean over items)")

@@ -264,25 +264,30 @@ def _wilcoxon(diffs: pd.Series):
     return float(p), float(diffs.median()), float(diffs.mean()), n
 
 
-def paired_items(long, score, cond_a, cond_b, subset="all", outcome="tight") -> pd.DataFrame:
+def paired_items(long, score, cond_a, cond_b, subset="all", outcome="tight", tables=None) -> pd.DataFrame:
     """Model x item outcome under two conditions on the same items.
     diff = b - a for accuracy bands (positive = more within the band under b);
     a - b for tails (lower share is better) and for the threshold-free
-    outcome (smaller error under b), so a positive diff always means b is better."""
+    outcome (smaller error under b), so a positive diff always means b is better.
+
+    ``tables`` ({condition: item_table(...)} computed once for several bands)
+    avoids recomputing the item tables for every outcome; results are identical."""
     bands = [] if outcome == THRESHOLD_FREE else [outcome]
     col = THRESHOLD_FREE if outcome == THRESHOLD_FREE else f"prop_{outcome}"
-    a = item_table(long, score, cond_a, subset, bands)[["model", "item", "ome", col]]
-    b = item_table(long, score, cond_b, subset, bands)[["model", "item", col]]
+    ta = tables[cond_a] if tables else item_table(long, score, cond_a, subset, bands)
+    tb = tables[cond_b] if tables else item_table(long, score, cond_b, subset, bands)
+    a = ta[["model", "item", "ome", col]]
+    b = tb[["model", "item", col]]
     m = a.merge(b, on=["model", "item"], suffixes=("_a", "_b"))
     lower_better = outcome == THRESHOLD_FREE or not BANDS[outcome].higher_is_better
     m["diff"] = (m[f"{col}_a"] - m[f"{col}_b"]) if lower_better else (m[f"{col}_b"] - m[f"{col}_a"])
     return m
 
 
-def paired_effect(long, score, cond_a, cond_b, subset="all", outcome="tight") -> pd.DataFrame:
+def paired_effect(long, score, cond_a, cond_b, subset="all", outcome="tight", tables=None) -> pd.DataFrame:
     """Per-model and POOLED Wilcoxon signed-rank test of the item-level
     difference (b better than a when positive). One row per model + POOLED."""
-    m = paired_items(long, score, cond_a, cond_b, subset, outcome)
+    m = paired_items(long, score, cond_a, cond_b, subset, outcome, tables)
     col = THRESHOLD_FREE if outcome == THRESHOLD_FREE else f"prop_{outcome}"
     rows = []
     for model, g in list(m.groupby("model")) + [("POOLED", m)]:
