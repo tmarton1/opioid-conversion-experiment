@@ -12,7 +12,7 @@ Also writes ``results_revision/responses_long.csv``: one row per response with
 the expected dose under every standard and the ratio under every score.
 
 Expected doses use each standard's whole-conversion answer by factor swap
-(REVISION_PLAN.md 1.2): expected_S = expected_nielsen x ratio_S with
+(REVISION_PLAN_REANALYSIS.md 1.2): expected_S = expected_nielsen x ratio_S with
 
     ratio_S = [sum_i(dose_i * S_i) / S_to] / [sum_i(dose_i * N_i) / N_to]
 

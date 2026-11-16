@@ -1,4 +1,4 @@
-"""Task 1.4: hand-checked rescoring examples (REVISION_PLAN.md 1.4). Stop the run if any fails."""
+"""Task 1.4: hand-checked rescoring examples (REVISION_PLAN_REANALYSIS.md 1.4). Stop the run if any fails."""
 import math
 
 from analysis.revision.rescore import standard_ratio

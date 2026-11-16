@@ -44,7 +44,7 @@ from common import config  # noqa: E402
 
 REF_DIR = os.path.join("results_revision", "references")
 LEGENDS = os.path.join("results_revision", "figure_legends_E5-E7.md")
-# Approval status of this legend (author decision, part 2): accepted for use without author
+# Approval status of this legend (author decision, Figures and appendix): accepted for use without author
 # review. Any change to the text needs author approval (scripts/revision/check_approvals.py).
 ACCEPTED_NOTE = "Accepted from part 1 without author review."
 OUT_DIR = os.path.join(config.FIGURES_DIR, "revision", "examples")

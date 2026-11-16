@@ -1,6 +1,6 @@
 """Check that every number in the private manuscript-number tables matches its source.
 
-Reads revision_private/part2/manuscript_numbers.csv and new_sections_numbers.csv.
+Reads revision_private/figures_appendix/manuscript_numbers.csv and new_sections_numbers.csv.
 Each row has a locator naming a source file, a column or key, a row filter and an
 optional aggregation. The stored value must equal the value recomputed from the
 source exactly. Markdown tables in qualified_claims.md and new_sections_numbers.md
@@ -25,7 +25,7 @@ import numpy as np
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PRIV = os.path.join(ROOT, "revision_private", "part2")
+PRIV = os.path.join(ROOT, "revision_private", "figures_appendix")
 FILTER_RE = re.compile(r"^(\w+)(!=|=|<|>)(.*)$")
 _CACHE: dict = {}
 

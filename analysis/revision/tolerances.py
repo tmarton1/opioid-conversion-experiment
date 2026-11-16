@@ -217,7 +217,7 @@ def within(name: str, ratios: pd.Series, frame: pd.DataFrame) -> pd.Series:
     return out
 
 
-# ── Band justification (REVISION_PLAN.md 1.7) ─────────────────────────────
+# ── Band justification (REVISION_PLAN_REANALYSIS.md 1.7) ─────────────────────────────
 
 def band_justification() -> tuple[pd.DataFrame, dict]:
     conv = scored_spreads()

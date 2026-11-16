@@ -14,7 +14,7 @@ def test_protected_patterns():
     assert ca.is_protected("appendix/appendix.pdf")
     assert ca.is_protected("results_revision/figure_legends.md")
     assert ca.is_protected("summary_w_figures/revision/examples/E2a_fig11_grounding_vignettes_score_view_grid.png")
-    assert ca.is_protected("summary_w_figures/revision/part2/fig_safety.pdf")
+    assert ca.is_protected("summary_w_figures/revision/figures_appendix/fig_safety.pdf")
     assert not ca.is_protected("results_revision/distribution_summary.csv")
     assert not ca.is_protected("summary_w_figures/revision/examples/E3_ranking_shifts_data.csv")
     assert not ca.is_protected("appendix/fig.png" + ca.SIDECAR)

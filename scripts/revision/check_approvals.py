@@ -1,16 +1,16 @@
 """
-Approval gate for model-written public text (revision plan part 2, section 0).
+Approval gate for model-written public text (revision plan (Figures and appendix stage), section 0).
 
 Prose, captions, legends and figure annotations written by a model stay private
 until the authors approve them. Approval is recorded in
-revision_private/part2/approvals.json (private, never committed):
+revision_private/figures_appendix/approvals.json (private, never committed):
 
     {"approved": [{"path": "...", "sha256": "<hex>", "status": "approved" | "accepted_unreviewed",
                    "date": "YYYY-MM-DD", "approver": "...", "note": "..."}]}
 
 Statuses:
   approved             reviewed and approved by the authors;
-  accepted_unreviewed  accepted for use without author review (the part 1 legends
+  accepted_unreviewed  accepted for use without author review (the Reanalysis legends
                        and example figures E1-E8). Allowed on the branch, in the
                        private differences report and the example figures, but
                        never in the public appendix.
@@ -42,7 +42,7 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-APPROVALS = os.path.join(ROOT, "revision_private", "part2", "approvals.json")
+APPROVALS = os.path.join(ROOT, "revision_private", "figures_appendix", "approvals.json")
 
 # Files that carry model-written text (paths relative to the repository root).
 PROTECTED = [
@@ -52,8 +52,8 @@ PROTECTED = [
     "*legend*.md",
     "summary_w_figures/revision/examples/*.png",    # example figures with written titles and annotations
     "summary_w_figures/revision/examples/*.pdf",
-    "summary_w_figures/revision/part2/*.png",       # part 2 figures with written annotations
-    "summary_w_figures/revision/part2/*.pdf",
+    "summary_w_figures/revision/figures_appendix/*.png",       # Figures and appendix figures with written annotations
+    "summary_w_figures/revision/figures_appendix/*.pdf",
 ]
 SIDECAR = ".built_from.json"
 
@@ -204,11 +204,11 @@ def main(argv=None) -> int:
             for p in res[st]:
                 print(f"  {p}")
     if res["blocked"]:
-        print("Not approved (model-written text needs author approval; see revision plan part 2, section 0;"
+        print("Not approved (model-written text needs author approval; see revision plan (Figures and appendix stage), section 0;"
               " files under appendix/ need status \"approved\"):")
         for p in res["blocked"]:
             print(f"  {p}")
-        print("Record the approved content's SHA-256 in revision_private/part2/approvals.json "
+        print("Record the approved content's SHA-256 in revision_private/figures_appendix/approvals.json "
               "(authors only), or keep the file private. Do not use --no-verify.")
         return 1
     return 0

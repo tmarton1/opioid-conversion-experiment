@@ -10,7 +10,7 @@ from resources.reference_data import (
     load_reference, load_reference_raw,
 )
 
-# The values table in REVISION_PLAN.md section 1.1 (blank = no factor).
+# The values table in REVISION_PLAN_REANALYSIS.md section 1.1 (blank = no factor).
 PLAN_TABLE = """\
 oral_codeine | 0.1 | 0.15 | 0.15 | 0.15 |
 oral_hydrocodone | 1.2 | 1 | 1 | 1 | 1
