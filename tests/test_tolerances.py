@@ -84,3 +84,22 @@ def test_range_rates_equal_outside_broad_under_all_standards():
         low = (d["in_broad"] == 0) & (d["ratio"] < 1)
         assert np.array_equal(high.to_numpy(), (d["in_above_range"] == 1).to_numpy()), cond
         assert np.array_equal(low.to_numpy(), (d["in_below_range"] == 1).to_numpy()), cond
+
+
+def test_range_rates_by_prompt_consistent_with_safety_tests():
+    """Text vignettes, all scenarios: the prompt-type table reproduces the
+    per-model safety tests (same paired tests, same items)."""
+    import os
+    import numpy as np
+    import pandas as pd
+    a, b = "results_revision/range_rates_by_prompt.csv", "results_revision/safety_tests_by_model.csv"
+    if not (os.path.exists(a) and os.path.exists(b)):
+        return
+    rp = pd.read_csv(a)
+    st = pd.read_csv(b)
+    for outcome in ("above_range", "below_range"):
+        x = rp[(rp.prompt == "text_vignettes") & (rp.subset == "all") & (rp.outcome == outcome)].set_index("model")
+        y = st[(st.cond_a == "vignette_naive") & (st.cond_b == "vignette_nielsen") & (st.outcome == outcome)].set_index("model")
+        y = y.loc[x.index]
+        assert np.allclose(x.pct_naive, y.mean_a) and np.allclose(x.pct_nielsen, y.mean_b)
+        assert np.allclose(x.p.fillna(-1), y.p.fillna(-1))

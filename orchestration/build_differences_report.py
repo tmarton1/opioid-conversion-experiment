@@ -509,6 +509,29 @@ def sec_extremes(S, tables):
         ["Comparison", "Measure (lower is better)", "Naive % (paired subset)", "Grounded % (paired subset)", "Reduction (pp)",
          "Pooled p (model × item pairs)", "Pairs with any such answer", "Models significantly better / worse"], rows)
 
+    # grounding effect on the range measures by prompt type (results_revision/range_rates_by_prompt.csv)
+    rp = pd.read_csv(f"{RR}/range_rates_by_prompt.csv")
+    rsrc = f"{RR}/range_rates_by_prompt.csv"
+    PROMPT_LABEL = {"random_doses": "Random doses", "empty_prompts": "Empty prompts", "text_vignettes": "Text vignettes"}
+    SUB_LABEL = {"matched": "11 conversions matched to vignettes", "matched_same_conversion": "10 matched to the 16 scenarios",
+                 "all": "20 scenarios", "same_conversion": "16 same-conversion scenarios", "reduction": "4 reduction scenarios (check)"}
+    rows = []
+    for (prompt, sub), g in rp[rp.model == "POOLED"].groupby(["prompt", "subset"], sort=False):
+        vals = []
+        for outcome in ("above_range", "below_range", "broad"):
+            r = g[g.outcome == outcome].iloc[0]
+            k = f"rp_{prompt}_{sub}_{outcome}"
+            S.add(f"{k}_a", r.pct_naive, rsrc, f"% {outcome}, {prompt}, {sub}, naive (paired subset)")
+            S.add(f"{k}_b", r.pct_nielsen, rsrc, f"% {outcome}, {prompt}, {sub}, Nielsen supplied (paired subset)")
+            S.add(f"{k}_p", r.p, rsrc, f"pooled Wilcoxon p, {outcome}, {prompt}, {sub}", pfmt)
+            S.add(f"{k}_better", int(r.models_sig_better), rsrc, f"models significantly better, {outcome}, {prompt}, {sub}", "d")
+            S.add(f"{k}_worse", int(r.models_sig_worse), rsrc, f"models significantly worse, {outcome}, {prompt}, {sub}", "d")
+            vals.append(f"{S[f'{k}_a']['display']} → {S[f'{k}_b']['display']} (p {S[f'{k}_p']['display']}; "
+                        f"{S[f'{k}_better']['display']}/{S[f'{k}_worse']['display']})")
+        rows.append((PROMPT_LABEL[prompt], SUB_LABEL[sub], int(g.n_items.iloc[0]), *vals))
+    tables["range_by_prompt"] = _html_table(
+        ["Prompt", "Items", "n items", "Above the range, % naive → Nielsen (pooled p; models better/worse)",
+         "Below the range", "Within 0.6–1.7× of Nielsen"], rows)
     # basis comparison (two decimals): mean over models vs paired subset, naive vignettes
     rv = nz[(nz.condition == "vignette_naive") & (nz.model == "POOLED")].iloc[0]
     for tail, tag in (("above_range", "above"), ("below_range", "below"), ("overdose", "over"), ("severe_overdose", "severe")):
