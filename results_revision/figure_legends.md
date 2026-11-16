@@ -1,3 +1,5 @@
+Accepted from part 1 without author review.
+
 # Figure legends (draft): revision example figures E1–E8
 
 Merged from the per-group legend files; regenerated figures in `summary_w_figures/revision/examples/`.

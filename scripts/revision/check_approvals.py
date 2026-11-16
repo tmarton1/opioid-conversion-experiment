@@ -5,17 +5,27 @@ Prose, captions, legends and figure annotations written by a model stay private
 until the authors approve them. Approval is recorded in
 revision_private/part2/approvals.json (private, never committed):
 
-    {"approved": [{"path": "...", "sha256": "<hex>", "date": "YYYY-MM-DD", "approver": "..."}]}
+    {"approved": [{"path": "...", "sha256": "<hex>", "status": "approved" | "accepted_unreviewed",
+                   "date": "YYYY-MM-DD", "approver": "...", "note": "..."}]}
 
-A protected file may be committed only if the SHA-256 of its content is listed
-there, or if it has a sidecar "<file>.built_from.json" ({"template": "<path>",
-"sha256": "<hex>"}) naming a template whose hash is listed (a build from an
-approved template). Deterministic outputs (CSVs, stats JSON, figures whose
-text is only axis and registry labels) are not protected.
+Statuses:
+  approved             reviewed and approved by the authors;
+  accepted_unreviewed  accepted for use without author review (the part 1 legends
+                       and example figures E1-E8). Allowed on the branch, in the
+                       private differences report and the example figures, but
+                       never in the public appendix.
+A protected file may be committed only while the SHA-256 of its content is
+listed (any change needs a new "approved" entry), or if it has a sidecar
+"<file>.built_from.json" ({"template": "<path>", "sha256": "<hex>"}) naming a
+template whose hash is listed (a build from that template; the build gets the
+template's status). Files under appendix/ need status "approved".
+Deterministic outputs (CSVs, stats JSON, figures whose text is only axis and
+registry labels) are not protected.
 
     python scripts/revision/check_approvals.py --staged     # pre-commit hook
     python scripts/revision/check_approvals.py --worktree   # changed or untracked files
     python scripts/revision/check_approvals.py FILE ...
+    python scripts/revision/check_approvals.py --list       # recorded entries by status
 
 Exit status 1 lists every protected file that is not approved. Only the
 authors add entries to approvals.json (or the agent adds an entry they dictate);
@@ -59,12 +69,45 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def load_approved(path: str = APPROVALS) -> set[str]:
+APPROVED, ACCEPTED = "approved", "accepted_unreviewed"
+STATUSES = (APPROVED, ACCEPTED)
+APPENDIX_ONLY_APPROVED = ["appendix/*"]
+
+
+def load_entries(path: str = APPROVALS) -> list[dict]:
     if not os.path.exists(path):
-        return set()
+        return []
     with open(path) as f:
         data = json.load(f)
-    return {e["sha256"].lower() for e in data.get("approved", []) if e.get("sha256")}
+    out = []
+    for e in data.get("approved", []):
+        if not e.get("sha256"):
+            continue
+        st = e.get("status", APPROVED)
+        if st not in STATUSES:
+            raise ValueError(f"unknown approval status {st!r} for {e.get('path')}")
+        out.append({**e, "sha256": e["sha256"].lower(), "status": st})
+    return out
+
+
+def load_approved(path: str = APPROVALS) -> dict[str, str]:
+    """sha256 -> status ("approved" wins if a hash is recorded with both)."""
+    out: dict[str, str] = {}
+    for e in load_entries(path):
+        if out.get(e["sha256"]) != APPROVED:
+            out[e["sha256"]] = e["status"]
+    return out
+
+
+def _as_status_map(approved) -> dict[str, str]:
+    if isinstance(approved, dict):
+        return {k.lower(): v for k, v in approved.items()}
+    return {h.lower(): APPROVED for h in approved}      # a plain set means "approved"
+
+
+def needs_approved(path: str) -> bool:
+    p = path.replace(os.sep, "/")
+    return any(fnmatch.fnmatch(p, pat) for pat in APPENDIX_ONLY_APPROVED)
 
 
 def _read(path: str, staged: bool) -> bytes | None:
@@ -78,28 +121,44 @@ def _read(path: str, staged: bool) -> bytes | None:
         return f.read()
 
 
-def unapproved(paths, approved: set[str], staged: bool = False) -> list[str]:
-    """Protected paths among `paths` whose content is not approved. Deleted
-    files are allowed (removing text needs no approval)."""
-    bad = []
-    for p in paths:
-        if not is_protected(p):
-            continue
-        data = _read(p, staged)
-        if data is None:
-            continue
-        if sha256(data) in approved:
-            continue
-        side = _read(p + SIDECAR, staged)
+def status_of(path: str, approved, staged: bool = False):
+    """Status of a protected file's current content: "approved",
+    "accepted_unreviewed", or None (not recorded). Unprotected or deleted -> "free"."""
+    if not is_protected(path):
+        return "free"
+    smap = _as_status_map(approved)
+    data = _read(path, staged)
+    if data is None:
+        return "free"
+    st = smap.get(sha256(data))
+    if st is None:
+        side = _read(path + SIDECAR, staged)
         if side is not None:
             try:
-                t = json.loads(side)
-                if t.get("sha256", "").lower() in approved:
-                    continue
+                st = smap.get(json.loads(side).get("sha256", "").lower())
             except ValueError:
-                pass
-        bad.append(p)
-    return bad
+                st = None
+    return st
+
+
+def classify(paths, approved, staged: bool = False) -> dict[str, list[str]]:
+    """{"blocked": [...], "approved": [...], "accepted_unreviewed": [...]} for the
+    protected paths among `paths`."""
+    out = {"blocked": [], APPROVED: [], ACCEPTED: []}
+    for p in paths:
+        st = status_of(p, approved, staged)
+        if st == "free":
+            continue
+        if st is None or (st == ACCEPTED and needs_approved(p)):
+            out["blocked"].append(p)
+        else:
+            out[st].append(p)
+    return out
+
+
+def unapproved(paths, approved, staged: bool = False) -> list[str]:
+    """Protected paths among `paths` that may not be committed."""
+    return classify(paths, approved, staged)["blocked"]
 
 
 def _git_list(args) -> list[str]:
@@ -122,17 +181,32 @@ def main(argv=None) -> int:
     ap.add_argument("files", nargs="*")
     ap.add_argument("--staged", action="store_true")
     ap.add_argument("--worktree", action="store_true")
+    ap.add_argument("--list", action="store_true", help="list recorded entries by status")
     a = ap.parse_args(argv)
+    if a.list:
+        entries = load_entries()
+        for st in STATUSES:
+            rows = [e for e in entries if e["status"] == st]
+            print(f"{st} ({len(rows)}):")
+            for e in rows:
+                print(f"  {e.get('path')}  {e['sha256'][:12]}  {e.get('date', '')}  {e.get('approver', '')}  {e.get('note', '')}")
+        return 0
     approved = load_approved()
     if a.staged:
-        bad = unapproved(staged_paths(), approved, staged=True)
+        res = classify(staged_paths(), approved, staged=True)
     elif a.worktree:
-        bad = unapproved(worktree_paths(), approved)
+        res = classify(worktree_paths(), approved)
     else:
-        bad = unapproved(a.files, approved)
-    if bad:
-        print("Not approved (model-written text needs author approval; see revision plan part 2, section 0):")
-        for p in bad:
+        res = classify(a.files, approved)
+    for st in (APPROVED, ACCEPTED):
+        if res[st]:
+            print(f"{st} ({len(res[st])}):")
+            for p in res[st]:
+                print(f"  {p}")
+    if res["blocked"]:
+        print("Not approved (model-written text needs author approval; see revision plan part 2, section 0;"
+              " files under appendix/ need status \"approved\"):")
+        for p in res["blocked"]:
             print(f"  {p}")
         print("Record the approved content's SHA-256 in revision_private/part2/approvals.json "
               "(authors only), or keep the file private. Do not use --no-verify.")

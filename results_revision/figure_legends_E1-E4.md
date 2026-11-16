@@ -1,3 +1,5 @@
+Accepted from part 1 without author review.
+
 # Draft legends: example figures E1–E4
 
 Built by `python -m visualize.revision.examples_scores` from `results_revision/responses_long.csv`; files in `summary_w_figures/revision/examples/`. Models are in the fixed global order and colors used by every figure (never by rank). Scores: Nielsen (the original reference); all standards (nearest of Nielsen, CDC 2022, NIH HEAL, McPherson 2018); all except Nielsen (nearest of the three non-Nielsen standards; conversions only Nielsen covers are excluded, so it scores 19 of 20 vignette scenarios and 40 of 49 random-dose pairs).
