@@ -44,6 +44,7 @@ from __future__ import annotations
 
 import ast
 import os
+from functools import lru_cache
 
 import numpy as np
 import pandas as pd
@@ -69,6 +70,7 @@ def _write(df, name):
     os.replace(path + ".tmp", path)
 
 
+@lru_cache(maxsize=None)
 def _inversion_multipliers(standard, from_opioid, from_dose, to_opioid):
     froms, doses = _parse_sources(from_opioid, from_dose)
     sf = [_factor(standard, f) for f in froms]
@@ -85,14 +87,15 @@ def _inversion_multipliers(standard, from_opioid, from_dose, to_opioid):
 def _unit_possible(name, row) -> bool:
     """A unit error is counted only where the prompt makes that confusion
     possible: mg/mcg where a unit in the conversion is in mcg; mcg/h vs mg/day
-    where one is mcg/hr; per 4 h vs per day where the target is mg/4hr."""
+    where one is mcg/hr; per 4 h vs per day where the target is mg/4hr (or mg/4 hours)."""
     units = f"{row.get('from_opioid_unit', '')} {row.get('to_opioid_unit', '')}"
     if name.startswith("mg_vs_mcg"):
         return "mcg" in units
     if name.startswith(("mcg_per_h", "hourly")):
         return "mcg/hr" in units
     if name.startswith("per_4h"):
-        return "4hr" in str(row.get("to_opioid_unit", ""))
+        to = str(row.get("to_opioid_unit", "")).replace(" ", "")
+        return "4hr" in to or "4hours" in to     # "mg/4hr" (vignettes) and "mg/4 hours" (dosing-unit arms)
     return True
 
 
@@ -100,7 +103,12 @@ def _match(ratio, m):
     return TIGHT_RANGE_LOWER * m <= ratio <= TIGHT_RANGE_UPPER * m
 
 
-def classify(row) -> dict:
+def match_lists(row, unit_both_directions: bool = False) -> tuple[list, list]:
+    """Matches of one response: (factor-inversion matches, unit-error matches),
+    each a list of labels ``<pattern>@<standard>``; empty when none. Shared with
+    analysis/revision/error_taxonomy.py. Unit errors are the multiplier only (the
+    answer too large) unless ``unit_both_directions``, which also tries the
+    reciprocal (the answer too small; label suffix ``_inverse``)."""
     inv, unit = [], []
     for s in SCORING_INPUTS:
         e = row.get(f"expected_{s}")
@@ -112,8 +120,17 @@ def classify(row) -> dict:
                 if _match(r, mm):
                     inv.append(f"{name}{sign}F^2@{s}")
         for name, m in UNIT_MULTIPLIERS.items():
-            if _unit_possible(name, row) and _match(r, m):
+            if not _unit_possible(name, row):
+                continue
+            if _match(r, m):
                 unit.append(f"{name}@{s}")
+            if unit_both_directions and _match(r, 1 / m):
+                unit.append(f"{name}_inverse@{s}")
+    return inv, unit
+
+
+def classify(row) -> dict:
+    inv, unit = match_lists(row)
     cls = "factor_inversion" if inv else ("unit_error" if unit else "other")
     return {"error_class": cls, "also_unit": bool(inv and unit),
             "matched": ";".join(sorted(set(inv or unit)))}

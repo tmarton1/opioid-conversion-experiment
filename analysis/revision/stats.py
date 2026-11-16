@@ -296,19 +296,81 @@ def paired_effect(long, score, cond_a, cond_b, subset="all", outcome="tight") ->
 
 # ── CMH ranking for any score and pair of bands ──────────────────────────
 
+def _free_of(cells: pd.DataFrame, band: str) -> str:
+    """Add the complement column ``free_<band>`` = 1 - in_<band> (NaN stays NaN)."""
+    cells[f"free_{band}"] = 1.0 - cells[f"in_{band}"]
+    return f"free_{band}"
+
+
 def rank_models(long, score, condition, subset="all", bands=("tight", "broad")):
-    """CMH ranking (analysis/model_ranking.py) under any score, ranked on any
-    two registered bands (primary, secondary). Returns the built ModelRanking
-    (``result_df``, ``pairs_df``)."""
+    """CMH ranking (analysis/model_ranking.py) under any score, on one or two
+    registered bands. Returns the built ModelRanking (``result_df``, ``pairs_df``).
+
+    Two bands (primary, secondary; the original behaviour, unchanged): models
+    are sorted on the primary band's mean share (secondary breaks ties), one-sided
+    CMH tests are run for both bands over all model pairs, Bonferroni over
+    2 x pairs, and a model drops a tier when any model above it is significantly
+    better on either band. ``result_df`` keeps the columns ``mean_tight_prop`` and
+    ``mean_broad_prop`` for the primary and secondary band.
+
+    One band (``bands=("broad",)``): the same machinery on that band alone. Sorted on
+    the band's mean share, one CMH test per model pair, Bonferroni over the pairs
+    (not twice the pairs, as duplicating the column in ModelRanking would count), same
+    tier rule. ``result_df`` has the band's mean share in both ``mean_tight_prop``
+    and ``mean_broad_prop`` (same value); ``n_tight``/``n_broad`` are both the
+    band's count. The ranking object gets ``bands`` (as passed) and ``criterion``.
+
+    Freedom from a tail: a lower-is-better registry entry (overdose, severe_overdose,
+    underdose) is ranked on its complement, 1 - in_tail, so a higher share of
+    responses outside the tail is better; the same CMH machinery applies (the
+    tail's counts per cell become n - k). Allowed in one-band form, or in the
+    two-band form with accuracy bands and tails mixed (each tail enters as its
+    complement); the share columns then hold the complement ("free") shares.
+    """
     from analysis.model_ranking import ModelRanking
-    b1, b2 = _band_list(bands)
-    if not (BANDS[b1].higher_is_better and BANDS[b2].higher_is_better):
-        raise ValueError("CMH ranking ranks on accuracy bands (higher share better), not on tails")
+    bands = _band_list(bands)
+    if len(bands) not in (1, 2):
+        raise ValueError("rank_models takes one band or two bands (primary, secondary)")
     c = CONDITIONS[condition]
-    cells = cell_table(long, score, condition, subset, [b1, b2])
-    cells = cells.dropna(subset=[f"in_{b1}", f"in_{b2}"])
+    cells = cell_table(long, score, condition, subset, sorted(set(bands)))
+    cols = []
+    for b in bands:
+        cols.append(f"in_{b}" if BANDS[b].higher_is_better else _free_of(cells, b))
+    cells = cells.dropna(subset=cols)
+    two = len(bands) == 2
+    use = tuple(cols) if two else (cols[0], "_dup")
+    if not two:
+        cells = cells.assign(_dup=cells[cols[0]])
     r = ModelRanking(csv_path=None, filters={}, unit_col=c.item,
-                     label=f"{condition} [{score}]", df=cells,
-                     range_cols=(f"in_{b1}", f"in_{b2}"))
+                     label=f"{condition} [{score}]", df=cells, range_cols=use)
     r.build()
+    r.bands = tuple(bands)
+    r.criterion = "+".join(("" if BANDS[b].higher_is_better else "free_") + b for b in bands)
+    if not two:
+        _single_band_bonferroni(r)
     return r
+
+
+def _single_band_bonferroni(r, alpha: float = 0.05) -> None:
+    """Redo the multiple-test correction and the tier assignment of a ModelRanking built
+    on one column duplicated as both ranges: Bonferroni over the model pairs of that one
+    band (NaN p-values excluded from the count, as in ModelRanking), then the same tier
+    rule as ModelRanking.build."""
+    pairs, res = r.pairs_df, r.result_df
+    n_models = len(res)
+    if not pairs.empty:
+        p = pairs["tight_p"].astype(float)
+        m = int(p.notna().sum())
+        corr = (p * m).clip(upper=1.0)
+        pairs["tight_p_bonf"] = corr
+        pairs["broad_p_bonf"] = corr
+        pairs["a_sig_better"] = corr < alpha
+    sig = set()
+    if not pairs.empty:
+        sig = {(int(i), int(j)) for i, j, s in zip(pairs["idx_a"], pairs["idx_b"], pairs["a_sig_better"]) if s}
+    adjusted = [1] + [0] * (n_models - 1)
+    for j in range(1, n_models):
+        sup = [adjusted[i] for i in range(j) if (i, j) in sig]
+        adjusted[j] = max(sup) + 1 if sup else adjusted[j - 1]
+    res["adjusted_rank"] = adjusted
+    r.n_total_tests = len(pairs) if not pairs.empty else 0

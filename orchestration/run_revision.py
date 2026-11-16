@@ -104,6 +104,8 @@ PHASE3_MODULES = [
     "analysis.revision.distribution_metrics",   # 3A
     "analysis.revision.circularity",            # 3B
     "analysis.revision.extreme_breakdown",      # 3A follow-up: extreme-error classes, per-model tail tests
+    "analysis.revision.error_taxonomy",         # FA.4: error taxonomy (outside broad, both directions)
+    "analysis.revision.rankings_by_criterion",  # FA.4: rankings by criterion and rank correlations
     "analysis.revision.di2_subset",             # 3C
     "analysis.revision.model_agreement",        # 3D
     "analysis.revision.standard_matches",       # 3E
