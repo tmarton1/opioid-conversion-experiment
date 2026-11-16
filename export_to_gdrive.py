@@ -85,8 +85,9 @@ def collect_files() -> list[tuple[Path, str]]:
 
 # ── Google Drive helpers ──────────────────────────────────────────────────────
 
-def get_drive_service():
-    """Authenticate and return an authorised Drive API service object."""
+def get_drive_service(allow_browser: bool = True):
+    """Authenticate and return an authorised Drive API service object.
+    With allow_browser=False, exit instead of opening a browser sign-in."""
     try:
         from google.oauth2.credentials import Credentials
         from google.auth.transport.requests import Request
@@ -109,9 +110,21 @@ def get_drive_service():
         creds = Credentials.from_authorized_user_file(str(TOKEN_FILE), SCOPES)
 
     if not creds or not creds.valid:
+        refreshed = False
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
+            try:
+                creds.refresh(Request())
+                refreshed = True
+            except Exception as e:  # e.g. invalid_grant: token revoked or expired
+                if not allow_browser:
+                    sys.exit(f"Google sign-in needed (token refresh failed: {e}); "
+                             "run this script interactively once to sign in.")
+        if refreshed:
+            pass
         else:
+            if not allow_browser:
+                sys.exit("Google sign-in needed (token missing, expired or revoked); "
+                         "run this script interactively once to sign in.")
             flow = InstalledAppFlow.from_client_secrets_file(
                 str(CREDENTIALS_FILE), SCOPES
             )
@@ -173,6 +186,16 @@ def upload_file(service, local_path: Path, parent_id: str) -> str:
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 
+def update_file_by_id(service, file_id: str, local_path: Path) -> dict:
+    """Replace the content of an existing Drive file in place (same ID and link)."""
+    from googleapiclient.http import MediaFileUpload
+    mime = mimetypes.guess_type(str(local_path))[0] or "application/octet-stream"
+    media = MediaFileUpload(str(local_path), mimetype=mime, resumable=True)
+    return service.files().update(fileId=file_id, media_body=media,
+                                  fields="id, name, modifiedTime, size",
+                                  supportsAllDrives=True).execute()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -180,7 +203,26 @@ def main():
                         help="Print what would be uploaded without doing it.")
     parser.add_argument("--replace", action="store_true",
                         help="Delete the existing export folder before uploading.")
+    parser.add_argument("--update-id", metavar="FILE_ID",
+                        help="Replace the content of this existing Drive file in place (keeps its ID and link); "
+                             "use with --file.")
+    parser.add_argument("--file", type=Path, help="Local file to upload with --update-id.")
+    parser.add_argument("--check-id", metavar="FILE_ID",
+                        help="Print the name and modified time of a Drive file (read-only).")
     args = parser.parse_args()
+
+    if args.check_id or args.update_id:
+        service = get_drive_service(allow_browser=sys.stdin.isatty())   # sign-in only when run in a terminal
+        if args.check_id:
+            f = service.files().get(fileId=args.check_id, fields="id, name, modifiedTime, size",
+                                    supportsAllDrives=True).execute()
+            print(f)
+            return
+        if not args.file or not args.file.exists():
+            sys.exit("--update-id needs --file pointing to an existing local file.")
+        f = update_file_by_id(service, args.update_id, args.file)
+        print(f"✓ updated {f.get('name')} ({f.get('id')}) at {f.get('modifiedTime')}")
+        return
 
     files = collect_files()
     if not files:
