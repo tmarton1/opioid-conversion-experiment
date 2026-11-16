@@ -13,7 +13,7 @@ Bands (author decision 2026-11-15: tight and broad only):
   broad   0.6-1.7x   (original): just wider than the largest disagreement between
           current standards (1.5-fold, computed below), so an answer copying any
           current standard, Nielsen included, is always within broad of every
-          other one. Broad under non_nielsen is therefore the fair band test of
+          other one. Broad under non_nielsen is therefore a cross-reference measure of
           circularity; tight under that score fails by construction.
 Safety tails (registry entries, author decision 2026-11-15), anchored on the
 current standards and so the same under every score; lower share is better:

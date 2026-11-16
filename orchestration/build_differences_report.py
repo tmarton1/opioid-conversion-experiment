@@ -445,11 +445,11 @@ def sec_circularity(S, tables):
                                      S[f"{k}_after"]["display"], S[f"{k}_gain"]["display"],
                                      S.get(f"{k}_band_p", S[f"{k}_tf_p"])["display"], surv))
     tables["circularity"] = _html_table(["Experiment", "Subset", "Score", "Outcome", "Naive", "Grounded", "Gain", "p", "Verdict"], rows)
-    # headline verdict: fair tests under non_nielsen
-    fair = [S.v(f"verdict_circ_{x}_all_non_nielsen_{o}") for x in ("vig", "rd") for o in ("median_fold_error", "broad")]
-    S.add("verdict_circularity_overall", "survives" if all(v == "survives" for v in fair) else
-          ("partly survives" if any(v == "survives" for v in fair) else "does not survive"), "rule",
-          "grounding gain under non_nielsen on the fair tests (median fold error, broad), both experiments")
+    # headline verdict: cross-reference measures under non_nielsen
+    xref = [S.v(f"verdict_circ_{x}_all_non_nielsen_{o}") for x in ("vig", "rd") for o in ("median_fold_error", "broad")]
+    S.add("verdict_circularity_overall", "survives" if all(v == "survives" for v in xref) else
+          ("partly survives" if any(v == "survives" for v in xref) else "does not survive"), "rule",
+          "grounding gain under non_nielsen on the cross-reference measures (median fold error, broad), both experiments")
 
 
 # ── Section 6: safety tails (dose terms) and extreme errors ─────────────
