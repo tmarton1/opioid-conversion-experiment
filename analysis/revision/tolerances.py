@@ -237,7 +237,7 @@ def band_justification() -> tuple[pd.DataFrame, dict]:
     info["broad_fold_half_width"] = float(bfold)
     info["broad_covers_any_standard"] = bool(bfold >= mx)
     info["broad_interpretation"] = (
-        f"broad ({blo:g}-{bhi:g}x, at least {bfold:.2f}-fold either way) is just wider than the largest "
+        f"broad ({blo:g}–{bhi:g}×, at least {bfold:.2f}-fold either way) is just wider than the largest "
         f"disagreement between current standards ({mx:.2f}-fold), so an answer copying any current standard, "
         f"Nielsen included, is always within broad of every other one: broad accuracy means within the range "
         f"the published standards disagree over, plus a margin")

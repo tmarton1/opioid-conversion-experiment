@@ -103,6 +103,7 @@ PHASE3_MODULES = [
     "analysis.revision.vignette_reductions",
     "analysis.revision.distribution_metrics",   # 3A
     "analysis.revision.circularity",            # 3B
+    "analysis.revision.extreme_breakdown",      # 3A follow-up: extreme-error classes, per-model tail tests
     "analysis.revision.di2_subset",             # 3C
     "analysis.revision.model_agreement",        # 3D
     "analysis.revision.standard_matches",       # 3E
