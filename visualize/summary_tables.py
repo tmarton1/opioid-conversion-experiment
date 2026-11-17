@@ -13,9 +13,56 @@ Usage
 """
 
 from common.config import RESULTS_DIR
+import html as _html
 import os
 import pandas as pd
 import numpy as np
+
+# Revision (decision 45): Bonferroni-adjusted p beside the unadjusted p (families from
+# results_revision/multiple_comparisons_tests.csv), 0.6-1.7x-only groups beside the published
+# ranks, condition names "naive" / "reference-grounded" / "unit-augmented", and sections for
+# median fold error, scoring against the other references, range rates and extreme errors.
+# OPIOID_FIGURES_SUBMITTED=1 reproduces the submitted tables.
+SUBMITTED = os.environ.get("OPIOID_FIGURES_SUBMITTED", "") == "1"
+REV_DIR = "results_revision"
+_MC = {}
+
+
+def _mc_family(fam: str) -> dict:
+    """{unit: (p, p_bonf)} for one multiple-comparisons family ({} if unavailable)."""
+    if fam not in _MC:
+        path = os.path.join(REV_DIR, "multiple_comparisons_tests.csv")
+        out = {}
+        if os.path.exists(path):
+            if "_df" not in _MC:
+                _MC["_df"] = pd.read_csv(path)
+            d = _MC["_df"][_MC["_df"]["family"] == fam]
+            out = {u: (float(p), float(b)) for u, p, b in zip(d["unit"], d["p"], d["p_bonf"])}
+        _MC[fam] = out
+    return _MC[fam]
+
+
+def _fmt_p(p) -> str:
+    if p is None or not np.isfinite(p):
+        return "—"
+    return f"{p:.2e}" if p < 0.001 else f"{p:.3f}"
+
+
+def _mark(p, pb) -> str:
+    """★ significant after Bonferroni within the family; ☆ p < 0.05 unadjusted only."""
+    if pb is not None and np.isfinite(pb) and pb < 0.05:
+        return "★"
+    if p is not None and np.isfinite(p) and p < 0.05:
+        return "☆"
+    return ""
+
+
+RENAMES = [  # DZ 6 condition names (revision mode only)
+    ("Effect of Nielsen Reference", "Effect of reference grounding (Nielsen's factors in the prompt)"),
+    ("+ Nielsen + Explain Units", ", unit-augmented"),
+    ("+ Nielsen", ", reference-grounded"),
+    (">nielsen↑<", ">grounded↑<"), (">nielsen<", ">reference-grounded<"),
+]
 
 
 class SummaryTablesBuilder:
@@ -300,8 +347,11 @@ class SummaryTablesBuilder:
             f"<b>Wilcoxon signed-rank test</b>: Tests whether the distribution "
             f"of accuracy-proportion differences (A − B) across all model × unit "
             f"pairs is symmetric around zero. Positive Δ = {a_label} more accurate. "
-            f"* = p &lt; 0.05."
-            f"</div>"
+            + ("* = p &lt; 0.05." if SUBMITTED else
+               "Per-model verdicts give the unadjusted p and p<sub>Bonf</sub> (Bonferroni within the family: "
+               "the 13 per-model tests of this comparison and measure); ★ significant after Bonferroni, "
+               "☆ p &lt; 0.05 unadjusted only.")
+            + "</div>"
         )
 
     @staticmethod
@@ -331,6 +381,11 @@ class SummaryTablesBuilder:
             return ("—", "ns")
 
         p_str = f"{p:.2e}" if p < 0.001 else f"{p:.3f}"
+        if not SUBMITTED and wilcoxon_csv:
+            fam = _mc_family(f"{os.path.relpath(wilcoxon_csv)[:-4]}:{range_type}")
+            if model in fam:
+                pb = fam[model][1]
+                p_str += f", p<sub>Bonf</sub>={_fmt_p(pb)}{(' ' + _mark(p, pb)) if _mark(p, pb) else ''}"
 
         if p >= 0.05:
             return (f"n.s. (p={p_str})", "ns")
@@ -495,6 +550,17 @@ class SummaryTablesBuilder:
         tight_col = "mean_tight_prop" if "mean_tight_prop" in df.columns else "tight_prop"
         broad_col = "mean_broad_prop" if "mean_broad_prop" in df.columns else "broad_prop"
 
+        groups = {}
+        if not SUBMITTED and os.path.exists(os.path.join(REV_DIR, "rankings_fig12_fig15_broad.csv")):
+            fig_of = {"ranking_naive_vignettes.csv": "Figure 1", "ranking_naive_random_doses.csv": "Figure 8",
+                      "ranking_random_doses_nielsen.csv": "Figure 12",
+                      "ranking_random_doses_nielsen_units.csv": "Figure 15 (top)",
+                      "ranking_vignettes_nielsen_units.csv": "Figure 15 (bottom)"}.get(os.path.basename(csv_path))
+            rb = pd.read_csv(os.path.join(REV_DIR, "rankings_fig12_fig15_broad.csv"))
+            rb = rb[rb["figure"] == fig_of]
+            groups = dict(zip(rb["model"], rb["group_broad"].astype(int)))
+            if groups:
+                df = df.assign(_g=df["model"].map(groups)).sort_values(["_g", broad_col], ascending=[True, False])
         html = f"""
         <h2>{title}</h2>
         <div class='summary-box'>
@@ -505,10 +571,14 @@ class SummaryTablesBuilder:
         </div>
         <table>
             <tr>
-                <th>Rank</th><th>Model</th>
+                <th>Rank</th>{"<th>Group (0.6–1.7× only)</th>" if groups else ""}<th>Model</th>
                 <th>Tight %</th><th>Broad %</th>
                 <th>Units</th><th>n</th>
             </tr>"""
+        if groups:
+            html = html.replace("<div class='summary-box'>", "<div class='summary-box'>Rows sorted by the group "
+                                "from the 0.6–1.7×-only ranking (one-sided CMH, Bonferroni over model pairs), then by "
+                                "% within 0.6–1.7×; Rank = the published tight-primary rank.<br>", 1)
 
         rows = []
         prev_rank = None
@@ -520,13 +590,14 @@ class SummaryTablesBuilder:
             n_units = int(row["n_units"]) if "n_units" in df.columns else ""
             n = int(row["n_total"])
 
-            # Add visual separator between rank tiers
-            border_class = " step-sig" if prev_rank is not None and rank != prev_rank else ""
-            prev_rank = rank
+            # Add visual separator between rank tiers (between groups in revision mode)
+            tier = groups.get(row["model"], rank) if groups else rank
+            border_class = " step-sig" if prev_rank is not None and tier != prev_rank else ""
+            prev_rank = tier
 
             rows.append(f"""
                 <tr class='{border_class}'>
-                    <td class='rank-cell'>{rank}</td>
+                    <td class='rank-cell'>{rank}</td>{f"<td class='rank-cell'>{groups.get(row['model'], '')}</td>" if groups else ""}
                     <td>{model}</td>
                     <td>{tight_pct}</td><td>{broad_pct}</td>
                     <td>{n_units}</td><td>{n}</td>
@@ -534,6 +605,83 @@ class SummaryTablesBuilder:
 
         html += "\n".join(rows) + "</table>"
         return html
+
+    # ------------------------------------------------------------------
+    # revision sections (decision 45; not in the submitted tables)
+    # ------------------------------------------------------------------
+
+    _EXP = {"vignette": "text vignettes", "random_dose": "random doses"}
+    _SCORE = {"nielsen": "scored against Nielsen", "all": "scored against all current standards",
+              "non_nielsen": "scored against all except Nielsen", "any": "standard-anchored (same under every score)"}
+    _OUT = {"tight": "% within ±15% of the reference", "broad": "% within 0.6–1.7× of the reference",
+            "median_fold_error": "median fold error (lower is better)",
+            "above_range": "% above the range of published standards (> 1.7× the highest; lower is better)",
+            "below_range": "% below the range of published standards (< 0.6× the lowest; lower is better)",
+            "overdose": "% above 2× the highest standard (extreme error; lower is better)",
+            "severe_overdose": "% above 4× the highest standard (extreme error; lower is better)",
+            "underdose": "% below ½× the lowest standard (extreme error; lower is better)"}
+
+    def _revision_table(self, circ: pd.DataFrame, exp: str, score: str, outcome: str) -> str:
+        d = circ[(circ["experiment"] == exp) & (circ["subset"] == "all") & (circ["score"] == score)
+                 & (circ["outcome"] == outcome)].set_index("model")
+        if d.empty:
+            return ""
+        kind = "tf" if outcome == "median_fold_error" else "band"
+        fam = _mc_family(f"circularity:{exp}:all:{score}:{outcome}:{kind}")
+        pcol = "tf_p" if kind == "tf" else "band_p"
+        fmt = (lambda v: f"{v:.2f}×") if outcome == "median_fold_error" else (lambda v: f"{v:.1f}%")
+        rows = []
+        for m in [x for x in d.index if x != "ALL_MODELS"] + (["ALL_MODELS"] if "ALL_MODELS" in d.index else []):
+            r = d.loc[m]
+            pooled = m == "ALL_MODELS"
+            p = float(r[pcol]) if pd.notna(r[pcol]) else np.nan
+            pb = np.nan if pooled else fam.get(m, (np.nan, np.nan))[1]
+            gain = float(r["gain"]) if pd.notna(r["gain"]) else np.nan
+            mk = "" if pooled else _mark(p, pb)
+            if mk and gain < 0:
+                mk = {"★": "▲", "☆": "△"}[mk]
+            name = "<b>all models (pooled)</b>" if pooled else self._shorten_model(m)
+            rows.append(f"<tr><td>{name}</td><td>{fmt(r['before'])}</td><td>{fmt(r['after'])}</td>"
+                        f"<td>{_fmt_p(p)}</td><td>{'(pooled, unadjusted)' if pooled else _fmt_p(pb)}</td>"
+                        f"<td>{mk}</td></tr>")
+        m_fam = len(fam) if fam else "—"
+        return (f"<h3>{self._EXP[exp].capitalize()}, {self._SCORE[score]}: {self._OUT[outcome]}</h3>"
+                f"<table><tr><th>Model</th><th>naive</th><th>reference-grounded</th><th>p</th>"
+                f"<th>p, Bonferroni (family: this column, m = {m_fam})</th><th></th></tr>" + "".join(rows) + "</table>")
+
+    def _build_revision_sections(self) -> str:
+        path = os.path.join(REV_DIR, "circularity.csv")
+        if not os.path.exists(path):
+            return ""
+        circ = pd.read_csv(path)
+        intro = ("<div class='summary-box'>Naive → reference-grounded (Nielsen's factors in the prompt), per model, "
+                 "cell means as in Figure 11 (results_revision/circularity.csv). p: per-model paired Wilcoxon over "
+                 "items (threshold-free test for median fold error); Bonferroni within the family (one table = 13 "
+                 "models). ★ significant after Bonferroni; ☆ p &lt; 0.05 unadjusted only; ▲ / △ the same for a "
+                 "change in the worse direction. Pooled rows: test over model × item pairs, unadjusted. The cutoffs "
+                 "are conventions.</div>")
+        parts = ["<div class='page-break'></div>", "<h1>Median fold error (threshold-free)</h1>", intro]
+        for exp in ("vignette", "random_dose"):
+            for score in ("nielsen", "non_nielsen"):
+                parts.append(self._revision_table(circ, exp, score, "median_fold_error"))
+        parts += ["<div class='page-break'></div>", "<h1>Scoring against the other references</h1>", intro]
+        for exp in ("vignette", "random_dose"):
+            for score in ("all", "non_nielsen"):
+                for outcome in ("broad", "tight"):
+                    parts.append(self._revision_table(circ, exp, score, outcome))
+        parts += ["<div class='page-break'></div>", "<h1>Answers above and below the range of published standards</h1>",
+                  intro.replace("</div>", " Above / below the range: answers outside 0.6–1.7× of every current "
+                                "standard, split by direction.</div>")]
+        for exp in ("vignette", "random_dose"):
+            for outcome in ("above_range", "below_range"):
+                parts.append(self._revision_table(circ, exp, "any", outcome))
+        parts += ["<div class='page-break'></div>", "<h1>Extreme errors</h1>",
+                  intro.replace("</div>", " Extreme errors: below ½× the lowest, above 2× or above 4× the highest "
+                                "current standard.</div>")]
+        for exp in ("vignette", "random_dose"):
+            for outcome in ("underdose", "overdose", "severe_overdose"):
+                parts.append(self._revision_table(circ, exp, "any", outcome))
+        return "\n".join(parts)
 
     # ------------------------------------------------------------------
     # public API
@@ -550,6 +698,12 @@ class SummaryTablesBuilder:
         sections.append("<h1>Model Rankings by Experimental Condition</h1>")
         for csv_path, title in self.RANKING_CSVS:
             sections.append(self._build_ranking_section(csv_path, title))
+        if not SUBMITTED:
+            sections.append(self._build_revision_sections())
+            body = "".join(sections)
+            for old, new in RENAMES:
+                body = body.replace(old, new)
+            sections = [body]
 
         return f"""<!DOCTYPE html>
 <html>

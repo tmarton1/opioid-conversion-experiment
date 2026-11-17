@@ -1036,7 +1036,7 @@ def spearman_variance_icc_bars(
     p = figure(
         width=width, height=height,
         y_range=clean_names_rev,
-        x_range=(-rho_max, rho_max),
+        x_range=(-rho_max, rho_max * (1.0 if os.environ.get("OPIOID_FIGURES_SUBMITTED", "") == "1" else 1.12)),
         toolbar_location=None,
     )
 
@@ -1054,9 +1054,18 @@ def spearman_variance_icc_bars(
         ("p-value", "@pval{0.0000}"),
     ]))
 
-    # Significance annotations
+    # Significance annotations. Revision (decision 45): Bonferroni within the figure's family (the 13
+    # per-model correlations); ★ significant after Bonferroni, ☆ p < 0.05 unadjusted only.
+    # OPIOID_FIGURES_SUBMITTED=1 keeps the submitted stars (unadjusted p).
+    _submitted = os.environ.get("OPIOID_FIGURES_SUBMITTED", "") == "1"
+    _pv = np.array(pvals, dtype=float)
+    _pb = np.minimum(1.0, _pv * int(np.isfinite(_pv).sum()))
+    n_bonf = int((_pb < 0.05).sum())
+    n_open = int(((_pv < 0.05) & ~(_pb < 0.05)).sum())
     for i, (name, rho_v, pv) in enumerate(zip(clean_names_rev, rhos, pvals)):
-        if pv < 0.001:
+        if not _submitted:
+            star = " ★" if _pb[i] < 0.05 else " ☆" if pv < 0.05 else ""
+        elif pv < 0.001:
             star = "***"
         elif pv < 0.01:
             star = "**"
@@ -1093,9 +1102,11 @@ def spearman_variance_icc_bars(
             n_neg = int(sr.get("n_negative", 0))
             sign_p = float(sr["p_value"])
             sign_str = (
-                f"{n_sig_models}/{len(acc_order)} models individually significant (p<0.05). "
+                (f"{n_sig_models}/{len(acc_order)} models individually significant (p<0.05). " if _submitted else
+                 f"{n_bonf}/{len(acc_order)} models individually significant after Bonferroni (★; 13 models), "
+                 f"{n_open} more at p < 0.05 unadjusted only (☆). ") +
                 f"{n_pos} positive, {n_neg} negative. "
-                f"Sign test p={'<0.001' if sign_p < 0.001 else f'= {sign_p:.3f}'}."
+                f"Sign test p{(' < 0.001' if sign_p < 0.001 else f' = {sign_p:.3f}') if not _submitted else ('=<0.001' if sign_p < 0.001 else f'== {sign_p:.3f}')}."
             )
 
     title_div = Div(

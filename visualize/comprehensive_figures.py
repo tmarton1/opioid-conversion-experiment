@@ -79,6 +79,117 @@ def _overall_wilcoxon(comparison_csv: str, range_type: str = "tight"):
     return lookup_pooled_p(wilcoxon_csv, range_type)
 
 
+# ── revision rules (decision 45): DZ 4 multiple comparisons, DZ 6 condition names ─────
+# Default: Bonferroni within each family (results_revision/multiple_comparisons_tests.csv);
+# filled symbol = significant after Bonferroni, open = p < 0.05 unadjusted only; condition
+# names "naive", "reference-grounded", "unit-augmented"; rankings on 0.6-1.7x only, rows
+# sorted by group then % within 0.6-1.7x. OPIOID_FIGURES_SUBMITTED=1 reproduces the submitted
+# figures (stars from unadjusted p, the smaller of the tight and broad p, published labels).
+SUBMITTED = os.environ.get("OPIOID_FIGURES_SUBMITTED", "") == "1"
+_MC_TESTS = os.path.join("results_revision", "multiple_comparisons_tests.csv")
+_MC_RANKINGS = os.path.join("results_revision", "rankings_fig12_fig15_broad.csv")
+_MC_CACHE = {}
+FILLED_MARK = {"better": "★", "worse": "▲"}
+OPEN_MARK = {"better": "☆", "worse": "△"}
+
+
+def _lbl(submitted: str, revised: str) -> str:
+    """Figure text: the submitted wording, or the revision's condition names (DZ 6)."""
+    return submitted if SUBMITTED else revised
+
+
+def _mc_family(fam: str, panel: bool = False) -> dict:
+    """{unit: (p, p_bonf, effect)} for one family of multiple_comparisons_tests.csv ({} if absent).
+    panel=True uses the per-panel family (Figures 9, 10 and 14)."""
+    key = (fam, panel)
+    if key not in _MC_CACHE:
+        out = {}
+        if os.path.exists(_MC_TESTS):
+            if "_df" not in _MC_CACHE:
+                _MC_CACHE["_df"] = pd.read_csv(_MC_TESTS)
+            d = _MC_CACHE["_df"]
+            d = d[d["family"] == fam]
+            col = "p_bonf_panel" if panel else "p_bonf"
+            out = {u: (float(p), float(b), float(e) if pd.notna(e) else np.nan)
+                   for u, p, b, e in zip(d["unit"], d["p"], d[col], d["effect"])}
+        _MC_CACHE[key] = out
+    return _MC_CACHE[key]
+
+
+def _mc_mark(p, p_bonf, direction="better") -> str:
+    """Filled mark if Bonferroni-significant, open mark if p < 0.05 unadjusted only, else ''."""
+    if p_bonf is not None and np.isfinite(p_bonf) and p_bonf < 0.05:
+        return FILLED_MARK[direction]
+    if p is not None and np.isfinite(p) and p < 0.05:
+        return OPEN_MARK[direction]
+    return ""
+
+
+def _wilcoxon_family(comparison_csv: str, measure: str, suffix: str = "") -> str:
+    """Family key of the per-model Wilcoxon tests behind a comparison CSV."""
+    rel = os.path.relpath(_wilcoxon_csv_from_comparison(comparison_csv))
+    return f"{rel[:-4]}:{measure}{suffix}"
+
+
+def _pair_marks(comparison_csv: str, model: str, suffix: str = "", panel: bool = False):
+    """Two marks per model (decision 45: each mark refers to one measure): ±15% then 0.6-1.7x.
+    Returns None when the families are not in the multiple-comparisons table (other scores)."""
+    out = []
+    for measure in ("tight", "broad"):
+        fam = _mc_family(_wilcoxon_family(comparison_csv, measure, suffix), panel)
+        if not fam:
+            return None
+        p, pb, eff = fam.get(model, (np.nan, np.nan, np.nan))
+        # effect > 0 = the second condition is better, except the dosing-unit family (mg/day vs mg/4 h),
+        # whose effect is mg/day minus mg/4 h: there a positive effect means the mg/4 h bar is worse (▲).
+        worse = np.isfinite(eff) and ((eff > 0) if "dosing_unit_effect" in comparison_csv else (eff < 0))
+        out.append(_mc_mark(p, pb, "worse" if worse else "better") or "·")
+    return "n.s." if out == ["·", "·"] else " ".join(out)
+
+
+def _slope_p_bonf(df, model_col="model", pair_col="opioid_pair"):
+    """Figure 9 slopes: Bonferroni per panel (family figure9:slope_panel, m = 636); NaN if absent."""
+    fam = _mc_family("figure9:slope_panel", panel=True)
+    if not fam:
+        return None
+    return np.array([fam.get(f"{m} | {q}", (np.nan, np.nan, np.nan))[1]
+                     for m, q in zip(df[model_col], df[pair_col])], dtype=float)
+
+
+def _slope_pooled_line(model_csv, naive_filter):
+    """Figure 9 (decision 45 amendment 3): pooled test of whether the panel's slopes are negative overall.
+    One-sided sign test on all model x pair slopes of the panel (zero slopes dropped; scale-free, since the
+    slopes of different pairs are in different dose units), plus the per-pair counts after Bonferroni."""
+    from scipy.stats import binomtest
+    df = pd.read_csv(model_csv)
+    for col, val in naive_filter.items():
+        if col in df.columns:
+            df = df[df[col] == val]
+    df = df[df["model"].isin(_CONSISTENT_SET)]
+    sl = df["regression_slope"].dropna()
+    nz = sl[sl != 0]
+    k, n = int((nz < 0).sum()), int(len(nz))
+    p = binomtest(k, n, 0.5, alternative="greater").pvalue
+    pb = _slope_p_bonf(df)
+    ok = ~np.isnan(pb) if pb is not None else np.zeros(len(df), bool)
+    neg_b = int(((df["regression_slope"] < 0).to_numpy() & ok & (np.nan_to_num(pb, nan=1) < 0.05)).sum())
+    pos_b = int(((df["regression_slope"] > 0).to_numpy() & ok & (np.nan_to_num(pb, nan=1) < 0.05)).sum())
+    neg_u = int(((df["regression_slope"] < 0) & (df["regression_slope_pvalue"] < 0.05)).sum())
+    pos_u = int(((df["regression_slope"] > 0) & (df["regression_slope_pvalue"] < 0.05)).sum())
+    ptxt = "p < 0.001" if p < 0.001 else f"p = {p:.3f}"
+    return (f"<p style='font-size:12px;color:#333;margin:2px 0 6px 60px'><b>All slopes in the panel:</b> {k} of {n} "
+            f"non-zero slopes negative, one-sided sign test {ptxt}. Per pair: {neg_b} negative and {pos_b} positive "
+            f"slopes significant after Bonferroni (family: all {len(df)} model × pair slopes of the panel); "
+            f"{neg_u} negative and {pos_u} positive at p &lt; 0.05 unadjusted.</p>")
+
+
+def _bonf_within(pvals):
+    """Bonferroni within one family: min(1, p x m), m = tests with a p-value."""
+    arr = np.array([np.nan if p is None else float(p) for p in pvals], dtype=float)
+    m = int(np.isfinite(arr).sum())
+    return np.minimum(1.0, arr * m)
+
+
 def _significance_star(p):
     """Return significance annotation: ***, **, *, or ns."""
     if p is None:
@@ -184,6 +295,30 @@ def _get_pairwise_significance(ranking_csv: str):
     return result
 
 
+_RANKING_FIGURES = {   # ranking CSV -> (figure, condition) in rankings_fig12_fig15_broad.csv / cmh_broad families
+    "ranking_naive_vignettes.csv": ("Figure 1", "vignette_naive"),
+    "ranking_naive_random_doses.csv": ("Figure 8", "rd_naive"),
+    "ranking_random_doses_nielsen.csv": ("Figure 12", "rd_nielsen"),
+    "ranking_random_doses_nielsen_units.csv": ("Figure 15 (top)", "eu_4h_nielsen_units"),
+    "ranking_vignettes_nielsen_units.csv": ("Figure 15 (bottom)", "vignette_nielsen_units"),
+}
+
+
+def _revision_ranking(ranking_csv: str):
+    """Decision 45: groups from the 0.6-1.7x-only CMH ranking, rows sorted by group then % within
+    0.6-1.7x (results_revision/rankings_fig12_fig15_broad.csv), and the broad-only CMH pair tests
+    (Bonferroni over the model pairs). None when not available (other scores, submitted mode)."""
+    key = _RANKING_FIGURES.get(os.path.basename(ranking_csv))
+    if SUBMITTED or key is None or not os.path.exists(_MC_RANKINGS) or "results_nielsen" not in ranking_csv:
+        return None
+    r = pd.read_csv(_MC_RANKINGS)
+    r = r[r["figure"] == key[0]].sort_values("row_order")
+    fam = _mc_family(f"cmh_broad:{key[1]}")
+    if r.empty or not fam:
+        return None
+    return r["model"].tolist(), dict(zip(r["model"], r["group_broad"].astype(int))), fam
+
+
 def naive_performance_bars(
     ranking_csv: str,
     comparison_csv: Optional[str] = None,
@@ -198,8 +333,12 @@ def naive_performance_bars(
     """
     df = pd.read_csv(ranking_csv).sort_values("adjusted_rank")
     df = df[df["model"].isin(_CONSISTENT_SET)]
+    rev = _revision_ranking(ranking_csv)
+    if rev is not None:
+        order, groups_broad, cmh_fam = rev
+        df = df.set_index("model").loc[[m for m in order if m in set(df["model"])]].reset_index()
     models = df["model"].tolist()
-    ranks = df["adjusted_rank"].tolist()
+    ranks = [groups_broad[m] for m in models] if rev is not None else df["adjusted_rank"].tolist()
     clean_names = [f"({int(r)}) {_clean(m)}" for m, r in zip(models, ranks)]
     colors = [MODEL_COLOR_DICT.get(m, "#888888") for m in models]
 
@@ -259,14 +398,20 @@ def naive_performance_bars(
     for i in range(n - 1):
         model_top = models_rev[i + 1]
         model_bot = models_rev[i]
-        p_val = pairwise.get((model_top, model_bot), np.nan)
+        if rev is not None:     # one-sided CMH, upper row better than lower; filled = Bonferroni (model pairs)
+            pp, pb, _ = cmh_fam.get(f"{model_top} > {model_bot}", (np.nan, np.nan, np.nan))
+            stars = _mc_mark(pp, pb)
+            if not stars:
+                continue
+        else:
+            p_val = pairwise.get((model_top, model_bot), np.nan)
 
-        if np.isnan(p_val):
-            continue
+            if np.isnan(p_val):
+                continue
 
-        stars = _significance_star(p_val)
-        if not stars:
-            continue
+            stars = _significance_star(p_val)
+            if not stars:
+                continue
 
         # Position bracket near the longer bar of the pair
         pair_max = max(broads[i], broads[i + 1]) if i + 1 < len(broads) else broads[i]
@@ -764,9 +909,11 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
 
     # Read pre-computed chi-square p-values per model
     model_pvals: dict[str, float] = {}
+    model_pbonf: dict[str, float] = {}
     if chi2_csv and os.path.exists(chi2_csv):
         chi2_df = pd.read_csv(chi2_csv)
         model_pvals = dict(zip(chi2_df["model"], chi2_df["p_value"]))
+        model_pbonf = dict(zip(chi2_df["model"], _bonf_within(chi2_df["p_value"])))
 
     all_rows = []
     idx = 0
@@ -796,7 +943,10 @@ def _cv_accuracy_mosaic(df, cv_col, tight_col, broad_col,
                     pcts.append(f"{prop:.0%}")
 
             pval = model_pvals.get(m, np.nan)
-            if np.isnan(pval):
+            if not SUBMITTED and np.isfinite(pval):
+                mk = _mc_mark(pval, model_pbonf.get(m, np.nan))
+                star = f" χ² {mk}" if mk else " χ² n.s."
+            elif np.isnan(pval):
                 star = " χ² NA"
             elif pval < 0.001:
                 star = " χ² ***"
@@ -904,6 +1054,9 @@ def cv_strip_chart(
 
     # Determine if slope highlighting is possible
     has_slope = slope_col in df.columns and slope_p_col in df.columns
+    pbonf = None if (SUBMITTED or not has_slope or pair_col not in df.columns) else _slope_p_bonf(df, pair_col=pair_col)
+    if pbonf is not None:
+        df = df.assign(_slope_p_bonf=pbonf)
 
     # Sort models by ranked order (best at top)
     ranked = get_ranked_model_order()
@@ -930,10 +1083,10 @@ def cv_strip_chart(
                 if (slope_val is not None and p_val is not None
                         and not np.isnan(slope_val) and not np.isnan(p_val)
                         and p_val < slope_alpha):
-                    if slope_val < 0:
-                        outlines.append("black")
-                    else:
-                        outlines.append("grey")
+                    base = "black" if slope_val < 0 else "grey"
+                    if pbonf is not None and not (row.get("_slope_p_bonf", np.nan) < slope_alpha):
+                        base += "_open"          # p < 0.05 unadjusted only (decision 45)
+                    outlines.append(base)
                 else:
                     outlines.append(None)
             else:
@@ -985,6 +1138,13 @@ def cv_strip_chart(
         r3 = p.scatter("x", "y", color="color", alpha=0.8, size=8,
                         line_color="#888888", line_width=1.5, source=src_pos)
 
+    # Open dots: significant slope at p < 0.05 unadjusted only (white fill, colored outline)
+    for key, lc in (("black_open", "black"), ("grey_open", "#888888")):
+        idx_o = [i for i, o in enumerate(outlines) if o == key]
+        if idx_o:
+            p.scatter([xs[i] for i in idx_o], [ys[i] for i in idx_o], fill_color="white", size=7,
+                      line_color=lc, line_width=1.2)
+
     p.add_tools(HoverTool(tooltips=[("Pair", "@pair"), ("CV", "@x{0.00}")]))
 
     p.xaxis.axis_label = "Coefficient of Variation"
@@ -1006,9 +1166,13 @@ def cv_strip_chart(
 
     # Update axis label to reflect slope highlighting
     slope_parts = []
-    if idx_neg:
+    if pbonf is not None:
+        p.below[0].axis_label = ("CV   (black / grey outline: negative / positive slope after Bonferroni; "
+                                 "open: p < 0.05 unadjusted only)")
+        slope_parts = []
+    if idx_neg and pbonf is None:
         slope_parts.append(f"black outline = sig. negative slope")
-    if idx_pos:
+    if idx_pos and pbonf is None:
         slope_parts.append(f"grey outline = sig. positive slope")
     if slope_parts:
         p.below[0].axis_label = (
@@ -1048,7 +1212,7 @@ def nielsen_effect_bars(
         models = sorted(set(naive.index) & set(nielsen.index))
 
     clean_names = [_clean(m) for m in models]
-    bar_labels = ["naive", "Nielsen"]
+    bar_labels = ["naive", _lbl("Nielsen", "reference-grounded")]
 
     x_factors = [(cn, bl) for cn in clean_names for bl in bar_labels]
 
@@ -1057,7 +1221,7 @@ def nielsen_effect_bars(
         cn = _clean(m)
         color = MODEL_COLOR_DICT.get(m, "#888888")
         for batch_name, label, batch_df in [(naive_batch, "naive", naive),
-                                            (nielsen_batch, "Nielsen", nielsen)]:
+                                            (nielsen_batch, bar_labels[1], nielsen)]:
             t = batch_df.loc[m, "mean_in_tight"]
             b = batch_df.loc[m, "mean_in_broad"]
             bar_data["x"].append((cn, label))
@@ -1082,16 +1246,18 @@ def nielsen_effect_bars(
     if os.path.exists(comparison_csv):
         star_x, star_y, star_text = [], [], []
         for m, cn in zip(models, clean_names):
-            p_t, _, _ = _per_model_wilcoxon(comparison_csv, m, "tight")
-            p_b, _, _ = _per_model_wilcoxon(comparison_csv, m, "broad")
-            p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
-            s = _significance_star(p_min)
+            s = None if SUBMITTED else _pair_marks(comparison_csv, m)
+            if s is None:
+                p_t, _, _ = _per_model_wilcoxon(comparison_csv, m, "tight")
+                p_b, _, _ = _per_model_wilcoxon(comparison_csv, m, "broad")
+                p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
+                s = _significance_star(p_min)
             if s:
                 broad_max = max(
                     naive.loc[m, "mean_in_broad"],
                     nielsen.loc[m, "mean_in_broad"],
                 )
-                star_x.append((cn, "Nielsen"))
+                star_x.append((cn, bar_labels[1]))
                 star_y.append(broad_max + 0.03)
                 star_text.append(s)
 
@@ -1252,7 +1418,7 @@ def explain_units_bars(
               if m in c1.index and m in c2.index and m in c3.index]
 
     clean_names = [_clean(m) for m in models]
-    cond_labels = ["mg/day", "mg/4h", "mg/4h explained"]
+    cond_labels = ["mg/day", "mg/4h", _lbl("mg/4h explained", "mg/4h unit-augmented")]
 
     x_factors = [(cn, cl) for cn in clean_names for cl in cond_labels]
     bar_data = {"x": [], "tight": [], "broad_top": [], "color": [], "model": [], "batch": []}
@@ -1260,7 +1426,7 @@ def explain_units_bars(
     for m in models:
         cn = _clean(m)
         color = MODEL_COLOR_DICT.get(m, "#888888")
-        for label, src_df in [("mg/day", c1), ("mg/4h", c2), ("mg/4h explained", c3)]:
+        for label, src_df in zip(cond_labels, [c1, c2, c3]):
             t = src_df.loc[m, "mean_in_tight"]
             b = src_df.loc[m, "mean_in_broad"]
             bar_data["x"].append((cn, label))
@@ -1297,15 +1463,17 @@ def explain_units_bars(
     if dosing_comparison_csv and os.path.exists(dosing_comparison_csv):
         bracket_defs.append((dosing_comparison_csv, "mg/day", "mg/4h", 1))
     if os.path.exists(comparison_csv):
-        bracket_defs.append((comparison_csv, "mg/4h", "mg/4h explained", 2))
+        bracket_defs.append((comparison_csv, "mg/4h", cond_labels[2], 2))
 
     for m, cn in zip(models, clean_names):
         model_max = max(_bar_top(cn, cl) for cl in cond_labels)
         for csv_path, left_lbl, right_lbl, level in bracket_defs:
-            p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
-            p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
-            p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
-            stars = _significance_star(p_min)
+            stars = None if SUBMITTED else _pair_marks(csv_path, m, suffix="", panel=True)
+            if stars is None:
+                p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
+                p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
+                p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
+                stars = _significance_star(p_min)
             if stars:
                 bracket_y = model_max + BRACKET_PAD + (level - 1) * BRACKET_STEP
                 _draw_bracket(p, cn, left_lbl, right_lbl, bracket_y, stars,
@@ -1374,14 +1542,10 @@ def full_treatment_bars(
         models = sorted(available)
 
     clean_names = [_clean(m) for m in models]
-    cond_labels = ["naive", "mg/day+N", "mg/4h+N", "mg/4h+N+E"]
+    cond_labels = (["naive", "mg/day+N", "mg/4h+N", "mg/4h+N+E"] if SUBMITTED
+                   else ["naive", "mg/day grounded", "mg/4h grounded", "mg/4h unit-aug."])
 
-    conditions = [
-        ("naive", naive_df),
-        ("mg/day+N", daily_nielsen),
-        ("mg/4h+N", fourh_nielsen),
-        ("mg/4h+N+E", fourh_explained),
-    ]
+    conditions = list(zip(cond_labels, [naive_df, daily_nielsen, fourh_nielsen, fourh_explained]))
 
     x_factors = [(cn, cl) for cn in clean_names for cl in cond_labels]
     bar_data = {"x": [], "tight": [], "broad_top": [], "color": [], "model": [], "batch": []}
@@ -1423,17 +1587,19 @@ def full_treatment_bars(
     # Bracket definitions: (csv, left_label, right_label, level)
     bracket_defs = []
     if os.path.exists(comparison_nielsen_csv):
-        bracket_defs.append((comparison_nielsen_csv, "naive", "mg/day+N", 1))
+        bracket_defs.append((comparison_nielsen_csv, cond_labels[0], cond_labels[1], 1))
     if os.path.exists(comparison_units_csv):
-        bracket_defs.append((comparison_units_csv, "mg/4h+N", "mg/4h+N+E", 2))
+        bracket_defs.append((comparison_units_csv, cond_labels[2], cond_labels[3], 2))
 
     for m, cn in zip(models, clean_names):
         model_max = max(_bar_top(cn, cl) for cl in cond_labels)
         for csv_path, left_lbl, right_lbl, level in bracket_defs:
-            p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
-            p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
-            p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
-            stars = _significance_star(p_min)
+            stars = None if SUBMITTED else _pair_marks(csv_path, m, suffix="@figure14bottom", panel=True)
+            if stars is None:
+                p_t, _, _ = _per_model_wilcoxon(csv_path, m, "tight")
+                p_b, _, _ = _per_model_wilcoxon(csv_path, m, "broad")
+                p_min = min(p for p in [p_t, p_b] if p is not None) if any(p is not None for p in [p_t, p_b]) else None
+                stars = _significance_star(p_min)
             if stars:
                 bracket_y = model_max + BRACKET_PAD + (level - 1) * BRACKET_STEP
                 _draw_bracket(p, cn, left_lbl, right_lbl, bracket_y, stars,
@@ -1550,7 +1716,13 @@ def cross_experiment_bars(
             if pd.isna(p_val):
                 continue
 
-            stars = _significance_star(p_val)
+            fam = {} if SUBMITTED else _mc_family(
+                f"{os.path.relpath(matched_wilcoxon_csv)[:-4]}:{cond_a_key}-{cond_b_key}:broad", panel=True)
+            if fam:
+                pp, pb, eff = fam.get(m, (np.nan, np.nan, np.nan))
+                stars = _mc_mark(pp, pb) or "n.s."      # one measure (0.6-1.7x); family = the panel (39 tests)
+            else:
+                stars = _significance_star(p_val)
             if not stars:
                 continue
 
@@ -1822,6 +1994,17 @@ class ComprehensiveFigureBuilder:
 
         # Bottom: error profile stacked bars
         profile_csv = self._p("performance_profile_random_doses.csv")
+        adj = None if SUBMITTED else _slope_p_bonf(pd.read_csv(csv))
+        if adj is not None and np.isfinite(adj).any():
+            from analysis.performance_profile import compute_random_dose_profile
+            tmp = pd.read_csv(csv).assign(regression_slope_pvalue_bonf=adj)
+            # rows without a test in the family (other conditions) keep NaN: never classed as dose-dependent
+            tmp_csv = self._f("_figure9_slopes_bonferroni.csv")
+            tmp.to_csv(tmp_csv, index=False)
+            profile_csv = self._f("performance_profile_random_doses_bonferroni.csv")
+            compute_random_dose_profile(tmp_csv, output_csv=profile_csv, naive_filter=naive_filter,
+                                        slope_p_col="regression_slope_pvalue_bonf")
+            os.remove(tmp_csv)
         if not os.path.exists(profile_csv):
             from analysis.performance_profile import compute_random_dose_profile
             compute_random_dose_profile(csv, output_csv=profile_csv,
@@ -1835,7 +2018,9 @@ class ComprehensiveFigureBuilder:
             profile_csv=profile_csv,
         )
 
-        return column(top, mid, bot)
+        if SUBMITTED:
+            return column(top, mid, bot)
+        return column(top, Div(text=_slope_pooled_line(csv, naive_filter), width=800), mid, bot)
 
     def build_icc_heatmap(self):
         """ICC heatmap — model × scenario (naive condition)."""
@@ -1981,18 +2166,18 @@ class ComprehensiveFigureBuilder:
         """Ranked model performance with Nielsen — random doses."""
         return naive_performance_bars(
             ranking_csv=self._p("ranking_random_doses_nielsen.csv"),
-            title="Nielsen Performance by Model — Random Doses",
+            title=_lbl("Nielsen Performance by Model — Random Doses", "Reference-grounded performance by model — random doses"),
         )
 
     def build_nielsen_units_ranked(self):
         """Ranked model performance with Nielsen + explain units."""
         rd = naive_performance_bars(
             ranking_csv=self._p("ranking_random_doses_nielsen_units.csv"),
-            title="Nielsen + Explain Units — Random Doses (Oral Morphine)",
+            title=_lbl("Nielsen + Explain Units — Random Doses (Oral Morphine)", "Unit-augmented — random doses (mg/4 h, to oral morphine)"),
         )
         vig = naive_performance_bars(
             ranking_csv=self._p("ranking_vignettes_nielsen_units.csv"),
-            title="Nielsen + Explain Units — Vignettes",
+            title=_lbl("Nielsen + Explain Units — Vignettes", "Unit-augmented — text vignettes"),
         )
         return column(rd, vig)
 
@@ -2013,7 +2198,7 @@ class ComprehensiveFigureBuilder:
             comparison_csv=self._p("comparison_nielsen_effect_vignettes.csv"),
             naive_batch="all_n0",
             nielsen_batch="all_n1",
-            title="Nielsen Effect — Vignettes",
+            title=_lbl("Nielsen Effect — Vignettes", "Reference-grounding effect — text vignettes"),
             width=900, height=370,
         )
         rd = nielsen_effect_bars(
@@ -2021,7 +2206,7 @@ class ComprehensiveFigureBuilder:
             comparison_csv=self._p("comparison_nielsen_effect_random_dose.csv"),
             naive_batch="all_n0",
             nielsen_batch="all_n1",
-            title="Nielsen Effect — Random Doses",
+            title=_lbl("Nielsen Effect — Random Doses", "Reference-grounding effect — random doses"),
             width=900, height=370,
         )
         return column(vig, rd)
@@ -2033,7 +2218,7 @@ class ComprehensiveFigureBuilder:
             comparison_csv=self._p("comparison_nielsen_effect_vignettes_ome.csv"),
             naive_batch="ome_n0",
             nielsen_batch="ome_n1",
-            title="Vignettes — Oral Morphine",
+            title=_lbl("Vignettes — Oral Morphine", "Text vignettes, involving oral morphine — naive vs reference-grounded"),
             width=900, height=300,
         )
         vig_nonome = nielsen_effect_bars(
@@ -2041,7 +2226,7 @@ class ComprehensiveFigureBuilder:
             comparison_csv=self._p("comparison_nielsen_effect_vignettes_nonome.csv"),
             naive_batch="pairs_n0",
             nielsen_batch="pairs_n1",
-            title="Vignettes — Non-Oral-Morphine",
+            title=_lbl("Vignettes — Non-Oral-Morphine", "Text vignettes, other conversions — naive vs reference-grounded"),
             width=900, height=300,
         )
         rd_ome = nielsen_effect_bars(
@@ -2049,7 +2234,7 @@ class ComprehensiveFigureBuilder:
             comparison_csv=self._p("comparison_nielsen_effect_random_dose_ome.csv"),
             naive_batch="ome_n0",
             nielsen_batch="ome_n1",
-            title="Random Doses — Oral Morphine",
+            title=_lbl("Random Doses — Oral Morphine", "Random doses, to oral morphine — naive vs reference-grounded"),
             width=900, height=300,
         )
         rd_nonome = nielsen_effect_bars(
@@ -2057,7 +2242,7 @@ class ComprehensiveFigureBuilder:
             comparison_csv=self._p("comparison_nielsen_effect_random_dose_nonome.csv"),
             naive_batch="pairs_n0",
             nielsen_batch="pairs_n1",
-            title="Random Doses — Non-Oral-Morphine",
+            title=_lbl("Random Doses — Non-Oral-Morphine", "Random doses, other conversions — naive vs reference-grounded"),
             width=900, height=300,
         )
         sep = Div(text="<hr style='border:1px solid #ccc; margin:12px 0'>", width=900)
@@ -2070,7 +2255,7 @@ class ComprehensiveFigureBuilder:
             explain_units_pair_csv=self._p("explain_units_pair_model_analysis.csv"),
             comparison_csv=self._p("comparison_units_effect_random_dose.csv"),
             dosing_comparison_csv=self._p("comparison_dosing_unit_effect.csv"),
-            title="Dosing-Unit Effect — OME Random Doses",
+            title=_lbl("Dosing-Unit Effect — OME Random Doses", "Dosing-unit effect, reference-grounded — random doses to oral morphine"),
             width=1000, height=400,
         )
         ft = full_treatment_bars(
@@ -2079,7 +2264,7 @@ class ComprehensiveFigureBuilder:
             batch_means_csv=self._p("model_batch_means.csv"),
             comparison_nielsen_csv=self._p("comparison_nielsen_effect_random_dose_ome.csv"),
             comparison_units_csv=self._p("comparison_units_effect_random_dose.csv"),
-            title="Full Treatment Pipeline — OME Random Doses",
+            title=_lbl("Full Treatment Pipeline — OME Random Doses", "Naive → reference-grounded → mg/4 h → unit-augmented — random doses to oral morphine"),
             width=1100, height=420,
         )
         return column(eu, ft)
