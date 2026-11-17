@@ -1,0 +1,66 @@
+figure,panel,condition,model,row_order,pct_broad,group_broad,n_in_group,n_groups,n_responses,n_items,published_group,published_order,published_pct_tight,published_pct_broad,group_changed,n_pairs_tested,n_pairs_sig_bonf_broad_only
+Figure 1,naive vignettes,vignette_naive,anthropic/claude-3.5-sonnet:20241022,1,83.39285714,1,2,5,560,20,2,5,32.85714286,83.39285714,True,78,55
+Figure 1,naive vignettes,vignette_naive,mistralai/mistral-large-2407,2,83.21428571,1,2,5,560,20,1,1,42.14285714,83.21428571,False,78,55
+Figure 1,naive vignettes,vignette_naive,google/gemini-2.5-pro,3,77.85714286,2,3,5,559,20,1,3,36.60714286,77.85714286,True,78,55
+Figure 1,naive vignettes,vignette_naive,openai/gpt-4.1,4,77.85714286,2,3,5,560,20,1,2,40.89285714,77.85714286,True,78,55
+Figure 1,naive vignettes,vignette_naive,meta-llama/llama-3.3-70b-instruct,5,75.17857143,2,3,5,560,20,3,6,31.60714286,75.17857143,True,78,55
+Figure 1,naive vignettes,vignette_naive,openai/gpt-4.1-mini,6,70.53571429,3,1,5,560,20,2,4,33.75,70.53571429,True,78,55
+Figure 1,naive vignettes,vignette_naive,deepseek/deepseek-chat,7,63.57142857,4,4,5,560,20,5,10,22.67857143,63.57142857,True,78,55
+Figure 1,naive vignettes,vignette_naive,mistralai/mixtral-8x22b-instruct,8,60.35714286,4,4,5,560,20,5,12,16.96428571,60.35714286,True,78,55
+Figure 1,naive vignettes,vignette_naive,google/gemini-2.5-flash,9,60,4,4,5,560,20,4,8,25,60,False,78,55
+Figure 1,naive vignettes,vignette_naive,qwen/qwen-2.5-72b-instruct,10,56.19047619,4,4,5,506,20,4,11,21.96428571,56.19047619,False,78,55
+Figure 1,naive vignettes,vignette_naive,ai21/jamba-large-1.7,11,56.07142857,5,3,5,560,20,4,7,28.75,56.07142857,True,78,55
+Figure 1,naive vignettes,vignette_naive,openai/gpt-3.5-turbo,12,53.03571429,5,3,5,560,20,4,9,24.82142857,53.03571429,True,78,55
+Figure 1,naive vignettes,vignette_naive,cohere/command-r-plus-08-2024,13,50.89285714,5,3,5,554,20,6,13,16.42857143,50.89285714,True,78,55
+Figure 8,naive random doses,rd_naive,google/gemini-2.5-pro,1,82.07821431,1,1,6,763,49,1,1,35.27207482,82.07821431,False,78,64
+Figure 8,naive random doses,rd_naive,google/gemini-2.5-flash,2,71.49479713,2,2,6,940,49,2,2,29.39833485,71.49479713,False,78,64
+Figure 8,naive random doses,rd_naive,openai/gpt-4.1,3,70.9898769,2,2,6,796,49,3,3,25.61414804,70.9898769,True,78,64
+Figure 8,naive random doses,rd_naive,anthropic/claude-3.5-sonnet:20241022,4,71.36888565,3,1,6,796,49,3,4,25.13613541,71.36888565,False,78,64
+Figure 8,naive random doses,rd_naive,openai/gpt-4.1-mini,5,59.81597397,4,4,6,1565,49,4,5,21.24624548,59.81597397,False,78,64
+Figure 8,naive random doses,rd_naive,qwen/qwen-2.5-72b-instruct,6,59.34126984,4,4,6,731,49,5,10,15.46076288,59.34126984,True,78,64
+Figure 8,naive random doses,rd_naive,mistralai/mistral-large-2407,7,58.25315841,4,4,6,796,49,4,6,17.81814869,58.25315841,False,78,64
+Figure 8,naive random doses,rd_naive,deepseek/deepseek-chat,8,56.60313411,4,4,6,753,49,4,9,15.6324506,56.60313411,False,78,64
+Figure 8,naive random doses,rd_naive,ai21/jamba-large-1.7,9,54.31628604,5,3,6,753,49,5,7,16.17751863,54.31628604,False,78,64
+Figure 8,naive random doses,rd_naive,meta-llama/llama-3.3-70b-instruct,10,48.99700356,5,3,6,753,49,6,12,12.32944606,48.99700356,True,78,64
+Figure 8,naive random doses,rd_naive,openai/gpt-3.5-turbo,11,47.640405,5,3,6,1316,49,5,8,15.85867215,47.640405,False,78,64
+Figure 8,naive random doses,rd_naive,mistralai/mixtral-8x22b-instruct,12,29.1235339,6,2,6,793,49,6,11,12.83385973,29.1235339,False,78,64
+Figure 8,naive random doses,rd_naive,cohere/command-r-plus-08-2024,13,27.76886945,6,2,6,753,49,7,13,10.84823453,27.76886945,True,78,64
+Figure 12,"random doses, reference-grounded",rd_nielsen,anthropic/claude-3.5-sonnet:20241022,1,100,1,4,5,422,49,1,1,100,100,False,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,google/gemini-2.5-flash,2,99.82078853,1,4,5,1240,49,1,2,99.82078853,99.82078853,False,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,google/gemini-2.5-pro,3,99.59183673,1,4,5,416,49,1,4,98.71720117,99.59183673,False,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,deepseek/deepseek-chat,4,99.12536443,1,4,5,422,49,1,3,99.12536443,99.12536443,False,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,openai/gpt-4.1-mini,5,96.93650794,2,4,5,1774,49,2,5,96.40589569,96.93650794,False,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,qwen/qwen-2.5-72b-instruct,6,95.33527697,2,4,5,400,49,2,7,94.07191448,95.33527697,False,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,mistralai/mistral-large-2407,7,95.04373178,2,4,5,422,49,3,8,91.83673469,95.04373178,True,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,openai/gpt-4.1,8,94.75218659,2,4,5,422,49,2,6,94.75218659,94.75218659,False,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,mistralai/mixtral-8x22b-instruct,9,88.9212828,3,2,5,422,49,4,9,83.3819242,88.9212828,True,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,meta-llama/llama-3.3-70b-instruct,10,84.7829608,3,2,5,422,49,4,10,77.20278588,84.7829608,True,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,ai21/jamba-large-1.7,11,68.85325559,4,2,5,402,49,5,11,57.67735666,68.85325559,True,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,openai/gpt-3.5-turbo,12,64.73696145,4,2,5,1508,49,5,13,52.0430839,64.73696145,True,78,61
+Figure 12,"random doses, reference-grounded",rd_nielsen,cohere/command-r-plus-08-2024,13,62.97376093,5,1,5,422,49,5,12,53.64431487,62.97376093,False,78,61
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,anthropic/claude-3.5-sonnet:20241022,1,100,1,3,6,500,20,1,1,100,100,False,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,openai/gpt-4.1,2,98.4,1,3,6,500,20,1,2,98.4,98.4,False,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,google/gemini-2.5-pro,3,96.49166667,1,3,6,443,20,2,3,95.825,96.49166667,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,openai/gpt-4.1-mini,4,88,2,3,6,500,20,3,4,88,88,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,deepseek/deepseek-chat,5,86.6,2,3,6,500,20,3,5,86.6,86.6,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,mistralai/mixtral-8x22b-instruct,6,85.4,2,3,6,500,20,4,7,69.4,85.4,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,mistralai/mistral-large-2407,7,75.4,3,2,6,500,20,4,6,75.2,75.4,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,qwen/qwen-2.5-72b-instruct,8,71.67272727,3,2,6,497,20,5,8,66.67272727,71.67272727,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,google/gemini-2.5-flash,9,57.6,4,1,6,500,20,6,9,54.6,57.6,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,cohere/command-r-plus-08-2024,10,37,5,1,6,500,20,7,10,32.8,37,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,ai21/jamba-large-1.7,11,24,6,3,6,500,20,8,11,24,24,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,openai/gpt-3.5-turbo,12,22,6,3,6,500,20,9,13,8,22,True,78,68
+Figure 15 (top),"random doses mg/4 h, unit-augmented",eu_4h_nielsen_units,meta-llama/llama-3.3-70b-instruct,13,20.2173913,6,3,6,495,20,9,12,10.0173913,20.2173913,True,78,68
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,anthropic/claude-3.5-sonnet:20241022,1,100,1,2,6,560,20,2,2,94.10714286,100,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,google/gemini-2.5-pro,2,100,1,2,6,556,20,1,1,99.64285714,100,False,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,deepseek/deepseek-chat,3,94.82142857,2,3,6,560,20,3,4,86.25,94.82142857,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,openai/gpt-4.1,4,93.21428571,2,3,6,560,20,3,3,88.39285714,93.21428571,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,qwen/qwen-2.5-72b-instruct,5,92.5,2,3,6,560,20,7,9,64.64285714,92.5,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,mistralai/mistral-large-2407,6,88.92857143,3,1,6,560,20,4,5,78.92857143,88.92857143,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,openai/gpt-4.1-mini,7,81.78571429,4,3,6,560,20,5,6,78.39285714,81.78571429,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,mistralai/mixtral-8x22b-instruct,8,78.57142857,4,3,6,560,20,6,8,65.53571429,78.57142857,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,meta-llama/llama-3.3-70b-instruct,9,78.03571429,4,3,6,560,20,8,10,60.53571429,78.03571429,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,google/gemini-2.5-flash,10,72.5,5,2,6,560,20,6,7,71.25,72.5,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,ai21/jamba-large-1.7,11,72.41071429,5,2,6,523,20,8,11,54.64285714,72.41071429,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,cohere/command-r-plus-08-2024,12,51.2202381,6,2,6,545,20,9,12,37.5,51.2202381,True,77,66
+Figure 15 (bottom),"vignettes, unit-augmented",vignette_nielsen_units,openai/gpt-3.5-turbo,13,50,6,2,6,560,20,9,13,36.42857143,50,True,77,66

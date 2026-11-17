@@ -107,6 +107,7 @@ PHASE3_MODULES = [
     "analysis.revision.range_rates_by_prompt",  # range measures by prompt type on comparable items
     "analysis.revision.error_taxonomy",         # FA.4: error taxonomy (outside broad, both directions)
     "analysis.revision.rankings_by_criterion",  # FA.4: rankings by criterion and rank correlations
+    "analysis.revision.multiple_comparisons",   # decision 45: Bonferroni within each family, rankings on 0.6-1.7x only
     "analysis.revision.di2_subset",             # 3C
     "analysis.revision.model_agreement",        # 3D
     "analysis.revision.standard_matches",       # 3E
