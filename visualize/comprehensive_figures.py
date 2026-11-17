@@ -156,8 +156,8 @@ def _slope_p_bonf(df, model_col="model", pair_col="opioid_pair"):
                      for m, q in zip(df[model_col], df[pair_col])], dtype=float)
 
 
-def _slope_pooled_line(model_csv, naive_filter):
-    """Figure 9 (decision 45 amendment 3): pooled test of whether the panel's slopes are negative overall.
+def _slope_pooled_stats(model_csv, naive_filter):
+    """Figure 9 (decision 45 amendment 3; decision 47): the numbers of the pooled slope test, as a dict.
     One-sided sign test on all model x pair slopes of the panel (zero slopes dropped; scale-free, since the
     slopes of different pairs are in different dose units), plus the per-pair counts after Bonferroni."""
     from scipy.stats import binomtest
@@ -172,16 +172,23 @@ def _slope_pooled_line(model_csv, naive_filter):
     p = binomtest(k, n, 0.5, alternative="greater").pvalue
     pb = _slope_p_bonf(df)
     ok = ~np.isnan(pb) if pb is not None else np.zeros(len(df), bool)
-    neg_b = int(((df["regression_slope"] < 0).to_numpy() & ok & (np.nan_to_num(pb, nan=1) < 0.05)).sum())
-    pos_b = int(((df["regression_slope"] > 0).to_numpy() & ok & (np.nan_to_num(pb, nan=1) < 0.05)).sum())
-    neg_u = int(((df["regression_slope"] < 0) & (df["regression_slope_pvalue"] < 0.05)).sum())
-    pos_u = int(((df["regression_slope"] > 0) & (df["regression_slope_pvalue"] < 0.05)).sum())
-    ptxt = "p < 0.001" if p < 0.001 else f"p = {p:.3f}"
-    return (f"<p style='font-size:12px;color:#333;margin:2px 0 6px 60px'><b>All slopes in the panel:</b> {k} of {n} "
-            f"non-zero slopes negative, one-sided sign test {ptxt}. Per pair: {neg_b} negative and {pos_b} positive "
-            f"slopes significant after Bonferroni (family: the {int(ok.sum())} model × pair slopes of the panel with a "
-            f"p-value; {int((df['regression_slope'] == 0).sum())} slope exactly zero); "
-            f"{neg_u} negative and {pos_u} positive at p &lt; 0.05 unadjusted.</p>")
+    return dict(
+        neg=k, nonzero=n, p=float(p), family=int(ok.sum()), zero=int((df["regression_slope"] == 0).sum()),
+        neg_bonf=int(((df["regression_slope"] < 0).to_numpy() & ok & (np.nan_to_num(pb, nan=1) < 0.05)).sum()),
+        pos_bonf=int(((df["regression_slope"] > 0).to_numpy() & ok & (np.nan_to_num(pb, nan=1) < 0.05)).sum()),
+        neg_unadj=int(((df["regression_slope"] < 0) & (df["regression_slope_pvalue"] < 0.05)).sum()),
+        pos_unadj=int(((df["regression_slope"] > 0) & (df["regression_slope_pvalue"] < 0.05)).sum()))
+
+
+def _slope_pooled_line(model_csv, naive_filter):
+    """Figure 9: the pooled slope test as an HTML line (numbers from _slope_pooled_stats)."""
+    t = _slope_pooled_stats(model_csv, naive_filter)
+    ptxt = "p < 0.001" if t["p"] < 0.001 else f"p = {t['p']:.3f}"
+    return (f"<p style='font-size:12px;color:#333;margin:2px 0 6px 60px'><b>All slopes in the panel:</b> {t['neg']} of "
+            f"{t['nonzero']} non-zero slopes negative, one-sided sign test {ptxt}. Per pair: {t['neg_bonf']} negative and "
+            f"{t['pos_bonf']} positive slopes significant after Bonferroni (family: the {t['family']} model × pair slopes "
+            f"of the panel with a p-value; {t['zero']} slope exactly zero); "
+            f"{t['neg_unadj']} negative and {t['pos_unadj']} positive at p &lt; 0.05 unadjusted.</p>")
 
 
 def _bonf_within(pvals):

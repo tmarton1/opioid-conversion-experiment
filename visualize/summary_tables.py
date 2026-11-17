@@ -349,7 +349,7 @@ class SummaryTablesBuilder:
             f"pairs is symmetric around zero. Positive Δ = {a_label} more accurate. "
             + ("* = p &lt; 0.05." if SUBMITTED else
                "Per-model verdicts give the unadjusted p and p<sub>Bonf</sub> (Bonferroni within the family: "
-               "the 13 per-model tests of this comparison and measure); ★ significant after Bonferroni, "
+               "the per-model tests of this comparison and measure); ★ significant after Bonferroni, "
                "☆ p &lt; 0.05 unadjusted only.")
             + "</div>"
         )

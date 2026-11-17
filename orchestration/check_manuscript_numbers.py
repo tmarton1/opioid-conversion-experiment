@@ -330,7 +330,11 @@ class Stats:
 
 
 def classify(tok: dict, sentence: str, section: str, S: Stats) -> dict:
-    cur, _ = S.current_matches(tok)
+    cur_all, _ = S.current_matches(tok)
+    # the 83 submitted keys (and their _bonf counterparts) decide stale / current; keys added by the reanalysis
+    # (decision 47) are matched afterwards, so a coincidence with one of them cannot hide a stale number
+    cur = [k for k in cur_all if S.meta[k].get("scope") == "figure_stats"]
+    cur_re = [k for k in cur_all if k not in cur]
     stale = S.stale_matches(tok)
     note = ""
     if cur and not stale:
@@ -339,6 +343,12 @@ def classify(tok: dict, sentence: str, section: str, S: Stats) -> dict:
         status, note = "ambiguous", "also equals the submitted value of a key that changed"
     elif stale:
         status = "stale"
+        if cur_re:
+            note = "also equals reanalysis keys: " + ", ".join(cur_re[:4])
+    elif cur_re:
+        cur = cur_re
+        status = "matches current" if len(cur) == 1 else "ambiguous"
+        note = "matches reanalysis keys only (new in the revision)"
     else:
         status = "no match"
         cap = S.caption_matches(tok)

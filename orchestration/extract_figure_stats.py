@@ -781,18 +781,63 @@ def bonferroni_stats(audit_path: str = AUDIT_CSV) -> dict:
     return out
 
 
+_R = "results_nielsen/"   # the revised-baseline results directory (RESULTS_DIR when run for the revision)
+BASE_SOURCES = {  # base key (prefix match, longest first) -> source file and column / filter
+    "n_models": "common/models.py CONSISTENT_MODELS (count)",
+    "tight_": "common/config.py TIGHT_RANGE_LOWER / UPPER", "broad_": "common/config.py BROAD_RANGE_LOWER / UPPER",
+    "naive_vig_": _R + "ranking_naive_vignettes.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)",
+    "naive_rd_": _R + "ranking_naive_random_doses.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)",
+    "naive_rank_": _R + "ranking_naive_vignettes.csv + ranking_naive_random_doses.csv: Spearman of mean_tight_prop",
+    "n_vignette_": _R + "reworded_vignettes_model_analysis.csv (naive): unique scenario_key, wordings",
+    "n_sig_cv_chi2_vignettes": _R + "cv_accuracy_chi2.csv: sum of significant",
+    "vig_mean_": _R + "performance_profile_vignettes.csv: mean of correct / precise_wrong / imprecise",
+    "n_model_scenario_cells": _R + "icc_analysis.csv: rows", "n_scenarios_per_model": _R + "icc_analysis.csv: scenarios per model",
+    "icc_": _R + "icc_analysis.csv: sig_pairs, total_pairs", "mean_icc": _R + "icc_analysis.csv: icc mean",
+    "median_icc": _R + "icc_analysis.csv: icc median", "n_models_icc_gt_half": _R + "icc_analysis.csv: icc, mean per model > 0.5",
+    "n_models_with_sig_icc": _R + "icc_analysis.csv: f_pvalue < 0.05, models with at least one",
+    "mean_between_var_pct": _R + "icc_analysis.csv: var_between / var_total",
+    "mean_kendall_w": _R + "kendall_w_vignettes.csv: kendall_w mean", "median_kendall_w": _R + "kendall_w_vignettes.csv: kendall_w median",
+    "n_sig_kendall_w": _R + "kendall_w_vignettes.csv: p < 0.05",
+    "spearman_": _R + "variance_icc_spearman.csv: OVERALL row (rho, p_value)",
+    "n_positive_rho_models": _R + "variance_icc_spearman.csv: per-model rho > 0", "n_total_rho_models": _R + "variance_icc_spearman.csv: per-model rows",
+    "n_sig_rho_models": _R + "variance_icc_spearman.csv: per-model p_value < 0.05",
+    "n_opioid_pairs": _R + "pair_model_analysis.csv (naive): unique opioid_pair", "n_sig_cv_chi2_rd": _R + "pair_model_analysis.csv (naive): chi-square per model",
+    "rd_mean_": _R + "performance_profile_random_doses.csv: mean of correct / precise_wrong / dose_dep_neg",
+    "n_matched_pairs": _R + "cross_experiment_matched_means.csv: n_pairs", "cross_pooled_": _R + "cross_experiment_matched_wilcoxon.csv: pooled Wilcoxon of broad_diff",
+    "cross_spearman_": _R + "cross_experiment_matched_spearman.csv: spearman_rho (broad, random dose vs text vignette)",
+    "cross_n_sig_": _R + "cross_experiment_matched_spearman.csv: spearman_p < 0.05",
+    "nielsen_n_sig_tight_": _R + "wilcoxon_nielsen_effect_*.csv: tight_p < 0.05, per model",
+    "nielsen_mean_tight_": _R + "wilcoxon_nielsen_effect_*.csv: tight_mean", "nielsen_pooled_tight_": _R + "wilcoxon_nielsen_effect_*.csv: POOLED tight_p",
+    "best_rd_model_after_nielsen": _R + "ranking_random_doses_nielsen.csv: rank 1", "nielsen_rd_": _R + "ranking_random_doses_nielsen.csv: mean_tight_prop",
+    "vig_ome_": _R + "model_batch_means_vignettes.csv: mean_in_tight, batch ome_n0 / ome_n1", "vig_nonome_": _R + "model_batch_means_vignettes.csv: mean_in_tight, batch pairs_n0 / pairs_n1",
+    "rd_ome_": _R + "model_batch_means.csv: mean_in_tight, batch ome_n0 / ome_n1", "rd_nonome_": _R + "model_batch_means.csv: mean_in_tight, batch pairs_n0 / pairs_n1",
+    "nielsen_vig_": _R + "wilcoxon_nielsen_effect_vignettes_*ome.csv: POOLED tight_p", "nielsen_rd_ome_": _R + "wilcoxon_nielsen_effect_random_dose_ome.csv: POOLED tight_p",
+    "nielsen_rd_nonome_": _R + "wilcoxon_nielsen_effect_random_dose_nonome.csv: POOLED tight_p",
+    "dosing_": _R + "wilcoxon_dosing_unit_effect.csv: tight_p, tight_mean, POOLED", "units_": _R + "wilcoxon_units_effect_random_dose.csv: tight_p, tight_mean, POOLED",
+    "best_rd_": _R + "ranking_random_doses_nielsen_units.csv: top row (mean_tight_prop)", "mean_rd_": _R + "ranking_random_doses_nielsen_units.csv: mean_tight_prop",
+    "best_vig_": _R + "ranking_vignettes_nielsen_units.csv: top row (mean_tight_prop)", "mean_vig_": _R + "ranking_vignettes_nielsen_units.csv: mean_tight_prop",
+}
+
+
+def base_source(key: str, base: str) -> str:
+    cand = sorted((p for p in BASE_SOURCES if base == p or (p.endswith("_") and base.startswith(p))), key=len, reverse=True)
+    src = BASE_SOURCES[cand[0]] if cand else ""
+    if key != base:
+        src = "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family " + \
+              "; ".join(BONF_FAMILIES[base][0]) + ")"
+    return src
+
+
 def build_meta(stats: dict, extra: dict | None = None) -> dict:
     """figure_stats_meta: for every key of ``stats`` (the flat map, with any *_bonf keys): value,
     format, display, display_html and the structured fields. Unknown keys raise (keep KEY_META complete)."""
     meta = {}
     extra = extra or {}
     for key, value in stats.items():
-        if key in extra:        # caption-only keys: {format, figure}
-            e = extra[key]
-            meta[key] = dict(value=value, format=e["format"], display=fmt_value(value, e["format"]),
-                             display_html=fmt_html(value, e["format"]), measure="caption quantity",
-                             experiment="n/a", condition="n/a", reference="n/a", statistic="caption-derived",
-                             adjusted="n/a", figure=e["figure"], scope="caption-only")
+        if key in extra:        # reanalysis keys (orchestration/figure_stats_reanalysis.py): fields and source given
+            e = dict(extra[key])
+            fmt = e.pop("format")
+            meta[key] = dict(value=value, format=fmt, display=fmt_value(value, fmt), display_html=fmt_html(value, fmt), **e)
             continue
         base = key[:-len(BONF_SUFFIX)] if key.endswith(BONF_SUFFIX) and key[:-len(BONF_SUFFIX)] in BONF_FAMILIES else key
         if base not in KEY_META:
@@ -808,7 +853,8 @@ def build_meta(stats: dict, extra: dict | None = None) -> dict:
             adjusted = "n/a"
         meta[key] = dict(value=value, format=fmt, display=fmt_value(value, fmt), display_html=fmt_html(value, fmt),
                          measure=measure, experiment=experiment, condition=condition, reference=reference,
-                         statistic=statistic, adjusted=adjusted, figure=figure, scope="figure_stats")
+                         statistic=statistic, adjusted=adjusted, figure=figure, scope="figure_stats",
+                         source=base_source(key, base))
     return meta
 
 
@@ -827,8 +873,6 @@ _MEASURE_WORDS = {
 
 def make_description(m: dict) -> str:
     """Description assembled from the structured fields only (no free text)."""
-    if m.get("scope") == "caption-only":
-        return f"caption-only quantity ({m['figure']} caption)"
     parts = [f"{m['statistic']}: {_MEASURE_WORDS.get(m['measure'], m['measure'])}"]
     for f in ("experiment", "condition", "reference"):
         if m[f] not in ("n/a", "design"):
@@ -849,16 +893,23 @@ def run():
     os.makedirs(FIGURES_DIR, exist_ok=True)
     print("── Extracting figure stats ──")
     stats = compute_stats()
+    extra = {}
     if "--extended" in sys.argv:
         # flat map stays flat: the Bonferroni-adjusted counts are added as *_bonf keys
         # (results_revision/multiple_comparisons_audit.csv; revised-baseline runs only)
         stats.update(bonferroni_stats())
+        from orchestration.figure_stats_reanalysis import reanalysis_stats
+        re_values, re_meta = reanalysis_stats()
+        clash = set(re_values) & set(stats)
+        assert not clash, f"reanalysis keys clash with existing keys: {sorted(clash)}"
+        stats.update(re_values)
+        extra = re_meta
 
     with open(OUTPUT_PATH, "w") as f:
         json.dump(stats, f, indent=2)
 
     # display formats and structured fields (adds the Bonferroni counts as *_bonf keys, meta file only)
-    meta = build_meta(stats)
+    meta = build_meta(stats, extra)
     write_json_atomic(META_PATH, meta)
 
     print(f"✓ Saved {len(stats)} stats to {OUTPUT_PATH}; {len(meta)} entries to {META_PATH}")

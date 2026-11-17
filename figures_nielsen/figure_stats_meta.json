@@ -10,7 +10,9 @@
     "reference": "n/a",
     "statistic": "count",
     "adjusted": "n/a",
-    "figure": "all figures"
+    "figure": "all figures",
+    "scope": "figure_stats",
+    "source": "common/models.py CONSISTENT_MODELS (count)"
   },
   "tight_lower_x": {
     "value": "0.85",
@@ -23,7 +25,9 @@
     "reference": "Nielsen",
     "statistic": "limit (lower, tight)",
     "adjusted": "n/a",
-    "figure": "Figures 1, 8"
+    "figure": "Figures 1, 8",
+    "scope": "figure_stats",
+    "source": "common/config.py TIGHT_RANGE_LOWER / UPPER"
   },
   "tight_upper_x": {
     "value": "1.15",
@@ -36,7 +40,9 @@
     "reference": "Nielsen",
     "statistic": "limit (upper, tight)",
     "adjusted": "n/a",
-    "figure": "Figures 1, 8"
+    "figure": "Figures 1, 8",
+    "scope": "figure_stats",
+    "source": "common/config.py TIGHT_RANGE_LOWER / UPPER"
   },
   "broad_lower_x": {
     "value": "0.6",
@@ -49,7 +55,9 @@
     "reference": "Nielsen",
     "statistic": "limit (lower, broad)",
     "adjusted": "n/a",
-    "figure": "Figures 1, 8"
+    "figure": "Figures 1, 8",
+    "scope": "figure_stats",
+    "source": "common/config.py BROAD_RANGE_LOWER / UPPER"
   },
   "broad_upper_x": {
     "value": "1.7",
@@ -62,7 +70,9 @@
     "reference": "Nielsen",
     "statistic": "limit (upper, broad)",
     "adjusted": "n/a",
-    "figure": "Figures 1, 8"
+    "figure": "Figures 1, 8",
+    "scope": "figure_stats",
+    "source": "common/config.py BROAD_RANGE_LOWER / UPPER"
   },
   "naive_vig_best_tight_pct": {
     "value": 42.1,
@@ -75,7 +85,9 @@
     "reference": "Nielsen",
     "statistic": "best model",
     "adjusted": "n/a",
-    "figure": "Figure 1"
+    "figure": "Figure 1",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_vignettes.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_vig_worst_tight_pct": {
     "value": 16.4,
@@ -88,7 +100,9 @@
     "reference": "Nielsen",
     "statistic": "worst model",
     "adjusted": "n/a",
-    "figure": "Figure 1"
+    "figure": "Figure 1",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_vignettes.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_vig_mean_tight_pct": {
     "value": 28.8,
@@ -101,7 +115,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 1"
+    "figure": "Figure 1",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_vignettes.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_vig_best_broad_pct": {
     "value": 83.4,
@@ -114,7 +130,9 @@
     "reference": "Nielsen",
     "statistic": "best model",
     "adjusted": "n/a",
-    "figure": "Figure 1"
+    "figure": "Figure 1",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_vignettes.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_rd_best_tight_pct": {
     "value": 35.3,
@@ -127,7 +145,9 @@
     "reference": "Nielsen",
     "statistic": "best model",
     "adjusted": "n/a",
-    "figure": "Figure 8"
+    "figure": "Figure 8",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_random_doses.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_rd_worst_tight_pct": {
     "value": 10.8,
@@ -140,7 +160,9 @@
     "reference": "Nielsen",
     "statistic": "worst model",
     "adjusted": "n/a",
-    "figure": "Figure 8"
+    "figure": "Figure 8",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_random_doses.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_rd_mean_tight_pct": {
     "value": 19.5,
@@ -153,7 +175,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 8"
+    "figure": "Figure 8",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_random_doses.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_rd_best_broad_pct": {
     "value": 82.1,
@@ -166,7 +190,9 @@
     "reference": "Nielsen",
     "statistic": "best model",
     "adjusted": "n/a",
-    "figure": "Figure 8"
+    "figure": "Figure 8",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_random_doses.csv: mean_tight_prop / mean_broad_prop (max, min, mean over models)"
   },
   "naive_rank_spearman_rho": {
     "value": 0.7,
@@ -179,7 +205,9 @@
     "reference": "Nielsen",
     "statistic": "rho",
     "adjusted": "n/a",
-    "figure": "Figure 8"
+    "figure": "Figure 8",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_vignettes.csv + ranking_naive_random_doses.csv: Spearman of mean_tight_prop"
   },
   "naive_rank_spearman_p": {
     "value": 0.007,
@@ -192,7 +220,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 8"
+    "figure": "Figure 8",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_vignettes.csv + ranking_naive_random_doses.csv: Spearman of mean_tight_prop"
   },
   "naive_rank_n_models": {
     "value": 13,
@@ -205,7 +235,9 @@
     "reference": "Nielsen",
     "statistic": "count of models",
     "adjusted": "n/a",
-    "figure": "Figure 8"
+    "figure": "Figure 8",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_naive_vignettes.csv + ranking_naive_random_doses.csv: Spearman of mean_tight_prop"
   },
   "n_vignette_scenarios": {
     "value": 20,
@@ -218,7 +250,9 @@
     "reference": "n/a",
     "statistic": "count of scenarios",
     "adjusted": "n/a",
-    "figure": "Figures 1-3, 7"
+    "figure": "Figures 1-3, 7",
+    "scope": "figure_stats",
+    "source": "results_nielsen/reworded_vignettes_model_analysis.csv (naive): unique scenario_key, wordings"
   },
   "n_vignette_wordings": {
     "value": 4,
@@ -231,7 +265,9 @@
     "reference": "n/a",
     "statistic": "count of wordings per scenario",
     "adjusted": "n/a",
-    "figure": "Figure 1"
+    "figure": "Figure 1",
+    "scope": "figure_stats",
+    "source": "results_nielsen/reworded_vignettes_model_analysis.csv (naive): unique scenario_key, wordings"
   },
   "n_vignette_prompts": {
     "value": 80,
@@ -244,7 +280,9 @@
     "reference": "n/a",
     "statistic": "count of prompts",
     "adjusted": "n/a",
-    "figure": "Figure 1"
+    "figure": "Figure 1",
+    "scope": "figure_stats",
+    "source": "results_nielsen/reworded_vignettes_model_analysis.csv (naive): unique scenario_key, wordings"
   },
   "n_sig_cv_chi2_vignettes": {
     "value": 2,
@@ -257,7 +295,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 2"
+    "figure": "Figure 2",
+    "scope": "figure_stats",
+    "source": "results_nielsen/cv_accuracy_chi2.csv: sum of significant"
   },
   "vig_mean_correct_pct": {
     "value": 29.5,
@@ -270,7 +310,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 3"
+    "figure": "Figure 3",
+    "scope": "figure_stats",
+    "source": "results_nielsen/performance_profile_vignettes.csv: mean of correct / precise_wrong / imprecise"
   },
   "vig_mean_precise_wrong_pct": {
     "value": 52.2,
@@ -283,7 +325,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 3"
+    "figure": "Figure 3",
+    "scope": "figure_stats",
+    "source": "results_nielsen/performance_profile_vignettes.csv: mean of correct / precise_wrong / imprecise"
   },
   "vig_mean_imprecise_pct": {
     "value": 18.3,
@@ -296,7 +340,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 3"
+    "figure": "Figure 3",
+    "scope": "figure_stats",
+    "source": "results_nielsen/performance_profile_vignettes.csv: mean of correct / precise_wrong / imprecise"
   },
   "n_model_scenario_cells": {
     "value": 260,
@@ -309,7 +355,9 @@
     "reference": "n/a",
     "statistic": "count of model-scenario cells",
     "adjusted": "n/a",
-    "figure": "Figures 4, 6"
+    "figure": "Figures 4, 6",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: rows"
   },
   "n_scenarios_per_model": {
     "value": 20,
@@ -322,7 +370,9 @@
     "reference": "n/a",
     "statistic": "count of scenarios per model",
     "adjusted": "n/a",
-    "figure": "Figure 5"
+    "figure": "Figure 5",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: scenarios per model"
   },
   "icc_total_sig_pairs": {
     "value": 420,
@@ -335,7 +385,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant wording pairs",
     "adjusted": "Bonferroni (already, within each cell)",
-    "figure": "Figure 6"
+    "figure": "Figure 6",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: sig_pairs, total_pairs"
   },
   "icc_total_pairs": {
     "value": 1551,
@@ -348,7 +400,9 @@
     "reference": "Nielsen",
     "statistic": "count of wording pairs",
     "adjusted": "n/a",
-    "figure": "Figure 6"
+    "figure": "Figure 6",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: sig_pairs, total_pairs"
   },
   "icc_max_pairs": {
     "value": 6,
@@ -361,7 +415,9 @@
     "reference": "Nielsen",
     "statistic": "maximum wording pairs per cell",
     "adjusted": "n/a",
-    "figure": "Figure 6"
+    "figure": "Figure 6",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: sig_pairs, total_pairs"
   },
   "mean_icc": {
     "value": 0.585,
@@ -374,7 +430,9 @@
     "reference": "Nielsen",
     "statistic": "mean",
     "adjusted": "n/a",
-    "figure": "Figure 4"
+    "figure": "Figure 4",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: icc mean"
   },
   "median_icc": {
     "value": 0.743,
@@ -387,7 +445,9 @@
     "reference": "Nielsen",
     "statistic": "median",
     "adjusted": "n/a",
-    "figure": "Figure 4"
+    "figure": "Figure 4",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: icc median"
   },
   "n_models_icc_gt_half": {
     "value": 9,
@@ -400,7 +460,9 @@
     "reference": "Nielsen",
     "statistic": "count of models above 0.5",
     "adjusted": "n/a",
-    "figure": "Figure 4"
+    "figure": "Figure 4",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: icc, mean per model > 0.5"
   },
   "n_models_with_sig_icc": {
     "value": 13,
@@ -413,7 +475,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 6"
+    "figure": "Figure 6",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: f_pvalue < 0.05, models with at least one"
   },
   "mean_between_var_pct": {
     "value": 65.2,
@@ -426,7 +490,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 4"
+    "figure": "Figure 4",
+    "scope": "figure_stats",
+    "source": "results_nielsen/icc_analysis.csv: var_between / var_total"
   },
   "mean_kendall_w": {
     "value": 0.055,
@@ -439,7 +505,9 @@
     "reference": "Nielsen",
     "statistic": "mean",
     "adjusted": "n/a",
-    "figure": "Figure 7"
+    "figure": "Figure 7",
+    "scope": "figure_stats",
+    "source": "results_nielsen/kendall_w_vignettes.csv: kendall_w mean"
   },
   "median_kendall_w": {
     "value": 0.059,
@@ -452,7 +520,9 @@
     "reference": "Nielsen",
     "statistic": "median",
     "adjusted": "n/a",
-    "figure": "Figure 7"
+    "figure": "Figure 7",
+    "scope": "figure_stats",
+    "source": "results_nielsen/kendall_w_vignettes.csv: kendall_w median"
   },
   "n_sig_kendall_w": {
     "value": 0,
@@ -465,7 +535,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant scenarios",
     "adjusted": "unadjusted",
-    "figure": "Figure 7"
+    "figure": "Figure 7",
+    "scope": "figure_stats",
+    "source": "results_nielsen/kendall_w_vignettes.csv: p < 0.05"
   },
   "spearman_rho_variance_icc": {
     "value": 0.375,
@@ -478,7 +550,9 @@
     "reference": "Nielsen",
     "statistic": "rho",
     "adjusted": "n/a",
-    "figure": "Figure 5"
+    "figure": "Figure 5",
+    "scope": "figure_stats",
+    "source": "results_nielsen/variance_icc_spearman.csv: OVERALL row (rho, p_value)"
   },
   "spearman_p_variance_icc": {
     "value": 0.0,
@@ -491,7 +565,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 5"
+    "figure": "Figure 5",
+    "scope": "figure_stats",
+    "source": "results_nielsen/variance_icc_spearman.csv: OVERALL row (rho, p_value)"
   },
   "n_positive_rho_models": {
     "value": 12,
@@ -504,7 +580,9 @@
     "reference": "Nielsen",
     "statistic": "count of models with positive rho",
     "adjusted": "n/a",
-    "figure": "Figure 5"
+    "figure": "Figure 5",
+    "scope": "figure_stats",
+    "source": "results_nielsen/variance_icc_spearman.csv: per-model rho > 0"
   },
   "n_total_rho_models": {
     "value": 13,
@@ -517,7 +595,9 @@
     "reference": "Nielsen",
     "statistic": "count of models",
     "adjusted": "n/a",
-    "figure": "Figure 5"
+    "figure": "Figure 5",
+    "scope": "figure_stats",
+    "source": "results_nielsen/variance_icc_spearman.csv: per-model rows"
   },
   "n_sig_rho_models": {
     "value": 7,
@@ -530,7 +610,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 5"
+    "figure": "Figure 5",
+    "scope": "figure_stats",
+    "source": "results_nielsen/variance_icc_spearman.csv: per-model p_value < 0.05"
   },
   "n_opioid_pairs": {
     "value": 49,
@@ -543,7 +625,9 @@
     "reference": "n/a",
     "statistic": "count of opioid pairs",
     "adjusted": "n/a",
-    "figure": "Figures 8, 9, 12"
+    "figure": "Figures 8, 9, 12",
+    "scope": "figure_stats",
+    "source": "results_nielsen/pair_model_analysis.csv (naive): unique opioid_pair"
   },
   "n_sig_cv_chi2_rd": {
     "value": 1,
@@ -556,7 +640,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 9"
+    "figure": "Figure 9",
+    "scope": "figure_stats",
+    "source": "results_nielsen/pair_model_analysis.csv (naive): chi-square per model"
   },
   "rd_mean_correct_pct": {
     "value": 16.2,
@@ -569,7 +655,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 9"
+    "figure": "Figure 9",
+    "scope": "figure_stats",
+    "source": "results_nielsen/performance_profile_random_doses.csv: mean of correct / precise_wrong / dose_dep_neg"
   },
   "rd_mean_precise_wrong_pct": {
     "value": 20.6,
@@ -582,7 +670,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 9"
+    "figure": "Figure 9",
+    "scope": "figure_stats",
+    "source": "results_nielsen/performance_profile_random_doses.csv: mean of correct / precise_wrong / dose_dep_neg"
   },
   "rd_mean_dose_dep_neg_pct": {
     "value": 20.9,
@@ -595,7 +685,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 9"
+    "figure": "Figure 9",
+    "scope": "figure_stats",
+    "source": "results_nielsen/performance_profile_random_doses.csv: mean of correct / precise_wrong / dose_dep_neg"
   },
   "n_matched_pairs": {
     "value": 11,
@@ -608,7 +700,9 @@
     "reference": "n/a",
     "statistic": "count of matched conversions",
     "adjusted": "n/a",
-    "figure": "Figure 10"
+    "figure": "Figure 10",
+    "scope": "figure_stats",
+    "source": "results_nielsen/cross_experiment_matched_means.csv: n_pairs"
   },
   "cross_pooled_broad_p_rd_text": {
     "value": 0.2439,
@@ -621,7 +715,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 10"
+    "figure": "Figure 10",
+    "scope": "figure_stats",
+    "source": "results_nielsen/cross_experiment_matched_wilcoxon.csv: pooled Wilcoxon of broad_diff"
   },
   "cross_pooled_broad_p_rd_empty": {
     "value": 0.1909,
@@ -634,7 +730,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 10"
+    "figure": "Figure 10",
+    "scope": "figure_stats",
+    "source": "results_nielsen/cross_experiment_matched_wilcoxon.csv: pooled Wilcoxon of broad_diff"
   },
   "cross_pooled_broad_p_empty_text": {
     "value": 0.4043,
@@ -647,7 +745,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 10"
+    "figure": "Figure 10",
+    "scope": "figure_stats",
+    "source": "results_nielsen/cross_experiment_matched_wilcoxon.csv: pooled Wilcoxon of broad_diff"
   },
   "cross_spearman_rho_rd_text_broad": {
     "value": 0.468,
@@ -660,7 +760,9 @@
     "reference": "Nielsen",
     "statistic": "mean rho",
     "adjusted": "n/a",
-    "figure": "Figure 10"
+    "figure": "Figure 10",
+    "scope": "figure_stats",
+    "source": "results_nielsen/cross_experiment_matched_spearman.csv: spearman_rho (broad, random dose vs text vignette)"
   },
   "cross_n_sig_spearman_rd_text": {
     "value": 5,
@@ -673,7 +775,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 10"
+    "figure": "Figure 10",
+    "scope": "figure_stats",
+    "source": "results_nielsen/cross_experiment_matched_spearman.csv: spearman_p < 0.05"
   },
   "nielsen_n_sig_tight_vignettes": {
     "value": 9,
@@ -686,7 +790,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_*.csv: tight_p < 0.05, per model"
   },
   "nielsen_mean_tight_improvement_vignettes": {
     "value": 40.1,
@@ -699,7 +805,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_*.csv: tight_mean"
   },
   "nielsen_pooled_tight_p_vignettes": {
     "value": 0.0,
@@ -712,7 +820,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_*.csv: POOLED tight_p"
   },
   "nielsen_n_sig_tight_rd": {
     "value": 13,
@@ -725,7 +835,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_*.csv: tight_p < 0.05, per model"
   },
   "nielsen_mean_tight_improvement_rd": {
     "value": 65.0,
@@ -738,7 +850,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_*.csv: tight_mean"
   },
   "nielsen_pooled_tight_p_rd": {
     "value": 0.0,
@@ -751,7 +865,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_*.csv: POOLED tight_p"
   },
   "best_rd_model_after_nielsen": {
     "value": "claude-3.5-sonnet:20241022",
@@ -764,7 +880,9 @@
     "reference": "Nielsen",
     "statistic": "best model (name)",
     "adjusted": "n/a",
-    "figure": "Figure 12"
+    "figure": "Figure 12",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_random_doses_nielsen.csv: rank 1"
   },
   "nielsen_rd_best_tight_pct": {
     "value": 100.0,
@@ -777,7 +895,9 @@
     "reference": "Nielsen",
     "statistic": "best model",
     "adjusted": "n/a",
-    "figure": "Figure 12"
+    "figure": "Figure 12",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_random_doses_nielsen.csv: mean_tight_prop"
   },
   "nielsen_rd_mean_tight_pct": {
     "value": 84.5,
@@ -790,7 +910,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 12"
+    "figure": "Figure 12",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_random_doses_nielsen.csv: mean_tight_prop"
   },
   "vig_ome_naive_tight_pct": {
     "value": 32.1,
@@ -803,7 +925,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/model_batch_means_vignettes.csv: mean_in_tight, batch ome_n0 / ome_n1"
   },
   "vig_ome_nielsen_tight_pct": {
     "value": 83.1,
@@ -816,7 +940,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/model_batch_means_vignettes.csv: mean_in_tight, batch ome_n0 / ome_n1"
   },
   "vig_ome_tight_improvement_pp": {
     "value": 51.0,
@@ -829,7 +955,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/model_batch_means_vignettes.csv: mean_in_tight, batch ome_n0 / ome_n1"
   },
   "vig_nonome_tight_improvement_pp": {
     "value": 27.0,
@@ -842,7 +970,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/model_batch_means_vignettes.csv: mean_in_tight, batch pairs_n0 / pairs_n1"
   },
   "rd_ome_tight_improvement_pp": {
     "value": 72.6,
@@ -855,7 +985,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/model_batch_means.csv: mean_in_tight, batch ome_n0 / ome_n1"
   },
   "rd_nonome_tight_improvement_pp": {
     "value": 60.2,
@@ -868,7 +1000,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/model_batch_means.csv: mean_in_tight, batch pairs_n0 / pairs_n1"
   },
   "nielsen_vig_ome_pooled_p": {
     "value": 0.0,
@@ -881,7 +1015,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_vignettes_*ome.csv: POOLED tight_p"
   },
   "nielsen_vig_nonome_pooled_p": {
     "value": 4e-06,
@@ -894,7 +1030,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_vignettes_*ome.csv: POOLED tight_p"
   },
   "nielsen_rd_ome_pooled_p": {
     "value": 0.0,
@@ -907,7 +1045,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_random_dose_ome.csv: POOLED tight_p"
   },
   "nielsen_rd_nonome_pooled_p": {
     "value": 0.0,
@@ -920,7 +1060,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 13"
+    "figure": "Figure 13",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_random_dose_nonome.csv: POOLED tight_p"
   },
   "dosing_n_sig_drop_tight": {
     "value": 12,
@@ -933,7 +1075,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_dosing_unit_effect.csv: tight_p, tight_mean, POOLED"
   },
   "dosing_mean_tight_drop_pp": {
     "value": 82.9,
@@ -946,7 +1090,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_dosing_unit_effect.csv: tight_p, tight_mean, POOLED"
   },
   "dosing_pooled_tight_p": {
     "value": 0.0,
@@ -959,7 +1105,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_dosing_unit_effect.csv: tight_p, tight_mean, POOLED"
   },
   "units_n_sig_recovery_tight": {
     "value": 11,
@@ -972,7 +1120,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "unadjusted",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_units_effect_random_dose.csv: tight_p, tight_mean, POOLED"
   },
   "units_mean_tight_recovery_pp": {
     "value": 43.5,
@@ -985,7 +1135,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_units_effect_random_dose.csv: tight_p, tight_mean, POOLED"
   },
   "units_pooled_tight_p": {
     "value": 0.0,
@@ -998,7 +1150,9 @@
     "reference": "Nielsen",
     "statistic": "p",
     "adjusted": "unadjusted",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_nielsen/wilcoxon_units_effect_random_dose.csv: tight_p, tight_mean, POOLED"
   },
   "best_rd_model_after_all": {
     "value": "claude-3.5-sonnet:20241022",
@@ -1011,7 +1165,9 @@
     "reference": "Nielsen",
     "statistic": "best model (name)",
     "adjusted": "n/a",
-    "figure": "Figure 15"
+    "figure": "Figure 15",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_random_doses_nielsen_units.csv: top row (mean_tight_prop)"
   },
   "best_rd_tight_after_all_pct": {
     "value": 100.0,
@@ -1024,7 +1180,9 @@
     "reference": "Nielsen",
     "statistic": "best model",
     "adjusted": "n/a",
-    "figure": "Figure 15"
+    "figure": "Figure 15",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_random_doses_nielsen_units.csv: top row (mean_tight_prop)"
   },
   "mean_rd_tight_after_all_pct": {
     "value": 62.3,
@@ -1037,7 +1195,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 15"
+    "figure": "Figure 15",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_random_doses_nielsen_units.csv: mean_tight_prop"
   },
   "best_vig_model_after_all": {
     "value": "gemini-2.5-pro",
@@ -1050,7 +1210,9 @@
     "reference": "Nielsen",
     "statistic": "best model (name)",
     "adjusted": "n/a",
-    "figure": "Figure 15"
+    "figure": "Figure 15",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_vignettes_nielsen_units.csv: top row (mean_tight_prop)"
   },
   "best_vig_tight_after_all_pct": {
     "value": 99.6,
@@ -1063,7 +1225,9 @@
     "reference": "Nielsen",
     "statistic": "best model",
     "adjusted": "n/a",
-    "figure": "Figure 15"
+    "figure": "Figure 15",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_vignettes_nielsen_units.csv: top row (mean_tight_prop)"
   },
   "mean_vig_tight_after_all_pct": {
     "value": 70.5,
@@ -1076,7 +1240,9 @@
     "reference": "Nielsen",
     "statistic": "mean of models",
     "adjusted": "n/a",
-    "figure": "Figure 15"
+    "figure": "Figure 15",
+    "scope": "figure_stats",
+    "source": "results_nielsen/ranking_vignettes_nielsen_units.csv: mean_tight_prop"
   },
   "n_sig_cv_chi2_vignettes_bonf": {
     "value": 0,
@@ -1089,7 +1255,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 2"
+    "figure": "Figure 2",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/cv_accuracy_chi2:Figure 2)"
   },
   "n_sig_cv_chi2_rd_bonf": {
     "value": 0,
@@ -1102,7 +1270,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 9"
+    "figure": "Figure 9",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family figure9:cv_chi2)"
   },
   "n_models_with_sig_icc_bonf": {
     "value": 13,
@@ -1115,7 +1285,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 6"
+    "figure": "Figure 6",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/icc_analysis:f_test)"
   },
   "n_sig_kendall_w_bonf": {
     "value": 0,
@@ -1128,7 +1300,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant scenarios",
     "adjusted": "Bonferroni",
-    "figure": "Figure 7"
+    "figure": "Figure 7",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/kendall_w_vignettes:kendall_p)"
   },
   "n_sig_rho_models_bonf": {
     "value": 5,
@@ -1141,7 +1315,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 5"
+    "figure": "Figure 5",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/variance_icc_spearman:variance_vs_icc)"
   },
   "cross_n_sig_spearman_rd_text_bonf": {
     "value": 2,
@@ -1154,7 +1330,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 10"
+    "figure": "Figure 10",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/cross_experiment_matched_spearman:random_dose-text_vignette:broad)"
   },
   "nielsen_n_sig_tight_vignettes_bonf": {
     "value": 5,
@@ -1167,7 +1345,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/wilcoxon_nielsen_effect_vignettes:tight)"
   },
   "nielsen_n_sig_tight_rd_bonf": {
     "value": 13,
@@ -1180,7 +1360,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 11"
+    "figure": "Figure 11",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/wilcoxon_nielsen_effect_random_dose:tight)"
   },
   "dosing_n_sig_drop_tight_bonf": {
     "value": 12,
@@ -1193,7 +1375,9 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/wilcoxon_dosing_unit_effect:tight)"
   },
   "units_n_sig_recovery_tight_bonf": {
     "value": 9,
@@ -1206,6 +1390,2453 @@
     "reference": "Nielsen",
     "statistic": "count of significant models",
     "adjusted": "Bonferroni",
-    "figure": "Figure 14"
+    "figure": "Figure 14",
+    "scope": "figure_stats",
+    "source": "results_revision/multiple_comparisons_audit.csv (n_sig_bonf or n_groups_sig_bonf; family results_nielsen/wilcoxon_units_effect_random_dose:tight)"
+  },
+  "f1_broad_min": {
+    "value": 50.89285714,
+    "format": "ratio:0",
+    "display": "51",
+    "display_html": "51",
+    "figure": "Figure 1",
+    "measure": "within 0.6–1.7× (percent; no sign, used as the low end of a range)",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "lowest model",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=vignette_naive, pct_broad min over models",
+    "scope": "reanalysis"
+  },
+  "f1_broad_max": {
+    "value": 83.39285714,
+    "format": "percent:0",
+    "display": "83%",
+    "display_html": "83%",
+    "figure": "Figure 1",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "highest model",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=vignette_naive, pct_broad max over models",
+    "scope": "reanalysis"
+  },
+  "f1_mean_tight": {
+    "value": 28.80494505,
+    "format": "percent:0",
+    "display": "29%",
+    "display_html": "29%",
+    "figure": "Figure 1",
+    "measure": "within ±15%",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=vignette_naive, pct_tight, model=POOLED",
+    "scope": "reanalysis"
+  },
+  "f1_mean_broad": {
+    "value": 66.78113553,
+    "format": "percent:0",
+    "display": "67%",
+    "display_html": "67%",
+    "figure": "Figure 1",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=vignette_naive, pct_broad, model=POOLED",
+    "scope": "reanalysis"
+  },
+  "f1_pct_below_range": {
+    "value": 17.6510989,
+    "format": "percent:1",
+    "display": "17.7%",
+    "display_html": "17.7%",
+    "figure": "Figure 1",
+    "measure": "below the range of standards",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=vignette_naive, model=POOLED, pct_below_range",
+    "scope": "reanalysis"
+  },
+  "f1_pct_underdose": {
+    "value": 10.17857143,
+    "format": "percent:1",
+    "display": "10.2%",
+    "display_html": "10.2%",
+    "figure": "Figure 1",
+    "measure": "below ½× the lowest standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=vignette_naive, model=POOLED, pct_underdose",
+    "scope": "reanalysis"
+  },
+  "f1_pct_above_range": {
+    "value": 8.081501832,
+    "format": "percent:1",
+    "display": "8.1%",
+    "display_html": "8.1%",
+    "figure": "Figure 1",
+    "measure": "above the range of standards",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=vignette_naive, model=POOLED, pct_above_range",
+    "scope": "reanalysis"
+  },
+  "f1_pct_overdose": {
+    "value": 5.169413919,
+    "format": "percent:1",
+    "display": "5.2%",
+    "display_html": "5.2%",
+    "figure": "Figure 1",
+    "measure": "above 2× the highest standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=vignette_naive, model=POOLED, pct_overdose",
+    "scope": "reanalysis"
+  },
+  "f1_pct_severe_overdose": {
+    "value": 1.08974359,
+    "format": "percent:1",
+    "display": "1.1%",
+    "display_html": "1.1%",
+    "figure": "Figure 1",
+    "measure": "above 4× the highest standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=vignette_naive, model=POOLED, pct_severe_overdose",
+    "scope": "reanalysis"
+  },
+  "f1_n_groups": {
+    "value": 5,
+    "format": "count",
+    "display": "5",
+    "display_html": "5",
+    "figure": "Figure 1",
+    "measure": "CMH groups (0.6–1.7× only)",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of groups",
+    "adjusted": "Bonferroni",
+    "source": "analysis.revision.stats.rank_models(bands=('broad',)) on results_revision/responses_long.csv",
+    "scope": "reanalysis"
+  },
+  "f1_n_pairs": {
+    "value": 78,
+    "format": "count",
+    "display": "78",
+    "display_html": "78",
+    "figure": "Figure 1",
+    "measure": "model pairs",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of pairs",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 1, test contains 'broad only', m",
+    "scope": "reanalysis"
+  },
+  "f1_pairs_sig_bonf": {
+    "value": 55,
+    "format": "count",
+    "display": "55",
+    "display_html": "55",
+    "figure": "Figure 1",
+    "measure": "significant model pairs",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 1, n_sig_bonf",
+    "scope": "reanalysis"
+  },
+  "f1_pairs_sig_unadj": {
+    "value": 69,
+    "format": "count",
+    "display": "69",
+    "display_html": "69",
+    "figure": "Figure 1",
+    "measure": "significant model pairs",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 1, n_sig_unadj",
+    "scope": "reanalysis"
+  },
+  "f1_brackets_star": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 1",
+    "measure": "brackets between adjacent rows",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of ★ brackets",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family cmh_broad:vignette_naive, adjacent rows by group then % within 0.6–1.7×",
+    "scope": "reanalysis"
+  },
+  "f1_brackets_open": {
+    "value": 3,
+    "format": "count",
+    "display": "3",
+    "display_html": "3",
+    "figure": "Figure 1",
+    "measure": "brackets between adjacent rows",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of ☆ brackets",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family cmh_broad:vignette_naive, adjacent rows",
+    "scope": "reanalysis"
+  },
+  "f8_broad_min": {
+    "value": 27.76886945,
+    "format": "ratio:0",
+    "display": "28",
+    "display_html": "28",
+    "figure": "Figure 8",
+    "measure": "within 0.6–1.7× (percent; no sign, used as the low end of a range)",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "lowest model",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=rd_naive, pct_broad min over models",
+    "scope": "reanalysis"
+  },
+  "f8_broad_max": {
+    "value": 82.07821431,
+    "format": "percent:0",
+    "display": "82%",
+    "display_html": "82%",
+    "figure": "Figure 8",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "highest model",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=rd_naive, pct_broad max over models",
+    "scope": "reanalysis"
+  },
+  "f8_mean_tight": {
+    "value": 19.50969476,
+    "format": "percent:0",
+    "display": "20%",
+    "display_html": "20%",
+    "figure": "Figure 8",
+    "measure": "within ±15%",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=rd_naive, pct_tight, model=POOLED",
+    "scope": "reanalysis"
+  },
+  "f8_mean_broad": {
+    "value": 56.75318525,
+    "format": "percent:0",
+    "display": "57%",
+    "display_html": "57%",
+    "figure": "Figure 8",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=nielsen, condition=rd_naive, pct_broad, model=POOLED",
+    "scope": "reanalysis"
+  },
+  "f8_pct_below_range": {
+    "value": 19.4939275,
+    "format": "percent:1",
+    "display": "19.5%",
+    "display_html": "19.5%",
+    "figure": "Figure 8",
+    "measure": "below the range of standards",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=rd_naive, model=POOLED, pct_below_range",
+    "scope": "reanalysis"
+  },
+  "f8_pct_underdose": {
+    "value": 15.03258244,
+    "format": "percent:1",
+    "display": "15.0%",
+    "display_html": "15.0%",
+    "figure": "Figure 8",
+    "measure": "below ½× the lowest standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=rd_naive, model=POOLED, pct_underdose",
+    "scope": "reanalysis"
+  },
+  "f8_pct_above_range": {
+    "value": 19.43379745,
+    "format": "percent:1",
+    "display": "19.4%",
+    "display_html": "19.4%",
+    "figure": "Figure 8",
+    "measure": "above the range of standards",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=rd_naive, model=POOLED, pct_above_range",
+    "scope": "reanalysis"
+  },
+  "f8_pct_overdose": {
+    "value": 15.22846659,
+    "format": "percent:1",
+    "display": "15.2%",
+    "display_html": "15.2%",
+    "figure": "Figure 8",
+    "measure": "above 2× the highest standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=rd_naive, model=POOLED, pct_overdose",
+    "scope": "reanalysis"
+  },
+  "f8_pct_severe_overdose": {
+    "value": 4.571890533,
+    "format": "percent:1",
+    "display": "4.6%",
+    "display_html": "4.6%",
+    "figure": "Figure 8",
+    "measure": "above 4× the highest standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/distribution_summary.csv, score=any, condition=rd_naive, model=POOLED, pct_severe_overdose",
+    "scope": "reanalysis"
+  },
+  "f8_n_groups": {
+    "value": 6,
+    "format": "count",
+    "display": "6",
+    "display_html": "6",
+    "figure": "Figure 8",
+    "measure": "CMH groups (0.6–1.7× only)",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of groups",
+    "adjusted": "Bonferroni",
+    "source": "analysis.revision.stats.rank_models(bands=('broad',)) on results_revision/responses_long.csv",
+    "scope": "reanalysis"
+  },
+  "f8_n_pairs": {
+    "value": 78,
+    "format": "count",
+    "display": "78",
+    "display_html": "78",
+    "figure": "Figure 8",
+    "measure": "model pairs",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of pairs",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 8, test contains 'broad only', m",
+    "scope": "reanalysis"
+  },
+  "f8_pairs_sig_bonf": {
+    "value": 64,
+    "format": "count",
+    "display": "64",
+    "display_html": "64",
+    "figure": "Figure 8",
+    "measure": "significant model pairs",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 8, n_sig_bonf",
+    "scope": "reanalysis"
+  },
+  "f8_pairs_sig_unadj": {
+    "value": 69,
+    "format": "count",
+    "display": "69",
+    "display_html": "69",
+    "figure": "Figure 8",
+    "measure": "significant model pairs",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 8, n_sig_unadj",
+    "scope": "reanalysis"
+  },
+  "f8_brackets_star": {
+    "value": 4,
+    "format": "count",
+    "display": "4",
+    "display_html": "4",
+    "figure": "Figure 8",
+    "measure": "brackets between adjacent rows",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of ★ brackets",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family cmh_broad:rd_naive, adjacent rows by group then % within 0.6–1.7×",
+    "scope": "reanalysis"
+  },
+  "f8_brackets_open": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 8",
+    "measure": "brackets between adjacent rows",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of ☆ brackets",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family cmh_broad:rd_naive, adjacent rows",
+    "scope": "reanalysis"
+  },
+  "f11_vig_nielsen_before": {
+    "value": 66.79730983,
+    "format": "percent:1",
+    "display": "66.8%",
+    "display_html": "66.8%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=nielsen, model=ALL_MODELS, outcome=broad, before",
+    "scope": "reanalysis"
+  },
+  "f11_vig_nielsen_after": {
+    "value": 81.33102657,
+    "format": "percent:1",
+    "display": "81.3%",
+    "display_html": "81.3%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=nielsen, model=ALL_MODELS, outcome=broad, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_vig_nielsen_before": {
+    "value": 1.453596687,
+    "format": "ratio:2",
+    "display": "1.45",
+    "display_html": "1.45",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=nielsen, model=ALL_MODELS, outcome=median_fold_error, before",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_vig_nielsen_after": {
+    "value": 1.059583586,
+    "format": "ratio:2",
+    "display": "1.06",
+    "display_html": "1.06",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "vignettes",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=nielsen, model=ALL_MODELS, outcome=median_fold_error, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_vig_nielsen_p": {
+    "value": 8.841021444e-11,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled threshold-free test)",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=nielsen, model=ALL_MODELS, outcome=median_fold_error, tf_p",
+    "scope": "reanalysis"
+  },
+  "f11_vig_nonn_before": {
+    "value": 68.35727358,
+    "format": "percent:1",
+    "display": "68.4%",
+    "display_html": "68.4%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=broad, before",
+    "scope": "reanalysis"
+  },
+  "f11_vig_nonn_after": {
+    "value": 83.13398882,
+    "format": "percent:1",
+    "display": "83.1%",
+    "display_html": "83.1%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes",
+    "condition": "reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=broad, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_vig_nonn_before": {
+    "value": 1.409722436,
+    "format": "ratio:2",
+    "display": "1.41",
+    "display_html": "1.41",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=median_fold_error, before",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_vig_nonn_after": {
+    "value": 1.230732315,
+    "format": "ratio:2",
+    "display": "1.23",
+    "display_html": "1.23",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "vignettes",
+    "condition": "reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=median_fold_error, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_vig_nonn_p": {
+    "value": 0.0001992322301,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "p (pooled threshold-free test)",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv, experiment=vignette, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=median_fold_error, tf_p",
+    "scope": "reanalysis"
+  },
+  "f11_rd_nielsen_before": {
+    "value": 56.75318525,
+    "format": "percent:1",
+    "display": "56.8%",
+    "display_html": "56.8%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=nielsen, model=ALL_MODELS, outcome=broad, before",
+    "scope": "reanalysis"
+  },
+  "f11_rd_nielsen_after": {
+    "value": 88.52876266,
+    "format": "percent:1",
+    "display": "88.5%",
+    "display_html": "88.5%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=nielsen, model=ALL_MODELS, outcome=broad, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_rd_nielsen_before": {
+    "value": 1.707152798,
+    "format": "ratio:2",
+    "display": "1.71",
+    "display_html": "1.71",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=nielsen, model=ALL_MODELS, outcome=median_fold_error, before",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_rd_nielsen_after": {
+    "value": 1.016774496,
+    "format": "ratio:2",
+    "display": "1.02",
+    "display_html": "1.02",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "random doses",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=nielsen, model=ALL_MODELS, outcome=median_fold_error, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_rd_nielsen_p": {
+    "value": 2.016804922e-57,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled threshold-free test)",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=nielsen, model=ALL_MODELS, outcome=median_fold_error, tf_p",
+    "scope": "reanalysis"
+  },
+  "f11_rd_nonn_before": {
+    "value": 60.31387257,
+    "format": "percent:1",
+    "display": "60.3%",
+    "display_html": "60.3%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=broad, before",
+    "scope": "reanalysis"
+  },
+  "f11_rd_nonn_after": {
+    "value": 87.62941924,
+    "format": "percent:1",
+    "display": "87.6%",
+    "display_html": "87.6%",
+    "figure": "Figure 11",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses",
+    "condition": "reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=broad, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_rd_nonn_before": {
+    "value": 1.563933965,
+    "format": "ratio:2",
+    "display": "1.56",
+    "display_html": "1.56",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=median_fold_error, before",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_rd_nonn_after": {
+    "value": 1.092215856,
+    "format": "ratio:2",
+    "display": "1.09",
+    "display_html": "1.09",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "random doses",
+    "condition": "reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "mean of models",
+    "adjusted": "n/a",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=median_fold_error, after",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_rd_nonn_p": {
+    "value": 1.945155149e-31,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "p (pooled threshold-free test)",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv, experiment=random_dose, subset=all, score=non_nielsen, model=ALL_MODELS, outcome=median_fold_error, tf_p",
+    "scope": "reanalysis"
+  },
+  "f11_mfe_p_max": {
+    "value": 0.0001992322301,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 11",
+    "measure": "median fold error",
+    "experiment": "both",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen and all except Nielsen",
+    "statistic": "largest of the four pooled p values",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv tf_p, max of the four panels",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_nielsen_tight_star": {
+    "value": 5,
+    "format": "count",
+    "display": "5",
+    "display_html": "5",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_nielsen_tight_open": {
+    "value": 4,
+    "format": "count",
+    "display": "4",
+    "display_html": "4",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_nielsen_broad_star": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_nielsen_broad_open": {
+    "value": 2,
+    "format": "count",
+    "display": "2",
+    "display_html": "2",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_non_nielsen_tight_star": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:non_nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_non_nielsen_tight_open": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:non_nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_non_nielsen_broad_star": {
+    "value": 2,
+    "format": "count",
+    "display": "2",
+    "display_html": "2",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:non_nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_vignette_non_nielsen_broad_open": {
+    "value": 2,
+    "format": "count",
+    "display": "2",
+    "display_html": "2",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:vignette:all:non_nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_nielsen_tight_star": {
+    "value": 13,
+    "format": "count",
+    "display": "13",
+    "display_html": "13",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_nielsen_tight_open": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_nielsen_broad_star": {
+    "value": 11,
+    "format": "count",
+    "display": "11",
+    "display_html": "11",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_nielsen_broad_open": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_non_nielsen_tight_star": {
+    "value": 10,
+    "format": "count",
+    "display": "10",
+    "display_html": "10",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:non_nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_non_nielsen_tight_open": {
+    "value": 3,
+    "format": "count",
+    "display": "3",
+    "display_html": "3",
+    "figure": "Figure 11",
+    "measure": "tight",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:non_nielsen:tight:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_non_nielsen_broad_star": {
+    "value": 10,
+    "format": "count",
+    "display": "10",
+    "display_html": "10",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:non_nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_random_dose_non_nielsen_broad_open": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 11",
+    "measure": "broad",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_tests.csv family circularity:random_dose:all:non_nielsen:broad:band + circularity.csv gain>0",
+    "scope": "reanalysis"
+  },
+  "f11_X": {
+    "value": 63.1578947368421,
+    "format": "percent:0",
+    "display": "63%",
+    "display_html": "63%",
+    "figure": "Figure 11",
+    "measure": "copy of Nielsen scored wrong against another standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "other current standards",
+    "statistic": "share of items",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv expected_* columns: items whose nearest other standard is beyond ±15% of Nielsen",
+    "scope": "reanalysis"
+  },
+  "f11_X_n": {
+    "value": 19,
+    "format": "count",
+    "display": "19",
+    "display_html": "19",
+    "figure": "Figure 11",
+    "measure": "items with another standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "other current standards",
+    "statistic": "count of items",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv, scenario_key with another standard",
+    "scope": "reanalysis"
+  },
+  "f11_Y": {
+    "value": 47.5,
+    "format": "percent:0",
+    "display": "48%",
+    "display_html": "48%",
+    "figure": "Figure 11",
+    "measure": "copy of Nielsen scored wrong against another standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "other current standards",
+    "statistic": "share of items",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv expected_* columns: items whose nearest other standard is beyond ±15% of Nielsen",
+    "scope": "reanalysis"
+  },
+  "f11_Y_n": {
+    "value": 40,
+    "format": "count",
+    "display": "40",
+    "display_html": "40",
+    "figure": "Figure 11",
+    "measure": "items with another standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "other current standards",
+    "statistic": "count of items",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv, opioid_pair with another standard",
+    "scope": "reanalysis"
+  },
+  "circ_vig_within_1pct": {
+    "value": 62.6,
+    "format": "percent:0",
+    "display": "63%",
+    "display_html": "63%",
+    "figure": "Circularity figure",
+    "measure": "answers within 1% of Nielsen",
+    "experiment": "vignettes",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "share of answers",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv, condition=vignette_nielsen, score=nielsen, |log ratio| <= log 1.01",
+    "scope": "reanalysis"
+  },
+  "circ_vig_exact": {
+    "value": 53.0,
+    "format": "percent:0",
+    "display": "53%",
+    "display_html": "53%",
+    "figure": "Circularity figure",
+    "measure": "answers exactly equal to Nielsen",
+    "experiment": "vignettes",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "share of answers",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv, condition=vignette_nielsen, score=nielsen, |log ratio| < 1e-6",
+    "scope": "reanalysis"
+  },
+  "circ_vig_mfe_p": {
+    "value": 0.0001992322301,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Circularity figure",
+    "measure": "median fold error",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "p (pooled threshold-free test)",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv, score=non_nielsen, outcome=median_fold_error, tf_p",
+    "scope": "reanalysis"
+  },
+  "circ_vig_cons_inside": {
+    "value": 7,
+    "format": "count",
+    "display": "7",
+    "display_html": "7",
+    "figure": "Circularity figure",
+    "measure": "consensus inside the range of current standards",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "circ_vig_cons_other": {
+    "value": 19,
+    "format": "count",
+    "display": "19",
+    "display_html": "19",
+    "figure": "Circularity figure",
+    "measure": "conversions with another standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "circ_vig_cons_within": {
+    "value": 18,
+    "format": "count",
+    "display": "18",
+    "display_html": "18",
+    "figure": "Circularity figure",
+    "measure": "consensus within 0.6–1.7× of the range of standards",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "circ_vig_cons_n": {
+    "value": 20,
+    "format": "count",
+    "display": "20",
+    "display_html": "20",
+    "figure": "Circularity figure",
+    "measure": "conversions",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "circ_rd_within_1pct": {
+    "value": 77.3,
+    "format": "percent:0",
+    "display": "77%",
+    "display_html": "77%",
+    "figure": "Circularity figure",
+    "measure": "answers within 1% of Nielsen",
+    "experiment": "random doses",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "share of answers",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv, condition=rd_nielsen, score=nielsen, |log ratio| <= log 1.01",
+    "scope": "reanalysis"
+  },
+  "circ_rd_exact": {
+    "value": 20.2,
+    "format": "percent:0",
+    "display": "20%",
+    "display_html": "20%",
+    "figure": "Circularity figure",
+    "measure": "answers exactly equal to Nielsen",
+    "experiment": "random doses",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "share of answers",
+    "adjusted": "n/a",
+    "source": "results_revision/responses_long.csv, condition=rd_nielsen, score=nielsen, |log ratio| < 1e-6",
+    "scope": "reanalysis"
+  },
+  "circ_rd_mfe_p": {
+    "value": 1.945155149e-31,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Circularity figure",
+    "measure": "median fold error",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all except Nielsen",
+    "statistic": "p (pooled threshold-free test)",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv, score=non_nielsen, outcome=median_fold_error, tf_p",
+    "scope": "reanalysis"
+  },
+  "circ_rd_cons_inside": {
+    "value": 11,
+    "format": "count",
+    "display": "11",
+    "display_html": "11",
+    "figure": "Circularity figure",
+    "measure": "consensus inside the range of current standards",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "circ_rd_cons_other": {
+    "value": 40,
+    "format": "count",
+    "display": "40",
+    "display_html": "40",
+    "figure": "Circularity figure",
+    "measure": "conversions with another standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "circ_rd_cons_within": {
+    "value": 47,
+    "format": "count",
+    "display": "47",
+    "display_html": "47",
+    "figure": "Circularity figure",
+    "measure": "consensus within 0.6–1.7× of the range of standards",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "circ_rd_cons_n": {
+    "value": 49,
+    "format": "count",
+    "display": "49",
+    "display_html": "49",
+    "figure": "Circularity figure",
+    "measure": "conversions",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "current standards",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/model_agreement.csv (consensus_ratio) + results_revision/references/by_conversion.csv (standards_low/high_current)",
+    "scope": "reanalysis"
+  },
+  "f9_slopes_neg": {
+    "value": 426,
+    "format": "count",
+    "display": "426",
+    "display_html": "426",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of negative slopes",
+    "adjusted": "n/a",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_slopes_nonzero": {
+    "value": 636,
+    "format": "count",
+    "display": "636",
+    "display_html": "636",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of non-zero slopes",
+    "adjusted": "n/a",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_sign_test_p": {
+    "value": 3.689019687846126e-18,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "p (one-sided sign test over all slopes)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_neg_bonf": {
+    "value": 31,
+    "format": "count",
+    "display": "31",
+    "display_html": "31",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "negative slopes significant",
+    "adjusted": "Bonferroni",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_pos_bonf": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "positive slopes significant",
+    "adjusted": "Bonferroni",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_family_slopes": {
+    "value": 636,
+    "format": "count",
+    "display": "636",
+    "display_html": "636",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "model x pair slopes with a p-value",
+    "adjusted": "Bonferroni",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_slopes_zero": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "slopes exactly zero",
+    "adjusted": "n/a",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_neg_unadj": {
+    "value": 133,
+    "format": "count",
+    "display": "133",
+    "display_html": "133",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "negative slopes significant",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_pos_unadj": {
+    "value": 28,
+    "format": "count",
+    "display": "28",
+    "display_html": "28",
+    "figure": "Figure 9",
+    "measure": "slope of observed/expected ratio on dose",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "positive slopes significant",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/pair_model_analysis.csv (naive), regression_slope / regression_slope_pvalue (visualize.comprehensive_figures._slope_pooled_stats)",
+    "scope": "reanalysis"
+  },
+  "f9_m": {
+    "value": 636,
+    "format": "count",
+    "display": "636",
+    "display_html": "636",
+    "figure": "Figure 9",
+    "measure": "model x pair slopes of the panel",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 9, panel 'strip chart (all models)'",
+    "scope": "reanalysis"
+  },
+  "f9_slopes_bonf": {
+    "value": 32,
+    "format": "count",
+    "display": "32",
+    "display_html": "32",
+    "figure": "Figure 9",
+    "measure": "slopes significant",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 9, panel 'strip chart (all models)'",
+    "scope": "reanalysis"
+  },
+  "f9_slopes_unadj": {
+    "value": 161,
+    "format": "count",
+    "display": "161",
+    "display_html": "161",
+    "figure": "Figure 9",
+    "measure": "slopes significant",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 9, panel 'strip chart (all models)'",
+    "scope": "reanalysis"
+  },
+  "f2_n_tested": {
+    "value": 12,
+    "format": "count",
+    "display": "12",
+    "display_html": "12",
+    "figure": "Figure 2",
+    "measure": "models with a chi-square test",
+    "experiment": "n/a",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 2, m",
+    "scope": "reanalysis"
+  },
+  "f5_open": {
+    "value": 2,
+    "format": "count",
+    "display": "2",
+    "display_html": "2",
+    "figure": "Figure 5",
+    "measure": "models significant at p < 0.05 unadjusted only",
+    "experiment": "n/a",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 5, n_sig_unadj - n_sig_bonf",
+    "scope": "reanalysis"
+  },
+  "f7_n_scenarios": {
+    "value": 20,
+    "format": "count",
+    "display": "20",
+    "display_html": "20",
+    "figure": "Figure 7",
+    "measure": "scenarios tested (Kendall's W)",
+    "experiment": "n/a",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 7, m",
+    "scope": "reanalysis"
+  },
+  "f10_n_tests": {
+    "value": 39,
+    "format": "count",
+    "display": "39",
+    "display_html": "39",
+    "figure": "Figure 10",
+    "measure": "tests in the panel",
+    "experiment": "n/a",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 10, m_panel",
+    "scope": "reanalysis"
+  },
+  "f13_vig_ome_bonf": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 13",
+    "measure": "models significant on ±15%",
+    "experiment": "n/a",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 13, text vignettes, oral morphine, tight, n_sig_bonf",
+    "scope": "reanalysis"
+  },
+  "f13_vig_ome_unadj": {
+    "value": 12,
+    "format": "count",
+    "display": "12",
+    "display_html": "12",
+    "figure": "Figure 13",
+    "measure": "models significant on ±15%",
+    "experiment": "n/a",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 13, text vignettes, oral morphine, tight, n_sig_unadj",
+    "scope": "reanalysis"
+  },
+  "f14_drop_bonf": {
+    "value": 12,
+    "format": "count",
+    "display": "12",
+    "display_html": "12",
+    "figure": "Figure 14",
+    "measure": "models with a drop on ±15% (mg/day to mg/4 h)",
+    "experiment": "n/a",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 14 (top), dosing-unit effect, tight, n_sig_bonf_panel",
+    "scope": "reanalysis"
+  },
+  "f9_neg_pct_unadj": {
+    "value": 20.87912088,
+    "format": "percent:1",
+    "display": "20.9%",
+    "display_html": "20.9%",
+    "figure": "Figure 9",
+    "measure": "share of model x pair slopes negative and significant",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "percent of slopes",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 9, panel 'strip chart (all models)', dose_dep_neg_pct_unadj",
+    "scope": "reanalysis"
+  },
+  "f9_neg_pct_bonf": {
+    "value": 4.866562009,
+    "format": "percent:1",
+    "display": "4.9%",
+    "display_html": "4.9%",
+    "figure": "Figure 9",
+    "measure": "share of model x pair slopes negative and significant",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "percent of slopes",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 9, panel 'strip chart (all models)', dose_dep_neg_pct_bonf",
+    "scope": "reanalysis"
+  },
+  "f10_brackets_unadj": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Figure 10",
+    "measure": "significant brackets (0.6–1.7×, matched Wilcoxon)",
+    "experiment": "n/a",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of brackets",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, figure='Figure 10', sum of n_sig_unadj",
+    "scope": "reanalysis"
+  },
+  "f10_brackets_bonf": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Figure 10",
+    "measure": "significant brackets (0.6–1.7×, matched Wilcoxon)",
+    "experiment": "n/a",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count of brackets",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, figure='Figure 10', sum of n_sig_bonf",
+    "scope": "reanalysis"
+  },
+  "f13_vig_other_unadj": {
+    "value": 3,
+    "format": "count",
+    "display": "3",
+    "display_html": "3",
+    "figure": "Figure 13",
+    "measure": "models significant on ±15%",
+    "experiment": "text vignettes, other conversions",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 13, text vignettes, other conversions, tight",
+    "scope": "reanalysis"
+  },
+  "f13_vig_other_bonf": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Figure 13",
+    "measure": "models significant on ±15%",
+    "experiment": "text vignettes, other conversions",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 13, text vignettes, other conversions, tight",
+    "scope": "reanalysis"
+  },
+  "f14_m_panel": {
+    "value": 26,
+    "format": "count",
+    "display": "26",
+    "display_html": "26",
+    "figure": "Figure 14",
+    "measure": "tests in the panel (family)",
+    "experiment": "random doses",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 14 (top), dosing-unit effect, m_panel",
+    "scope": "reanalysis"
+  },
+  "f14_units_tight_unadj": {
+    "value": 11,
+    "format": "count",
+    "display": "11",
+    "display_html": "11",
+    "figure": "Figure 14",
+    "measure": "models with a units-explained recovery (tight)",
+    "experiment": "random doses",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, family results_nielsen/wilcoxon_units_effect_random_dose:tight, n_sig_unadj",
+    "scope": "reanalysis"
+  },
+  "f14_units_tight_bonf": {
+    "value": 9,
+    "format": "count",
+    "display": "9",
+    "display_html": "9",
+    "figure": "Figure 14",
+    "measure": "models with a units-explained recovery (tight)",
+    "experiment": "random doses",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, family results_nielsen/wilcoxon_units_effect_random_dose:tight, n_sig_bonf",
+    "scope": "reanalysis"
+  },
+  "f14_units_broad_unadj": {
+    "value": 9,
+    "format": "count",
+    "display": "9",
+    "display_html": "9",
+    "figure": "Figure 14",
+    "measure": "models with a units-explained recovery (broad)",
+    "experiment": "random doses",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "unadjusted",
+    "source": "results_revision/multiple_comparisons_audit.csv, family results_nielsen/wilcoxon_units_effect_random_dose:broad, n_sig_unadj",
+    "scope": "reanalysis"
+  },
+  "f14_units_broad_bonf": {
+    "value": 7,
+    "format": "count",
+    "display": "7",
+    "display_html": "7",
+    "figure": "Figure 14",
+    "measure": "models with a units-explained recovery (broad)",
+    "experiment": "random doses",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/multiple_comparisons_audit.csv, family results_nielsen/wilcoxon_units_effect_random_dose:broad, n_sig_bonf",
+    "scope": "reanalysis"
+  },
+  "f10_n_comparisons": {
+    "value": 3,
+    "format": "count",
+    "display": "3",
+    "display_html": "3",
+    "figure": "Figure 10",
+    "measure": "comparisons among random doses, empty prompts and text vignettes",
+    "experiment": "n/a",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/multiple_comparisons_audit.csv, Figure 10, m_panel / n_models",
+    "scope": "reanalysis"
+  },
+  "f12_n_pairs": {
+    "value": 78,
+    "format": "count",
+    "display": "78",
+    "display_html": "78",
+    "figure": "Figure 12",
+    "measure": "model pairs",
+    "experiment": "random doses",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of pairs",
+    "adjusted": "Bonferroni",
+    "source": "common/models.py CONSISTENT_MODELS: n (n - 1) / 2",
+    "scope": "reanalysis"
+  },
+  "f1_changed": {
+    "value": 10,
+    "format": "count",
+    "display": "10",
+    "display_html": "10",
+    "figure": "Figure 1",
+    "measure": "models whose group changed against the submitted ranking",
+    "experiment": "n/a",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "n/a",
+    "source": "results_revision/rankings_fig12_fig15_broad.csv, figure=Figure 1, group_changed",
+    "scope": "reanalysis"
+  },
+  "f8_changed": {
+    "value": 4,
+    "format": "count",
+    "display": "4",
+    "display_html": "4",
+    "figure": "Figure 8",
+    "measure": "models whose group changed against the submitted ranking",
+    "experiment": "n/a",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "n/a",
+    "source": "results_revision/rankings_fig12_fig15_broad.csv, figure=Figure 8, group_changed",
+    "scope": "reanalysis"
+  },
+  "f12_changed": {
+    "value": 5,
+    "format": "count",
+    "display": "5",
+    "display_html": "5",
+    "figure": "Figure 12",
+    "measure": "models whose group changed against the submitted ranking",
+    "experiment": "n/a",
+    "condition": "reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "n/a",
+    "source": "results_revision/rankings_fig12_fig15_broad.csv, figure=Figure 12, group_changed",
+    "scope": "reanalysis"
+  },
+  "f15_top_changed": {
+    "value": 11,
+    "format": "count",
+    "display": "11",
+    "display_html": "11",
+    "figure": "Figure 15",
+    "measure": "models whose group changed against the submitted ranking",
+    "experiment": "n/a",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "n/a",
+    "source": "results_revision/rankings_fig12_fig15_broad.csv, figure=Figure 15 (top), group_changed",
+    "scope": "reanalysis"
+  },
+  "f15_bottom_changed": {
+    "value": 12,
+    "format": "count",
+    "display": "12",
+    "display_html": "12",
+    "figure": "Figure 15",
+    "measure": "models whose group changed against the submitted ranking",
+    "experiment": "n/a",
+    "condition": "unit-augmented",
+    "reference": "Nielsen",
+    "statistic": "count of models",
+    "adjusted": "n/a",
+    "source": "results_revision/rankings_fig12_fig15_broad.csv, figure=Figure 15 (bottom), group_changed",
+    "scope": "reanalysis"
+  },
+  "f13_vig_ome_tight_p": {
+    "value": 2.0366499326732748e-17,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 13",
+    "measure": "within ±15%",
+    "experiment": "vignettes, oral morphine",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_vignettes_ome.csv, model=POOLED, tight_p",
+    "scope": "reanalysis"
+  },
+  "f13_vig_ome_broad_p": {
+    "value": 7.239890560568438e-08,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 13",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes, oral morphine",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_vignettes_ome.csv, model=POOLED, broad_p",
+    "scope": "reanalysis"
+  },
+  "f13_vig_other_tight_p": {
+    "value": 4.235491265856218e-06,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 13",
+    "measure": "within ±15%",
+    "experiment": "vignettes, other conversions",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_vignettes_nonome.csv, model=POOLED, tight_p",
+    "scope": "reanalysis"
+  },
+  "f13_vig_other_broad_p": {
+    "value": 0.1512137715072145,
+    "format": "p_caption",
+    "display": "p = 0.15",
+    "display_html": "p = 0.15",
+    "figure": "Figure 13",
+    "measure": "within 0.6–1.7×",
+    "experiment": "vignettes, other conversions",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_vignettes_nonome.csv, model=POOLED, broad_p",
+    "scope": "reanalysis"
+  },
+  "f13_rd_ome_tight_p": {
+    "value": 2.65172195881333e-40,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 13",
+    "measure": "within ±15%",
+    "experiment": "random doses, oral morphine",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_random_dose_ome.csv, model=POOLED, tight_p",
+    "scope": "reanalysis"
+  },
+  "f13_rd_ome_broad_p": {
+    "value": 9.237224842280108e-35,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 13",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses, oral morphine",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_random_dose_ome.csv, model=POOLED, broad_p",
+    "scope": "reanalysis"
+  },
+  "f13_rd_other_tight_p": {
+    "value": 7.919521932033898e-55,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 13",
+    "measure": "within ±15%",
+    "experiment": "random doses, other conversions",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_random_dose_nonome.csv, model=POOLED, tight_p",
+    "scope": "reanalysis"
+  },
+  "f13_rd_other_broad_p": {
+    "value": 1.830429313271834e-20,
+    "format": "p_caption",
+    "display": "p < 0.001",
+    "display_html": "p < 0.001",
+    "figure": "Figure 13",
+    "measure": "within 0.6–1.7×",
+    "experiment": "random doses, other conversions",
+    "condition": "naive -> reference-grounded",
+    "reference": "Nielsen",
+    "statistic": "p (pooled Wilcoxon over model x item pairs)",
+    "adjusted": "unadjusted",
+    "source": "results_nielsen/wilcoxon_nielsen_effect_random_dose_nonome.csv, model=POOLED, broad_p",
+    "scope": "reanalysis"
+  },
+  "supp_vig_underdose_bonf": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Supplement: extreme errors",
+    "measure": "below ½× the lowest standard",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:vignette_naive>vignette_nielsen:underdose",
+    "scope": "reanalysis"
+  },
+  "supp_vig_underdose_open": {
+    "value": 1,
+    "format": "count",
+    "display": "1",
+    "display_html": "1",
+    "figure": "Supplement: extreme errors",
+    "measure": "below ½× the lowest standard",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:vignette_naive>vignette_nielsen:underdose",
+    "scope": "reanalysis"
+  },
+  "supp_vig_overdose_bonf": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 2× the highest standard",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:vignette_naive>vignette_nielsen:overdose",
+    "scope": "reanalysis"
+  },
+  "supp_vig_overdose_open": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 2× the highest standard",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:vignette_naive>vignette_nielsen:overdose",
+    "scope": "reanalysis"
+  },
+  "supp_vig_severe_overdose_bonf": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 4× the highest standard",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:vignette_naive>vignette_nielsen:severe_overdose",
+    "scope": "reanalysis"
+  },
+  "supp_vig_severe_overdose_open": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 4× the highest standard",
+    "experiment": "vignettes",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:vignette_naive>vignette_nielsen:severe_overdose",
+    "scope": "reanalysis"
+  },
+  "supp_rd_underdose_bonf": {
+    "value": 5,
+    "format": "count",
+    "display": "5",
+    "display_html": "5",
+    "figure": "Supplement: extreme errors",
+    "measure": "below ½× the lowest standard",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:rd_naive>rd_nielsen:underdose",
+    "scope": "reanalysis"
+  },
+  "supp_rd_underdose_open": {
+    "value": 2,
+    "format": "count",
+    "display": "2",
+    "display_html": "2",
+    "figure": "Supplement: extreme errors",
+    "measure": "below ½× the lowest standard",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:rd_naive>rd_nielsen:underdose",
+    "scope": "reanalysis"
+  },
+  "supp_rd_overdose_bonf": {
+    "value": 11,
+    "format": "count",
+    "display": "11",
+    "display_html": "11",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 2× the highest standard",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:rd_naive>rd_nielsen:overdose",
+    "scope": "reanalysis"
+  },
+  "supp_rd_overdose_open": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 2× the highest standard",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:rd_naive>rd_nielsen:overdose",
+    "scope": "reanalysis"
+  },
+  "supp_rd_severe_overdose_bonf": {
+    "value": 2,
+    "format": "count",
+    "display": "2",
+    "display_html": "2",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 4× the highest standard",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ★",
+    "adjusted": "Bonferroni",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:rd_naive>rd_nielsen:severe_overdose",
+    "scope": "reanalysis"
+  },
+  "supp_rd_severe_overdose_open": {
+    "value": 7,
+    "format": "count",
+    "display": "7",
+    "display_html": "7",
+    "figure": "Supplement: extreme errors",
+    "measure": "above 4× the highest standard",
+    "experiment": "random doses",
+    "condition": "naive -> reference-grounded",
+    "reference": "all current standards",
+    "statistic": "count of models with ☆ only",
+    "adjusted": "unadjusted",
+    "source": "results_revision/safety_tests_by_model.csv (mean_a, mean_b) + results_revision/multiple_comparisons_tests.csv family safety_tests:rd_naive>rd_nielsen:severe_overdose",
+    "scope": "reanalysis"
+  },
+  "ma2_worse_text": {
+    "value": "vignette underdose: GPT-4.1 mini (unadjusted only); vignette overdose: GPT-3.5 Turbo (unadjusted only); random dose underdose: Jamba Large 1.7 (unadjusted only)",
+    "format": "text",
+    "display": "vignette underdose: GPT-4.1 mini (unadjusted only); vignette overdose: GPT-3.5 Turbo (unadjusted only); random dose underdose: Jamba Large 1.7 (unadjusted only)",
+    "display_html": "vignette underdose: GPT-4.1 mini (unadjusted only); vignette overdose: GPT-3.5 Turbo (unadjusted only); random dose underdose: Jamba Large 1.7 (unadjusted only)",
+    "figure": "Multimedia Appendix 2",
+    "measure": "models worse after grounding (names only)",
+    "experiment": "both",
+    "condition": "naive -> reference-grounded",
+    "reference": "all",
+    "statistic": "list of models",
+    "adjusted": "unadjusted",
+    "source": "results_revision/circularity.csv gain < 0 + results_revision/multiple_comparisons_tests.csv families circularity:*",
+    "scope": "reanalysis"
+  },
+  "ma1_n": {
+    "value": 47,
+    "format": "count",
+    "display": "47",
+    "display_html": "47",
+    "figure": "Multimedia Appendix 1",
+    "measure": "conversions with Nielsen and another current standard",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_farthest": {
+    "value": 1.4999999999999998,
+    "format": "ratio:2",
+    "display": "1.50",
+    "display_html": "1.50",
+    "figure": "Multimedia Appendix 1",
+    "measure": "farthest standard from Nielsen (fold)",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "maximum",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_n_outside_tight": {
+    "value": 29,
+    "format": "count",
+    "display": "29",
+    "display_html": "29",
+    "figure": "Multimedia Appendix 1",
+    "measure": "conversions with a standard outside ±15% of Nielsen",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_n_outside_broad": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "Multimedia Appendix 1",
+    "measure": "conversions with a standard outside 0.6–1.7× of Nielsen",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_lowest_standard": {
+    "value": 0.7142857142857143,
+    "format": "ratio:2",
+    "display": "0.71",
+    "display_html": "0.71",
+    "figure": "Multimedia Appendix 1",
+    "measure": "lowest current standard relative to Nielsen",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "minimum",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_highest_standard": {
+    "value": 1.4999999999999998,
+    "format": "ratio:2",
+    "display": "1.50",
+    "display_html": "1.50",
+    "figure": "Multimedia Appendix 1",
+    "measure": "highest current standard relative to Nielsen",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "maximum",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_extended_lowest": {
+    "value": 0.62,
+    "format": "ratio:2",
+    "display": "0.62",
+    "display_html": "0.62",
+    "figure": "Multimedia Appendix 1",
+    "measure": "lowest standard extended by ±15%",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "lowest / 1.15",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_extended_highest": {
+    "value": 1.73,
+    "format": "ratio:2",
+    "display": "1.73",
+    "display_html": "1.73",
+    "figure": "Multimedia Appendix 1",
+    "measure": "highest standard extended by ±15%",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "highest x 1.15",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "ma1_farthest_conversion": {
+    "value": "oral codeine → oral morphine",
+    "format": "text",
+    "display": "oral codeine → oral morphine",
+    "display_html": "oral codeine → oral morphine",
+    "figure": "Multimedia Appendix 1",
+    "measure": "conversion with the farthest standard",
+    "experiment": "both",
+    "condition": "n/a",
+    "reference": "Nielsen",
+    "statistic": "name",
+    "adjusted": "n/a",
+    "source": "results_revision/references/by_conversion.csv, rows with n_alternatives_current >= 1, distinct (from, to, standards)",
+    "scope": "reanalysis"
+  },
+  "std_match_vig_observed_pct": {
+    "value": 21.51162791,
+    "format": "percent:0",
+    "display": "22%",
+    "display_html": "22%",
+    "figure": "3E (standard matching)",
+    "measure": "wrong answers matching another standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "observed share",
+    "adjusted": "n/a",
+    "source": "results_revision/standard_matches.csv, row_type=summary, item=eligible_wrong_cells, experiment=vignette, observed_match_rate",
+    "scope": "reanalysis"
+  },
+  "std_match_vig_chance_pct": {
+    "value": 9.209302326,
+    "format": "percent:0",
+    "display": "9%",
+    "display_html": "9%",
+    "figure": "3E (standard matching)",
+    "measure": "wrong answers matching another standard",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "share expected by chance (shift)",
+    "adjusted": "n/a",
+    "source": "results_revision/standard_matches.csv, row_type=summary, item=eligible_wrong_cells, experiment=vignette, chance_rate_shift",
+    "scope": "reanalysis"
+  },
+  "std_match_rd_observed_pct": {
+    "value": 22.029702970000002,
+    "format": "percent:0",
+    "display": "22%",
+    "display_html": "22%",
+    "figure": "3E (standard matching)",
+    "measure": "wrong answers matching another standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "observed share",
+    "adjusted": "n/a",
+    "source": "results_revision/standard_matches.csv, row_type=summary, item=eligible_wrong_cells, experiment=random_dose, observed_match_rate",
+    "scope": "reanalysis"
+  },
+  "std_match_rd_chance_pct": {
+    "value": 9.429702970000001,
+    "format": "percent:0",
+    "display": "9%",
+    "display_html": "9%",
+    "figure": "3E (standard matching)",
+    "measure": "wrong answers matching another standard",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "all current standards",
+    "statistic": "share expected by chance (shift)",
+    "adjusted": "n/a",
+    "source": "results_revision/standard_matches.csv, row_type=summary, item=eligible_wrong_cells, experiment=random_dose, chance_rate_shift",
+    "scope": "reanalysis"
+  },
+  "di2_vig_change_pp_tight": {
+    "value": -0.44360051712993354,
+    "format": "pp:1",
+    "display": "-0.4 pp",
+    "display_html": "-0.4 pp",
+    "figure": "DI 2 subset check",
+    "measure": "change in mean accuracy without the DI 2 scenarios",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean over models (without minus with)",
+    "adjusted": "n/a",
+    "source": "results_revision/di2_subset.csv, metric=change_pp_tight_without_minus_with, subset=no_di2_vs_all",
+    "scope": "reanalysis"
+  },
+  "di2_vig_change_pp_broad": {
+    "value": -0.028280542986436785,
+    "format": "pp:1",
+    "display": "-0.0 pp",
+    "display_html": "-0.0 pp",
+    "figure": "DI 2 subset check",
+    "measure": "change in mean accuracy without the DI 2 scenarios",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean over models (without minus with)",
+    "adjusted": "n/a",
+    "source": "results_revision/di2_subset.csv, metric=change_pp_broad_without_minus_with, subset=no_di2_vs_all",
+    "scope": "reanalysis"
+  },
+  "di2_rd_change_pp_tight": {
+    "value": -0.18380459187313036,
+    "format": "pp:1",
+    "display": "-0.2 pp",
+    "display_html": "-0.2 pp",
+    "figure": "DI 2 subset check",
+    "measure": "change in mean accuracy without the DI 2 scenarios",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean over models (without minus with)",
+    "adjusted": "n/a",
+    "source": "results_revision/di2_subset.csv, metric=change_pp_tight_without_minus_with, subset=no_di2_vs_all",
+    "scope": "reanalysis"
+  },
+  "di2_rd_change_pp_broad": {
+    "value": 1.8644343701618311,
+    "format": "pp:1",
+    "display": "1.9 pp",
+    "display_html": "1.9 pp",
+    "figure": "DI 2 subset check",
+    "measure": "change in mean accuracy without the DI 2 scenarios",
+    "experiment": "random doses",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "mean over models (without minus with)",
+    "adjusted": "n/a",
+    "source": "results_revision/di2_subset.csv, metric=change_pp_broad_without_minus_with, subset=no_di2_vs_all",
+    "scope": "reanalysis"
+  },
+  "di2_vig_rho_mean_tight": {
+    "value": 0.8705267192145757,
+    "format": "ratio:2",
+    "display": "0.87",
+    "display_html": "0.87",
+    "figure": "DI 2 subset check",
+    "measure": "rank correlation of mean tight accuracy, with vs without DI 2",
+    "experiment": "vignettes",
+    "condition": "naive",
+    "reference": "Nielsen",
+    "statistic": "rho",
+    "adjusted": "n/a",
+    "source": "results_revision/di2_subset.csv, metric=spearman_rho_mean_tight_accuracy, subset=all_vs_no_di2",
+    "scope": "reanalysis"
+  },
+  "di2_refusal_n_responses": {
+    "value": 21711,
+    "format": "count",
+    "display": "21711",
+    "display_html": "21711",
+    "figure": "DI 2 subset check",
+    "measure": "responses searched for refusals",
+    "experiment": "vignettes",
+    "condition": "all conditions",
+    "reference": "n/a",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/di2_subset.csv, metric=refusal_check_n_responses",
+    "scope": "reanalysis"
+  },
+  "di2_refusal_decline": {
+    "value": 0,
+    "format": "count",
+    "display": "0",
+    "display_html": "0",
+    "figure": "DI 2 subset check",
+    "measure": "responses matching a refusal pattern",
+    "experiment": "vignettes",
+    "condition": "all conditions",
+    "reference": "n/a",
+    "statistic": "count",
+    "adjusted": "n/a",
+    "source": "results_revision/di2_subset.csv, metric=refusal_pattern_decline",
+    "scope": "reanalysis"
   }
 }
