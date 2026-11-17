@@ -3752,8 +3752,8 @@
   "di2_vig_change_pp_broad": {
     "value": -0.028280542986436785,
     "format": "pp:1",
-    "display": "-0.0 pp",
-    "display_html": "-0.0 pp",
+    "display": "0.0 pp",
+    "display_html": "0.0 pp",
     "figure": "DI 2 subset check",
     "measure": "change in mean accuracy without the DI 2 scenarios",
     "experiment": "vignettes",

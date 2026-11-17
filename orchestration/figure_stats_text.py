@@ -35,7 +35,7 @@ WHITELIST = [
     r"\b13 models\b", r"\bthirteen\b",
     r"\bmg/4 h\b", r"\bCV\s?=\s?0\b", r"\b4 h\b",
     # published standards and their years
-    r"CDC 20(?:16|22)", r"McPherson 2018", r"NIH HEAL", r"\bNielsen et al\b",
+    r"CDC\s+20(?:16|22)", r"McPherson\s+2018", r"NIH HEAL", r"\bNielsen et al\b",
     # model names with versions
     r"(?:GPT|Gemini|Claude|Llama|Jamba|Mistral|Mixtral|Qwen|DeepSeek|Command)[ -][\w.+ -]*?\d[\w.]*",
     r"\bR\+", r"\bχ²",

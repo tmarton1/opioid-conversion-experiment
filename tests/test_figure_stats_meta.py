@@ -163,6 +163,6 @@ def test_latest_yian_pdf_built_after_the_templates():
     text = _pdf_text(pdfs[-1])
     labels = [r"\b[0-9a-f]{7}\b", r"submitted-\d{4}-\d{2}", r"\b(?:decisions?|DZ|DI)\s?\d+(?:\s?[–-]\s?\d+)?",
               r"\b\d{4}-\d{2}-\d{2}\b", r"\bv\d+\b", r"\b\d+ pages?\b",
-              r"\bvignettes \d+(?:, \d+)*"]
+              r"\(vignettes \d+(?:, \d+)*\)"]
     u = F.unexplained_numbers(text, stats, meta, extra_allowed=labels)
     assert u == [], u[:10]

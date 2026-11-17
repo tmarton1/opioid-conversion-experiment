@@ -622,14 +622,17 @@ def fmt_value(value, fmt: str) -> str:
         return value
     kind, _, arg = fmt.partition(":")
     n = int(arg) if arg else 0
+    def num(v):              # fixed decimals, never "-0.0"
+        t = f"{float(v):.{n}f}"
+        return f"{0:.{n}f}" if float(t) == 0 else t
     if kind == "percent":
-        return f"{float(value):.{n}f}%"
+        return f"{num(value)}%"
     if kind == "pp":
-        return f"{float(value):.{n}f} pp"
+        return f"{num(value)} pp"
     if kind == "count":
         return str(int(round(float(value))))
     if kind == "ratio":
-        return f"{float(value):.{n}f}"
+        return num(value)
     if kind == "p":
         return fmt_p(value)
     if kind == "p_caption":
