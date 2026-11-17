@@ -13,12 +13,13 @@ Statuses:
   accepted_unreviewed  accepted for use without author review (the Reanalysis legends
                        and example figures E1-E8). Allowed on the branch, in the
                        private differences report and the example figures, but
-                       never in the public appendix.
+                       never in the public supplement or a multimedia appendix.
 A protected file may be committed only while the SHA-256 of its content is
 listed (any change needs a new "approved" entry), or if it has a sidecar
 "<file>.built_from.json" ({"template": "<path>", "sha256": "<hex>"}) naming a
 template whose hash is listed (a build from that template; the build gets the
-template's status). Files under appendix/ need status "approved".
+template's status). Files in the public supplement (supplement/, figures_revision/supplement/)
+and the multimedia appendices (figures_revision/multimedia_appendix/) need status "approved".
 Deterministic outputs (CSVs, stats JSON, figures whose text is only axis and
 registry labels) are not protected.
 
@@ -46,7 +47,8 @@ APPROVALS = os.path.join(ROOT, "revision_private", "figures_appendix", "approval
 
 # Files that carry model-written text (paths relative to the repository root).
 PROTECTED = [
-    "appendix/*",                                   # public appendix: template, HTML, PDF, figures
+    "appendix/*",                                   # legacy name of the public supplement folder
+    "supplement/*",                                 # public supplement: template, HTML, PDF, figures
     "results_revision/figure_legends*.md",          # figure legends
     "*/figure_legends*.md",
     "*legend*.md",
@@ -73,7 +75,8 @@ def sha256(data: bytes) -> str:
 
 APPROVED, ACCEPTED = "approved", "accepted_unreviewed"
 STATUSES = (APPROVED, ACCEPTED)
-APPENDIX_ONLY_APPROVED = ["appendix/*"]
+APPENDIX_ONLY_APPROVED = ["appendix/*", "supplement/*", "figures_revision/supplement/*",
+                          "figures_revision/multimedia_appendix/*"]   # status "approved" required
 
 
 def load_entries(path: str = APPROVALS) -> list[dict]:
@@ -207,7 +210,7 @@ def main(argv=None) -> int:
                 print(f"  {p}")
     if res["blocked"]:
         print("Not approved (model-written text needs author approval; see revision plan (Figures and appendix stage), section 0;"
-              " files under appendix/ need status \"approved\"):")
+              " supplement and multimedia-appendix files need status \"approved\"):")
         for p in res["blocked"]:
             print(f"  {p}")
         print("Record the approved content's SHA-256 in revision_private/figures_appendix/approvals.json "

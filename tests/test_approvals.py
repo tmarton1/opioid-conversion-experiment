@@ -12,6 +12,10 @@ from scripts.revision import check_approvals as ca  # noqa: E402
 
 def test_protected_patterns():
     assert ca.is_protected("appendix/appendix.pdf")
+    assert ca.is_protected("supplement/supplement.pdf")
+    assert ca.needs_approved("figures_revision/multimedia_appendix/fig_ma1_standards_agreement.png")
+    assert ca.needs_approved("figures_revision/supplement/fig_supp_extreme_errors.png")
+    assert not ca.needs_approved("figures_revision/main/fig01_naive_accuracy_vignettes.png")
     assert ca.is_protected("results_revision/figure_legends.md")
     assert ca.is_protected("summary_w_figures/revision/examples/E2a_fig11_grounding_vignettes_score_view_grid.png")
     assert ca.is_protected("summary_w_figures/revision/figures_appendix/fig_safety.pdf")
