@@ -179,7 +179,8 @@ def _slope_pooled_line(model_csv, naive_filter):
     ptxt = "p < 0.001" if p < 0.001 else f"p = {p:.3f}"
     return (f"<p style='font-size:12px;color:#333;margin:2px 0 6px 60px'><b>All slopes in the panel:</b> {k} of {n} "
             f"non-zero slopes negative, one-sided sign test {ptxt}. Per pair: {neg_b} negative and {pos_b} positive "
-            f"slopes significant after Bonferroni (family: all {len(df)} model × pair slopes of the panel); "
+            f"slopes significant after Bonferroni (family: the {int(ok.sum())} model × pair slopes of the panel with a "
+            f"p-value; {int((df['regression_slope'] == 0).sum())} slope exactly zero); "
             f"{neg_u} negative and {pos_u} positive at p &lt; 0.05 unadjusted.</p>")
 
 

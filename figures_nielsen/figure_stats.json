@@ -81,5 +81,15 @@
   "mean_rd_tight_after_all_pct": 62.3,
   "best_vig_model_after_all": "gemini-2.5-pro",
   "best_vig_tight_after_all_pct": 99.6,
-  "mean_vig_tight_after_all_pct": 70.5
+  "mean_vig_tight_after_all_pct": 70.5,
+  "n_sig_cv_chi2_vignettes_bonf": 0,
+  "n_sig_cv_chi2_rd_bonf": 0,
+  "n_models_with_sig_icc_bonf": 13,
+  "n_sig_kendall_w_bonf": 0,
+  "n_sig_rho_models_bonf": 5,
+  "cross_n_sig_spearman_rd_text_bonf": 2,
+  "nielsen_n_sig_tight_vignettes_bonf": 5,
+  "nielsen_n_sig_tight_rd_bonf": 13,
+  "dosing_n_sig_drop_tight_bonf": 12,
+  "units_n_sig_recovery_tight_bonf": 9
 }
